@@ -297,25 +297,9 @@
 
 ;;;; Marks
 
-(define-structure (mark
-		   (constructor make-temporary-mark)
-		   (print-procedure
-		    (unparser/standard-method 'MARK
-		      (lambda (state mark)
-			(unparse-object state
-					(or (mark-buffer mark)
-					    (mark-group mark)))
-			(unparse-string state " ")
-			(unparse-object state (mark-index mark))
-			(unparse-string state
-					(if (mark-left-inserting? mark)
-					    " left"
-					    " right"))))))
-  ;; The microcode file "edwin.h" depends on the definition of this
-  ;; structure.
-  (group #f read-only #t)
-  (index #f)
-  (left-inserting? #f read-only #t))
+(define-record-type* mark
+  (make-temporary-mark group (index) left-inserting?)
+  ())
 
 (define (guarantee-mark mark)
   (if (not (mark? mark)) (error "not a mark" mark))
