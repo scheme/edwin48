@@ -78,11 +78,11 @@
 
 (define (group-left-char group index)
   (string-ref (group-text group)
-	       (fix:- (group-index->position-integrable group index #f) 1)))
+	       (fix:- (group-index->position group index #f) 1)))
 
 (define (group-right-char group index)
   (string-ref (group-text group)
-	       (group-index->position-integrable group index #t)))
+	       (group-index->position group index #t)))
 
 (define (group-extract-and-delete-string! group start end)
   (let ((string (group-extract-string group start end)))
@@ -262,7 +262,7 @@
 	(end-index (fix:+ index 1)))
     (prepare-gap-for-replace! group index end-index)
     (string-set! (group-text group)
-		  (group-index->position-integrable group index #t)
+		  (group-index->position group index #t)
 		  char)
     (finish-group-replace! group index end-index)
     (set-interrupt-enables! interrupt-mask)
@@ -281,7 +281,7 @@
 	(prepare-gap-for-replace! group index end-index)
 	(%substring-move! string start end
 			  (group-text group)
-			  (group-index->position-integrable group index #t))
+			  (group-index->position group index #t))
 	(finish-group-replace! group index end-index)
 	(set-interrupt-enables! interrupt-mask)
 	unspecific)))

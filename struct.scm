@@ -146,9 +146,6 @@
   (%make-region (group-start-mark group) (group-end-mark group)))
 
 (define (group-position->index group position)
-  (group-position->index-integrable group position))
-
-(define (group-position->index-integrable group position)
   (cond ((fix:<= position (group-gap-start group))
 	 position)
 	((fix:> position (group-gap-end group))
@@ -157,10 +154,6 @@
 	 (group-gap-start group))))
 
 (define (group-index->position group index left-inserting?)
-  (group-index->position-integrable group index left-inserting?))
-
-(define (group-index->position-integrable group index
-						     left-inserting?)
   (cond ((fix:< index (group-gap-start group))
 	 index)
 	((fix:> index (group-gap-start group))
