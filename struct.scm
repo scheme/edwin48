@@ -68,36 +68,30 @@
 
 ;;;; Groups
 
-(define-structure (group
-		   (type vector)
-		   (named)
-		   (constructor %make-group (buffer)))
-  ;; The microcode file "edwin.h" depends on this structure being a
-  ;; named vector, and knows the indexes of the fields TEXT-DESCRIPTOR,
-  ;; GAP-START, GAP-LENGTH, GAP-END, START-MARK, END-MARK, and
-  ;; MODIFIED?.
-  text-descriptor
-  (gap-start 0)
-  (gap-length 0)
-  (gap-end 0)
-  (marks '())
-  start-mark
-  end-mark
-  (writeable? #t)
-  display-start
-  display-end
-  (start-changes-index #f)
-  (end-changes-index #f)
-  (modified-tick 0)
-  (clip-daemons '())
-  (undo-data #f)
-  (modified? #f)
-  %point
-  buffer
-  (shrink-length 0)
-  (text-properties #f)
-  (%hash-number #f)
-  %text)
+(define-record-type* group
+  (%make-group buffer)
+  (text-descriptor
+   (gap-start 0)
+   (gap-length 0)
+   (gap-end 0)
+   (marks '())
+   start-mark
+   end-mark
+   (writeable? #t)
+   display-start
+   display-end
+   (start-changes-index #f)
+   (end-changes-index #f)
+   (modified-tick 0)
+   (clip-daemons '())
+   (undo-data #f)
+   (modified? #f)
+   %point
+   buffer
+   (shrink-length 0)
+   (text-properties #f)
+   (%hash-number #f)
+   %text))
 
 (define group-point group-%point)
 
