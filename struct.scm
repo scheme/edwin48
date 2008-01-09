@@ -89,7 +89,6 @@
    buffer
    (shrink-length 0)
    (text-properties #f)
-   (%hash-number #f)
    text))
 
 (define (group-point group) (group-%point group))
@@ -177,11 +176,6 @@
 (define (group-absolute-end group)
   (make-temporary-mark group (group-length group) #t))
 
-(define (group-hash-number group)
-  (or (group-%hash-number group)
-      (let ((n (object-hash group)))
-	(set-group-%hash-number! group n)
-	n)))
 
 ;;;; Text Clipping
 
