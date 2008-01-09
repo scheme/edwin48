@@ -125,18 +125,18 @@
 
 (define (with-region-clipped! new-region thunk)
   (let ((group (region-group new-region))
-	(old-region))
+	(old-region (unspecific)))
     (dynamic-wind (lambda ()
 		    (set! old-region (group-region group))
 		    (region-clip! new-region)
-		    (set! new-region)
+		    (set! new-region (unspecific))
 		    unspecific)
 		  thunk
 		  (lambda ()
 		    (region-clip! old-region)))))
 
 (define (without-group-clipped! group thunk)
-  (let ((old-region))
+  (let ((old-region (unspecific)))
     (dynamic-wind (lambda ()
 		    (set! old-region (group-region group))
 		    (group-widen! group))

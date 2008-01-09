@@ -229,10 +229,10 @@
   (group-text-clip (mark-group start) (mark-index start) (mark-index end)))
 
 (define (with-group-text-clipped! group start end thunk)
-  (let ((old-text-start)
-	(old-text-end)
+  (let ((old-text-start 0)
+	(old-text-end   0)
 	(new-text-start (make-permanent-mark group start #f))
-	(new-text-end (make-permanent-mark group end #t)))
+	(new-text-end   (make-permanent-mark group end #t)))
     (dynamic-wind (lambda ()
 		    (set! old-text-start (group-start-mark group))
 		    (set! old-text-end (group-end-mark group))
