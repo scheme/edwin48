@@ -46,3 +46,9 @@
 	    error:wrong-type-argument)
   (open scheme signals)
   (files s48-errors))
+
+(define-structure aliases
+    (export without-interrupts
+	    unspecific)
+  (open scheme interrupts util)
+  (files s48-aliases))
