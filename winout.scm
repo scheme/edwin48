@@ -28,7 +28,6 @@ USA.
 ;;;; Buffer I/O Ports
 ;;; package: (edwin window-output-port)
 
-(declare (usual-integrations))
 
 (define (with-output-to-current-point thunk)
   (with-output-to-window-point (current-window) thunk))

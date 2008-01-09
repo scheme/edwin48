@@ -27,7 +27,6 @@ USA.
 
 ;;;; Modes
 
-(declare (usual-integrations))
 
 (define-structure (mode
 		   (constructor %make-mode

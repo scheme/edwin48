@@ -30,7 +30,6 @@
 ;;; $Id: techinfo.scm,v 1.10 2007/01/05 21:19:24 cph Exp $
 ;;;
 
-(declare (usual-integrations))
 
 (define-variable techinfo-web-buffer
   "Buffer which contains a copy of the TechInfo web file."

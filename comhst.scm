@@ -28,7 +28,6 @@ USA.
 ;;;; Command interpreter history
 ;;; Translated from "comint.el", by Olin Shivers.
 
-(declare (usual-integrations))
 
 (define-variable-per-buffer comint-input-ring-size
   "Size of input history ring."

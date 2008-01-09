@@ -27,7 +27,6 @@ USA.
 
 ;;;; Lisp Commands
 
-(declare (usual-integrations))
 
 ;;;; S-expression Commands
 

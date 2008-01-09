@@ -27,7 +27,6 @@ USA.
 
 ;;;; Motion Commands
 
-(declare (usual-integrations))
 
 (define-command beginning-of-line
   "Move point to beginning of line."

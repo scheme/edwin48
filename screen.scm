@@ -27,7 +27,6 @@ USA.
 
 ;;;; Screen Abstraction
 
-(declare (usual-integrations))
 
 (define-structure (screen
 		   (constructor make-screen

@@ -28,7 +28,6 @@ USA.
 ;;;; Win32 Terminal
 ;;; package: (edwin screen win32)
 
-(declare (usual-integrations))
 
 (define-primitives
   (win32-read-event 0)

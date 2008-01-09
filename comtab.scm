@@ -27,7 +27,6 @@ USA.
 
 ;;;; Command Tables
 
-(declare (usual-integrations))
 
 (define-structure (comtab (constructor make-comtab ()))
   (vector 0)

@@ -27,7 +27,6 @@ USA.
 
 ;;;; Utility Windows
 
-(declare (usual-integrations))
 
 ;;;; Blank Window
 

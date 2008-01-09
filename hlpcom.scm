@@ -27,7 +27,6 @@ USA.
 
 ;;;; Help Commands
 
-(declare (usual-integrations))
 
 (define-command help-prefix
   "This is a prefix for more commands.

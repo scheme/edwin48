@@ -13,7 +13,6 @@ Domain.  All warranties are disclaimed.
 ;;; bells & whistles for converting between unified and context diffs,
 ;;; like in GNU Emacs.  Some day.
 
-(declare (usual-integrations))
 
 (define-variable diff-program
   "The name of the diff program."

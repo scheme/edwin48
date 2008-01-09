@@ -27,7 +27,6 @@ USA.
 
 ;;;; Major Mode for XML
 
-(declare (usual-integrations))
 
 (define-major-mode xml text "XML"
   "Major mode for editing XML.

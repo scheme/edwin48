@@ -27,7 +27,6 @@ USA.
 
 ;;;; Window System
 
-(declare (usual-integrations))
 
 ;;;  Based on WINDOW-WIN, designed by RMS.
 ;;;  See WINOPS.TXT for more information.
@@ -232,9 +231,7 @@ USA.
 	       (set-car! (inferior-redisplay-flags inferior) #f)
 	       #t)))))
 
-(declare (integrate-operator clip-window-region-1))
 (define (clip-window-region-1 al au bs receiver)
-  (declare (integrate al au bs))
   (if (fix:< 0 al)
       (if (fix:< au bs)
 	  (if (fix:< al au) (receiver al au) true)

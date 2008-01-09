@@ -27,7 +27,6 @@ USA.
 
 ;;;; Auto Save
 
-(declare (usual-integrations))
 
 (define-variable auto-save-visited-file-name
   "True says auto-save a buffer in the file it is visiting, when practical.

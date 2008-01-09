@@ -27,7 +27,6 @@ USA.
 
 ;;;; Shell commands for DOS
 
-(declare (usual-integrations))
 
 (load-option 'DOSPROCESS)
 

@@ -30,7 +30,6 @@ USA.
 ;;; Adapted from "vc.el" in Emacs 19.22.
 ;;; Updated March 2000 from "vc.el" in Emacs 20.6.
 
-(declare (usual-integrations))
 
 ;;;; Editor Variables
 

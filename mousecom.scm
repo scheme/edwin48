@@ -27,7 +27,6 @@ USA.
 
 ;;;; Mouse Commands
 
-(declare (usual-integrations))
 
 (define-command mouse-select
   "Select window the mouse is on."

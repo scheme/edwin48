@@ -27,7 +27,6 @@ USA.
 
 ;;;; Edwin Interface to YStep
 
-(declare (usual-integrations))
 
 (define-command step-expression
   "Single-step an expression."

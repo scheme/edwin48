@@ -28,7 +28,6 @@ USA.
 ;;;; Directory Editor (OS/2 Customizations)
 ;;; package: (edwin dired)
 
-(declare (usual-integrations))
 
 (define-key 'dired #\Z 'dired-do-compress)
 (define-key 'dired #\S 'dired-hidden-toggle)

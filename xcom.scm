@@ -27,7 +27,6 @@ USA.
 
 ;;;; X Commands
 
-(declare (usual-integrations))
 
 (define-primitives
   (x-list-fonts 3)

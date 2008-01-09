@@ -27,7 +27,6 @@ USA.
 
 ;;;; Keyword Syntax Parser
 
-(declare (usual-integrations))
 
 (define-structure (description
 		   (keyword-constructor make-keyparser-description)

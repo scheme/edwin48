@@ -27,7 +27,6 @@ USA.
 
 ;;;; Editor Data Abstraction
 
-(declare (usual-integrations))
 
 (define-structure (editor (constructor %make-editor))
   (name #f read-only #t)

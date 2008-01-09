@@ -27,7 +27,6 @@ USA.
 
 ;;;; Buffer Frames
 
-(declare (usual-integrations))
 
 (define-class buffer-frame combination-leaf-window
   (

@@ -27,7 +27,6 @@ USA.
 
 ;;;; Sorting
 
-(declare (usual-integrations))
 
 (define (sort-region region reverse?
 		     forward-record record-end

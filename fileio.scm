@@ -27,7 +27,6 @@ USA.
 
 ;;;; File <-> Buffer I/O
 
-(declare (usual-integrations))
 
 ;;;; Encrypted files
 

@@ -28,7 +28,6 @@ USA.
 ;;;; Info Mode
 ;;; Shamelessly copied from GNU Emacs.
 
-(declare (usual-integrations))
 
 (define-command info
   "Create a buffer for Info, the documentation browser program."

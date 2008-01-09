@@ -27,7 +27,6 @@ USA.
 
 ;;;; Outline minor mode
 
-(declare (usual-integrations))
 
 (define (%forward-up-topic start end outline-pattern)
   (if (not (mark<= start end)) (error "Marks incorrectly related:" start end))

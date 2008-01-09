@@ -27,7 +27,6 @@ USA.
 
 ;;;; Scheme Mode
 
-(declare (usual-integrations))
 
 (define-command scheme-mode
   "Enter Scheme mode."

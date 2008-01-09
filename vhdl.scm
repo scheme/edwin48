@@ -27,7 +27,6 @@ USA.
 
 ;;;; Major Mode for VHDL Programs
 
-(declare (usual-integrations))
 
 (define-command vhdl-mode
   "Enter VHDL mode."

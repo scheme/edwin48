@@ -27,7 +27,6 @@ USA.
 
 ;;;; Text Fill Commands
 
-(declare (usual-integrations))
 
 (define-variable-per-buffer fill-column
   "Column beyond which automatic line-wrapping should happen.

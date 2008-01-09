@@ -28,7 +28,6 @@ USA.
 ;;;; Inferior REPL Mode
 ;;; Package: (edwin inferior-repl)
 
-(declare (usual-integrations))
 
 (define-variable repl-enable-transcript-buffer
   "If true, record input and output from inferior REPLs in transcript buffer.
@@ -760,8 +759,6 @@ If this is an error, the debugger examines the error condition."
 
 (define-integrable (queue-empty? queue)
   (null? (car queue)))
-
-(declare (integrate-operator enqueue!/unsafe dequeue!/unsafe))
 
 (define (enqueue!/unsafe queue object)
   (let ((next (cons object '())))

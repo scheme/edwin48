@@ -28,7 +28,6 @@ USA.
 ;;;; Pseudo Shell subprocess in a buffer
 ;;; Inspired by "cmushell.el", by Olin Shivers.
 
-(declare (usual-integrations))
 
 (load-option 'DOSPROCESS)
 

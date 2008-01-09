@@ -28,7 +28,6 @@ USA.
 ;;;; Buffer Output Ports
 ;;; Package: (edwin buffer-output-port)
 
-(declare (usual-integrations))
 
 (define (with-output-to-mark mark thunk)
   (call-with-output-mark mark

@@ -27,7 +27,6 @@ USA.
 
 ;;;; Incremental Search
 
-(declare (usual-integrations))
 
 (define (isearch forward? regexp?)
   (reset-command-prompt!)

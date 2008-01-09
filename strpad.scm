@@ -27,7 +27,6 @@ USA.
 
 ;;;; String Padding Stuff
 
-(declare (usual-integrations))
 
 (define (pad-on-right-to string n)
   (let ((l (string-length string)))

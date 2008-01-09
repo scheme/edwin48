@@ -27,7 +27,6 @@ USA.
 
 ;;;; Edwin: Syntaxing Declarations
 
-(declare (usual-integrations))
 
 (let* ((scm-file (lambda (file) (string-append file ".scm")))
        (bin-file (lambda (file) (string-append file ".bin")))

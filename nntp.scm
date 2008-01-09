@@ -37,7 +37,6 @@ USA.
 ;;; it contains, and the headers in each group.  It also provides a
 ;;; method for combining headers into conversation threads.
 
-(declare (usual-integrations))
 
 (load-option 'GDBM)
 

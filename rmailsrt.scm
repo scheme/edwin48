@@ -27,7 +27,6 @@ USA.
 
 ;;;; RMAIL Sorting Utilities
 
-(declare (usual-integrations))
 
 ;; GNUS compatible key bindings.
 (define-key 'rmail (list #\C-c #\C-s #\C-d) 'rmail-sort-by-date)

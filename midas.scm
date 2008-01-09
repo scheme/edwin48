@@ -27,7 +27,6 @@ USA.
 
 ;;;; Midas Mode
 
-(declare (usual-integrations))
 
 (define-command midas-mode
   "Enter Midas mode."

@@ -28,7 +28,6 @@ USA.
 ;;;; Shell subprocess in a buffer
 ;;; Translated from "cmushell.el", by Olin Shivers.
 
-(declare (usual-integrations))
 
 (define-variable shell-prompt-pattern
   "Regexp to match prompts in the inferior shell."

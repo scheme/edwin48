@@ -27,7 +27,6 @@ USA.
 
 ;;;; Autoloads for Edwin
 
-(declare (usual-integrations))
 
 ;;;; Definitions
 

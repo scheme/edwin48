@@ -27,7 +27,6 @@ USA.
 
 ;;;; Simple Editing Procedures
 
-(declare (usual-integrations))
 
 (define (insert-char char #!optional point)
   (let ((point (if (default-object? point) (current-point) point)))

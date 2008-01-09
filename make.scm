@@ -27,7 +27,6 @@ USA.
 
 ;;;; Edwin: System Construction
 
-(declare (usual-integrations))
 
 (with-loader-base-uri (system-library-uri "edwin/")
   (lambda ()

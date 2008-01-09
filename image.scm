@@ -27,7 +27,6 @@ USA.
 
 ;;;; Display Imaging
 
-(declare (usual-integrations))
 
 (define (group-columns group start end column tab-width char-image-strings)
   (let ((text       (group-text group))

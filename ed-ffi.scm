@@ -25,7 +25,6 @@ USA.
 
 |#
 
-(declare (usual-integrations))
 
 ;; This list must be kept in alphabetical order by filename.
 

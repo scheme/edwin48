@@ -28,7 +28,6 @@ USA.
 ;;;; Directory Editor
 ;; package: (edwin dired)
 
-(declare (usual-integrations))
 
 (define-variable dired-trivial-filenames
   "Regexp of files to skip when finding first file of a directory.

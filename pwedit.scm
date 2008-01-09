@@ -34,7 +34,6 @@ USA.
 ;;; displays a set of key names, and the user selectively reveals the
 ;;; password information hidden behind those keys.
 
-(declare (usual-integrations))
 
 (define-command view-password-file
   "Read in a password file and show it in password-view mode.

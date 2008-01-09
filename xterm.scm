@@ -28,7 +28,6 @@ USA.
 ;;;; X Terminal
 ;;; Package: (edwin x-screen)
 
-(declare (usual-integrations))
 
 (define-primitives
   (x-change-property 7)

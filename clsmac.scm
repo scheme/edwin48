@@ -27,7 +27,6 @@ USA.
 
 ;;;; Class/Object System
 
-(declare (usual-integrations))
 
 ;;; ******************************************************************
 ;;; This software is intended for use in the Edwin window system only.

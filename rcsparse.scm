@@ -27,7 +27,6 @@ USA.
 
 ;;;; RCS Parser
 
-(declare (usual-integrations))
 
 (define (parse-rcs-admin filename)
   (call-with-input-file filename

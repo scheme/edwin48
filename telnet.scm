@@ -27,7 +27,6 @@ USA.
 
 ;;;; Run Telnet in a buffer
 
-(declare (usual-integrations))
 
 (define-variable telnet-prompt-pattern
   "#f or Regexp to match prompts in telnet buffers."

@@ -27,7 +27,6 @@ USA.
 
 ;;;; Combinatoric Matcher
 
-(declare (usual-integrations))
 
 ;;; This matcher allows compex matching patterns to be built up from
 ;;; primitives using combinators.  With this implementation, the

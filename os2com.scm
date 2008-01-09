@@ -27,7 +27,6 @@ USA.
 
 ;;;; OS/2 Presentation Manager Commands
 
-(declare (usual-integrations))
 
 (define-command set-foreground-color
   "Set foreground (text) color to COLOR."

@@ -28,7 +28,6 @@ USA.
 ;;;; Windows Keys
 ;;; Package: (edwin win32-keys)
 
-(declare (usual-integrations))
 
 (define (initialize-package!)
   (set! end (make-special-key 'END 0))

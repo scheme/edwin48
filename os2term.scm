@@ -28,8 +28,6 @@ USA.
 ;;;; OS/2 Presentation Manager Interface
 ;;; Package: (edwin screen os2-screen)
 
-(declare (usual-integrations))
-(declare (integrate-external "../runtime/os2winp"))
 
 (define os2-display-type)
 (define screen-list)

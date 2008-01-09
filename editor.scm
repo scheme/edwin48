@@ -27,7 +27,6 @@ USA.
 
 ;;;; Editor Top Level
 
-(declare (usual-integrations))
 
 (define (edit . args)
   (call-with-current-continuation

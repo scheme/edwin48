@@ -27,7 +27,6 @@ USA.
 
 ;;;; Dynamic Abbrev
 
-(declare (usual-integrations))
 
 (define-variable dabbrevs-backward-only
   "If true, dabbrevs-expand only looks backwards."

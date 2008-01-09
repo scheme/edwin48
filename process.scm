@@ -28,7 +28,6 @@ USA.
 ;;;; Subprocess Support
 ;; package: (edwin process)
 
-(declare (usual-integrations))
 
 (define subprocesses-available? #t)
 

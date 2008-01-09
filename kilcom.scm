@@ -27,7 +27,6 @@ USA.
 
 ;;;; Kill Commands
 
-(declare (usual-integrations))
 
 ;;;; Deletion
 

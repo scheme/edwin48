@@ -27,7 +27,6 @@ USA.
 
 ;;;; Termcap(3) Interface
 
-(declare (usual-integrations))
 
 (define-primitives
   (termcap-initialize 1)

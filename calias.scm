@@ -27,7 +27,6 @@ USA.
 
 ;;;; Alias Keys
 
-(declare (usual-integrations))
 
 (define alias-keys '())
 

@@ -13,7 +13,6 @@ Domain.
 ;;;   <http://paste.lisp.org/>
 ;;;   <http://common-lisp.net/project/lisppaste/>
 
-(declare (usual-integrations))
 
 (load-option 'XML)
 

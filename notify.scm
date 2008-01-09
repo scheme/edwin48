@@ -27,7 +27,6 @@ USA.
 
 ;;;; Mode-line notifications (e.g. presence of mail, load average)
 
-(declare (usual-integrations))
 
 (define-variable notify-show-time
   "If true, the notifier displays the current time."

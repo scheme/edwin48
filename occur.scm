@@ -27,7 +27,6 @@ USA.
 
 ;;;; Occurrence Commands
 
-(declare (usual-integrations))
 
 (define-command keep-lines
   "Delete all lines except those containing matches for REGEXP.

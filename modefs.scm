@@ -27,7 +27,6 @@ USA.
 
 ;;;; Fundamental Mode
 
-(declare (usual-integrations))
 
 (define-command fundamental-mode
   "Make the current mode be Fundamental Mode.

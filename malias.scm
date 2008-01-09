@@ -27,7 +27,6 @@ USA.
 
 ;;;; Mail Aliases
 
-(declare (usual-integrations))
 
 (define-command define-mail-alias
   "Define NAME as a mail-alias that translates to DEFINITION."

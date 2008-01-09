@@ -27,7 +27,6 @@ USA.
 
 ;;;; Basic Commands
 
-(declare (usual-integrations))
 
 (define-command self-insert-command
   "Insert the character you type.

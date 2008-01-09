@@ -27,5 +27,4 @@ USA.
 
 ;;;; Edwin Interpackage Renames
 
-(declare (usual-integrations))
 

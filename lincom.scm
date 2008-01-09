@@ -27,7 +27,6 @@ USA.
 
 ;;;; Line/Indentation Commands
 
-(declare (usual-integrations))
 
 ;;;; Lines
 

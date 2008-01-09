@@ -27,7 +27,6 @@ USA.
 
 ;;;; Rectangle Commands
 
-(declare (usual-integrations))
 
 (define rectangle-ring (list 'RECTANGLE))
 

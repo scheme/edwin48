@@ -9,7 +9,6 @@ Domain.  All warranties are disclaimed.
 
 ;;;; Paredit: Parenthesis-Editing Minor Mode (based on paredit.el)
 
-(declare (usual-integrations))
 
 (define-command paredit-mode
   "Toggle pseudo-structural editing of Lisp code.

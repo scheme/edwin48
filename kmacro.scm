@@ -27,7 +27,6 @@ USA.
 
 ;;;; Keyboard Macros
 
-(declare (usual-integrations))
 
 (define *defining-keyboard-macro?* #f)
 (define *executing-keyboard-macro?* #f)

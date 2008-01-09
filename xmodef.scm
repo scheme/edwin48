@@ -27,5 +27,4 @@ USA.
 
 ;;;; Fundamental Mode, additional X bindings
 
-(declare (usual-integrations))
 

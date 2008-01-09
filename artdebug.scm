@@ -27,7 +27,6 @@ USA.
 
 ;;;; Continuation Browser
 
-(declare (usual-integrations))
 
 #| TO DO
 

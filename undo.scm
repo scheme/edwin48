@@ -27,7 +27,6 @@ USA.
 
 ;;;; Undo, translated from the GNU Emacs implementation in C/Emacs-Lisp.
 
-(declare (usual-integrations))
 
 (define (enable-group-undo! group)
   (set-group-undo-data! group '()))

@@ -27,7 +27,6 @@ USA.
 
 ;;;; New Vector Operations
 
-(declare (usual-integrations))
 
 (define (vector-delq! vector index item)
   (vector-set! vector index (delq! item (vector-ref vector index))))

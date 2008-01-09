@@ -28,7 +28,6 @@ USA.
 ;;;; Display-Type Abstraction
 ;;; package: (edwin display-type)
 
-(declare (usual-integrations))
 
 (define-structure (display-type
 		   (conc-name display-type/)

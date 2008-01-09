@@ -27,7 +27,6 @@ USA.
 
 ;;;; Buffer Windows: Fill and Scroll
 
-(declare (usual-integrations))
 
 (define (fill-top window start)
   (let ((group (%window-group window))

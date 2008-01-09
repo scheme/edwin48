@@ -27,7 +27,6 @@ USA.
 
 ;;;; Pascal Mode
 
-(declare (usual-integrations))
 
 (define-command pascal-mode
   "Enter Pascal mode."

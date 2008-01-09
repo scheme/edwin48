@@ -27,7 +27,6 @@ USA.
 
 ;;;; RMAIL Mail Reader
 
-(declare (usual-integrations))
 
 (define rmail-spool-directory
   #f)

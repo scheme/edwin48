@@ -27,7 +27,6 @@ USA.
 
 ;;;; Command Argument Reader
 
-(declare (usual-integrations))
 
 (define-command universal-argument
   "Begin a numeric argument for the following command.

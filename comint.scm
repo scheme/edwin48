@@ -28,7 +28,6 @@ USA.
 ;;;; Command interpreter subprocess control
 ;;; Translated from "comint.el", by Olin Shivers.
 
-(declare (usual-integrations))
 
 (define (make-comint mode buffer program . switches)
   (let ((buffer

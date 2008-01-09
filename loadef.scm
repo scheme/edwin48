@@ -27,7 +27,6 @@ USA.
 
 ;;;; Autoload Definitions
 
-(declare (usual-integrations))
 
 ;;; ****************
 

@@ -27,7 +27,6 @@ USA.
 
 ;;;; File Commands
 
-(declare (usual-integrations))
 
 (define (find-file filename)
   (select-buffer (find-file-noselect filename #t)))

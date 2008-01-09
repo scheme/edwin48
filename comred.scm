@@ -27,7 +27,6 @@ USA.
 
 ;;;; Command Reader
 
-(declare (usual-integrations))
 
 (define *command-key*)		;Key read to find current command
 (define *command*)		;The current command

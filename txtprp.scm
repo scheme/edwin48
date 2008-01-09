@@ -28,7 +28,6 @@ USA.
 ;;;; Text Properties
 ;;;  An improved version of a mechanism from GNU Emacs 19
 
-(declare (usual-integrations))
 
 (define (add-text-property group start end key datum #!optional no-overwrite?)
   (validate-region-arguments group start end 'ADD-TEXT-PROPERTY)
@@ -504,7 +503,6 @@ USA.
     (set-group-text-properties! group interval)
     interval))
 
-(declare (integrate-operator interval-length))
 (define (interval-length interval)
   (if (interval-left interval)
       (if (interval-right interval)
@@ -518,7 +516,6 @@ USA.
 		 (interval-total-length (interval-right interval)))
 	  (interval-total-length interval))))
 
-(declare (integrate-operator interval-end))
 (define (interval-end interval)
   (fix:+ (interval-start interval)
 	 (interval-length interval)))

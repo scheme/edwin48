@@ -27,7 +27,6 @@ USA.
 
 ;;;; IMAIL mail reader: RFC-822 support
 
-(declare (usual-integrations))
 
 (define rfc822:char-set:header-constituents
   (char-set-difference (ascii-range->char-set 33 127)

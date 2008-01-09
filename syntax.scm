@@ -27,7 +27,6 @@ USA.
 
 ;;;; Syntax Tables
 
-(declare (usual-integrations))
 
 (define modify-syntax-entry! set-char-syntax!)
 

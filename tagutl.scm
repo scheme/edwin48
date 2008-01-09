@@ -28,7 +28,6 @@ USA.
 ;;;; Tags Facility
 ;;;  From GNU Emacs (thank you RMS)
 
-(declare (usual-integrations))
 
 (define-variable tags-table-pathnames
   "List of pathnames of all of the active tags tables.

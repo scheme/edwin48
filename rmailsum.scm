@@ -27,7 +27,6 @@ USA.
 
 ;;;; RMAIL Summary Mode
 
-(declare (usual-integrations))
 
 (define-variable rmailsum-rcs-header
   "The RCS header of the rmailsum.scm file."

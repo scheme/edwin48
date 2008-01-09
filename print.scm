@@ -27,7 +27,6 @@ USA.
 
 ;;;; Print Buffers and Regions
 
-(declare (usual-integrations))
 
 (define-command lpr-buffer
   "Print buffer contents as with Unix command `lpr'.

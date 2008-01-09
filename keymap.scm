@@ -27,7 +27,6 @@ USA.
 
 ;;;; Command Summary
 
-(declare (usual-integrations))
 
 (define-command describe-bindings
   "Show a list of all defined keys, and their definitions.

@@ -28,7 +28,6 @@ USA.
 ;;;; Search Commands
 ;;; package: (edwin)
 
-(declare (usual-integrations))
 
 ;;;; Variables
 

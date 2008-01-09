@@ -27,4 +27,3 @@ USA.
 
 ;;;; Window System Rename Exports
 
-(declare (usual-integrations))

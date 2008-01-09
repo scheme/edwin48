@@ -27,7 +27,6 @@ USA.
 
 ;;;; C Mode (from GNU Emacs)
 
-(declare (usual-integrations))
 
 (define-major-mode c fundamental "C"
   "Major mode for editing C code.

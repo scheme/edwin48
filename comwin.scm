@@ -27,7 +27,6 @@ USA.
 
 ;;;; Combination Windows
 
-(declare (usual-integrations))
 
 ;;; Combination windows are used to split a window into vertically or
 ;;; horizontally divided areas.  That window's initial superior must

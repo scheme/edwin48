@@ -28,7 +28,6 @@ USA.
 ;;;; Keys
 ;;; Package: (edwin x-keys)
 
-(declare (usual-integrations))
 
 (define (x-make-special-key keysym bucky-bits)
   (make-special-key (or (keysym->name keysym)

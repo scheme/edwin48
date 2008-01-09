@@ -28,7 +28,6 @@ USA.
 ;;;; IBM-PC BIOS Screen Implementation
 ;;; package: (edwin screen console-screen)
 
-(declare (usual-integrations))
 
 (define (make-bios-screen)
   ;; What is the baud rate needed for?  It's not even meaningful.

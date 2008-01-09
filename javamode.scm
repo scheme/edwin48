@@ -36,7 +36,6 @@ USA.
 ;;; could be done using the keyparser, but that would be much more
 ;;; work than this was.
 
-(declare (usual-integrations))
 
 (define-major-mode java c "Java"
   "Major mode for editing Java code.
