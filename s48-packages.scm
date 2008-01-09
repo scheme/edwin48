@@ -38,3 +38,11 @@
 	    fix:or fix:xor fix:lsh)
   (open scheme bitwise)
   (files s48-fixnum))
+
+(define-structure errors
+    (export error:bad-range-argument
+	    error:datum-out-of-range
+	    error:file-operation
+	    error:wrong-type-argument)
+  (open scheme signals)
+  (files s48-errors))
