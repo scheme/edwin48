@@ -354,18 +354,14 @@
 (define (make-permanent-mark group index left-inserting?)
   (let ((mark (make-temporary-mark group index left-inserting?)))
     (set-group-marks! group
-		      (system-pair-cons (ucode-type weak-cons)
-					mark
-					(group-marks group)))
+		      (weak-cons mark (group-marks group)))
     mark))
 
 (define (mark-permanent! mark)
   (let ((group (mark-group mark)))
     (if (not (weak-memq mark (group-marks group)))
 	(set-group-marks! group
-			  (system-pair-cons (ucode-type weak-cons)
-					    mark
-					    (group-marks group)))))
+			  (weak-cons mark (group-marks group)))))
   mark)
 
 (define (mark-local-ref mark variable)
@@ -436,36 +432,36 @@
   (define (scan-head marks)
     (cond ((null? marks)
 	   (set-group-marks! group '()))
-	  ((not (system-pair-car marks))
-	   (scan-head (system-pair-cdr marks)))
+	  ((not (weak-car marks))
+	   (scan-head (weak-cdr marks)))
 	  (else
 	   (set-group-marks! group marks)
-	   (scan-tail marks (system-pair-cdr marks)))))
+	   (scan-tail marks (weak-cdr marks)))))
 
   (define (scan-tail previous marks)
     (cond ((null? marks)
 	   unspecific)
-	  ((not (system-pair-car marks))
-	   (skip-nulls previous (system-pair-cdr marks)))
+	  ((not (weak-car marks))
+	   (skip-nulls previous (weak-cdr marks)))
 	  (else
-	   (scan-tail marks (system-pair-cdr marks)))))
+	   (scan-tail marks (weak-cdr marks)))))
 
   (define (skip-nulls previous marks)
     (cond ((null? marks)
-	   (system-pair-set-cdr! previous '()))
-	  ((not (system-pair-car marks))
-	   (skip-nulls previous (system-pair-cdr marks)))
+	   (weak-set-cdr! previous '()))
+	  ((not (weak-car marks))
+	   (skip-nulls previous (weak-cdr marks)))
 	  (else
-	   (system-pair-set-cdr! previous marks)
-	   (scan-tail marks (system-pair-cdr marks)))))
+	   (weak-set-cdr! previous marks)
+	   (scan-tail marks (weak-cdr marks)))))
 
   (let ((marks (group-marks group)))
     (cond ((null? marks)
 	   unspecific)
-	  ((not (system-pair-car marks))
-	   (scan-head (system-pair-cdr marks)))
+	  ((not (weak-car marks))
+	   (scan-head (weak-cdr marks)))
 	  (else
-	   (scan-tail marks (system-pair-cdr marks))))))
+	   (scan-tail marks (weak-cdr marks))))))
 
 (define (mark-temporary! mark)
   ;; I'd think twice about using this one.
@@ -474,46 +470,46 @@
     (define (scan-head marks)
       (if (null? marks)
 	  (set-group-marks! group '())
-	  (let ((mark* (system-pair-car marks)))
+	  (let ((mark* (weak-car marks)))
 	    (cond ((not mark*)
-		   (scan-head (system-pair-cdr marks)))
+		   (scan-head (weak-cdr marks)))
 		  ((eq? mark mark*)
-		   (set-group-marks! group (system-pair-cdr marks)))
+		   (set-group-marks! group (weak-cdr marks)))
 		  (else
 		   (set-group-marks! group marks)
-		   (scan-tail marks (system-pair-cdr marks)))))))
+		   (scan-tail marks (weak-cdr marks)))))))
 
     (define (scan-tail previous marks)
       (if (not (null? marks))
-	  (let ((mark* (system-pair-car marks)))
+	  (let ((mark* (weak-car marks)))
 	    (cond ((not mark*)
-		   (skip-nulls previous (system-pair-cdr marks)))
+		   (skip-nulls previous (weak-cdr marks)))
 		  ((eq? mark mark*)
-		   (system-pair-set-cdr! previous marks))
+		   (weak-set-cdr! previous marks))
 		  (else
-		   (scan-tail marks (system-pair-cdr marks)))))))
+		   (scan-tail marks (weak-cdr marks)))))))
 
     (define (skip-nulls previous marks)
       (if (null? marks)
-	  (system-pair-set-cdr! previous '())
-	  (let ((mark* (system-pair-car marks)))
+	  (weak-set-cdr! previous '())
+	  (let ((mark* (weak-car marks)))
 	    (cond ((not mark*)
-		   (skip-nulls previous (system-pair-cdr marks)))
+		   (skip-nulls previous (weak-cdr marks)))
 		  ((eq? mark mark*)
-		   (system-pair-set-cdr! previous (system-pair-cdr marks)))
+		   (weak-set-cdr! previous (weak-cdr marks)))
 		  (else
-		   (system-pair-set-cdr! previous marks)
-		   (scan-tail marks (system-pair-cdr marks)))))))
+		   (weak-set-cdr! previous marks)
+		   (scan-tail marks (weak-cdr marks)))))))
 
     (let ((marks (group-marks group)))
       (if (not (null? marks))
-	  (let ((mark* (system-pair-car marks)))
+	  (let ((mark* (weak-car marks)))
 	    (cond ((not mark*)
-		   (scan-head (system-pair-cdr marks)))
+		   (scan-head (weak-cdr marks)))
 		  ((eq? mark mark*)
-		   (set-group-marks! group (system-pair-cdr marks)))
+		   (set-group-marks! group (weak-cdr marks)))
 		  (else
-		   (scan-tail marks (system-pair-cdr marks)))))))))
+		   (scan-tail marks (weak-cdr marks)))))))))
 
 (define (find-permanent-mark group index left-inserting?)
 
@@ -522,9 +518,9 @@
 	(begin
 	  (set-group-marks! group '())
 	  #f)
-	(let ((mark (system-pair-car marks)))
+	(let ((mark (weak-car marks)))
 	  (cond ((not mark)
-		 (scan-head (system-pair-cdr marks)))
+		 (scan-head (weak-cdr marks)))
 		((and (if (mark-left-inserting? mark)
 			  left-inserting?
 			  (not left-inserting?))
@@ -532,58 +528,58 @@
 		 mark)
 		(else
 		 (set-group-marks! group marks)
-		 (scan-tail marks (system-pair-cdr marks)))))))
+		 (scan-tail marks (weak-cdr marks)))))))
 
   (define (scan-tail previous marks)
     (and (not (null? marks))
-	 (let ((mark (system-pair-car marks)))
+	 (let ((mark (weak-car marks)))
 	   (cond ((not mark)
-		  (skip-nulls previous (system-pair-cdr marks)))
+		  (skip-nulls previous (weak-cdr marks)))
 		 ((and (if (mark-left-inserting? mark)
 			   left-inserting?
 			   (not left-inserting?))
 		       (fix:= (mark-index mark) index))
 		  mark)
 		 (else
-		  (scan-tail marks (system-pair-cdr marks)))))))
+		  (scan-tail marks (weak-cdr marks)))))))
 
   (define (skip-nulls previous marks)
     (if (null? marks)
 	(begin
-	  (system-pair-set-cdr! previous '())
+	  (weak-set-cdr! previous '())
 	  #f)
-	(let ((mark (system-pair-car marks)))
+	(let ((mark (weak-car marks)))
 	  (if (not mark)
-	      (skip-nulls previous (system-pair-cdr marks))
+	      (skip-nulls previous (weak-cdr marks))
 	      (begin
-		(system-pair-set-cdr! previous marks)
+		(weak-set-cdr! previous marks)
 		(if (and (if (mark-left-inserting? mark)
 			     left-inserting?
 			     (not left-inserting?))
 			 (fix:= (mark-index mark) index))
 		    mark
-		    (scan-tail marks (system-pair-cdr marks))))))))
+		    (scan-tail marks (weak-cdr marks))))))))
 
   (let ((marks (group-marks group)))
     (and (not (null? marks))
-	 (let ((mark (system-pair-car marks)))
+	 (let ((mark (weak-car marks)))
 	   (cond ((not mark)
-		  (scan-head (system-pair-cdr marks)))
+		  (scan-head (weak-cdr marks)))
 		 ((and (if (mark-left-inserting? mark)
 			   left-inserting?
 			   (not left-inserting?))
 		       (fix:= (mark-index mark) index))
 		  mark)
 		 (else
-		  (scan-tail marks (system-pair-cdr marks))))))))
+		  (scan-tail marks (weak-cdr marks))))))))
 
 (define (for-each-mark group procedure)
 
   (define (scan-head marks)
     (if (null? marks)
 	(set-group-marks! group '())
-	(let ((mark (system-pair-car marks))
-	      (rest (system-pair-cdr marks)))
+	(let ((mark (weak-car marks))
+	      (rest (weak-cdr marks)))
 	  (if mark
 	      (begin
 		(set-group-marks! group marks)
@@ -593,8 +589,8 @@
 
   (define (scan-tail previous marks)
     (if (not (null? marks))
-	(let ((mark (system-pair-car marks))
-	      (rest (system-pair-cdr marks)))
+	(let ((mark (weak-car marks))
+	      (rest (weak-cdr marks)))
 	  (if mark
 	      (begin
 		(procedure mark)
@@ -603,20 +599,20 @@
 
   (define (skip-nulls previous marks)
     (if (null? marks)
-	(system-pair-set-cdr! previous '())
-	(let ((mark (system-pair-car marks))
-	      (rest (system-pair-cdr marks)))
+	(weak-set-cdr! previous '())
+	(let ((mark (weak-car marks))
+	      (rest (weak-cdr marks)))
 	  (if mark
 	      (begin
-		(system-pair-set-cdr! previous marks)
+		(weak-set-cdr! previous marks)
 		(procedure mark)
 		(scan-tail marks rest))
 	      (skip-nulls previous rest)))))
 
   (let ((marks (group-marks group)))
     (if (not (null? marks))
-	(let ((mark (system-pair-car marks))
-	      (rest (system-pair-cdr marks)))
+	(let ((mark (weak-car marks))
+	      (rest (weak-cdr marks)))
 	  (if mark
 	      (begin
 		(procedure mark)

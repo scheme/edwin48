@@ -245,9 +245,9 @@ The following commands evaluate Scheme expressions:
 	    (cond ((not (pair? completions))
 		   (if-not-found))
 		  ((null? (cdr completions))
-		   (if-unique (system-pair-car (car completions))))
+		   (if-unique (weak-car (car completions))))
 		  (else
-		   (let ((completions (map system-pair-car completions)))
+		   (let ((completions (map weak-car completions)))
 		     (if-not-unique
 		      (string-greatest-common-prefix completions)
 		      (lambda () (sort completions string<=?))))))))
@@ -264,7 +264,7 @@ The following commands evaluate Scheme expressions:
 	    (let bucket-loop ((symbols (vector-ref obarray i)))
 	      (if (null? symbols)
 		  (index-loop (fix:+ i 1))
-		  (let ((string (system-pair-car (car symbols))))
+		  (let ((string (weak-car (car symbols))))
 		    (if (and (fix:<= prefix-length (string-length string))
 			     (let loop ((index 0))
 			       (or (fix:= index prefix-length)
