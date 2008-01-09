@@ -114,32 +114,32 @@
       (lambda () (intervals-to-modify group start end modify?))
     (lambda (start-interval end-interval)
       (if start-interval
-	  (let ((interrupt-mask (set-interrupt-enables! interrupt-mask/gc-ok)))
-	    (prepare-to-modify-intervals group start-interval end-interval)
-	    (let loop ((interval start-interval))
-	      (modify! interval)
-	      (if (not (eq? interval end-interval))
-		  (loop (next-interval interval))))
-	    (let ((end (interval-end end-interval)))
-	      (let loop
-		  ((interval
-		    (or (previous-interval start-interval)
-			start-interval)))
-		(let ((next
-		       (let ((next (next-interval interval)))
-			 (if (and next
-				  (properties=? (interval-properties interval)
-						(interval-properties next)))
-			     (begin
-			       (increment-interval-length
-				next
-				(interval-length interval))
-			       (delete-interval interval group))
-			     next))))
-		  (if (and next
-			   (not (fix:= end (interval-start next))))
-		      (loop next)))))
-	    (set-interrupt-enables! interrupt-mask))))))
+	  (without-interrupts
+	   (lambda ()
+	     (prepare-to-modify-intervals group start-interval end-interval)
+	     (let loop ((interval start-interval))
+	       (modify! interval)
+	       (if (not (eq? interval end-interval))
+		   (loop (next-interval interval))))
+	     (let ((end (interval-end end-interval)))
+	       (let loop
+		   ((interval
+		     (or (previous-interval start-interval)
+			 start-interval)))
+		 (let ((next
+			(let ((next (next-interval interval)))
+			  (if (and next
+				   (properties=? (interval-properties interval)
+						 (interval-properties next)))
+			      (begin
+				(increment-interval-length
+				 next
+				 (interval-length interval))
+				(delete-interval interval group))
+			      next))))
+		   (if (and next
+			    (not (fix:= end (interval-start next))))
+		       (loop next)))))))))))
 
 (define (intervals-to-modify group start end modify?)
   (letrec

@@ -241,15 +241,15 @@ Initialized from the SHELL environment variable."
     (let loop ((output? #f))
       (if (null? (car queue))
 	  output?
-	  (let ((interrupt-mask (set-interrupt-enables! interrupt-mask/gc-ok)))
-	    (let ((process (caar queue)))
-	      (set-car! queue (cdar queue))
-	      (if (null? (car queue))
-		  (set-cdr! queue '()))
-	      (let ((output?
-		     (if (poll-process-for-output process #t) #t output?)))
-		(set-interrupt-enables! interrupt-mask)
-		(loop output?))))))))
+	  (without-interrupts
+	   (lambda ()
+	     (let ((process (caar queue)))
+	       (set-car! queue (cdar queue))
+	       (if (null? (car queue))
+		   (set-cdr! queue '()))
+	       (let ((output?
+		      (if (poll-process-for-output process #t) #t output?)))
+		 (loop output?)))))))))
 
 (define (poll-process-for-output process do-status?)
   (and (let ((channel (subprocess-input-channel (process-subprocess process))))

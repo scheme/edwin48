@@ -676,19 +676,18 @@
   (%clear-window-buffer-state! window))
 
 (define-method buffer-window (:kill! window)
-  (let ((mask (set-interrupt-enables! interrupt-mask/gc-ok)))
-    (%unset-window-buffer! window)
-    (set-interrupt-enables! mask))
+  (without-interrupts
+   (lambda ()
+     (%unset-window-buffer! window)))
   (usual==> window :kill!))
 
 (define-method buffer-window (:salvage! window)
-  (let ((mask (set-interrupt-enables! interrupt-mask/gc-ok)))
-    (%set-window-point-index! window (%window-group-start-index window))
-    (%set-window-point-moved?! window 'SINCE-START-SET)
-    (%reset-window-structures! window)
-    (buffer-window/redraw! window)
-    (set-interrupt-enables! mask)
-    unspecific))
+  (without-interrupts
+   (lambda ()
+     (%set-window-point-index! window (%window-group-start-index window))
+     (%set-window-point-moved?! window 'SINCE-START-SET)
+     (%reset-window-structures! window)
+     (buffer-window/redraw! window))))
 
 (define-method buffer-window (:set-size! window x y)
   (if (%window-debug-trace window)
@@ -784,13 +783,12 @@
 (define (buffer-window/redraw! window)
   (if (%window-debug-trace window)
       ((%window-debug-trace window) 'window window 'force-redraw!))
-  (let ((mask (set-interrupt-enables! interrupt-mask/gc-ok)))
-    (%set-window-force-redraw?! window #t)
-    (%recache-window-buffer-local-variables! window)
-    (%clear-window-incremental-redisplay-state! window)
-    (window-needs-redisplay! window)
-    (set-interrupt-enables! mask)
-    unspecific))
+  (without-interrupts
+   (lambda ()
+     (%set-window-force-redraw?! window #t)
+     (%recache-window-buffer-local-variables! window)
+     (%clear-window-incremental-redisplay-state! window)
+     (window-needs-redisplay! window))))
 
 ;;;; Window State
 
@@ -923,12 +921,11 @@
   (let ((mark (clip-mark-to-display window mark)))
     (if (%window-debug-trace window)
 	((%window-debug-trace window) 'window window 'set-point! mark))
-    (let ((mask (set-interrupt-enables! interrupt-mask/gc-ok)))
-      (set-window-point-index! window (mark-index mark))
-      (%set-window-point-moved?! window 'SINCE-START-SET)
-      (window-needs-redisplay! window)
-      (set-interrupt-enables! mask)
-      unspecific)))
+    (without-interrupts
+      (lambda ()
+	(set-window-point-index! window (mark-index mark))
+	(%set-window-point-moved?! window 'SINCE-START-SET)
+	(window-needs-redisplay! window)))))
 
 ;;;; Start Mark
 
@@ -967,10 +964,9 @@
       (error:bad-range-argument y-point 'WINDOW-SCROLL-Y-ABSOLUTE!))
   (let ((cws
 	 (compute-window-start window (%window-point-index window) y-point)))
-    (let ((mask (set-interrupt-enables! interrupt-mask/gc-ok)))
-      (set-window-start! window cws)
-      (set-interrupt-enables! mask)
-      unspecific)))
+    (without-interrupts
+     (lambda ()
+       (set-window-start! window cws)))))
 
 (define (buffer-window/y-center window)
   (let ((y-size (window-y-size window)))
@@ -995,20 +991,17 @@ This number is a percentage, where 0 is the window's top and 100 the bottom."
 	  (y-start (vector-ref cws 1)))
       (cond ((predict-index-visible? window start y-start
 				     (%window-point-index window))
-	     (let ((mask (set-interrupt-enables! interrupt-mask/gc-ok)))
-	       (set-window-start! window cws)
-	       (set-interrupt-enables! mask)
-	       unspecific))
+	     (without-interrupts
+	      (lambda () (set-window-start! window cws))))
 	    (point-y
-	     (let ((mask (set-interrupt-enables! interrupt-mask/gc-ok)))
-	       (set-window-point-index!
-		window
-		(or (predict-index window start y-start
-				   (vector-ref cws 4) point-y)
-		    (%window-group-end-index window)))
-	       (set-window-start! window cws)
-	       (set-interrupt-enables! mask)
-	       unspecific))))))
+	     (without-interrupts
+	      (lambda ()
+		(set-window-point-index!
+		 window
+		 (or (predict-index window start y-start
+				    (vector-ref cws 4) point-y)
+		     (%window-group-end-index window)))
+		(set-window-start! window cws))))))))
 
 (define (set-window-start! window cws)
   (let ((start-line (vector-ref cws 0))
@@ -1065,10 +1058,8 @@ This number is a percentage, where 0 is the window's top and 100 the bottom."
   (%set-window-start-partial! window 0))
 
 (define (guarantee-start-mark! window)
-  (let ((mask (set-interrupt-enables! interrupt-mask/gc-ok)))
-    (%guarantee-start-mark! window)
-    (set-interrupt-enables! mask)
-    unspecific))
+  (without-interrupts
+   (lambda () (%guarantee-start-mark! window))))
 
 (define (%guarantee-start-mark! window)
   (let ((index-at!
@@ -1147,11 +1138,10 @@ If this is zero, point is always centered after it moves off screen."
   (if (%window-debug-trace window)
       ((%window-debug-trace window) 'window window 'set-override-message!
 				    message))
-  (let ((mask (set-interrupt-enables! interrupt-mask/gc-ok)))
-    (%set-window-override-string! window message)
-    (window-needs-redisplay! window)
-    (set-interrupt-enables! mask)
-    unspecific))
+  (without-interrupts
+   (lambda ()
+     (%set-window-override-string! window message)
+     (window-needs-redisplay! window))))
 
 (define (buffer-window/clear-override-message! window)
   (if (%window-override-string window)
@@ -1159,11 +1149,10 @@ If this is zero, point is always centered after it moves off screen."
 	(if (%window-debug-trace window)
 	    ((%window-debug-trace window) 'window window
 					  'clear-override-message!))
-	(let ((mask (set-interrupt-enables! interrupt-mask/gc-ok)))
-	  (%set-window-override-string! window #f)
-	  (buffer-window/redraw! window)
-	  (set-interrupt-enables! mask)
-	  unspecific))))
+	(without-interrupts
+	 (lambda ()
+	   (%set-window-override-string! window #f)
+	   (buffer-window/redraw! window))))))
 
 (define (update-override-string! window screen x-start y-start xl xu yl yu)
   ;; This should probably update like any other string, paying

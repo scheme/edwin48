@@ -718,27 +718,24 @@
 (define (read-event-1 block?)
   (or (os2win-get-event event-descriptor #f)
       (let loop ()
-	(let ((interrupt-mask (set-interrupt-enables! interrupt-mask/gc-ok)))
-	  (cond (inferior-thread-changes?
-		 (set-interrupt-enables! interrupt-mask)
-		 event:inferior-thread-output)
-		((process-output-available?)
-		 (set-interrupt-enables! interrupt-mask)
-		 event:process-output)
-		((process-status-changes?)
-		 (set-interrupt-enables! interrupt-mask)
-		 event:process-status)
-		(else
-		 (let ((flag
-			(test-for-io-on-descriptor event-descriptor
-						   block?
-						   'READ)))
-		   (set-interrupt-enables! interrupt-mask)
-		   (case flag
-		     ((#F) #f)
-		     ((PROCESS-STATUS-CHANGE) event:process-status)
-		     ((INTERRUPT) (loop))
-		     (else (read-event-1 block?))))))))))
+	(without-interrupts
+	 (lambda ()
+	   (cond (inferior-thread-changes?
+		  event:inferior-thread-output)
+		 ((process-output-available?)
+		  event:process-output)
+		 ((process-status-changes?)
+		  event:process-status)
+		 (else
+		  (let ((flag
+			 (test-for-io-on-descriptor event-descriptor
+						    block?
+						    'READ)))
+		    (case flag
+		      ((#F) #f)
+		      ((PROCESS-STATUS-CHANGE) event:process-status)
+		      ((INTERRUPT) (loop))
+		      (else (read-event-1 block?)))))))))))
 
 (define event:process-output -2)
 (define event:process-status -3)

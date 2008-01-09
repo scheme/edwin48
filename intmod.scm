@@ -778,23 +778,20 @@ If this is an error, the debugger examines the error condition."
 	  (car this)))))
 
 (define (enqueue! queue object)
-  (let ((interrupt-mask (set-interrupt-enables! interrupt-mask/gc-ok)))
-    (enqueue!/unsafe queue object)
-    (set-interrupt-enables! interrupt-mask)
-    unspecific))
+  (without-interrupts
+   (lambda () (enqueue!/unsafe queue object))))
 
 (define (dequeue! queue empty)
-  (let ((interrupt-mask (set-interrupt-enables! interrupt-mask/gc-ok)))
-    (let ((value (dequeue!/unsafe queue empty)))
-      (set-interrupt-enables! interrupt-mask)
-      value)))
+  (without-interrupts
+   (lambda ()
+     (let ((value (dequeue!/unsafe queue empty)))
+       value))))
 
 (define (flush-queue! queue)
-  (let ((interrupt-mask (set-interrupt-enables! interrupt-mask/gc-ok)))
-    (set-car! queue '())
-    (set-cdr! queue '())
-    (set-interrupt-enables! interrupt-mask)
-    unspecific))
+  (without-interrupts
+   (lambda ()
+     (set-car! queue '())
+     (set-cdr! queue '()))))
 
 ;;;; Interface Port
 
@@ -918,14 +915,13 @@ If this is an error, the debugger examines the error condition."
       (window-mark-visible? window mark))))
 
 (define (enqueue-output-string! port string)
-  (let ((interrupt-mask (set-interrupt-enables! interrupt-mask/gc-ok)))
-    (set-port/output-strings! port (cons string (port/output-strings port)))
-    (set-port/bytes-written! port
-			     (+ (port/bytes-written port)
-				(string-length string)))
-    (inferior-thread-output!/unsafe (port/output-registration port))
-    (set-interrupt-enables! interrupt-mask)
-    unspecific))
+  (without-interrupts
+    (lambda ()
+      (set-port/output-strings! port (cons string (port/output-strings port)))n
+      (set-port/bytes-written! port
+			       (+ (port/bytes-written port)
+				  (string-length string)))
+      (inferior-thread-output!/unsafe (port/output-registration port)))))
 
 ;;; We assume here that none of the OPERATORs passed to this procedure
 ;;; generate any output in the REPL buffer, and consequently we don't
@@ -933,57 +929,56 @@ If this is an error, the debugger examines the error condition."
 ;;; this procedure confirms the assumption. 
 
 (define (enqueue-output-operation! port operator)
-  (let ((interrupt-mask (set-interrupt-enables! interrupt-mask/gc-ok)))
-    (let ((strings (port/output-strings port)))
-      (if (not (null? strings))
-	  (begin
-	    (set-port/output-strings! port '())
-	    (enqueue!/unsafe
-	     (port/output-queue port)
-	     (let ((string (apply string-append (reverse! strings))))
-	       (lambda (mark transcript?)
-		 transcript?
-		 (region-insert-string! mark string)
-		 #t))))))
-    (enqueue!/unsafe (port/output-queue port) operator)
-    (inferior-thread-output!/unsafe (port/output-registration port))
-    (set-interrupt-enables! interrupt-mask)
-    unspecific))
+  (without-interrupts
+   (lambda ()
+     (let ((strings (port/output-strings port)))
+       (if (not (null? strings))
+	   (begin
+	     (set-port/output-strings! port '())
+	     (enqueue!/unsafe
+	      (port/output-queue port)
+	      (let ((string (apply string-append (reverse! strings))))
+		(lambda (mark transcript?)
+		  transcript?
+		  (region-insert-string! mark string)
+		  #t))))))
+     (enqueue!/unsafe (port/output-queue port) operator)
+     (inferior-thread-output!/unsafe (port/output-registration port)))))
 
 (define (process-output-queue port)
-  (let ((interrupt-mask (set-interrupt-enables! interrupt-mask/gc-ok))
-	(result #t))
-    (let ((mark (mark-left-inserting-copy (port/mark port))))
-      (call-with-transcript-output-mark (port/buffer port)
-	(lambda (transcript-mark)
-	  (let ((run-operation
-		 (lambda (operation mark transcript?)
-		   (let ((flag (operation mark transcript?)))
-		     (if (eq? flag 'FORCE-RETURN)
-			 (set! result flag)))
-		   unspecific)))
-	    (let loop ()
-	      (let ((operation (dequeue!/unsafe (port/output-queue port) #f)))
-		(if operation
-		    (begin
-		      (run-operation operation mark #f)
-		      (if transcript-mark
-			  (run-operation operation transcript-mark #t))
-		      (loop))))))
-	  (let ((strings (port/output-strings port)))
-	    (if (not (null? strings))
-		(begin
-		  (set-port/output-strings! port '())
-		  (do ((strings (reverse! strings) (cdr strings)))
-		      ((null? strings))
-		    (region-insert-string! mark (car strings))
-		    (if transcript-mark
-			(region-insert-string! transcript-mark
-					       (car strings)))))))))
-      (move-mark-to! (port/mark port) mark)
-      (mark-temporary! mark))
-    (set-interrupt-enables! interrupt-mask)
-    result))
+  (without-interrupts
+   (lambda ()
+     (let ((result #t))
+       (let ((mark (mark-left-inserting-copy (port/mark port))))
+	 (call-with-transcript-output-mark (port/buffer port)
+	   (lambda (transcript-mark)
+	     (let ((run-operation
+		    (lambda (operation mark transcript?)
+		      (let ((flag (operation mark transcript?)))
+			(if (eq? flag 'FORCE-RETURN)
+			    (set! result flag)))
+		      unspecific)))
+	       (let loop ()
+		 (let ((operation (dequeue!/unsafe (port/output-queue port) #f)))
+		   (if operation
+		       (begin
+			 (run-operation operation mark #f)
+			 (if transcript-mark
+			     (run-operation operation transcript-mark #t))
+			 (loop))))))
+	     (let ((strings (port/output-strings port)))
+	       (if (not (null? strings))
+		   (begin
+		     (set-port/output-strings! port '())
+		     (do ((strings (reverse! strings) (cdr strings)))
+			 ((null? strings))
+		       (region-insert-string! mark (car strings))
+		       (if transcript-mark
+			   (region-insert-string! transcript-mark
+						  (car strings)))))))))
+	 (move-mark-to! (port/mark port) mark)
+	 (mark-temporary! mark))
+       result))))
 
 ;;; Input operations
 

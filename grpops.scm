@@ -97,24 +97,22 @@
 (define (group-insert-chars! group index char n)
   (if (fix:< n 0)
       (error:bad-range-argument n 'GROUP-INSERT-CHARS!))
-  (let ((interrupt-mask (set-interrupt-enables! interrupt-mask/gc-ok)))
-    (prepare-gap-for-insert! group index n)
-    (xsubstring-fill! (group-text group) index (fix:+ index n) char)
-    (finish-group-insert! group index n)
-    (set-interrupt-enables! interrupt-mask)
-    unspecific))
+  (without-interrupts
+    (lambda ()
+      (prepare-gap-for-insert! group index n)
+      (xsubstring-fill! (group-text group) index (fix:+ index n) char)
+      (finish-group-insert! group index n))))
 
 (define (group-insert-string! group index string)
   (group-insert-substring! group index string 0 (string-length string)))
 
 (define (group-insert-substring! group index string start end)
-  (let ((interrupt-mask (set-interrupt-enables! interrupt-mask/gc-ok)))
-    (let ((n (fix:- end start)))
-      (prepare-gap-for-insert! group index n)
-      (%substring-move! string start end (group-text group) index)
-      (finish-group-insert! group index n))
-    (set-interrupt-enables! interrupt-mask)
-    unspecific))
+  (without-interrupts
+      (lambda ()
+	(let ((n (fix:- end start)))
+	  (prepare-gap-for-insert! group index n)
+	  (%substring-move! string start end (group-text group) index)
+	  (finish-group-insert! group index n)))))
 
 (define (prepare-gap-for-insert! group new-start n)
   (if (or (group-read-only? group)
@@ -187,104 +185,101 @@
   (if (not (and (fix:>= start 0) (fix:<= start end)))
       (error:bad-range-argument start 'GROUP-DELETE!))
   (if (not (fix:= start end))
-      (let ((interrupt-mask (set-interrupt-enables! interrupt-mask/gc-ok)))
-	(let ((text (group-text group))
-	      (gap-length (group-gap-length group)))
-	  (if (or (group-read-only? group)
-		  (and (group-text-properties group)
-		       (text-not-deleteable? group start end)))
-	      (barf-if-read-only))
-	  (if (not (group-modified? group))
-	      (check-first-group-modification group))
-	  ;; Guarantee that the gap is between START and END.  This is
-	  ;; best done before the undo recording.
-	  (cond ((fix:< (group-gap-start group) start)
-		 (%substring-move! text
-				   (group-gap-end group)
-				   (fix:+ start gap-length)
-				   text
-				   (group-gap-start group)))
-		((fix:> (group-gap-start group) end)
-		 (%substring-move! text
-				   end
-				   (group-gap-start group)
-				   text
-				   (fix:+ end gap-length))))
-	  ;; The undo recording must occur *before* the deletion.
-	  (undo-record-deletion! group start end)
-	  (let ((gap-end (fix:+ end gap-length)))
-	    (set-group-gap-start! group start)
-	    (set-group-gap-end! group gap-end)
-	    (set-group-gap-length! group (fix:- gap-end start))
-	    (if (and (group-shrink-length group)
-		     (fix:<= (fix:- (string-length text)
-				    (fix:- gap-end start))
-			     (group-shrink-length group)))
-		(shrink-group! group))))
-	(let ((n (fix:- end start)))
-	  (if (group-start-changes-index group)
-	      (begin
-		(if (fix:< start (group-start-changes-index group))
-		    (set-group-start-changes-index! group start))
-		(set-group-end-changes-index!
-		 group
-		 (if (fix:>= end (group-end-changes-index group))
-		     start
-		     (fix:- (group-end-changes-index group) n))))
-	      (begin
-		(set-group-start-changes-index! group start)
-		(set-group-end-changes-index! group start)))
-	  (do ((marks (group-marks group) (weak-cdr marks)))
-	      ((null? marks))
-	    (cond ((or (not (weak-car marks))
-		       (fix:<= (mark-index (weak-car marks)) start))
-		   unspecific)
-		  ((fix:<= (mark-index (weak-car marks)) end)
-		   (set-mark-index! (weak-car marks) start))
-		  (else
-		   (set-mark-index!
-		    (weak-car marks)
-		    (fix:- (mark-index (weak-car marks)) n))))))
-	(set-group-modified-tick! group (fix:+ (group-modified-tick group) 1))
-	;; The MODIFIED? bit must be set *after* the undo recording.
-	(set-group-modified?! group #t)
-	(if (group-text-properties group)
-	    (update-intervals-for-deletion! group start end))
-	(set-interrupt-enables! interrupt-mask)
-	unspecific)))
+      (without-interrupts
+	(lambda ()
+	  (let ((text (group-text group))
+		(gap-length (group-gap-length group)))
+	    (if (or (group-read-only? group)
+		    (and (group-text-properties group)
+			 (text-not-deleteable? group start end)))
+		(barf-if-read-only))
+	    (if (not (group-modified? group))
+		(check-first-group-modification group))
+	    ;; Guarantee that the gap is between START and END.  This is
+	    ;; best done before the undo recording.
+	    (cond ((fix:< (group-gap-start group) start)
+		   (%substring-move! text
+				     (group-gap-end group)
+				     (fix:+ start gap-length)
+				     text
+				     (group-gap-start group)))
+		  ((fix:> (group-gap-start group) end)
+		   (%substring-move! text
+				     end
+				     (group-gap-start group)
+				     text
+				     (fix:+ end gap-length))))
+	    ;; The undo recording must occur *before* the deletion.
+	    (undo-record-deletion! group start end)
+	    (let ((gap-end (fix:+ end gap-length)))
+	      (set-group-gap-start! group start)
+	      (set-group-gap-end! group gap-end)
+	      (set-group-gap-length! group (fix:- gap-end start))
+	      (if (and (group-shrink-length group)
+		       (fix:<= (fix:- (string-length text)
+				      (fix:- gap-end start))
+			       (group-shrink-length group)))
+		  (shrink-group! group))))
+	  (let ((n (fix:- end start)))
+	    (if (group-start-changes-index group)
+		(begin
+		  (if (fix:< start (group-start-changes-index group))
+		      (set-group-start-changes-index! group start))
+		  (set-group-end-changes-index!
+		   group
+		   (if (fix:>= end (group-end-changes-index group))
+		       start
+		       (fix:- (group-end-changes-index group) n))))
+		(begin
+		  (set-group-start-changes-index! group start)
+		  (set-group-end-changes-index! group start)))
+	    (do ((marks (group-marks group) (weak-cdr marks)))
+		((null? marks))
+	      (cond ((or (not (weak-car marks))
+			 (fix:<= (mark-index (weak-car marks)) start))
+		     unspecific)
+		    ((fix:<= (mark-index (weak-car marks)) end)
+		     (set-mark-index! (weak-car marks) start))
+		    (else
+		     (set-mark-index!
+		      (weak-car marks)
+		      (fix:- (mark-index (weak-car marks)) n))))))
+	  (set-group-modified-tick! group (fix:+ (group-modified-tick group) 1))
+	  ;; The MODIFIED? bit must be set *after* the undo recording.
+	  (set-group-modified?! group #t)
+	  (if (group-text-properties group)
+	      (update-intervals-for-deletion! group start end))))))
 
 ;;;; Replacement
 
 (define (group-replace-char! group index char)
   (if (not (and (fix:>= index 0) (fix:< index (group-length group))))
       (error:bad-range-argument index 'GROUP-REPLACE-CHAR!))
-  (let ((interrupt-mask (set-interrupt-enables! interrupt-mask/gc-ok))
-	(end-index (fix:+ index 1)))
-    (prepare-gap-for-replace! group index end-index)
-    (string-set! (group-text group)
-		  (group-index->position group index #t)
-		  char)
-    (finish-group-replace! group index end-index)
-    (set-interrupt-enables! interrupt-mask)
-    unspecific))
+  (without-interrupts
+    (lambda ()
+      (let ((end-index (fix:+ index 1)))
+	(prepare-gap-for-replace! group index end-index)
+	(string-set! (group-text group)
+		     (group-index->position group index #t)
+		     char)
+	(finish-group-replace! group index end-index)))))
 
 (define (group-replace-string! group index string)
   (group-replace-substring! group index string 0 (string-length string)))
 
 (define (group-replace-substring! group index string start end)
   (if (fix:< start end)
-      (let ((interrupt-mask (set-interrupt-enables! interrupt-mask/gc-ok))
-	    (end-index (fix:+ index (fix:- end start))))
-	(if (not (and (fix:>= index 0)
-		      (fix:<= end-index (group-length group))))
-	    (error:bad-range-argument index 'GROUP-REPLACE-SUBSTRING!))
-	(prepare-gap-for-replace! group index end-index)
-	(%substring-move! string start end
-			  (group-text group)
-			  (group-index->position group index #t))
-	(finish-group-replace! group index end-index)
-	(set-interrupt-enables! interrupt-mask)
-	unspecific)))
+      (without-interrupts
+	(lambda ()
+	  (let ((end-index (fix:+ index (fix:- end start))))
+	    (if (not (and (fix:>= index 0)
+			  (fix:<= end-index (group-length group))))
+		(error:bad-range-argument index 'GROUP-REPLACE-SUBSTRING!))
+	    (prepare-gap-for-replace! group index end-index)
+	    (%substring-move! string start end
+			      (group-text group)
+			      (group-index->position group index #t))
+	    (finish-group-replace! group index end-index))))))
 
 (define (prepare-gap-for-replace! group start end)
   (if (or (group-read-only? group)

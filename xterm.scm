@@ -544,28 +544,25 @@
 (define (read-event-1 display block?)
   (or (x-display-process-events display 2)
       (let loop ()
-	(let ((interrupt-mask (set-interrupt-enables! interrupt-mask/gc-ok)))
-	  (cond (inferior-thread-changes?
-		 (set-interrupt-enables! interrupt-mask)
-		 event:inferior-thread-output)
-		((process-output-available?)
-		 (set-interrupt-enables! interrupt-mask)
-		 event:process-output)
-		((process-status-changes?)
-		 (set-interrupt-enables! interrupt-mask)
-		 event:process-status)
-		(else
-		 (let ((flag
-			(test-for-io-on-descriptor
-			 (x-display-descriptor display)
-			 block?
-			 'READ)))
-		   (set-interrupt-enables! interrupt-mask)
-		   (case flag
-		     ((#F) #f)
-		     ((PROCESS-STATUS-CHANGE) event:process-status)
-		     ((INTERRUPT) (loop))
-		     (else (read-event-1 display block?))))))))))
+	(without-interrupts
+	 (lambda ()
+	   (cond (inferior-thread-changes?
+		  event:inferior-thread-output)
+		 ((process-output-available?)
+		  event:process-output)
+		 ((process-status-changes?)
+		  event:process-status)
+		 (else
+		  (let ((flag
+			 (test-for-io-on-descriptor
+			  (x-display-descriptor display)
+			  block?
+			  'READ)))
+		    (case flag
+		      ((#F) #f)
+		      ((PROCESS-STATUS-CHANGE) event:process-status)
+		      ((INTERRUPT) (loop))
+		      (else (read-event-1 display block?)))))))))))
 
 (define (preview-event-stream)
   (set! previewer-registration
