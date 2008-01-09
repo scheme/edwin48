@@ -126,7 +126,7 @@
 	     (let loop ((i1 s1) (i2 s2))
 	       (if (or (fix:= i1 e1)
 		       (fix:= i2 string-end)
-		       (not (char=? (xstring-ref text i1)
+		       (not (char=? (string-ref text i1)
 				    (string-ref string i2))))
 		   i1
 		   (loop (fix:+ i1 1) (fix:+ i2 1)))))))
@@ -154,7 +154,7 @@
     (let ((match
 	   (lambda (s1 e1 e2)
 	     (let loop ((i1 (fix:- e1 1)) (i2 (fix:- e2 1)))
-	       (cond ((not (char=? (xstring-ref text i1)
+	       (cond ((not (char=? (string-ref text i1)
 				   (string-ref string i2)))
 		      (fix:+ i1 1))
 		     ((or (fix:= i1 s1) (fix:= i2 string-start))
@@ -192,7 +192,7 @@
 	     (let loop ((i1 s1) (i2 s2))
 	       (if (or (fix:= i1 e1)
 		       (fix:= i2 string-end)
-		       (not (char-ci=? (xstring-ref text i1)
+		       (not (char-ci=? (string-ref text i1)
 				       (string-ref string i2))))
 		   i1
 		   (loop (fix:+ i1 1) (fix:+ i2 1)))))))
@@ -220,7 +220,7 @@
     (let ((match
 	   (lambda (s1 e1 e2)
 	     (let loop ((i1 (fix:- e1 1)) (i2 (fix:- e2 1)))
-	       (cond ((not (char-ci=? (xstring-ref text i1)
+	       (cond ((not (char-ci=? (string-ref text i1)
 				      (string-ref string i2)))
 		      (fix:+ i1 1))
 		     ((or (fix:= i1 s1) (fix:= i2 string-start))

@@ -78,9 +78,6 @@
 			  target start-target)
   (cond ((not (fix:< start-source end-source))
 	 unspecific)
-	((or (external-string? source) (external-string? target))
-	 (xsubstring-move! source start-source end-source
-			   target start-target))
 	((not (eq? source target))
 	 (if (fix:< (fix:- end-source start-source) 32)
 	     (do ((scan-source start-source (fix:+ scan-source 1))

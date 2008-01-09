@@ -77,11 +77,11 @@
 			     (fix:+ start* (fix:- gap-start start)))))))
 
 (define (group-left-char group index)
-  (xstring-ref (group-text group)
+  (string-ref (group-text group)
 	       (fix:- (group-index->position-integrable group index #f) 1)))
 
 (define (group-right-char group index)
-  (xstring-ref (group-text group)
+  (string-ref (group-text group)
 	       (group-index->position-integrable group index #t)))
 
 (define (group-extract-and-delete-string! group start end)
@@ -217,7 +217,7 @@
 	    (set-group-gap-end! group gap-end)
 	    (set-group-gap-length! group (fix:- gap-end start))
 	    (if (and (group-shrink-length group)
-		     (fix:<= (fix:- (xstring-length text)
+		     (fix:<= (fix:- (string-length text)
 				    (fix:- gap-end start))
 			     (group-shrink-length group)))
 		(shrink-group! group))))
@@ -261,7 +261,7 @@
   (let ((interrupt-mask (set-interrupt-enables! interrupt-mask/gc-ok))
 	(end-index (fix:+ index 1)))
     (prepare-gap-for-replace! group index end-index)
-    (xstring-set! (group-text group)
+    (string-set! (group-text group)
 		  (group-index->position-integrable group index #t)
 		  char)
     (finish-group-replace! group index end-index)
@@ -328,7 +328,7 @@
 	(gap-start (group-gap-start group))
 	(gap-end (group-gap-end group))
 	(realloc-factor (group-reallocation-factor group)))
-    (let ((text-length (xstring-length text))
+    (let ((text-length (string-length text))
 	  (gap-delta (- new-gap-start gap-start)))
       (let ((n-chars (- text-length (group-gap-length group))))
 	(let ((new-text-length
@@ -368,7 +368,7 @@
 	(gap-start (group-gap-start group))
 	(gap-length (group-gap-length group))
 	(realloc-factor (group-reallocation-factor group)))
-    (let ((text-length (xstring-length text)))
+    (let ((text-length (string-length text)))
       (let ((n-chars (- text-length gap-length)))
 	(let ((new-text-length
 	       (if (= n-chars 0)
@@ -394,7 +394,7 @@
 (define (memoize-shrink-length! group realloc-factor)
   (set-group-shrink-length!
    group
-   (compute-shrink-length (xstring-length (group-text group)) realloc-factor)))
+   (compute-shrink-length (string-length (group-text group)) realloc-factor)))
 
 (define (compute-shrink-length length realloc-factor)
   (floor (/ (floor (/ length realloc-factor)) realloc-factor)))

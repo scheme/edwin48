@@ -630,7 +630,7 @@
 
 (define (%window-line-start-index? window index)
   (or (%window-group-start-index? window index)
-      (char=? (xstring-ref (group-text (%window-group window))
+      (char=? (string-ref (group-text (%window-group window))
 			   (fix:- (group-index->position-integrable
 				   (%window-group window)
 				   index
@@ -640,7 +640,7 @@
 
 (define (%window-line-end-index? window index)
   (or (%window-group-end-index? window index)
-      (char=? (xstring-ref (group-text (%window-group window))
+      (char=? (string-ref (group-text (%window-group window))
 			   (group-index->position-integrable
 			    (%window-group window)
 			    index

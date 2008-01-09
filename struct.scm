@@ -70,8 +70,7 @@
 
 (define-record-type* group
   (%make-group buffer)
-  (text-descriptor
-   (gap-start 0)
+  ((gap-start 0)
    (gap-length 0)
    (gap-end 0)
    (marks '())
@@ -91,7 +90,7 @@
    (shrink-length 0)
    (text-properties #f)
    (%hash-number #f)
-   %text))
+   text))
 
 (define group-point group-%point)
 
@@ -107,17 +106,8 @@
     (set-group-%point! group (make-permanent-mark group 0 #t))
     group))
 
-(define (set-group-text! group text)
-  (without-interrupts
-   (lambda ()
-     (set-group-%text! group text)
-     (set-group-text-descriptor! group (external-string-descriptor text)))))
-
-(define (group-text group)
-  (group-%text group))
-
 (define (group-length group)
-  (fix:- (xstring-length (group-text group)) (group-gap-length group)))
+  (fix:- (string-length (group-text group)) (group-gap-length group)))
 
 (define (group-start-index group)
   (mark-index (group-start-mark group)))
