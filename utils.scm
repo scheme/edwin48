@@ -28,56 +28,6 @@
 ;;;; Editor Utilities
 
 
-;; Allow gc and after-gc hooks.
-
-(define interrupt-mask/gc-normal #x0025)
-
-(define (guarantee-heap-available n-words operator old-mask)
-  (gc-flip)
-  (if (not ((ucode-primitive heap-available? 1) n-words))
-      (begin
-	(set-interrupt-enables! old-mask)
-	(error:allocation-failure n-words operator))))
-
-(define condition-type:allocation-failure
-  (make-condition-type 'ALLOCATION-FAILURE condition-type:error
-      '(OPERATOR N-WORDS)
-    (lambda (condition port)
-      (let ((operator (access-condition condition 'OPERATOR)))
-	(if operator
-	    (begin
-	      (write-string "The procedure " port)
-	      (write operator port)
-	      (write-string " is unable" port))
-	    (write-string "Unable" port)))
-      (write-string " to allocate " port)
-      (write (access-condition condition 'N-WORDS) port)
-      (write-string " words of storage." port))))
-
-(define error:allocation-failure
-  (condition-signaller condition-type:allocation-failure
-		       '(N-WORDS OPERATOR)
-		       standard-error-handler))
-
-(define (allocate-buffer-storage n-chars)
-  ;; Too much of Edwin relies on fixnum-specific arithmetic for this
-  ;; to be safe.  Unfortunately, this means that Edwin can't edit
-  ;; files >32MB.
-  (let ((signal-failure
-	 (lambda ()
-	   (error:allocation-failure (chars->words n-chars)
-				     'ALLOCATE-BUFFER-STORAGE))))
-    (if (not (fix:fixnum? n-chars))
-	(signal-failure)
-	;; The ALLOCATE-EXTERNAL-STRING signals a bad-range-argument
-	;; if the allocation with `malloc' (or `mmap') fails.
-	(bind-condition-handler (list condition-type:bad-range-argument)
-	    (lambda (condition)
-	      condition
-	      (signal-failure))
-	  (lambda ()
-	    (allocate-external-string n-chars))))))
-
 (define-syntax chars-to-words-shift
   (sc-macro-transformer
    (lambda (form environment)
@@ -95,35 +45,6 @@
   (fix:lsh (fix:+ (fix:+ n-chars 1)	;Add 1 for NUL termination.
 		  (fix:not (fix:lsh -1 (fix:- 0 (chars-to-words-shift)))))
 	   (chars-to-words-shift)))
-
-(define (edwin-string-allocate n-chars)
-  (if (not (fix:fixnum? n-chars))
-      (error:wrong-type-argument n-chars "fixnum" 'STRING-ALLOCATE))
-  (if (not (fix:>= n-chars 0))
-      (error:bad-range-argument n-chars 'STRING-ALLOCATE))
-  (with-interrupt-mask interrupt-mask/none
-    (lambda (mask)
-      (let ((n-words			;Add two, for manifest & length.
-	     (fix:+ 2 (chars->words (fix:+ n-chars 1)))))
-	(if (not ((ucode-primitive heap-available? 1) n-words))
-	    (with-interrupt-mask interrupt-mask/gc-normal
-	      (lambda (ignore)
-		ignore			; ignored
-		(guarantee-heap-available n-words 'STRING-ALLOCATE mask))))
-	(let ((result ((ucode-primitive primitive-get-free 1)
-		       (ucode-type string))))
-	  ((ucode-primitive primitive-object-set! 3)
-	   result
-	   0
-	   ((ucode-primitive primitive-object-set-type 2)
-	    (ucode-type manifest-nm-vector)
-	    (fix:- n-words 1)))		;Subtract one for the manifest.
-	  (set-string-length! result (fix:+ n-chars 1))
-	  (string-set! result n-chars #\nul)
-	  (set-string-length! result n-chars)
-	  ((ucode-primitive primitive-increment-free 1) n-words)
-	  (set-interrupt-enables! mask)
-	  result)))))
 
 (define (edwin-set-string-maximum-length! string n-chars)
   (if (not (string? string))
@@ -147,11 +68,6 @@
     (set-string-length! string n-chars)
     (set-interrupt-enables! mask)
     unspecific))
-
-(define string-allocate
-  (if (compiled-procedure? edwin-string-allocate)
-      edwin-string-allocate
-      (ucode-primitive string-allocate)))
 
 (define set-string-maximum-length!
   (if (compiled-procedure? edwin-set-string-maximum-length!)

@@ -97,7 +97,7 @@
 
 (define (make-group buffer)
   (let ((group (%make-group buffer)))
-    (set-group-text! group (allocate-buffer-storage 0))
+    (set-group-text! group (make-string 0))
     (let ((start (make-permanent-mark group 0 #f)))
       (set-group-start-mark! group start)
       (set-group-display-start! group start))

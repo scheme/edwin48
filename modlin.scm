@@ -125,7 +125,7 @@ If #F, the normal method is used."
 		(string-set! line x #\space)))))))
 
 (define (format-modeline-string window format size)
-  (let ((line (string-allocate size)))
+  (let ((line (make-string size)))
     (display-mode-element format window line 0 size size)
     line))
 

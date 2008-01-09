@@ -33,14 +33,13 @@
 ;;; limited ways.  To save an index across a modification, it must be
 ;;; consed into a permanent mark.
 
-(declare (usual-integrations string-allocate))
 
 ;;;; Extractions
 
 (define (group-extract-string group start end)
   (let ((text (group-text group))
 	(gap-start (group-gap-start group))
-	(string (string-allocate (fix:- end start))))
+	(string (make-string (fix:- end start))))
     (cond ((fix:<= end gap-start)
 	   (%substring-move! text start end string 0))
 	  ((fix:>= start gap-start)
@@ -339,7 +338,7 @@
 		     (if (< length minimum-text-length)
 			 (loop length)
 			 length))))))
-	  (let ((new-text (allocate-buffer-storage new-text-length))
+	  (let ((new-text (make-string new-text-length))
 		(new-gap-length (- new-text-length n-chars)))
 	    (let ((new-gap-end (+ new-gap-start new-gap-length)))
 	      (cond ((= gap-delta 0)
@@ -382,7 +381,7 @@
 			     length
 			     (loop length)))))))
 	      (gap-end (group-gap-end group)))
-	  (let ((new-text (allocate-buffer-storage new-text-length))
+	  (let ((new-text (make-string new-text-length))
 		(delta (- text-length new-text-length)))
 	    (let ((new-gap-end (- gap-end delta)))
 	      (%substring-move! text 0 gap-start new-text 0)

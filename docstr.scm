@@ -46,7 +46,7 @@
 	(let* ((next (fix:+ posn nlen))
 	       (end (fix:+ next (fix:+ dslen 6))))
 	  (if (> end slen)
-	      (let ((new (string-allocate
+	      (let ((new (make-string
 			  (max end
 			       (if (fix:zero? slen)
 				   4096
@@ -129,7 +129,7 @@
 		      (out-of-range))
 		     (else
 		      (let* ((rlen (fix:+ (fix:+ nlen dslen) 1))
-			     (result (string-allocate rlen)))
+			     (result (make-string rlen)))
 			(substring-move-right! buffer 3 blen result 0)
 			(fill-buffer channel result (fix:- blen 3) rlen)
 			(verify-and-extract result nlen dslen 0))))))))))
@@ -154,7 +154,7 @@
 
 (define (guarantee-doc-string-state)
   (if (not *doc-string-buffer*)
-      (set! *doc-string-buffer* (string-allocate doc-string-buffer-length)))
+      (set! *doc-string-buffer* (make-string doc-string-buffer-length)))
   (cond (*doc-string-channel*)
 	((not *external-doc-strings-file*)
 	 (editor-error

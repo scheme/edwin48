@@ -916,7 +916,7 @@
 (define (boolean-subvector-find-next vector start end value)
   (vector-8b-find-next-char vector start end (boolean->ascii value)))
 
-(define make-boolean-vector string-allocate)
+(define make-boolean-vector make-string)
 (define boolean-vector-length string-length)
 (define boolean-vector=? string=?)
 (define boolean-subvector-move-right! substring-move-right!)
