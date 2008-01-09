@@ -114,9 +114,9 @@ and that its contents match what the master file says."
 that is under version control.  Editing such a file through the
 link bypasses the version control system, which is dangerous and
 probably not what you want.  
-  If this variable is #t, VC follows the link and visits the real file,
+  If this variable is true, VC follows the link and visits the real file,
 telling you about it in the echo area.  If it is `ask', VC asks for
-confirmation whether it should follow the link.  If #f, the link is
+confirmation whether it should follow the link.  If false, the link is
 visited and a warning displayed."
   'ASK
   (lambda (object) (or (boolean? object) (eq? 'ASK object))))

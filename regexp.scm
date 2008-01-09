@@ -29,7 +29,7 @@
 
 
 (define hash-of-false (object-hash #f))
-(define match-group hash-of-false)
+(define match-group hash-of-#f)
 
 (define (re-match-start i)
   (let ((index (re-match-start-index i)))
@@ -85,7 +85,7 @@
 				  (mark-temporary! mark)
 				  index))))))
 	(begin
-	  (set! match-group hash-of-false)
+	  (set! match-group hash-of-#f)
 	  (do ((i 0 (fix:+ i 1)))
 	      ((fix:= i 20))
 	    (vector-set! registers i (vector-ref marks i)))))))
@@ -251,4 +251,4 @@
 (define (compute-match-group group index)
   (if index
       (group-hash-number group)
-      hash-of-false))
+      hash-of-#f))

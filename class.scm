@@ -35,11 +35,11 @@
 ;;; ******************************************************************
 
 (define-structure (class (constructor %make-class))
-  (name false read-only true)
-  (superclass false read-only true)
+  (name #f read-only #t)
+  (superclass #f read-only #t)
   object-size
   instance-transforms
-  (methods false read-only true))
+  (methods #f read-only #t))
 
 (define (class-method class name)
   (class-methods/ref (class-methods class) name))
@@ -77,7 +77,7 @@
 (define (make-object class)
   (if (not (class? class))
       (error:wrong-type-argument class "class" 'MAKE-OBJECT))
-  (let ((object (make-vector (class-object-size class) false)))
+  (let ((object (make-vector (class-object-size class) #f)))
     (vector-set! object 0 class)
     object))
 

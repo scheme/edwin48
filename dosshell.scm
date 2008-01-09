@@ -48,16 +48,16 @@ Customization: Entry to this mode runs the hook pseudo-shell-mode-hook."
       '())
     (define-variable-local-value! buffer
       (ref-variable-object pseudo-shell-dirtrack?)
-      true)
+      #t)
     (define-variable-local-value! buffer
       (ref-variable-object comint-input-ring)
       (make-ring (ref-variable comint-input-ring-size)))
     (define-variable-local-value! buffer
       (ref-variable-object comint-last-input-match)
-      false)
+      #f)
     (define-variable-local-value! buffer
       (ref-variable-object pseudo-shell-active?)
-      true)
+      #t)
     (event-distributor/invoke! (ref-variable pseudo-shell-mode-hook)
 			       buffer)))
 
@@ -67,7 +67,7 @@ Customization: Entry to this mode runs the hook pseudo-shell-mode-hook."
 
 (define-variable pseudo-shell-active?
   "Is this shell buffer active?"
-  false
+  #f
   boolean?)
 
 (define-key 'pseudo-shell #\C-a 'pseudo-shell-bol)
@@ -117,7 +117,7 @@ and tracking directories."
       (set-buffer-point! buffer (buffer-end buffer))
       (define-variable-local-value! buffer
 	(ref-variable-object pseudo-shell-active?)
-	true)
+	#t)
       (select-buffer buffer))))
 
 (define (insert-pseudo-shell-prompt! #!optional point)
@@ -198,7 +198,7 @@ With argument, don't skip the prompt -- go straight to column 0."
 		   (substring command 0 next))))
     (let ((handler (assoc (string-downcase prog) pseudo-shell-builtins)))
       (if (not handler)
-	  (shell-command false output-mark dir command)
+	  (shell-command #f output-mark dir command)
 	  ((cdr handler) prog
 			 (if (not next)
 			     ""
@@ -212,11 +212,11 @@ With argument, don't skip the prompt -- go straight to column 0."
   "List of directories saved by pushd in this buffer's shell."
   '())
 
-(define-variable pseudo-shell-dirtrack? "" false)
+(define-variable pseudo-shell-dirtrack? "" #f)
 
 (define (pseudo-parse-directory dir prog args)
   (cond ((string-null? args)
-	 false)
+	 #f)
 	((string-find-next-char-in-set args char-set:whitespace)
 	 (pseudo-error "Too many arguments" prog args))
 	(else
@@ -325,5 +325,5 @@ With argument, don't skip the prompt -- go straight to column 0."
 	    prog args dir		; ignored
 	    (define-variable-local-value! (mark-buffer output-mark)
 	      (ref-variable-object pseudo-shell-active?)
-	      false)
+	      #f)
 	    (message "Pseudo exitted"))))))

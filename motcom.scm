@@ -102,7 +102,7 @@ With arg from 0 to 10, goes up that many tenths of the file from the end."
 (define-variable goal-column
   "Semipermanent goal column for vertical motion,
 as set by \\[set-goal-column], or false, indicating no goal column."
-  false)
+  #f)
 
 (define temporary-goal-column-tag
   "Temporary Goal Column")
@@ -142,7 +142,7 @@ If `next-line-add-newlines' is true and this command is given after
     (let ((argument (command-argument-value argument))
 	  (column (current-goal-column)))
       (cond ((not argument)
-	     (let ((mark (line-start (current-point) 1 false)))
+	     (let ((mark (line-start (current-point) 1 #f)))
 	       (if mark
 		   (set-current-point! (move-to-column mark column))
 		   (begin

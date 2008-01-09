@@ -65,7 +65,7 @@
 			      (lambda ()
 				(set-comtab-vector! comtab vector)
 				(set-comtab-alist! comtab alist)))
-			     (let* ((vector (make-vector 256 false))
+			     (let* ((vector (make-vector 256 #f))
 				    (alist
 				     (list-transform-negative alist
 				       (lambda (entry)
@@ -77,7 +77,7 @@
 						   vector
 						   (char->integer key)
 						   (cdr entry))
-						  true)))))))
+						  #t)))))))
 			       (without-interrupts
 				(lambda ()
 				  (set-comtab-vector! comtab vector)
@@ -94,7 +94,7 @@
   (if (and (char? key) (< (char->integer key) 256))
       (let ((vector (comtab-vector comtab)))
 	(if (vector? vector)
-	    (vector-set! vector (char->integer key) false)
+	    (vector-set! vector (char->integer key) #f)
 	    (let ((alist (comtab-alist comtab)))
 	      (let ((entry (assq key alist)))
 		(if entry
@@ -175,7 +175,7 @@
 		     ((not (null? (cdr comtabs*)))
 		      (loop (cdr comtabs*)))
 		     (else
-		      false))))))
+		      #f))))))
       (cond ((key? key)
 	     (simple-lookup (remap-alias-key key)))
 	    ((button? key)
@@ -187,13 +187,13 @@
 		   (simple-lookup key)
 		   (let loop ((comtabs* comtabs))
 		     (let ((comtab
-			    (lookup-prefix (car comtabs*) prefix false)))
+			    (lookup-prefix (car comtabs*) prefix #f)))
 		       (cond ((and comtab (comtab-get comtab key))
 			      => handle-datum)
 			     ((not (null? (cdr comtabs*)))
 			      (loop (cdr comtabs*)))
 			     (else
-			      false)))))))
+			      #f)))))))
 	    (else
 	     (error:wrong-type-argument key "comtab key" 'LOOKUP-KEY))))))
 
@@ -300,7 +300,7 @@
 	   (let ((prefix (except-last-pair key)))
 	     (comtab-put! (if (null? prefix)
 			      comtab
-			      (lookup-prefix comtab prefix true))
+			      (lookup-prefix comtab prefix #t))
 			  (remap-alias-key (car (last-pair key)))
 			  datum)))
 	  (else
@@ -364,7 +364,7 @@
 		     ((command&comtab? datum)
 		      (eq? command (car datum)))
 		     (else
-		      false))))))
+		      #f))))))
       (sort (let loop ((comtabs comtabs))
 	      (if (null? comtabs)
 		  '()

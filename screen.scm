@@ -50,32 +50,32 @@
 				 preemption-modulus
 				 x-size
 				 y-size)))
-  (state false read-only true)
-  (operation/beep false read-only true)
-  (operation/clear-line! false read-only true)
-  (operation/clear-rectangle! false read-only true)
-  (operation/clear-screen! false read-only true)
-  (operation/discard! false read-only true)
-  (operation/enter! false read-only true)
-  (operation/exit! false read-only true)
-  (operation/flush! false read-only true)
-  (operation/modeline-event! false read-only true)
-  (operation/discretionary-flush false read-only true)
-  (operation/scroll-lines-down! false read-only true)
-  (operation/scroll-lines-up! false read-only true)
-  (operation/wrap-update! false read-only true)
-  (operation/write-char! false read-only true)
-  (operation/write-cursor! false read-only true)
-  (operation/write-substring! false read-only true)
-  (preemption-modulus false read-only true)
-  (root-window false)
+  (state #f read-only #t)
+  (operation/beep #f read-only #t)
+  (operation/clear-line! #f read-only #t)
+  (operation/clear-rectangle! #f read-only #t)
+  (operation/clear-screen! #f read-only #t)
+  (operation/discard! #f read-only #t)
+  (operation/enter! #f read-only #t)
+  (operation/exit! #f read-only #t)
+  (operation/flush! #f read-only #t)
+  (operation/modeline-event! #f read-only #t)
+  (operation/discretionary-flush #f read-only #t)
+  (operation/scroll-lines-down! #f read-only #t)
+  (operation/scroll-lines-up! #f read-only #t)
+  (operation/wrap-update! #f read-only #t)
+  (operation/write-char! #f read-only #t)
+  (operation/write-cursor! #f read-only #t)
+  (operation/write-substring! #f read-only #t)
+  (preemption-modulus #f read-only #t)
+  (root-window #f)
   ;; Visibility is one of the following:
   ;; VISIBLE PARTIALLY-OBSCURED OBSCURED UNMAPPED DELETED
   (visibility 'VISIBLE)
-  (needs-update? false)
-  (in-update? false)
-  (x-size false)
-  (y-size false)
+  (needs-update? #f)
+  (in-update? #f)
+  (x-size #f)
+  (y-size #f)
 
   ;; Description of actual screen contents.
   current-matrix
@@ -84,7 +84,7 @@
   new-matrix
 
   ;; Set this variable in the debugger to trace interesting events.
-  (debug-trace false))
+  (debug-trace #f))
 
 (define (guarantee-screen object procedure)
   (if (not (screen? object))
@@ -252,7 +252,7 @@
 	  ((fix:= i y-size))
 	(vector-set! contents i (make-string x-size))
 	(vector-set! highlight i (make-vector x-size)))
-      (boolean-vector-fill! enable false)
+      (boolean-vector-fill! enable #f)
       (set-matrix-contents! matrix contents)
       (set-matrix-highlight! matrix highlight)
       (set-matrix-enable! matrix enable)
@@ -373,7 +373,7 @@
   (let ((new-matrix (screen-new-matrix screen)))
     (cond ((not (line-contents-enabled? new-matrix y))
 	   (enable-line-contents! new-matrix y)
-	   (set-screen-needs-update?! screen true)
+	   (set-screen-needs-update?! screen #t)
 	   (initialize-new-line-contents screen y)
 	   (if (not (default-face? face))
 	       (begin
@@ -395,7 +395,7 @@
     (let ((full-line? (and (fix:= xl 0) (fix:= xu (screen-x-size screen)))))
       (cond ((not (line-contents-enabled? new-matrix y))
 	     (enable-line-contents! new-matrix y)
-	     (set-screen-needs-update?! screen true)
+	     (set-screen-needs-update?! screen #t)
 	     (if (not full-line?) (initialize-new-line-contents screen y))
 	     (if (not (default-face? face))
 		 (begin
@@ -487,7 +487,7 @@
 	       (string-fill! (vector-ref new-contents y) #\space)
 	       (enable-line-contents! new-matrix y)
 	       (disable-line-highlights! new-matrix y))))))
-  (set-screen-needs-update?! screen true))
+  (set-screen-needs-update?! screen #t))
 
 (define (screen-direct-output-char screen x y char face)
   (if (screen-debug-trace screen)
@@ -551,7 +551,7 @@
 	(enable-line-contents! current-matrix y)
 	(disable-line-highlights! current-matrix y))))
   (invalidate-cursor screen)
-  (set-screen-needs-update?! screen true))
+  (set-screen-needs-update?! screen #t))
 
 (define (invalidate-cursor screen)
   (let ((current-matrix (screen-current-matrix screen))
@@ -657,7 +657,7 @@
   (without-interrupts
    (lambda ()
      (let ((old-flag (screen-in-update? screen)))
-       (set-screen-in-update?! screen true)
+       (set-screen-in-update?! screen #t)
        (let ((finished?
 	      ((screen-operation/wrap-update! screen)
 	       screen
@@ -688,7 +688,7 @@
 (define (screen-update screen force?)
   ;; Update the actual terminal screen based on the data in `new-matrix'.
   ;; Value is #F if redisplay stopped due to pending input.
-  ;; FORCE? true means do not stop for pending input.
+  ;; FORCE? #t means do not stop for pending input.
   (if (screen-debug-trace screen)
       ((screen-debug-trace screen) 'screen screen 'update force?))
   (let ((new-matrix (screen-new-matrix screen))
@@ -698,7 +698,7 @@
 	(halt-update? (editor-halt-update? current-editor)))
     (let loop ((y 0) (m 0))
       (cond ((fix:= y y-size)
-	     true)
+	     #t)
 	    ((not (line-contents-enabled? new-matrix y))
 	     (loop (fix:+ y 1) m))
 	    ((not (fix:= 0 m))
@@ -710,7 +710,7 @@
 	     (if (screen-debug-trace screen)
 		 ((screen-debug-trace screen) 'screen screen
 					      'update-preemption y))
-	     false)
+	     #f)
 	    (else
 	     (update-line screen y)
 	     (loop (fix:+ y 1) preemption-modulus))))))
@@ -771,7 +771,7 @@
 (define (update-line-trivial screen y nline x-size)
   (let ((xe (substring-non-space-end nline 0 x-size)))
     (if (fix:< 0 xe)
-	(terminal-output-substring screen 0 y nline 0 xe false))
+	(terminal-output-substring screen 0 y nline 0 xe #f))
     (if (fix:< xe x-size)
 	(terminal-clear-line screen xe y x-size))))
 
@@ -782,7 +782,7 @@
 	   (let ((nstart (substring-non-space-start nline 0 nlen)))
 	     (if (fix:< nstart nlen)
 		 (terminal-output-substring screen nstart y
-					    nline nstart nlen false))))
+					    nline nstart nlen #f))))
 	  ((fix:= 0 nlen)
 	   (terminal-clear-line screen nlen y olen))
 	  (else
@@ -791,7 +791,7 @@
 	       (cond ((fix:= x len)
 		      (if (fix:< x nlen)
 			  (terminal-output-substring screen x y
-						     nline x nlen false)))
+						     nline x nlen #f)))
 		     ((fix:= (vector-8b-ref oline x)
 			     (vector-8b-ref nline x))
 		      (find-mismatch (fix:+ x 1)))
@@ -799,7 +799,7 @@
 		      (let find-match ((x* (fix:+ x 1)))
 			(cond ((fix:= x* len)
 			       (terminal-output-substring
-				screen x y nline x nlen false))
+				screen x y nline x nlen #f))
 			      ((not (fix:= (vector-8b-ref oline x*)
 					   (vector-8b-ref nline x*)))
 			       (find-match (fix:+ x* 1)))
@@ -812,14 +812,14 @@
 				 (cond ((fix:= x** len)
 					(if (fix:< (fix:- x** x*) 5)
 					    (terminal-output-substring
-					     screen x y nline x nlen false)
+					     screen x y nline x nlen #f)
 					    (begin
 					      (terminal-output-substring
-					       screen x y nline x x* false)
+					       screen x y nline x x* #f)
 					      (if (fix:< x** nlen)
 						  (terminal-output-substring
 						   screen x** y
-						   nline x** nlen false)))))
+						   nline x** nlen #f)))))
 				       ((fix:= (vector-8b-ref oline x**)
 					       (vector-8b-ref nline x**))
 					(find-end-match (fix:+ x** 1)))
@@ -827,7 +827,7 @@
 					(find-match x**))
 				       (else
 					(terminal-output-substring
-					 screen x y nline x x* false)
+					 screen x y nline x x* #f)
 					(find-mismatch x**)))))))))))
 	   (if (fix:< nlen olen)
 	       (terminal-clear-line screen nlen y olen))))))
@@ -902,16 +902,16 @@
 
 (define (boolean-subvector-all-elements? vector start end value)
   (if (vector-8b-find-next-char vector start end (boolean->ascii (not value)))
-      false
-      true))
+      #f
+      #t))
 
 (define (boolean-subvector-uniform? vector start end)
   (if (and (fix:< start end)
 	   (vector-8b-find-next-char
 	    vector start end
 	    (boolean->ascii (not (boolean-vector-ref vector start)))))
-      false
-      true))
+      #f
+      #t))
 
 (define (boolean-subvector-find-next vector start end value)
   (vector-8b-find-next-char vector start end (boolean->ascii value)))

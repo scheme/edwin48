@@ -76,11 +76,11 @@ Good choices:
 This is a good thing to set in mode hooks."
   "^")
 
-(define-variable comint-last-input-end "" false)
+(define-variable comint-last-input-end "" #f)
 
 (define-variable comint-program-name
   "File name of program that is running in this buffer."
-  false)
+  #f)
 
 (define (comint-strip-carriage-returns buffer)
   (let ((process (get-buffer-process buffer)))
@@ -171,7 +171,7 @@ sending it.  The input is entered into the input history ring, if
 value of variable comint-input-filter returns non-false when called on
 the input."
   ()
-  (lambda () (comint-send-input "\n" false)))
+  (lambda () (comint-send-input "\n" #f)))
 
 (define (comint-send-input terminator delete?)
   (let ((process (current-process)))
@@ -217,7 +217,7 @@ Thus it can, for instance, track cd/pushd/popd commands issued to the shell."
 
 (define-variable-per-buffer comint-input-filter
   "Predicate for filtering additions to input history.
-Only inputs answering true to this procedure are saved on the input
+Only inputs answering #t to this procedure are saved on the input
 history list.  Default is to save anything that isn't all whitespace."
   (lambda (string)
     (not (re-string-match "\\`\\s *\\'"
@@ -328,7 +328,7 @@ entered to the process."
   (lambda ()
     (let ((mark (line-start (ref-variable comint-last-input-end) 0)))
       (set-current-point! (comint-line-start mark))
-      (set-window-start-mark! (current-window) mark true))))
+      (set-window-start-mark! (current-window) mark #t))))
 
 (define-command comint-bol
   "Goes to the beginning of line, then skips past the prompt, if any.
@@ -370,19 +370,19 @@ the subprocess.  If the process is a job-control shell, this means the
 shell's current subjob.  If the process connection is via pipes, the signal is
 sent to the immediate subprocess."
   ()
-  (lambda () (interrupt-process (current-process) true)))
+  (lambda () (interrupt-process (current-process) #t)))
 
 (define-command comint-kill-subjob
   "Send a kill signal to the current subprocess.
 See comint-interrupt-subjob for a description of \"current subprocess\"."
   ()
-  (lambda () (kill-process (current-process) true)))
+  (lambda () (kill-process (current-process) #t)))
 
 (define-command comint-quit-subjob
   "Send a quit signal to the current subprocess.
 See comint-interrupt-subjob for a description of \"current subprocess\"."
   ()
-  (lambda () (quit-process (current-process) true)))
+  (lambda () (quit-process (current-process) #t)))
 
 (define-command comint-stop-subjob
   "Stop the current subprocess.
@@ -393,14 +393,14 @@ the top-level process running in the buffer.  If you accidentally do
 this, use \\[comint-continue-subjob] to resume the process.   (This is not a
 problem with most shells, since they ignore this signal.)"
   ()
-  (lambda () (stop-process (current-process) true)))
+  (lambda () (stop-process (current-process) #t)))
 
 (define-command comint-continue-subjob
   "Send a continue signal to current subprocess.
 See comint-interrupt-subjob for a description of \"current subprocess\".
 Useful if you accidentally suspend the top-level process."
   ()
-  (lambda () (continue-process (current-process) true)))
+  (lambda () (continue-process (current-process) #t)))
 
 ;;;; Filename Completion
 
@@ -471,7 +471,7 @@ it just adds completion characters to the end of the filename."
 
 (define-variable comint-dynamic-complete-functions
   "List of functions called to perform completion.
-Functions should return true if completion was performed.
+Functions should return #t if completion was performed.
 See also `comint-dynamic-complete'.
 
 This is a good thing to set in mode hooks."

@@ -38,7 +38,7 @@
 (define-command view-password-file
   "Read in a password file and show it in password-view mode.
 Reads the file specified in the variable password-file.
-If password-file is #f, or if prefix arg supplied, prompts for a filename."
+If password-file is false, or if prefix arg supplied, prompts for a filename."
   (lambda ()
     (list
      (let ((pathname

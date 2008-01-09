@@ -99,7 +99,7 @@
 (define-variable pascal-indentation-keywords
   "These keywords cause the lines below them to be indented to the right.
 This must be a regular expression, or #F to disable the option."
-  false)
+  #f)
 
 ;;; ****************
 
@@ -135,14 +135,14 @@ The current buffer should contain a formatted manual entry.")
 (define-variable manual-entry-reuse-buffer?
   "If true, MANUAL-ENTRY uses buffer *Manual-Entry* for all entries.
 Otherwise, a new buffer is created for each topic."
-  false
+  #f
   boolean?)
 
 (define-variable manual-command
   "A string containing the manual page formatting command.  
 Section (if any) and topic strings are appended (with space separators)
 and the resulting string is provided to a shell running in a subprocess."
-  false
+  #f
   string-or-false?)
 
 ;;; ****************
@@ -157,7 +157,7 @@ indicating that the text should be printed with page headers, a title string
 to appear in the header lines and on the title page, and the buffer in which
 the text was originally stored (for editor variable references).  If this
 variable's value is #F, the text is printed using LPR-COMMAND."
-  false
+  #f
   (lambda (object) (or (not object) (procedure? object))))
 
 (define-variable lpr-command
@@ -172,11 +172,11 @@ variable's value is #F, the text is printed using LPR-COMMAND."
 
 (define lpr-prompt-for-name?
   ;; If true, lpr commands prompt for a name to appear on the title page.
-  false)
+  #f)
 
 (define lpr-print-not-special?
   ;; If true, the print-* commands are just like the lpr-* commands.
-  false)
+  #f)
 
 (define-autoload-command 'lpr-buffer 'PRINT
   "Print buffer contents with Unix command `lpr'.")
@@ -407,7 +407,7 @@ With a prefix argument, list pastes starting at a certain number.")
 (define-autoload-command 'view-password-file 'PASSWORD-EDIT
   "Read in a password file and show it in password-view mode.
 Reads the file specified in the variable password-file.
-If password-file is #f, or if prefix arg supplied, prompts for a filename.")
+If password-file is false, or if prefix arg supplied, prompts for a filename.")
 
 (define-variable password-file
   "Name of file containing passwords, or #F meaning prompt for name.

@@ -389,8 +389,8 @@ Setting this variable automatically makes it local to the current buffer."
   exact-nonnegative-integer?)
 
 (define-variable comment-locator-hook
-  "Procedure to find a comment, or false if no comment syntax defined.
-The procedure is passed a mark, and should return false if it cannot
+  "Procedure to find a comment, or #f if no comment syntax defined.
+The procedure is passed a mark, and should return #f if it cannot
 find a comment, or a pair of marks.  The car should be the start of
 the comment, and the cdr should be the end of the comment's starter."
   #f)

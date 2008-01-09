@@ -118,7 +118,7 @@
 (define (set-combination-child! window window*)
   (with-instance-variables combination-window window (window*)
     (set! child window*)
-    (set-window-previous! window* false)))
+    (set-window-previous! window* #f)))
 
 (define (combination? window)
   (object-of-class? combination-window window))
@@ -298,7 +298,7 @@
 	   (x (window-x-size leaf))
 	   (y (window-y-size leaf)))
        (let ((n* (- x n))
-	     (new (allocate-leaf! leaf false)))
+	     (new (allocate-leaf! leaf #f)))
 	 (let ((combination (window-superior leaf)))
 	   (inferior-start (window-inferior combination leaf)
 	     (lambda (x y)
@@ -309,7 +309,7 @@
 		 (< n* (==> new :minimum-x-size)))
 	     (begin
 	       (deallocate-leaf! new)
-	       false)
+	       #f)
 	     (begin
 	       (==> leaf :set-x-size! n)
 	       (==> new :set-size! n* y)
@@ -326,7 +326,7 @@
 	   (x (window-x-size leaf))
 	   (y (window-y-size leaf)))
        (let ((n* (- y n))
-	     (new (allocate-leaf! leaf true)))
+	     (new (allocate-leaf! leaf #t)))
 	 (let ((combination (window-superior leaf)))
 	   (inferior-start (window-inferior combination leaf)
 	     (lambda (x y)
@@ -337,7 +337,7 @@
 		 (< n* (==> new :minimum-y-size)))
 	     (begin
 	       (deallocate-leaf! new)
-	       false)
+	       #f)
 	     (begin
 	       (==> leaf :set-y-size! n)
 	       (==> new :set-size! x n*)
@@ -353,7 +353,7 @@
 	  (set-combination-vertical! combination v)
 	  (window-replace! leaf combination)
 	  (set-combination-child! combination leaf)
-	  (set-window-next! leaf false)
+	  (set-window-next! leaf #f)
 	  (==> superior :delete-inferior! leaf)
 	  (add-inferior! combination leaf)
 	  (set-inferior-start! (window-inferior combination leaf) 0 0)
@@ -642,20 +642,20 @@
   (==> window :set-y-size! y))
 
 (define scale-combination-inferiors-x!
-  (scale-combination-inferiors! false window-x-size window-min-x-size
+  (scale-combination-inferiors! #f window-x-size window-min-x-size
 				send-window-x-size! set-inferior-x-start!))
 
 (define scale-combination-inferiors-y!
-  (scale-combination-inferiors! true window-y-size window-min-y-size
+  (scale-combination-inferiors! #t window-y-size window-min-y-size
 				send-window-y-size! set-inferior-y-start!))
 
 (define window-grow-horizontally!
-  (window-grow! false window-x-size window-min-x-size send-window-x-size!
+  (window-grow! #f window-x-size window-min-x-size send-window-x-size!
 		inferior-x-start set-inferior-x-start!
 		scale-combination-inferiors-x!))
 
 (define window-grow-vertically!
-  (window-grow! true window-y-size window-min-y-size send-window-y-size!
+  (window-grow! #t window-y-size window-min-y-size send-window-y-size!
 		inferior-y-start set-inferior-y-start!
 		scale-combination-inferiors-y!))
 
@@ -666,16 +666,16 @@
   (==> (window-leftmost-leaf combination) :minimum-y-size))
 
 (define (set-combination-x-size! combination x)
-  (scale-combination-inferiors-x! combination x false)
+  (scale-combination-inferiors-x! combination x #f)
   (set-window-x-size! combination x))
 
 (define (set-combination-y-size! combination y)
-  (scale-combination-inferiors-y! combination y false)
+  (scale-combination-inferiors-y! combination y #f)
   (set-window-y-size! combination y))
 
 (define (set-combination-size! combination x y)
-  (scale-combination-inferiors-x! combination x false)
-  (scale-combination-inferiors-y! combination y false)
+  (scale-combination-inferiors-x! combination x #f)
+  (scale-combination-inferiors-y! combination y #f)
   (set-window-size! combination x y))
 
 (define-method combination-window :set-x-size! set-combination-x-size!)

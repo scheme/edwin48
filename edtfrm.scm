@@ -43,14 +43,14 @@
     (with-instance-variables editor-frame
 			     window
 			     (root-screen main-buffer typein-buffer)
-      (set! superior false)
+      (set! superior #f)
       (set! x-size (screen-x-size root-screen))
       (set! y-size (screen-y-size root-screen))
-      (set! redisplay-flags (list false))
+      (set! redisplay-flags (list #f))
       (set! inferiors '())
       (set! properties (make-1d-table))
-      (let ((main-window (make-buffer-frame window main-buffer true))
-	    (typein-window (make-buffer-frame window typein-buffer false)))
+      (let ((main-window (make-buffer-frame window main-buffer #t))
+	    (typein-window (make-buffer-frame window typein-buffer #f)))
 	(set! screen root-screen)
 	(set! root-inferior (find-inferior inferiors main-window))
 	(set! typein-inferior (find-inferior inferiors typein-window))
@@ -61,7 +61,7 @@
     window))
 
 (define (editor-frame-update-display! window display-style)
-  ;; Returns true if update is successfully completed (or unnecessary).
+  ;; Returns #t if update is successfully completed (or unnecessary).
   ;; Assumes that interrupts are disabled.
   (notice-window-changes! (editor-frame-typein-window window))
   (let ((start (editor-frame-window0 window)))
@@ -76,7 +76,7 @@
 	       (window-update-display! window screen 0 0 0 x-size 0 y-size
 				       display-style)))
 	  (if finished?
-	      (set-car! redisplay-flags false))
+	      (set-car! redisplay-flags #f))
 	  finished?))))
 
 (define (set-editor-frame-size! window x y)
@@ -91,12 +91,12 @@
 	(screen-clear-rectangle screen
 				x (screen-x-size screen)
 				0 (screen-y-size screen)
-				false))
+				#f))
     (if (< y (screen-y-size screen))
 	(screen-clear-rectangle screen
 				0 (screen-x-size screen)
 				y (screen-y-size screen)
-				false))))
+				#f))))
 
 (define-method editor-frame :set-size!
   set-editor-frame-size!)

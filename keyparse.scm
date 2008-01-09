@@ -157,7 +157,7 @@
   ;; to the beginning of the header, and returns the indentation.
   (indent-body #f read-only #t)
 
-  ;; This value, if true for an ending fragment, causes the ender to
+  ;; This value, if #t for an ending fragment, causes the ender to
   ;; close this many enclosing structures in addition to the innermost
   ;; structure.
   (pop-container 0 read-only #t))
@@ -248,7 +248,7 @@ See \\[complete-keyword]."
   ;; DSTART is the start of a top-level definition.  LSTART is the
   ;; start of a line within that definition.  STATE is the keyparser
   ;; state obtained by parsing from DSTART to LSTART.  COMMENT? is
-  ;; true iff this procedure is being called from the comment
+  ;; #t iff this procedure is being called from the comment
   ;; indenter, in which case we must not use the comment indenter to
   ;; compute the indentation.
   (let ((char-state (keyparser-state/char-state state))

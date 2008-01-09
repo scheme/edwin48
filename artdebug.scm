@@ -97,14 +97,14 @@ commands before returning the value."
   boolean?)
 
 (define-variable debugger-split-window?
-  "True means use another window for the debugger buffer; false means
+  "True means use another window for the debugger buffer; #f means
 use the current window."
   #t
   boolean?)
 
 (define-variable debugger-one-at-a-time?
   "True means delete an existing debugger buffer before before
-starting a new debugger, ASK means ask the user, and false means
+starting a new debugger, ASK means ask the user, and #f means
 always create a new debugger buffer.  If there is more than one
 debugger buffer at the time a new debugger is started, the debugger
 will always create a new buffer."
@@ -952,7 +952,7 @@ Prefix argument means do not kill the debugger buffer."
 		       port))))
 
 (define (reductions-expanded? mark)
-  ;; Return true whenever expansion is impossible at MARK, even if
+  ;; Return #t whenever expansion is impossible at MARK, even if
   ;; because MARK is outside any subproblem or because there are no
   ;; reductions for the subproblem.  If only some of the reductions
   ;; appear already (e.g. if the others have been deleted by the

@@ -640,7 +640,7 @@ after the listing is made.)"
 
 (define-command shell-command
   "Execute string COMMAND in inferior shell; display output, if any.
-Optional second arg true (prefix arg, if interactive) means
+Optional second arg #t (prefix arg, if interactive) means
 insert output in current buffer after point (leave mark after it)."
   (lambda ()
     (list (shell-command-prompt "Shell command")

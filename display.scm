@@ -37,14 +37,14 @@
 		      (lambda (state display-type)
 			(unparse-object state
 					(display-type/name display-type))))))
-  (name false read-only true)
-  (multiple-screens? false read-only true)
-  (operation/available? false read-only true)
-  (operation/make-screen false read-only true)
-  (operation/get-input-operations false read-only true)
-  (operation/with-display-grabbed false read-only true)
-  (operation/with-interrupts-enabled false read-only true)
-  (operation/with-interrupts-disabled false read-only true))
+  (name #f read-only #t)
+  (multiple-screens? #f read-only #t)
+  (operation/available? #f read-only #t)
+  (operation/make-screen #f read-only #t)
+  (operation/get-input-operations #f read-only #t)
+  (operation/with-display-grabbed #f read-only #t)
+  (operation/with-interrupts-enabled #f read-only #t)
+  (operation/with-interrupts-disabled #f read-only #t))
 
 (define (make-display-type name
 			   multiple-screens?

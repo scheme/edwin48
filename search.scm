@@ -319,7 +319,7 @@
 	     (group-find-next-char-in-set (mark-group start)
 					  (mark-index start)
 					  (mark-index end)
-					  (re-compile-char-set pattern true))))
+					  (re-compile-char-set pattern #t))))
 	(if index
 	    (make-mark (mark-group start) index)
 	    (limit-mark-motion limit? end))))))
@@ -333,7 +333,7 @@
 					      (mark-index start)
 					      (mark-index end)
 					      (re-compile-char-set pattern
-								   true))))
+								   #t))))
 	(if index
 	    (make-mark (mark-group start) (fix:+ index 1))
 	    (limit-mark-motion limit? start))))))

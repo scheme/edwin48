@@ -46,7 +46,7 @@
   ()
   (lambda ()
     ((ref-command mouse-select))
-    ((ref-command split-window-vertically) false)))
+    ((ref-command split-window-vertically) #f)))
 
 (define-command mouse-set-point
   "Select window mouse is on, and move point to mouse position."

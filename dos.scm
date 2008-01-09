@@ -43,7 +43,7 @@
 
 (define (with-real-working-directory-pathname dir thunk)
   (let ((inside (->namestring (directory-pathname-as-file dir)))
-	(outside false))
+	(outside #f))
     (dynamic-wind
      (lambda ()
        (stop-thread-timer)
