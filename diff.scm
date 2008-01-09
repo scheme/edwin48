@@ -1,11 +1,11 @@
-#| -*-Scheme-*-
-
-$Id: diff.scm,v 1.2 2006/06/16 18:33:21 riastradh Exp $
-
-This code is written by Taylor R. Campbell and placed in the Public
-Domain.  All warranties are disclaimed.
-
-|#
+;;; -*-Scheme-*-
+;;;
+;;; $Id: diff.scm,v 1.2 2006/06/16 18:33:21 riastradh Exp $
+;;;
+;;; This code is written by Taylor R. Campbell and placed in the Public
+;;; Domain.  All warranties are disclaimed.
+;;;
+;;;
 
 ;;;; Unix diff(1) wrapper
 

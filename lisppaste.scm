@@ -1,11 +1,11 @@
-#| -*-Scheme-*-
-
-$Id: lisppaste.scm,v 1.1 2006/11/04 20:25:17 riastradh Exp $
-
-This code is written by Taylor R. Campbell and placed in the Public
-Domain.
-
-|#
+;;; -*-Scheme-*-
+;;;
+;;; $Id: lisppaste.scm,v 1.1 2006/11/04 20:25:17 riastradh Exp $
+;;;
+;;; This code is written by Taylor R. Campbell and placed in the Public
+;;; Domain.
+;;;
+;;;
 
 ;;;; Lisppaste XML-RPC Interface
 
