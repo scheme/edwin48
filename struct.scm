@@ -92,7 +92,7 @@
    (%hash-number #f)
    text))
 
-(define group-point group-%point)
+(define (group-point group) (group-%point group))
 
 (define (make-group buffer)
   (let ((group (%make-group buffer)))
