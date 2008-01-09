@@ -126,23 +126,23 @@
 (define (screen-modeline-event! screen window type)
   ((screen-operation/modeline-event! screen) screen window type))
 
-(define-integrable (screen-selected-window screen)
+(define (screen-selected-window screen)
   (editor-frame-selected-window (screen-root-window screen)))
 
 (define (screen-select-window! screen window)
   (editor-frame-select-window! (screen-root-window screen) window)
   (screen-modeline-event! screen window 'SELECT-WINDOW))
 
-(define-integrable (screen-select-cursor! screen window)
+(define (screen-select-cursor! screen window)
   (editor-frame-select-cursor! (screen-root-window screen) window))
 
-(define-integrable (screen-window-list screen)
+(define (screen-window-list screen)
   (editor-frame-windows (screen-root-window screen)))
 
-(define-integrable (screen-window0 screen)
+(define (screen-window0 screen)
   (editor-frame-window0 (screen-root-window screen)))
 
-(define-integrable (screen-typein-window screen)
+(define (screen-typein-window screen)
   (editor-frame-typein-window (screen-root-window screen)))
 
 (define (window-screen window)
@@ -152,7 +152,7 @@
   (not (or (screen-deleted? screen)
 	   (eq? 'UNMAPPED (screen-visibility screen)))))
 
-(define-integrable (screen-deleted? screen)
+(define (screen-deleted? screen)
   (eq? 'DELETED (screen-visibility screen)))
 
 (define (update-screen! screen display-style)
@@ -169,46 +169,46 @@
 
 ;;; Interface from update optimizer to terminal:
 
-(define-integrable (terminal-scroll-lines-down screen xl xu yl yu amount)
+(define (terminal-scroll-lines-down screen xl xu yl yu amount)
   (if (screen-debug-trace screen)
       ((screen-debug-trace screen) 'terminal screen 'scroll-lines-down
 				   xl xu yl yu amount))
   ((screen-operation/scroll-lines-down! screen) screen xl xu yl yu amount))
 
-(define-integrable (terminal-scroll-lines-up screen xl xu yl yu amount)
+(define (terminal-scroll-lines-up screen xl xu yl yu amount)
   (if (screen-debug-trace screen)
       ((screen-debug-trace screen) 'terminal screen 'scroll-lines-up
 				   xl xu yl yu amount))
   ((screen-operation/scroll-lines-up! screen) screen xl xu yl yu amount))
 
-(define-integrable (terminal-flush screen)
+(define (terminal-flush screen)
   (if (screen-debug-trace screen)
       ((screen-debug-trace screen) 'terminal screen 'flush))
   ((screen-operation/flush! screen) screen))
 
-(define-integrable (terminal-move-cursor screen x y)
+(define (terminal-move-cursor screen x y)
   (if (screen-debug-trace screen)
       ((screen-debug-trace screen) 'terminal screen 'move-cursor x y))
   ((screen-operation/write-cursor! screen) screen x y))
 
-(define-integrable (terminal-clear-screen screen)
+(define (terminal-clear-screen screen)
   (if (screen-debug-trace screen)
       ((screen-debug-trace screen) 'terminal screen 'clear-screen))
   ((screen-operation/clear-screen! screen) screen))
 
-(define-integrable (terminal-clear-line screen x y first-unused-x)
+(define (terminal-clear-line screen x y first-unused-x)
   (if (screen-debug-trace screen)
       ((screen-debug-trace screen) 'terminal screen 'clear-line
 				   x y first-unused-x))
   ((screen-operation/clear-line! screen) screen x y first-unused-x))
 
-(define-integrable (terminal-output-char screen x y char face)
+(define (terminal-output-char screen x y char face)
   (if (screen-debug-trace screen)
       ((screen-debug-trace screen) 'terminal screen 'output-char
 				   x y char face))
   ((screen-operation/write-char! screen) screen x y char face))
 
-(define-integrable (terminal-output-substring screen x y string start end face)
+(define (terminal-output-substring screen x y string start end face)
   (if (screen-debug-trace screen)
       ((screen-debug-trace screen) 'terminal screen 'output-substring
 				   x y (string-copy string) start end face))
@@ -259,29 +259,29 @@
       (set-matrix-highlight-enable! matrix highlight-enable))
     matrix))
 
-(define-integrable (highlight-ref matrix y x)
+(define (highlight-ref matrix y x)
   (vector-ref (vector-ref (matrix-highlight matrix) y) x))
 
-(define-integrable (highlight-set! matrix y x face)
+(define (highlight-set! matrix y x face)
   (vector-set! (vector-ref (matrix-highlight matrix) y) x face))
 
-(define-integrable (set-line-highlights! matrix y face)
+(define (set-line-highlights! matrix y face)
   (vector-fill! (vector-ref (matrix-highlight matrix) y) face))
 
-(define-integrable (set-subline-highlights! matrix y xl xu face)
+(define (set-subline-highlights! matrix y xl xu face)
   (subvector-fill! (vector-ref (matrix-highlight matrix) y) xl xu face))
 
-(define-integrable (clear-line-highlights! matrix y)
+(define (clear-line-highlights! matrix y)
   (set-line-highlights! matrix y (default-face)))
 
-(define-integrable (clear-subline-highlights! matrix y xl xu)
+(define (clear-subline-highlights! matrix y xl xu)
   (set-subline-highlights! matrix y xl xu (default-face)))
 
-(define-integrable (copy-line-highlights! m1 y1 m2 y2)
+(define (copy-line-highlights! m1 y1 m2 y2)
   (vector-move! (vector-ref (matrix-highlight m1) y1)
 		(vector-ref (matrix-highlight m2) y2)))
 
-(define-integrable (copy-subline-highlights! m1 y1 xl1 xu1 m2 y2 xl2)
+(define (copy-subline-highlights! m1 y1 xl1 xu1 m2 y2 xl2)
   (subvector-move-left! (vector-ref (matrix-highlight m1) y1) xl1 xu1
 			(vector-ref (matrix-highlight m2) y2) xl2))
 
@@ -301,34 +301,34 @@
   (subvector-find-next-element-not (vector-ref (matrix-highlight matrix) y)
 				   xl xu face))
 
-(define-integrable (default-face? face)
+(define (default-face? face)
   (not face))
 
-(define-integrable (default-face)
+(define (default-face)
   #f)
 
-(define-integrable (highlight-face)
+(define (highlight-face)
   #t)
 
-(define-integrable (line-contents-enabled? matrix y)
+(define (line-contents-enabled? matrix y)
   (boolean-vector-ref (matrix-enable matrix) y))
 
-(define-integrable (enable-line-contents! matrix y)
+(define (enable-line-contents! matrix y)
   (boolean-vector-set! (matrix-enable matrix) y #t))
 
-(define-integrable (disable-line-contents! matrix y)
+(define (disable-line-contents! matrix y)
   (boolean-vector-set! (matrix-enable matrix) y #f))
 
-(define-integrable (multiple-line-contents-enabled? matrix yl yu)
+(define (multiple-line-contents-enabled? matrix yl yu)
   (boolean-subvector-all-elements? (matrix-enable matrix) yl yu #t))
 
-(define-integrable (line-highlights-enabled? matrix y)
+(define (line-highlights-enabled? matrix y)
   (boolean-vector-ref (matrix-highlight-enable matrix) y))
 
-(define-integrable (enable-line-highlights! matrix y)
+(define (enable-line-highlights! matrix y)
   (boolean-vector-set! (matrix-highlight-enable matrix) y #t))
 
-(define-integrable (disable-line-highlights! matrix y)
+(define (disable-line-highlights! matrix y)
   (boolean-vector-set! (matrix-highlight-enable matrix) y #f))
 
 (define (set-screen-size! screen x-size y-size)
@@ -421,7 +421,7 @@
 						face)
 			x))
 
-(define-integrable (initialize-new-line-contents screen y)
+(define (initialize-new-line-contents screen y)
   (if (line-contents-enabled? (screen-current-matrix screen) y)
       (string-move!
        (vector-ref (matrix-contents (screen-current-matrix screen)) y)
@@ -430,7 +430,7 @@
        (vector-ref (matrix-contents (screen-new-matrix screen)) y)
        #\space)))
 
-(define-integrable (initialize-new-line-highlight screen y)
+(define (initialize-new-line-highlight screen y)
   (if (line-highlights-enabled? (screen-current-matrix screen) y)
       (copy-line-highlights! (screen-current-matrix screen) y
 			     (screen-new-matrix screen) y)
@@ -873,14 +873,14 @@
 				 screen x y nline x x* face)
 				(find-mismatch x**))))))))))))
 
-(define-integrable (substring-non-space-start string start end)
+(define (substring-non-space-start string start end)
   (do ((index start (fix:+ index 1)))
       ((or (fix:= end index)
 	   (not (fix:= (vector-8b-ref string index)
 		       (char->integer #\space))))
        index)))
 
-(define-integrable (substring-non-space-end string start end)
+(define (substring-non-space-end string start end)
   (do ((index end (fix:- index 1)))
       ((or (fix:= start index)
 	   (not (fix:= (vector-8b-ref string (fix:- index 1))
@@ -890,10 +890,10 @@
 (define (string-move! x y)
   (substring-move-left! x 0 (string-length x) y 0))
 
-(define-integrable (boolean-vector-ref vector index)
+(define (boolean-vector-ref vector index)
   (fix:= (char->integer #\t) (vector-8b-ref vector index)))
 
-(define-integrable (boolean-vector-set! vector index value)
+(define (boolean-vector-set! vector index value)
   (vector-8b-set! vector index (boolean->ascii value)))
 
 (define (boolean-vector-all-elements? vector value)
@@ -913,22 +913,22 @@
       false
       true))
 
-(define-integrable (boolean-subvector-find-next vector start end value)
+(define (boolean-subvector-find-next vector start end value)
   (vector-8b-find-next-char vector start end (boolean->ascii value)))
 
-(define-integrable make-boolean-vector string-allocate)
-(define-integrable boolean-vector-length string-length)
-(define-integrable boolean-vector=? string=?)
-(define-integrable boolean-subvector-move-right! substring-move-right!)
-(define-integrable boolean-subvector-move-left! substring-move-left!)
-(define-integrable boolean-vector-move! string-move!)
-(define-integrable boolean-vector-copy string-copy)
+(define make-boolean-vector string-allocate)
+(define boolean-vector-length string-length)
+(define boolean-vector=? string=?)
+(define boolean-subvector-move-right! substring-move-right!)
+(define boolean-subvector-move-left! substring-move-left!)
+(define boolean-vector-move! string-move!)
+(define boolean-vector-copy string-copy)
 
-(define-integrable (boolean-subvector-fill! vector start end value)
+(define (boolean-subvector-fill! vector start end value)
   (vector-8b-fill! vector start end (boolean->ascii value)))
 
 (define (boolean-vector-fill! vector value)
   (boolean-subvector-fill! vector 0 (boolean-vector-length vector) value))
 
-(define-integrable (boolean->ascii boolean)
+(define (boolean->ascii boolean)
   (if boolean (char->integer #\t) (char->integer #\f)))

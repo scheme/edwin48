@@ -136,7 +136,7 @@
   screen
   unspecific)
 
-(define-integrable (bios-move-cursor screen x y)
+(define (bios-move-cursor screen x y)
   screen
   (bios:write-cursor! x y))
 

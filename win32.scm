@@ -66,10 +66,10 @@
   (redisplay-title? #f)
   (name #f))
 
-(define-integrable (screen-redisplay-title? screen)
+(define (screen-redisplay-title? screen)
   (state/redisplay-title? (screen-state screen)))
 
-(define-integrable (set-screen-redisplay-title?! screen flag)
+(define (set-screen-redisplay-title?! screen flag)
   (set-state/redisplay-title?! (screen-state screen) flag))
 
 (define (make-win32-screen)
@@ -111,8 +111,8 @@
   (message-beep MB_OK))
 
 (define (expand-rect screen top bottom left right)
-  (define-integrable (min u v)  (if (fix:< u v) u v))
-  (define-integrable (max u v)  (if (fix:> u v) u v))
+  (define (min u v)  (if (fix:< u v) u v))
+  (define (max u v)  (if (fix:> u v) u v))
   (define (set-rect! state top bottom left right)
     (set-state/rect-top!    state top)
     (set-state/rect-bottom! state bottom)
@@ -139,7 +139,7 @@
 	   (state/rect-left state)
 	   (fix:+ (state/rect-right state) 1))))))
 
-(define-integrable (set-screen-cursor-position! screen x y)
+(define (set-screen-cursor-position! screen x y)
   (set-state/cursor-x! (screen-state screen) x)
   (set-state/cursor-y! (screen-state screen) y))
 
@@ -242,10 +242,10 @@
   (list-search-positive win32-screens
     (lambda (screen) (eqv? handle (state/handle (screen-state screen))))))
 
-(define-integrable (screen-name screen)
+(define (screen-name screen)
   (state/name (screen-state screen)))
 
-(define-integrable (set-screen-name! screen name)
+(define (set-screen-name! screen name)
   (set-state/name! (screen-state screen) name))
 
 (define (win32-screen/set-name! screen name)
@@ -470,7 +470,7 @@
       (set-interrupt-enables! mask)
       result)))
 
-(define-integrable interrupt-mask/gc+win32
+(define interrupt-mask/gc+win32
   ;; Include INTERRUPT-BIT/GLOBAL-1 so that messages are dispatched to
   ;; the screen by the interrupt-handler.
   ;;(fix:or interrupt-mask/gc-ok interrupt-bit/global-1)
@@ -519,32 +519,32 @@
 
 ;; Mask bits:  VK coded special keys, Edwin mode,
 ;;    mouse, key, resize, close, focus, and visibility events
-(define-integrable win32-screen-features-mask #x14003F)
+(define win32-screen-features-mask #x14003F)
 
-(define-integrable event:process-output 16)
-(define-integrable event:process-status 32)
-(define-integrable event:inferior-thread-output 64)
+(define event:process-output 16)
+(define event:process-status 32)
+(define event:inferior-thread-output 64)
 
-(define-integrable event-type:resize		#x001)
-(define-integrable event-type:key		#x002)
-(define-integrable event-type:mouse		#x004)
-(define-integrable event-type:close		#x008)
-(define-integrable event-type:focus		#x010)
-(define-integrable event-type:visibility	#x020)
+(define event-type:resize		#x001)
+(define event-type:key		#x002)
+(define event-type:mouse		#x004)
+(define event-type:close		#x008)
+(define event-type:focus		#x010)
+(define event-type:visibility	#x020)
 
-(define-integrable control-key:alt-pressed	#x001)
-(define-integrable control-key:control-pressed	#x002)
-(define-integrable control-key:shift-pressed	#x004)
+(define control-key:alt-pressed	#x001)
+(define control-key:control-pressed	#x002)
+(define control-key:shift-pressed	#x004)
 
-(define-integrable button-state:left-pressed	#x001)
-(define-integrable button-state:right-pressed	#x002)
-(define-integrable button-state:middle-pressed	#x004)
+(define button-state:left-pressed	#x001)
+(define button-state:right-pressed	#x002)
+(define button-state:middle-pressed	#x004)
 
-(define-integrable (some-bits? mask item)
+(define (some-bits? mask item)
   (not (fix:= 0 (fix:and mask item))))
 
-(define-integrable (event-type event) (vector-ref event 0))
-(define-integrable (event-handle event) (vector-ref event 1))
+(define (event-type event) (vector-ref event 0))
+(define (event-handle event) (vector-ref event 1))
 
 (define-structure (resize-event (type vector)
 				(initial-offset 2)

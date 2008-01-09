@@ -298,10 +298,10 @@
 	   event))))))
 
 
-(define-integrable input-buffer-size 16)
-(define-integrable event:process-output -2)
-(define-integrable event:process-status -3)
-(define-integrable event:interrupt -4)
+(define input-buffer-size 16)
+(define event:process-output -2)
+(define event:process-status -3)
+(define event:interrupt -4)
 
 (define (process-change-event event)
   (cond ((fix:= event event:process-output) (accept-process-output))
@@ -885,7 +885,7 @@
       (enter-standout-mode screen)
       (exit-standout-mode screen)))
 
-(define-integrable (enter-standout-mode screen)
+(define (enter-standout-mode screen)
   ;; If the terminal uses standout markers, don't use standout.
   ;; It's too complicated to bother with.
   (if (and (not (screen-standout-mode? screen))
@@ -896,42 +896,42 @@
 	 screen
 	 (ts-enter-standout-mode (screen-description screen))))))
 
-(define-integrable (exit-standout-mode screen)
+(define (exit-standout-mode screen)
   (if (screen-standout-mode? screen)
       (begin
 	(set-screen-standout-mode?! screen false)
 	(maybe-output-1 screen
 			(ts-exit-standout-mode (screen-description screen))))))
 
-(define-integrable (enter-insert-mode screen)
+(define (enter-insert-mode screen)
   (if (not (screen-insert-mode? screen))
       (begin
 	(set-screen-insert-mode?! screen true)
 	(maybe-output-1 screen
 			(ts-enter-insert-mode (screen-description screen))))))
 
-(define-integrable (exit-insert-mode screen)
+(define (exit-insert-mode screen)
   (if (screen-insert-mode? screen)
       (begin
 	(set-screen-insert-mode?! screen false)
 	(maybe-output-1 screen
 			(ts-exit-insert-mode (screen-description screen))))))
 
-(define-integrable (enter-delete-mode screen)
+(define (enter-delete-mode screen)
   (if (not (screen-delete-mode? screen))
       (begin
 	(set-screen-delete-mode?! screen true)
 	(maybe-output-1 screen
 			(ts-enter-delete-mode (screen-description screen))))))
 
-(define-integrable (exit-delete-mode screen)
+(define (exit-delete-mode screen)
   (if (screen-delete-mode? screen)
       (begin
 	(set-screen-delete-mode?! screen false)
 	(maybe-output-1 screen
 			(ts-exit-delete-mode (screen-description screen))))))
 
-(define-integrable (move-cursor screen x y)
+(define (move-cursor screen x y)
   (if (not (and (screen-cursor-x screen)
 		(fix:= x (screen-cursor-x screen))
 		(fix:= y (screen-cursor-y screen))))
@@ -1022,13 +1022,13 @@
 			 (ts-cursor-left description)
 			 (ts-cursor-up description))))
 
-(define-integrable (parameterize-1 string p1)
+(define (parameterize-1 string p1)
   (termcap-param-string string p1 0 0 0))
 
-(define-integrable (parameterize-2 string p1 p2)
+(define (parameterize-2 string p1 p2)
   (termcap-param-string string p1 p2 0 0))
 
-(define-integrable (parameterize-4 string p1 p2 p3 p4)
+(define (parameterize-4 string p1 p2 p3 p4)
   (termcap-param-string string p1 p2 p3 p4))
 
 (define (output screen command)
@@ -1040,10 +1040,10 @@
 			 (tn-y-size (screen-description screen))))
 		   (screen-cursor-y screen))))
 
-(define-integrable (output-1 screen command)
+(define (output-1 screen command)
   (output-n screen command 1))
 
-(define-integrable (output-n screen command n-lines)
+(define (output-n screen command n-lines)
   (output-port/write-string console-i/o-port
 			    (pad-string screen command n-lines)))
 
@@ -1051,7 +1051,7 @@
   (if command
       (output screen command)))
 
-(define-integrable (maybe-output-1 screen command)
+(define (maybe-output-1 screen command)
   (maybe-output-n screen command 1))
 
 (define (maybe-output-n screen command n-lines)
@@ -1119,7 +1119,7 @@
 	  (else
 	   (values false false)))))
 
-(define-integrable (string-cost description baud-rate string n-lines)
+(define (string-cost description baud-rate string n-lines)
   (string-length
    (termcap-pad-string string
 		       n-lines

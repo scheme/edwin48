@@ -202,7 +202,7 @@ or #F meaning no limit."
 	   select-buffer)
        buffer))))
 
-(define-integrable (buffer-dstate buffer)
+(define (buffer-dstate buffer)
   (buffer-get buffer 'DEBUG-STATE))
 
 ;;;; Main Entry

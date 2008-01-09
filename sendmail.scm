@@ -1299,25 +1299,25 @@ the user from the mailer."
 		       buffer)
   (buffer-modeline-event! buffer 'PROCESS-STATUS))
 
-(define-integrable (mime-attachment-type attachment)
+(define (mime-attachment-type attachment)
   (vector-ref attachment 0))
 
-(define-integrable (mime-attachment-subtype attachment)
+(define (mime-attachment-subtype attachment)
   (vector-ref attachment 1))
 
-(define-integrable (mime-attachment-parameters attachment)
+(define (mime-attachment-parameters attachment)
   (vector-ref attachment 2))
 
-(define-integrable (mime-attachment-disposition attachment)
+(define (mime-attachment-disposition attachment)
   (vector-ref attachment 3))
 
-(define-integrable (mime-attachment-message-headers attachment)
+(define (mime-attachment-message-headers attachment)
   (vector-ref attachment 4))
 
-(define-integrable (mime-attachment-message-body-generator attachment)
+(define (mime-attachment-message-body-generator attachment)
   (vector-ref attachment 5))
 
-(define-integrable (mime-attachment-pathname attachment)
+(define (mime-attachment-pathname attachment)
   (vector-ref attachment 4))
 
 (define (mime-parameters->string parameters)

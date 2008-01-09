@@ -165,7 +165,7 @@
 (define (override-next-command! override)
   (enqueue! command-reader-override-queue override))
 
-(define-integrable (current-command-key)
+(define (current-command-key)
   *command-key*)
 
 (define (last-command-key)
@@ -177,10 +177,10 @@
   (set! *command* command)
   unspecific)
 
-(define-integrable (current-command)
+(define (current-command)
   *command*)
 
-(define-integrable (last-command)
+(define (last-command)
   *last-command*)
 
 (define (set-command-argument! argument mode)
@@ -190,7 +190,7 @@
   (set! *command* *last-command*)
   unspecific)
 
-(define-integrable (command-argument)
+(define (command-argument)
   (and *command-argument* (car *command-argument*)))
 
 (define (auto-argument-mode?)
@@ -269,11 +269,11 @@
 ;;; latter should only be used by "prefix" commands such as C-X or
 ;;; C-4, since they want arguments, messages, etc. to be passed on.
 
-(define-integrable (execute-key comtab key)
+(define (execute-key comtab key)
   (reset-command-state!)
   (dispatch-on-key comtab key))
 
-(define-integrable (execute-command command)
+(define (execute-command command)
   (reset-command-state!)
   (%dispatch-on-command (current-window) command #f))
 

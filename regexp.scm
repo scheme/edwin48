@@ -245,7 +245,7 @@
     (set! match-group (compute-match-group group index))
     index))
 
-(define-integrable (syntax-table-argument syntax-table)
+(define (syntax-table-argument syntax-table)
   (char-syntax-table/entries (or syntax-table standard-char-syntax-table)))
 
 (define (compute-match-group group index)

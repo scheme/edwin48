@@ -30,7 +30,7 @@
 
 ;; Allow gc and after-gc hooks.
 
-(define-integrable interrupt-mask/gc-normal #x0025)
+(define interrupt-mask/gc-normal #x0025)
 
 (define (guarantee-heap-available n-words operator old-mask)
   (gc-flip)
@@ -91,7 +91,7 @@
 	 ((8) -3)
 	 (else (error "Can't support this word size:" chars-per-word)))))))
 
-(define-integrable (chars->words n-chars)
+(define (chars->words n-chars)
   (fix:lsh (fix:+ (fix:+ n-chars 1)	;Add 1 for NUL termination.
 		  (fix:not (fix:lsh -1 (fix:- 0 (chars-to-words-shift)))))
 	   (chars-to-words-shift)))

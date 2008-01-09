@@ -86,35 +86,35 @@
   (xterm-y-size 1))
 
 ;; These constants must match "microcode/x11base.c"
-(define-integrable event:process-output -2)
-(define-integrable event:process-status -3)
-(define-integrable event:inferior-thread-output -4)
-(define-integrable event-type:button-down 0)
-(define-integrable event-type:button-up 1)
-(define-integrable event-type:configure 2)
-(define-integrable event-type:enter 3)
-(define-integrable event-type:focus-in 4)
-(define-integrable event-type:focus-out 5)
-(define-integrable event-type:key-press 6)
-(define-integrable event-type:leave 7)
-(define-integrable event-type:motion 8)
-(define-integrable event-type:expose 9)
-(define-integrable event-type:delete-window 10)
-(define-integrable event-type:map 11)
-(define-integrable event-type:unmap 12)
-(define-integrable event-type:take-focus 13)
-(define-integrable event-type:visibility 14)
-(define-integrable event-type:selection-clear 15)
-(define-integrable event-type:selection-notify 16)
-(define-integrable event-type:selection-request 17)
-(define-integrable event-type:property-notify 18)
-(define-integrable number-of-event-types 19)
+(define event:process-output -2)
+(define event:process-status -3)
+(define event:inferior-thread-output -4)
+(define event-type:button-down 0)
+(define event-type:button-up 1)
+(define event-type:configure 2)
+(define event-type:enter 3)
+(define event-type:focus-in 4)
+(define event-type:focus-out 5)
+(define event-type:key-press 6)
+(define event-type:leave 7)
+(define event-type:motion 8)
+(define event-type:expose 9)
+(define event-type:delete-window 10)
+(define event-type:map 11)
+(define event-type:unmap 12)
+(define event-type:take-focus 13)
+(define event-type:visibility 14)
+(define event-type:selection-clear 15)
+(define event-type:selection-notify 16)
+(define event-type:selection-request 17)
+(define event-type:property-notify 18)
+(define number-of-event-types 19)
 
 ;; This mask contains button-down, button-up, configure, focus-in,
 ;; key-press, expose, destroy, map, unmap, visibility,
 ;; selection-clear, selection-notify, selection-request, and
 ;; property-notify.
-(define-integrable event-mask #x7de57)
+(define event-mask #x7de57)
 
 (define-structure (xterm-screen-state
 		   (constructor make-xterm-screen-state (xterm display))
@@ -227,7 +227,7 @@
 (define (set-screen-unexposed?! screen value)
   (set-xterm-screen-state/unexposed?! (screen-state screen) value))
 
-(define-integrable (screen-exposed? screen)
+(define (screen-exposed? screen)
   (not (screen-unexposed? screen)))
 
 (define (note-xterm-exposed xterm)
@@ -987,24 +987,24 @@
 (define (delete-window-property display window property)
   (x-delete-property display window (symbol->x-atom display property #f)))
 
-(define-integrable x-status:success		0)
-(define-integrable x-status:bad-request		1)
-(define-integrable x-status:bad-value		2)
-(define-integrable x-status:bad-window		3)
-(define-integrable x-status:bad-pixmap		4)
-(define-integrable x-status:bad-atom		5)
-(define-integrable x-status:bad-cursor		6)
-(define-integrable x-status:bad-font		7)
-(define-integrable x-status:bad-match		8)
-(define-integrable x-status:bad-drawable	9)
-(define-integrable x-status:bad-access		10)
-(define-integrable x-status:bad-alloc		11)
-(define-integrable x-status:bad-color		12)
-(define-integrable x-status:bad-gc		13)
-(define-integrable x-status:bad-id-choice	14)
-(define-integrable x-status:bad-name		15)
-(define-integrable x-status:bad-length		16)
-(define-integrable x-status:bad-implementation	17)
+(define x-status:success		0)
+(define x-status:bad-request		1)
+(define x-status:bad-value		2)
+(define x-status:bad-window		3)
+(define x-status:bad-pixmap		4)
+(define x-status:bad-atom		5)
+(define x-status:bad-cursor		6)
+(define x-status:bad-font		7)
+(define x-status:bad-match		8)
+(define x-status:bad-drawable	9)
+(define x-status:bad-access		10)
+(define x-status:bad-alloc		11)
+(define x-status:bad-color		12)
+(define x-status:bad-gc		13)
+(define x-status:bad-id-choice	14)
+(define x-status:bad-name		15)
+(define x-status:bad-length		16)
+(define x-status:bad-implementation	17)
 
 ;;;; Selection Source
 
@@ -1296,8 +1296,8 @@ Otherwise, it is copied from the primary selection."
   (time #f read-only #t)
   (state #f read-only #t))
 
-(define-integrable x-property-state:new-value 0)
-(define-integrable x-property-state:delete 1)
+(define x-property-state:new-value 0)
+(define x-property-state:delete 1)
 
 (define x-selection-timeout 5000)
 

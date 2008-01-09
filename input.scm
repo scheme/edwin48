@@ -109,7 +109,7 @@
 	(set! message-should-be-erased? #t)))
   unspecific)
 
-(define-integrable (command-prompt)
+(define (command-prompt)
   (or command-prompt-string ""))
 
 (define (set-command-prompt! string)

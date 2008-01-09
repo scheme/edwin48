@@ -1652,16 +1652,16 @@ Leaves original message, deleted, before the undigestified messages."
 	    (message "Counting messages...done")
 	    (values start tail))))))
 
-(define-integrable (buffer-msg-memo buffer)
+(define (buffer-msg-memo buffer)
   (buffer-get buffer 'RMAIL-MSG-MEMO))
 
-(define-integrable (set-buffer-msg-memo! buffer memo)
+(define (set-buffer-msg-memo! buffer memo)
   (buffer-put! buffer 'RMAIL-MSG-MEMO memo))
 
-(define-integrable (buffer-last-msg-end buffer)
+(define (buffer-last-msg-end buffer)
   (buffer-get buffer 'RMAIL-LAST-MSG-END))
 
-(define-integrable (set-buffer-last-msg-end! buffer memo)
+(define (set-buffer-last-msg-end! buffer memo)
   (buffer-put! buffer 'RMAIL-LAST-MSG-END memo))
 
 (define-structure (msg-memo (conc-name msg-memo/))
@@ -1712,7 +1712,7 @@ Leaves original message, deleted, before the undigestified messages."
 		  ((= n (msg-memo/number next)) next)
 		  (else (loop next))))))))
 
-(define-integrable (msg-memo/deleted? memo)
+(define (msg-memo/deleted? memo)
   (memq 'DELETED (msg-memo/attributes memo)))
 
 (define (msg-memo/next-undeleted memo)
@@ -2121,10 +2121,10 @@ Completion is performed over known labels when reading."
   (let ((group (buffer-group buffer)))
     (with-group-text-clipped! group 0 (group-length group) thunk)))
 
-(define-integrable (with-buffer-open buffer thunk)
+(define (with-buffer-open buffer thunk)
   (with-group-open (buffer-group buffer) thunk))
 
-(define-integrable (with-buffer-undo-disabled buffer thunk)
+(define (with-buffer-undo-disabled buffer thunk)
   (with-group-undo-disabled (buffer-group buffer) thunk))
 
 (define (with-group-open group thunk)
@@ -2193,13 +2193,13 @@ Note:    it means the file has no messages in it.\n\037")
 (define babyl-initial-message-start
   (string-append "\f\n0, unseen,,\n" babyl-eooh-string))
 
-(define-integrable digest-end-regexp
+(define digest-end-regexp
   "^End of.*Digest.*\n\\*\\*\\*\\*\\*\\*\\*\\*\\**\\(\n------*\\)*")
 
-(define-integrable digest-summary-separator-regexp
+(define digest-summary-separator-regexp
   "\n*\n------------------------------*\n*")
 
-(define-integrable digest-message-separator-regexp
+(define digest-message-separator-regexp
   "\n*\n\n----------------------------*\n*")
 
 (define digest-separator-replacement

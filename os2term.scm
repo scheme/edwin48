@@ -352,7 +352,7 @@
 			(fix:* amount (screen-char-height screen)))
 	 'CLOBBERED-CURSOR)))
 
-(define-integrable (screen-face screen highlight)
+(define (screen-face screen highlight)
   (if highlight
       (screen-highlight-face screen)
       (screen-normal-face screen)))
@@ -376,8 +376,8 @@
 (define normal-face (make-face #x000000 #xFFFFFF))
 (define highlight-face (make-face #xFFFFFF #x000000))
 
-(define-integrable (screen-normal-face screen) screen normal-face)
-(define-integrable (screen-highlight-face screen) screen highlight-face)
+(define (screen-normal-face screen) screen normal-face)
+(define (screen-highlight-face screen) screen highlight-face)
 
 (define (os2-screen/set-foreground-color! screen color)
   screen
@@ -474,21 +474,21 @@
 (define (os2/desktop-height)
   desktop-height)
 
-(define-integrable (cx->x screen cx)
+(define (cx->x screen cx)
   ;; Returns leftmost pel of cell.
   (fix:* cx (screen-char-width screen)))
 
-(define-integrable (cy->y screen cy)
+(define (cy->y screen cy)
   ;; Returns bottommost pel of cell.
   (cyl->yh screen (fix:+ cy 1)))
 
-(define-integrable (cyl->yh screen cy)
+(define (cyl->yh screen cy)
   ;; Returns bottommost pel of cell above.
   (fix:* (fix:- (screen-y-size screen) cy) (screen-char-height screen)))
 
-(define-integrable cxl->xl cx->x)
-(define-integrable cxh->xh cx->x)
-(define-integrable cyh->yl cyl->yh)
+(define cxl->xl cx->x)
+(define cxh->xh cx->x)
+(define cyh->yl cyl->yh)
 
 (define (x->cx screen x)
   (let ((cx (fix:quotient x (screen-char-width screen)))
@@ -543,10 +543,10 @@
 	0
 	cy)))
 
-(define-integrable (width->x-size screen width)
+(define (width->x-size screen width)
   (fix:quotient width (screen-char-width screen)))
 
-(define-integrable (height->y-size screen height)
+(define (height->y-size screen height)
   (fix:quotient height (screen-char-height screen)))
 
 (define-structure (os2-screen-state
@@ -564,64 +564,64 @@
   (current-face normal-face)
   (current-title #f))
 
-(define-integrable (screen-wid screen)
+(define (screen-wid screen)
   (screen-state/wid (screen-state screen)))
 
-(define-integrable (screen-font-metrics screen)
+(define (screen-font-metrics screen)
   (screen-state/font-metrics (screen-state screen)))
 
-(define-integrable (set-screen-font-metrics! screen metrics)
+(define (set-screen-font-metrics! screen metrics)
   (set-screen-state/font-metrics! (screen-state screen) metrics))
 
-(define-integrable (screen-pel-width screen)
+(define (screen-pel-width screen)
   (screen-state/pel-width (screen-state screen)))
 
-(define-integrable (set-screen-pel-width! screen width)
+(define (set-screen-pel-width! screen width)
   (set-screen-state/pel-width! (screen-state screen) width))
 
-(define-integrable (screen-pel-height screen)
+(define (screen-pel-height screen)
   (screen-state/pel-height (screen-state screen)))
 
-(define-integrable (set-screen-pel-height! screen height)
+(define (set-screen-pel-height! screen height)
   (set-screen-state/pel-height! (screen-state screen) height))
 
-(define-integrable (screen-char-map screen)
+(define (screen-char-map screen)
   (screen-state/char-map (screen-state screen)))
 
-(define-integrable (set-screen-char-map! screen char-map)
+(define (set-screen-char-map! screen char-map)
   (set-screen-state/char-map! (screen-state screen) char-map))
 
-(define-integrable (screen-face-map screen)
+(define (screen-face-map screen)
   (screen-state/face-map (screen-state screen)))
 
-(define-integrable (set-screen-face-map! screen face-map)
+(define (set-screen-face-map! screen face-map)
   (set-screen-state/face-map! (screen-state screen) face-map))
 
-(define-integrable (screen-current-face screen)
+(define (screen-current-face screen)
   (screen-state/current-face (screen-state screen)))
 
-(define-integrable (set-screen-current-face! screen face)
+(define (set-screen-current-face! screen face)
   (set-screen-state/current-face! (screen-state screen) face))
 
-(define-integrable (screen-current-title screen)
+(define (screen-current-title screen)
   (screen-state/current-title (screen-state screen)))
 
-(define-integrable (set-screen-current-title! screen title)
+(define (set-screen-current-title! screen title)
   (set-screen-state/current-title! (screen-state screen) title))
 
-(define-integrable (screen-psid screen)
+(define (screen-psid screen)
   (os2win-ps (screen-wid screen)))
 
-(define-integrable (screen-char-width screen)
+(define (screen-char-width screen)
   (font-metrics/width (screen-font-metrics screen)))
 
-(define-integrable (screen-char-height screen)
+(define (screen-char-height screen)
   (font-metrics/height (screen-font-metrics screen)))
 
-(define-integrable (screen-char-descender screen)
+(define (screen-char-descender screen)
   (font-metrics/descender (screen-font-metrics screen)))
 
-(define-integrable (screen-char-index screen x y)
+(define (screen-char-index screen x y)
   (fix:+ (fix:* y (screen-x-size screen)) x))
 
 (define (wid->screen wid)
@@ -740,9 +740,9 @@
 		     ((INTERRUPT) (loop))
 		     (else (read-event-1 block?))))))))))
 
-(define-integrable event:process-output -2)
-(define-integrable event:process-status -3)
-(define-integrable event:inferior-thread-output -4)
+(define event:process-output -2)
+(define event:process-status -3)
+(define event:inferior-thread-output -4)
 
 (define (preview-event-stream)
   (set! previewer-registration

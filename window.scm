@@ -64,36 +64,36 @@
 (define (window-kill! window)
   (for-each-inferior-window window (lambda (window) (==> window :kill!))))
 
-(define-integrable (window-superior window)
+(define (window-superior window)
   (with-instance-variables vanilla-window window () superior))
 
-(define-integrable (%set-window-superior! window window*)
+(define (%set-window-superior! window window*)
   (with-instance-variables vanilla-window window (window*)
     (set! superior window*)))
 
-(define-integrable (window-x-size window)
+(define (window-x-size window)
   (with-instance-variables vanilla-window window () x-size))
 
-(define-integrable (%set-window-x-size! window x)
+(define (%set-window-x-size! window x)
   (with-instance-variables vanilla-window window (x) (set! x-size x)))
 
-(define-integrable (window-y-size window)
+(define (window-y-size window)
   (with-instance-variables vanilla-window window () y-size))
 
-(define-integrable (%set-window-y-size! window y)
+(define (%set-window-y-size! window y)
   (with-instance-variables vanilla-window window (y) (set! y-size y)))
 
-(define-integrable (window-redisplay-flags window)
+(define (window-redisplay-flags window)
   (with-instance-variables vanilla-window window () redisplay-flags))
 
-(define-integrable (%set-window-redisplay-flags! window flags)
+(define (%set-window-redisplay-flags! window flags)
   (with-instance-variables vanilla-window window (flags)
     (set! redisplay-flags flags)))
 
-(define-integrable (window-inferiors window)
+(define (window-inferiors window)
   (with-instance-variables vanilla-window window () inferiors))
 
-(define-integrable (set-window-inferiors! window inferiors*)
+(define (set-window-inferiors! window inferiors*)
   (with-instance-variables vanilla-window window (inferiors*)
     (set! inferiors inferiors*)))
 
@@ -128,27 +128,27 @@
   (%set-window-y-size! window y)
   (window-needs-redisplay! window))
 
-(define-integrable (window-needs-redisplay? window)
+(define (window-needs-redisplay? window)
   (car (window-redisplay-flags window)))
 
-(define-integrable (window-needs-redisplay! window)
+(define (window-needs-redisplay! window)
   (if (not (car (window-redisplay-flags window)))
       (setup-redisplay-flags! (window-redisplay-flags window))))
 
-(define-integrable (window-inferior? window window*)
+(define (window-inferior? window window*)
   (find-inferior? (window-inferiors window) window*))
 
-(define-integrable (window-inferior window window*)
+(define (window-inferior window window*)
   (find-inferior (window-inferiors window) window*))
 
-(define-integrable (for-each-inferior window procedure)
+(define (for-each-inferior window procedure)
   (let loop ((inferiors (window-inferiors window)))
     (if (not (null? inferiors))
 	(begin
 	  (procedure (car inferiors))
 	  (loop (cdr inferiors))))))
 
-(define-integrable (for-each-inferior-window window procedure)
+(define (for-each-inferior-window window procedure)
   (for-each-inferior window
     (lambda (inferior)
       (procedure (inferior-window inferior)))))
@@ -334,31 +334,31 @@
 (define %inferior-tag
   "inferior")
 
-(define-integrable (%make-inferior window x-start y-start redisplay-flags)
+(define (%make-inferior window x-start y-start redisplay-flags)
   (vector %inferior-tag window x-start y-start redisplay-flags))
 
-(define-integrable (inferior-window inferior)
+(define (inferior-window inferior)
   (vector-ref inferior 1))
 
-(define-integrable (set-inferior-window! inferior window)
+(define (set-inferior-window! inferior window)
   (vector-set! inferior 1 window))
 
-(define-integrable (inferior-x-start inferior)
+(define (inferior-x-start inferior)
   (vector-ref inferior 2))
 
-(define-integrable (%set-inferior-x-start! inferior x-start)
+(define (%set-inferior-x-start! inferior x-start)
   (vector-set! inferior 2 x-start))
 
-(define-integrable (inferior-y-start inferior)
+(define (inferior-y-start inferior)
   (vector-ref inferior 3))
 
-(define-integrable (%set-inferior-y-start! inferior y-start)
+(define (%set-inferior-y-start! inferior y-start)
   (vector-set! inferior 3 y-start))
 
-(define-integrable (inferior-redisplay-flags inferior)
+(define (inferior-redisplay-flags inferior)
   (vector-ref inferior 4))
 
-(define-integrable (set-inferior-redisplay-flags! inferior redisplay-flags)
+(define (set-inferior-redisplay-flags! inferior redisplay-flags)
   (vector-set! inferior 4 redisplay-flags))
 
 (unparser/set-tagged-vector-method! %inferior-tag
@@ -399,10 +399,10 @@
   (%set-inferior-start! inferior x-start y-start)
   (inferior-needs-redisplay! inferior))
 
-(define-integrable (%inferior-x-end inferior)
+(define (%inferior-x-end inferior)
   (fix:+ (inferior-x-start inferior) (inferior-x-size inferior)))
 
-(define-integrable (%inferior-y-end inferior)
+(define (%inferior-y-end inferior)
   (fix:+ (inferior-y-start inferior) (inferior-y-size inferior)))
 
 (define (inferior-x-end inferior)
@@ -429,7 +429,7 @@
       (set-inferior-start! inferior false false)
       (set-inferior-start! inferior (car position) (cdr position))))
 
-(define-integrable (inferior-needs-redisplay? inferior)
+(define (inferior-needs-redisplay? inferior)
   (car (inferior-redisplay-flags inferior)))
 
 (define (inferior-needs-redisplay! inferior)
@@ -445,28 +445,28 @@
 	  (set-car! flags true)
 	  (loop (cdr flags))))))
 
-(define-integrable (inferior-x-size inferior)
+(define (inferior-x-size inferior)
   (window-x-size (inferior-window inferior)))
 
-(define-integrable (%set-inferior-x-size! inferior x)
+(define (%set-inferior-x-size! inferior x)
   (%set-window-x-size! (inferior-window inferior) x))
 
-(define-integrable (set-inferior-x-size! inferior x)
+(define (set-inferior-x-size! inferior x)
   (==> (inferior-window inferior) :set-x-size! x))
 
-(define-integrable (inferior-y-size inferior)
+(define (inferior-y-size inferior)
   (window-y-size (inferior-window inferior)))
 
-(define-integrable (%set-inferior-y-size! inferior y)
+(define (%set-inferior-y-size! inferior y)
   (%set-window-y-size! (inferior-window inferior) y))
 
-(define-integrable (set-inferior-y-size! inferior y)
+(define (set-inferior-y-size! inferior y)
   (==> (inferior-window inferior) :set-y-size! y))
 
-(define-integrable (inferior-size inferior receiver)
+(define (inferior-size inferior receiver)
   (window-size (inferior-window inferior) receiver))
 
-(define-integrable (set-inferior-size! inferior x y)
+(define (set-inferior-size! inferior x y)
   (==> (inferior-window inferior) :set-size! x y))
 
 (define (find-inferior? inferiors window)

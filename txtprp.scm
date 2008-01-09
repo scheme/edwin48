@@ -442,24 +442,24 @@
 
 ;;;; Properties
 
-(define-integrable properties->alist rb-tree->alist)
-(define-integrable properties/copy rb-tree/copy)
-(define-integrable properties/delete! rb-tree/delete!)
-(define-integrable properties/empty? rb-tree/empty?)
-(define-integrable properties/insert! rb-tree/insert!)
-(define-integrable properties/lookup rb-tree/lookup)
+(define properties->alist rb-tree->alist)
+(define properties/copy rb-tree/copy)
+(define properties/delete! rb-tree/delete!)
+(define properties/empty? rb-tree/empty?)
+(define properties/insert! rb-tree/insert!)
+(define properties/lookup rb-tree/lookup)
 
-(define-integrable (make-empty-properties)
+(define (make-empty-properties)
   (make-rb-tree key=? key<?))
 
-(define-integrable (alist->properties alist)
+(define (alist->properties alist)
   (alist->rb-tree alist key=? key<?))
 
-(define-integrable (properties=? x y)
+(define (properties=? x y)
   (rb-tree/equal? x y datum=?))
 
-(define-integrable key=? eq?)
-(define-integrable datum=? eqv?)
+(define key=? eq?)
+(define datum=? eqv?)
 
 (define (key<? k1 k2)
   (let ((lose
@@ -534,7 +534,7 @@
 				(fix:- (interval-total-length interval)
 				       length))))
 
-(define-integrable (interval-property interval key default)
+(define (interval-property interval key default)
   (properties/lookup (interval-properties interval) key default))
 
 ;;;; Interval Tree Search
@@ -743,28 +743,28 @@
 ;;; The algorithms are left/right symmetric, so abstract "directions"
 ;;; permit code to be used for either symmetry:
 
-(define-integrable (b->d left?)
+(define (b->d left?)
   (if left? 'LEFT 'RIGHT))
 
-(define-integrable (-d d)
+(define (-d d)
   (if (eq? 'LEFT d) 'RIGHT 'LEFT))
 
-(define-integrable (get-link+ p d)
+(define (get-link+ p d)
   (if (eq? 'LEFT d)
       (interval-left p)
       (interval-right p)))
 
-(define-integrable (set-link+! p d l)
+(define (set-link+! p d l)
   (if (eq? 'LEFT d)
       (set-interval-left! p l)
       (set-interval-right! p l)))
 
-(define-integrable (get-link- p d)
+(define (get-link- p d)
   (if (eq? 'RIGHT d)
       (interval-left p)
       (interval-right p)))
 
-(define-integrable (set-link-! p d l)
+(define (set-link-! p d l)
   (if (eq? 'RIGHT d)
       (set-interval-left! p l)
       (set-interval-right! p l)))
@@ -792,5 +792,5 @@
 		(if beta (interval-total-length beta) 0)))
 	(set-interval-total-length! y tlx)))))
 
-(define-integrable (rotate-! group x d)
+(define (rotate-! group x d)
   (rotate+! group x (-d d)))

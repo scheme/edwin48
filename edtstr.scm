@@ -66,19 +66,19 @@
 			#f
 			1))))))
 
-(define-integrable (current-display-type)
+(define (current-display-type)
   (editor-display-type current-editor))
 
-(define-integrable (with-editor-interrupts-enabled thunk)
+(define (with-editor-interrupts-enabled thunk)
   (display-type/with-interrupts-enabled (current-display-type) thunk))
 
-(define-integrable (with-editor-interrupts-disabled thunk)
+(define (with-editor-interrupts-disabled thunk)
   (display-type/with-interrupts-disabled (current-display-type) thunk))
 
-(define-integrable (current-bufferset)
+(define (current-bufferset)
   (editor-bufferset current-editor))
 
-(define-integrable (current-char-history)
+(define (current-char-history)
   (editor-char-history current-editor))
 
 (define (increment-select-time!)

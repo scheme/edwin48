@@ -50,11 +50,11 @@
 		      (lambda (x y) (string<? (car x) (car y))))))))
       (%make-string-table v (vector-length v) ci?))))
 
-(define-integrable make-string-table-entry cons)
-(define-integrable string-table-entry-string car)
-(define-integrable string-table-entry-value cdr)
-(define-integrable set-string-table-entry-string! set-car!)
-(define-integrable set-string-table-entry-value! set-cdr!)
+(define make-string-table-entry cons)
+(define string-table-entry-string car)
+(define string-table-entry-value cdr)
+(define set-string-table-entry-string! set-car!)
+(define set-string-table-entry-value! set-cdr!)
 
 (define (string-table-search table string1 if-found if-not-found)
   (let ((vector (string-table-vector table)))

@@ -64,7 +64,7 @@
 	  (set-car! methods (cons (cons name method) (car methods))))))
   name)
 
-(define-integrable (usual-method class name)
+(define (usual-method class name)
   (class-method (class-superclass class) name))
 
 (define (subclass? class class*)
@@ -91,13 +91,13 @@
        (not (zero? (vector-length object)))
        (eq? class (vector-ref object 0))))
 
-(define-integrable (object-class object)
+(define (object-class object)
   (vector-ref object 0))
 
-(define-integrable (object-methods object)
+(define (object-methods object)
   (class-methods (object-class object)))
 
-(define-integrable (object-method object name)
+(define (object-method object name)
   (class-method (object-class object) name))
 
 (define (send object operation . args)

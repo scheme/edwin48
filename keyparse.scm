@@ -104,11 +104,11 @@
 ;; continations are "ELSIF <expression> THEN <statements>" and "ELSE
 ;; <statements>".
 
-(define-integrable (pattern/keyword pattern) (car pattern))
-(define-integrable (pattern/fragments pattern) (cdr pattern))
-(define-integrable (pattern/start pattern) (cadr pattern))
-(define-integrable (pattern/end pattern) (caddr pattern))
-(define-integrable (pattern/current-level pattern) (cddr pattern))
+(define (pattern/keyword pattern) (car pattern))
+(define (pattern/fragments pattern) (cdr pattern))
+(define (pattern/start pattern) (cadr pattern))
+(define (pattern/end pattern) (caddr pattern))
+(define (pattern/current-level pattern) (cddr pattern))
 
 ;; A pattern fragment is a header followed by an indented body.  (This
 ;; is sometimes called a "hanging indentation" style.)  The pattern
@@ -334,7 +334,7 @@ See \\[complete-keyword]."
   (index #f read-only #t)
   (start #f read-only #t))
 
-(define-integrable (keyparser-stack-entry/end? entry)
+(define (keyparser-stack-entry/end? entry)
   (= 1 (keyparser-stack-entry/index entry)))
 
 (define (keyparser-stack-entry/fragment entry)

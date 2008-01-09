@@ -95,11 +95,11 @@
 			 (list modeline-inferior))))
 	(set! modeline-inferior #f))))
 
-(define-integrable (frame-text-inferior frame)
+(define (frame-text-inferior frame)
   (with-instance-variables buffer-frame frame ()
     (inferior-window text-inferior)))
 
-(define-integrable (frame-modeline-inferior frame)
+(define (frame-modeline-inferior frame)
   (with-instance-variables buffer-frame frame ()
     (and modeline-inferior
 	 (inferior-window modeline-inferior))))
@@ -144,7 +144,7 @@
 
 ;;;; External Entries
 
-(define-integrable (buffer-frame? object)
+(define (buffer-frame? object)
   (object-of-class? buffer-frame object))
 
 (define (make-buffer-frame superior new-buffer modeline?)
@@ -153,30 +153,30 @@
     (initial-modeline! frame modeline?)
     frame))
 
-(define-integrable (buffer-frame-x-size frame)
+(define (buffer-frame-x-size frame)
   (window-x-size (frame-text-inferior frame)))
 
-(define-integrable (buffer-frame-y-size frame)
+(define (buffer-frame-y-size frame)
   (window-y-size (frame-text-inferior frame)))
 
-(define-integrable (buffer-frame-needs-redisplay? frame)
+(define (buffer-frame-needs-redisplay? frame)
   (buffer-window/needs-redisplay? (frame-text-inferior frame)))
 
-(define-integrable (window-cursor-enable! frame)
+(define (window-cursor-enable! frame)
   (buffer-window/cursor-enable! (frame-text-inferior frame)))
 
-(define-integrable (window-cursor-disable! frame)
+(define (window-cursor-disable! frame)
   (buffer-window/cursor-disable! (frame-text-inferior frame)))
 
-(define-integrable (window-select-time frame)
+(define (window-select-time frame)
   (with-instance-variables buffer-frame frame ()
     last-select-time))
 
-(define-integrable (set-window-select-time! frame time)
+(define (set-window-select-time! frame time)
   (with-instance-variables buffer-frame frame (time)
     (set! last-select-time time)))
 
-(define-integrable (window-buffer frame)
+(define (window-buffer frame)
   (buffer-window/buffer (frame-text-inferior frame)))
 
 (define (set-window-buffer! frame buffer)
@@ -192,13 +192,13 @@
      (buffer-window/set-buffer! (frame-text-inferior frame) buffer)
      (add-buffer-window! buffer frame))))
 
-(define-integrable (window-point frame)
+(define (window-point frame)
   (buffer-window/point (frame-text-inferior frame)))
 
-(define-integrable (set-window-point! frame mark)
+(define (set-window-point! frame mark)
   (buffer-window/set-point! (frame-text-inferior frame) mark))
 
-(define-integrable (window-redraw! frame)
+(define (window-redraw! frame)
   (buffer-window/redraw! (frame-text-inferior frame)))
 
 (define (window-modeline-event! frame type)
@@ -213,81 +213,81 @@
 	(modeline-window:notice-changes! window)))
   (%notice-window-changes! (frame-text-inferior frame)))
 
-(define-integrable (window-override-message window)
+(define (window-override-message window)
   (buffer-window/override-message (frame-text-inferior window)))
 
-(define-integrable (window-set-override-message! window message)
+(define (window-set-override-message! window message)
   (buffer-window/set-override-message! (frame-text-inferior window) message))
 
-(define-integrable (window-clear-override-message! window)
+(define (window-clear-override-message! window)
   (buffer-window/clear-override-message! (frame-text-inferior window)))
 
-(define-integrable (window-direct-update! frame display-style)
+(define (window-direct-update! frame display-style)
   (buffer-window/direct-update! (frame-text-inferior frame) display-style))
 
-(define-integrable (window-home-cursor! window)
+(define (window-home-cursor! window)
   (buffer-window/home-cursor! (frame-text-inferior window)))
 
-(define-integrable (window-char->image frame char)
+(define (window-char->image frame char)
   (%window-char->image (frame-text-inferior frame) char))
 
-(define-integrable (window-direct-output-forward-char! frame)
+(define (window-direct-output-forward-char! frame)
   (buffer-window/direct-output-forward-char! (frame-text-inferior frame)))
 
-(define-integrable (window-direct-output-backward-char! frame)
+(define (window-direct-output-backward-char! frame)
   (buffer-window/direct-output-backward-char! (frame-text-inferior frame)))
 
-(define-integrable (window-direct-output-insert-char! frame char)
+(define (window-direct-output-insert-char! frame char)
   (buffer-window/direct-output-insert-char! (frame-text-inferior frame) char))
 
-(define-integrable (window-direct-output-insert-newline! frame)
+(define (window-direct-output-insert-newline! frame)
   (buffer-window/direct-output-insert-newline! (frame-text-inferior frame)))
 
-(define-integrable (window-direct-output-insert-substring! frame
+(define (window-direct-output-insert-substring! frame
 							   string start end)
   (buffer-window/direct-output-insert-substring! (frame-text-inferior frame)
 						 string start end))
 
-(define-integrable (window-scroll-y-absolute! frame y-point)
+(define (window-scroll-y-absolute! frame y-point)
   (buffer-window/scroll-y-absolute! (frame-text-inferior frame) y-point))
 
-(define-integrable (window-scroll-y-relative! frame delta)
+(define (window-scroll-y-relative! frame delta)
   (buffer-window/scroll-y-relative! (frame-text-inferior frame) delta))
 
-(define-integrable (set-window-start-mark! frame mark force?)
+(define (set-window-start-mark! frame mark force?)
   (buffer-window/set-start-mark! (frame-text-inferior frame) mark force?))
 
-(define-integrable (window-y-center frame)
+(define (window-y-center frame)
   (buffer-window/y-center (frame-text-inferior frame)))
 
-(define-integrable (window-start-mark frame)
+(define (window-start-mark frame)
   (buffer-window/start-mark (frame-text-inferior frame)))
 
-(define-integrable (window-mark-visible? frame mark)
+(define (window-mark-visible? frame mark)
   (buffer-window/mark-visible? (frame-text-inferior frame) mark))
 
-(define-integrable (window-mark->x frame mark)
+(define (window-mark->x frame mark)
   (buffer-window/mark->x (frame-text-inferior frame) mark))
 
-(define-integrable (window-mark->y frame mark)
+(define (window-mark->y frame mark)
   (buffer-window/mark->y (frame-text-inferior frame) mark))
 
-(define-integrable (window-mark->coordinates frame mark)
+(define (window-mark->coordinates frame mark)
   (buffer-window/mark->coordinates (frame-text-inferior frame) mark))
 
-(define-integrable (window-point-x frame)
+(define (window-point-x frame)
   (buffer-window/point-x (frame-text-inferior frame)))
 
-(define-integrable (window-point-y frame)
+(define (window-point-y frame)
   (buffer-window/point-y (frame-text-inferior frame)))
 
-(define-integrable (window-point-coordinates frame)
+(define (window-point-coordinates frame)
   (buffer-window/point-coordinates (frame-text-inferior frame)))
 
-(define-integrable (window-coordinates->mark frame x y)
+(define (window-coordinates->mark frame x y)
   (buffer-window/coordinates->mark (frame-text-inferior frame) x y))
 
-(define-integrable (set-window-debug-trace! frame debug-trace)
+(define (set-window-debug-trace! frame debug-trace)
   (%set-window-debug-trace! (frame-text-inferior frame) debug-trace))
 
 (define-variable-per-buffer truncate-lines

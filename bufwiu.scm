@@ -65,7 +65,7 @@
 		      (%set-window-point-moved?! window 'SINCE-START-SET)
 		      (window-needs-redisplay! window)))))))))
 
-(define-integrable (%start-clobbered? window start end)
+(define (%start-clobbered? window start end)
   (let ((wlstart (%window-start-line-index window))
 	(wstart (%window-start-index window))
 	(partial (%window-start-partial window)))
@@ -326,7 +326,7 @@
 		   (regenerate-outlines window wlstart wlsy)
 		   (scroll-up y))))))))
 
-(define-integrable (preserve-nothing! window)
+(define (preserve-nothing! window)
   (regenerate-outlines window
 		       (%window-start-line-index window)
 		       (%window-start-line-y window)))
@@ -363,7 +363,7 @@
     (generate-outlines window start end)
     (set-outlines! window start end)))
 
-(define-integrable (fill-edges window start end)
+(define (fill-edges window start end)
   (fill-top window start)
   (fill-bottom window end)
   (set-outlines! window start end))

@@ -472,7 +472,7 @@
 	(nntp-connection:remember-group! connection name group)
 	group)))
 
-(define-integrable (news-group:server group)
+(define (news-group:server group)
   (nntp-connection:server (news-group:connection group)))
 
 (define (news-group:< x y)
@@ -1188,7 +1188,7 @@
 (define (dummy-news-header group message-id)
   (make-news-header group #f message-id #f))
 
-(define-integrable news-header:real? news-header:text)
+(define news-header:real? news-header:text)
 
 (define (field-value-accessor name)
   (let ((parser (header-text-parser name)))

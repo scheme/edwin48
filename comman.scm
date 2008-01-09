@@ -125,8 +125,8 @@
 	      (set-variable-%description! variable new))
 	  new))))
 
-(define-integrable variable-value variable-%value)
-(define-integrable variable-default-value variable-%default-value)
+(define variable-value variable-%value)
+(define variable-default-value variable-%default-value)
 
 (define (variable-name-string variable)
   (editor-name/internal->external (symbol-name (variable-name variable))))

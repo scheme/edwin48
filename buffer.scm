@@ -157,7 +157,7 @@ The buffer is guaranteed to be deselected at that time."
   (set-buffer-%truename! buffer truename)
   (buffer-modeline-event! buffer 'BUFFER-TRUENAME))
 
-(define-integrable (set-buffer-save-length! buffer)
+(define (set-buffer-save-length! buffer)
   (set-buffer-%save-length! buffer (buffer-length buffer)))
 
 (define (buffer-point buffer)
@@ -171,40 +171,40 @@ The buffer is guaranteed to be deselected at that time."
 	(else
 	 (group-point (buffer-group buffer)))))
 
-(define-integrable (%set-buffer-point! buffer mark)
+(define (%set-buffer-point! buffer mark)
   (set-group-point! (buffer-group buffer) mark))
 
-(define-integrable (%set-buffer-point-index! buffer index)
+(define (%set-buffer-point-index! buffer index)
   (set-group-point-index! (buffer-group buffer) index))
 
-(define-integrable (minibuffer? buffer)
+(define (minibuffer? buffer)
   (char=? (string-ref (buffer-name buffer) 0) #\Space))
 
-(define-integrable (buffer-region buffer)
+(define (buffer-region buffer)
   (group-region (buffer-group buffer)))
 
-(define-integrable (buffer-string buffer)
+(define (buffer-string buffer)
   (region->string (buffer-region buffer)))
 
-(define-integrable (buffer-unclipped-region buffer)
+(define (buffer-unclipped-region buffer)
   (group-unclipped-region (buffer-group buffer)))
 
-(define-integrable (buffer-widen! buffer)
+(define (buffer-widen! buffer)
   (group-widen! (buffer-group buffer)))
 
-(define-integrable (buffer-length buffer)
+(define (buffer-length buffer)
   (group-length (buffer-group buffer)))
 
-(define-integrable (buffer-start buffer)
+(define (buffer-start buffer)
   (group-start-mark (buffer-group buffer)))
 
-(define-integrable (buffer-end buffer)
+(define (buffer-end buffer)
   (group-end-mark (buffer-group buffer)))
 
-(define-integrable (buffer-absolute-start buffer)
+(define (buffer-absolute-start buffer)
   (group-absolute-start (buffer-group buffer)))
 
-(define-integrable (buffer-absolute-end buffer)
+(define (buffer-absolute-end buffer)
   (group-absolute-end (buffer-group buffer)))
 
 (define (add-buffer-window! buffer window)
@@ -256,7 +256,7 @@ The buffer is guaranteed to be deselected at that time."
 
 ;;;; Modification Flags
 
-(define-integrable (buffer-modified? buffer)
+(define (buffer-modified? buffer)
   (group-modified? (buffer-group buffer)))
 
 (define (buffer-not-modified! buffer)
@@ -286,14 +286,14 @@ The buffer is guaranteed to be deselected at that time."
 	(let ((file-time (file-modification-time truename)))
 	  (and file-time (< (abs (- buffer-time file-time)) 2))))))
 
-(define-integrable (clear-visited-file-modification-time! buffer)
+(define (clear-visited-file-modification-time! buffer)
   (set-buffer-modification-time! buffer #f))
 
 (define (set-buffer-auto-saved! buffer)
   (set-buffer-auto-saved?! buffer #t)
   (set-group-modified?! (buffer-group buffer) 'AUTO-SAVED))
 
-(define-integrable (buffer-auto-save-modified? buffer)
+(define (buffer-auto-save-modified? buffer)
   (eq? #t (group-modified? (buffer-group buffer))))
 
 (define (buffer-clip-daemon buffer)
@@ -301,10 +301,10 @@ The buffer is guaranteed to be deselected at that time."
     group start end			;ignore
     (buffer-modeline-event! buffer 'CLIPPING-CHANGED)))
 
-(define-integrable (buffer-read-only? buffer)
+(define (buffer-read-only? buffer)
   (group-read-only? (buffer-group buffer)))
 
-(define-integrable (buffer-writeable? buffer)
+(define (buffer-writeable? buffer)
   (not (buffer-read-only? buffer)))
 
 (define (set-buffer-writeable! buffer)
@@ -412,7 +412,7 @@ The buffer is guaranteed to be deselected at that time."
 	   (invoke-variable-assignment-daemons! #f variable))))
       (set-default-variable-value!/outside-editor variable value)))
 
-(define-integrable (search-local-bindings buffer variable)
+(define (search-local-bindings buffer variable)
   (let loop ((bindings (buffer-local-bindings buffer)))
     (and (not (null? bindings))
 	 (if (eq? (caar bindings) variable)
@@ -494,7 +494,7 @@ The buffer is guaranteed to be deselected at that time."
 
 ;;;; Modes
 
-(define-integrable (buffer-major-mode buffer)
+(define (buffer-major-mode buffer)
   (car (buffer-modes buffer)))
 
 (define (set-buffer-major-mode! buffer mode)

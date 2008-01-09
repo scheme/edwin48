@@ -96,10 +96,10 @@ This is desirable in modes where blank lines are the paragraph delimiters."
   #f
   boolean?)
 
-(define-integrable (mark/paragraph-start mark)
+(define (mark/paragraph-start mark)
   (mark-local-ref mark (ref-variable-object paragraph-start)))
 
-(define-integrable (mark/paragraph-separate mark)
+(define (mark/paragraph-separate mark)
   (mark-local-ref mark (ref-variable-object paragraph-separate)))
 
 (define (mark/paragraph-fill-prefix mark)
@@ -313,7 +313,7 @@ All paragraph boundaries also end sentences, regardless."
   "[.?!][]\"')}]*\\($\\|\t\\|  \\)[ \t\n]*"
   string?)
 
-(define-integrable (mark/sentence-end mark)
+(define (mark/sentence-end mark)
   (mark-local-ref mark (ref-variable-object sentence-end)))
 
 (define (forward-one-sentence mark)

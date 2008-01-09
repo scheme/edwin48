@@ -80,19 +80,19 @@
 (define-class combination-leaf-window vanilla-window
   (next-window previous-window))
 
-(define-integrable (window-next window)
+(define (window-next window)
   (with-instance-variables combination-leaf-window window ()
     next-window))
 
-(define-integrable (set-window-next! window window*)
+(define (set-window-next! window window*)
   (with-instance-variables combination-leaf-window window (window*)
     (set! next-window window*)))
 
-(define-integrable (window-previous window)
+(define (window-previous window)
   (with-instance-variables combination-leaf-window window ()
     previous-window))
 
-(define-integrable (set-window-previous! window window*)
+(define (set-window-previous! window window*)
   (with-instance-variables combination-leaf-window window (window*)
     (set! previous-window window*)))
 
@@ -103,15 +103,15 @@
 (define-class combination-window combination-leaf-window
   (vertical? child))
 
-(define-integrable (combination-vertical? window)
+(define (combination-vertical? window)
   (with-instance-variables combination-window window ()
     vertical?))
 
-(define-integrable (set-combination-vertical! window v)
+(define (set-combination-vertical! window v)
   (with-instance-variables combination-window window (v)
     (set! vertical? v)))
 
-(define-integrable (combination-child window)
+(define (combination-child window)
   (with-instance-variables combination-window window ()
     child))
 
@@ -120,15 +120,15 @@
     (set! child window*)
     (set-window-previous! window* false)))
 
-(define-integrable (combination? window)
+(define (combination? window)
   (object-of-class? combination-window window))
 
-(define-integrable (leaf? window)
+(define (leaf? window)
   (and (object? window)
        (subclass? (object-class window) combination-leaf-window)
        (not (eq? (object-class window) combination-window))))
 
-(define-integrable (check-leaf-window window name)
+(define (check-leaf-window window name)
   (if (not (leaf? window))
       (error:wrong-type-argument window "window" name)))
 

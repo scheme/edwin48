@@ -184,48 +184,48 @@
 
 ;;;; Instance Variable Accessors
 
-(define-integrable (%window-buffer window)
+(define (%window-buffer window)
   (with-instance-variables buffer-window window () buffer))
 
-(define-integrable (%window-group window)
+(define (%window-group window)
   (buffer-group (%window-buffer window)))
 
-(define-integrable (%set-window-buffer! window buffer*)
+(define (%set-window-buffer! window buffer*)
   (with-instance-variables buffer-window window (buffer*)
     (set! buffer buffer*)))
 
-(define-integrable (%window-truncate-lines? window)
+(define (%window-truncate-lines? window)
   (with-instance-variables buffer-window window () truncate-lines?))
 
-(define-integrable (%set-window-truncate-lines?! window truncate-lines?*)
+(define (%set-window-truncate-lines?! window truncate-lines?*)
   (with-instance-variables buffer-window window (truncate-lines?*)
     (set! truncate-lines? truncate-lines?*)))
 
-(define-integrable (%window-tab-width window)
+(define (%window-tab-width window)
   (with-instance-variables buffer-window window () tab-width))
 
-(define-integrable (%set-window-tab-width! window tab-width*)
+(define (%set-window-tab-width! window tab-width*)
   (with-instance-variables buffer-window window (tab-width*)
     (set! tab-width tab-width*)))
 
-(define-integrable (%window-char-image-strings window)
+(define (%window-char-image-strings window)
   (with-instance-variables buffer-window window () char-image-strings))
 
-(define-integrable (%set-window-char-image-strings! window char-image-strings*)
+(define (%set-window-char-image-strings! window char-image-strings*)
   (with-instance-variables buffer-window window (char-image-strings*)
     (set! char-image-strings char-image-strings*)))
 
-(define-integrable (%window-char->image window char)
+(define (%window-char->image window char)
   (vector-ref (%window-char-image-strings window)
 	      (char->ascii char)))
 
-(define-integrable (%window-point window)
+(define (%window-point window)
   (with-instance-variables buffer-window window () point))
 
-(define-integrable (%window-point-index window)
+(define (%window-point-index window)
   (mark-index (%window-point window)))
 
-(define-integrable (%set-window-point! window point*)
+(define (%set-window-point! window point*)
   (with-instance-variables buffer-window window (point*)
     (set! point point*)))
 
@@ -248,251 +248,251 @@
   (%set-window-point-index! window index)
   (%set-buffer-point-index! (%window-buffer window) index))
 
-(define-integrable (%window-cursor-inferior window)
+(define (%window-cursor-inferior window)
   (with-instance-variables buffer-window window () cursor-inferior))
 
-(define-integrable (%set-window-cursor-inferior! window inferior)
+(define (%set-window-cursor-inferior! window inferior)
   (with-instance-variables buffer-window window (inferior)
     (set! cursor-inferior inferior)))
 
-(define-integrable (%window-blank-inferior window)
+(define (%window-blank-inferior window)
   (with-instance-variables buffer-window window () blank-inferior))
 
-(define-integrable (%set-window-blank-inferior! window inferior)
+(define (%set-window-blank-inferior! window inferior)
   (with-instance-variables buffer-window window (inferior)
     (set! blank-inferior inferior)))
 
-(define-integrable (%window-start-outline window)
+(define (%window-start-outline window)
   (with-instance-variables buffer-window window () start-outline))
 
-(define-integrable (%set-window-start-outline! window outline)
+(define (%set-window-start-outline! window outline)
   (with-instance-variables buffer-window window (outline)
     (set! start-outline outline)))
 
-(define-integrable (%window-end-outline window)
+(define (%window-end-outline window)
   (with-instance-variables buffer-window window () end-outline))
 
-(define-integrable (%set-window-end-outline! window outline)
+(define (%set-window-end-outline! window outline)
   (with-instance-variables buffer-window window (outline)
     (set! end-outline outline)))
 
-(define-integrable (%window-free-outline window)
+(define (%window-free-outline window)
   (with-instance-variables buffer-window window () free-outline))
 
-(define-integrable (%set-window-free-outline! window outline)
+(define (%set-window-free-outline! window outline)
   (with-instance-variables buffer-window window (outline)
     (set! free-outline outline)))
 
-(define-integrable (%window-current-start-mark window)
+(define (%window-current-start-mark window)
   (with-instance-variables buffer-window window () current-start-mark))
 
-(define-integrable (%window-current-start-index window)
+(define (%window-current-start-index window)
   (mark-index (%window-current-start-mark window)))
 
-(define-integrable (%set-window-current-start-mark! window mark)
+(define (%set-window-current-start-mark! window mark)
   (with-instance-variables buffer-window window (mark)
     (set! current-start-mark mark)))
 
-(define-integrable (%window-current-end-mark window)
+(define (%window-current-end-mark window)
   (with-instance-variables buffer-window window () current-end-mark))
 
-(define-integrable (%window-current-end-index window)
+(define (%window-current-end-index window)
   (mark-index (%window-current-end-mark window)))
 
-(define-integrable (%set-window-current-end-mark! window mark)
+(define (%set-window-current-end-mark! window mark)
   (with-instance-variables buffer-window window (mark)
     (set! current-end-mark mark)))
 
-(define-integrable (%window-current-start-delta window)
+(define (%window-current-start-delta window)
   (with-instance-variables buffer-window window () current-start-delta))
 
-(define-integrable (%set-window-current-start-delta! window delta)
+(define (%set-window-current-start-delta! window delta)
   (with-instance-variables buffer-window window (delta)
     (set! current-start-delta delta)))
 
-(define-integrable (%window-current-start-partial window)
+(define (%window-current-start-partial window)
   (with-instance-variables buffer-window window () current-start-partial))
 
-(define-integrable (%set-window-current-start-partial! window partial)
+(define (%set-window-current-start-partial! window partial)
   (with-instance-variables buffer-window window (partial)
     (set! current-start-partial partial)))
 
-(define-integrable (%window-current-start-y window)
+(define (%window-current-start-y window)
   (with-instance-variables buffer-window window () current-start-y))
 
-(define-integrable (%set-window-current-start-y! window y)
+(define (%set-window-current-start-y! window y)
   (with-instance-variables buffer-window window (y)
     (set! current-start-y y)))
 
-(define-integrable (%window-current-end-y window)
+(define (%window-current-end-y window)
   (with-instance-variables buffer-window window () current-end-y))
 
-(define-integrable (%set-window-current-end-y! window y)
+(define (%set-window-current-end-y! window y)
   (with-instance-variables buffer-window window (y)
     (set! current-end-y y)))
 
-(define-integrable (%window-free-o3 window)
+(define (%window-free-o3 window)
   (with-instance-variables buffer-window window () free-o3))
 
-(define-integrable (%set-window-free-o3! window o3)
+(define (%set-window-free-o3! window o3)
   (with-instance-variables buffer-window window (o3)
     (set! free-o3 o3)))
 
-(define-integrable (%window-override-string window)
+(define (%window-override-string window)
   (with-instance-variables buffer-window window () override-string))
 
-(define-integrable (%set-window-override-string! window string)
+(define (%set-window-override-string! window string)
   (with-instance-variables buffer-window window (string)
     (set! override-string string)))
 
-(define-integrable (%window-start-mark window)
+(define (%window-start-mark window)
   (with-instance-variables buffer-window window () start-mark))
 
-(define-integrable (%window-start-index window)
+(define (%window-start-index window)
   (mark-index (%window-start-mark window)))
 
-(define-integrable (%set-window-start-mark! window mark)
+(define (%set-window-start-mark! window mark)
   (with-instance-variables buffer-window window (mark)
     (set! start-mark mark)))
 
-(define-integrable (%window-start-line-mark window)
+(define (%window-start-line-mark window)
   (with-instance-variables buffer-window window () start-line-mark))
 
-(define-integrable (%window-start-line-index window)
+(define (%window-start-line-index window)
   (mark-index (%window-start-line-mark window)))
 
-(define-integrable (%set-window-start-line-mark! window mark)
+(define (%set-window-start-line-mark! window mark)
   (with-instance-variables buffer-window window (mark)
     (set! start-line-mark mark)))
 
-(define-integrable (%window-start-line-y window)
+(define (%window-start-line-y window)
   (with-instance-variables buffer-window window () start-line-y))
 
-(define-integrable (%set-window-start-line-y! window y)
+(define (%set-window-start-line-y! window y)
   (with-instance-variables buffer-window window (y)
     (set! start-line-y y)))
 
-(define-integrable (%window-start-column window)
+(define (%window-start-column window)
   (with-instance-variables buffer-window window () start-column))
 
-(define-integrable (%set-window-start-column! window column)
+(define (%set-window-start-column! window column)
   (with-instance-variables buffer-window window (column)
     (set! start-column column)))
 
-(define-integrable (%window-start-partial window)
+(define (%window-start-partial window)
   (with-instance-variables buffer-window window () start-partial))
 
-(define-integrable (%set-window-start-partial! window partial)
+(define (%set-window-start-partial! window partial)
   (with-instance-variables buffer-window window (partial)
     (set! start-partial partial)))
 
-(define-integrable (%window-modified-tick window)
+(define (%window-modified-tick window)
   (with-instance-variables buffer-window window () modified-tick))
 
-(define-integrable (%set-window-modified-tick! window tick)
+(define (%set-window-modified-tick! window tick)
   (with-instance-variables buffer-window window (tick)
     (set! modified-tick tick)))
 
-(define-integrable (%window-start-changes-index window)
+(define (%window-start-changes-index window)
   (group-start-changes-index (%window-group window)))
 
-(define-integrable (%window-end-changes-index window)
+(define (%window-end-changes-index window)
   (group-end-changes-index (%window-group window)))
 
-(define-integrable (%window-clip-daemon window)
+(define (%window-clip-daemon window)
   (with-instance-variables buffer-window window () clip-daemon))
 
-(define-integrable (%set-window-clip-daemon! window daemon)
+(define (%set-window-clip-daemon! window daemon)
   (with-instance-variables buffer-window window (daemon)
     (set! clip-daemon daemon)))
 
-(define-integrable (%window-start-clip-mark window)
+(define (%window-start-clip-mark window)
   (with-instance-variables buffer-window window () start-clip-mark))
 
-(define-integrable (%window-start-clip-index window)
+(define (%window-start-clip-index window)
   (mark-index (%window-start-clip-mark window)))
 
-(define-integrable (%set-window-start-clip-mark! window mark)
+(define (%set-window-start-clip-mark! window mark)
   (with-instance-variables buffer-window window (mark)
     (set! start-clip-mark mark)))
 
-(define-integrable (%window-end-clip-mark window)
+(define (%window-end-clip-mark window)
   (with-instance-variables buffer-window window () end-clip-mark))
 
-(define-integrable (%window-end-clip-index window)
+(define (%window-end-clip-index window)
   (mark-index (%window-end-clip-mark window)))
 
-(define-integrable (%set-window-end-clip-mark! window mark)
+(define (%set-window-end-clip-mark! window mark)
   (with-instance-variables buffer-window window (mark)
     (set! end-clip-mark mark)))
 
-(define-integrable (%window-point-moved? window)
+(define (%window-point-moved? window)
   (with-instance-variables buffer-window window () point-moved?))
 
-(define-integrable (%set-window-point-moved?! window point-moved?*)
+(define (%set-window-point-moved?! window point-moved?*)
   (with-instance-variables buffer-window window (point-moved?*)
     (set! point-moved? point-moved?*)))
 
-(define-integrable (%window-force-redraw? window)
+(define (%window-force-redraw? window)
   (with-instance-variables buffer-window window () force-redraw?))
 
-(define-integrable (%set-window-force-redraw?! window force-redraw?*)
+(define (%set-window-force-redraw?! window force-redraw?*)
   (with-instance-variables buffer-window window (force-redraw?*)
     (set! force-redraw? force-redraw?*)))
 
-(define-integrable (%window-saved-screen window)
+(define (%window-saved-screen window)
   (with-instance-variables buffer-window window () saved-screen))
 
-(define-integrable (%set-window-saved-screen! window screen)
+(define (%set-window-saved-screen! window screen)
   (with-instance-variables buffer-window window (screen)
     (set! saved-screen screen)))
 
-(define-integrable (%window-saved-x-start window)
+(define (%window-saved-x-start window)
   (with-instance-variables buffer-window window () saved-x-start))
 
-(define-integrable (%set-window-saved-x-start! window x-start)
+(define (%set-window-saved-x-start! window x-start)
   (with-instance-variables buffer-window window (x-start)
     (set! saved-x-start x-start)))
 
-(define-integrable (%window-saved-y-start window)
+(define (%window-saved-y-start window)
   (with-instance-variables buffer-window window () saved-y-start))
 
-(define-integrable (%set-window-saved-y-start! window y-start)
+(define (%set-window-saved-y-start! window y-start)
   (with-instance-variables buffer-window window (y-start)
     (set! saved-y-start y-start)))
 
-(define-integrable (%window-saved-xl window)
+(define (%window-saved-xl window)
   (with-instance-variables buffer-window window () saved-xl))
 
-(define-integrable (%set-window-saved-xl! window xl)
+(define (%set-window-saved-xl! window xl)
   (with-instance-variables buffer-window window (xl)
     (set! saved-xl xl)))
 
-(define-integrable (%window-saved-xu window)
+(define (%window-saved-xu window)
   (with-instance-variables buffer-window window () saved-xu))
 
-(define-integrable (%set-window-saved-xu! window xu)
+(define (%set-window-saved-xu! window xu)
   (with-instance-variables buffer-window window (xu)
     (set! saved-xu xu)))
 
-(define-integrable (%window-saved-yl window)
+(define (%window-saved-yl window)
   (with-instance-variables buffer-window window () saved-yl))
 
-(define-integrable (%set-window-saved-yl! window yl)
+(define (%set-window-saved-yl! window yl)
   (with-instance-variables buffer-window window (yl)
     (set! saved-yl yl)))
 
-(define-integrable (%window-saved-yu window)
+(define (%window-saved-yu window)
   (with-instance-variables buffer-window window () saved-yu))
 
-(define-integrable (%set-window-saved-yu! window yu)
+(define (%set-window-saved-yu! window yu)
   (with-instance-variables buffer-window window (yu)
     (set! saved-yu yu)))
 
-(define-integrable (%window-debug-trace window)
+(define (%window-debug-trace window)
   (with-instance-variables buffer-window window () debug-trace))
 
-(define-integrable (%set-window-debug-trace! window procedure)
+(define (%set-window-debug-trace! window procedure)
   (with-instance-variables buffer-window window (procedure)
     (set! debug-trace procedure)))
 
@@ -552,16 +552,16 @@
   (set-outline-previous! start-outline #f)
   (%set-window-free-outline! window start-outline))
 
-(define-integrable (outline-last outline)
+(define (outline-last outline)
   (do ((outline outline (outline-next outline)))
       ((not (outline-next outline)) outline)))
 
-(define-integrable (outline-end-y outline start-y)
+(define (outline-end-y outline start-y)
   (do ((outline outline (outline-next outline))
        (y start-y (fix:+ y (outline-y-size outline))))
       ((not outline) y)))
 
-(define-integrable (outline-start-y outline end-y)
+(define (outline-start-y outline end-y)
   (do ((outline outline (outline-previous outline))
        (y end-y (fix:- y (outline-y-size outline))))
       ((not outline) y)))
@@ -600,30 +600,30 @@
 
 ;;;; Narrowing
 
-(define-integrable (%window-group-start-mark window)
+(define (%window-group-start-mark window)
   (group-display-start (%window-group window)))
 
-(define-integrable (%window-group-end-mark window)
+(define (%window-group-end-mark window)
   (group-display-end (%window-group window)))
 
-(define-integrable (%window-group-start-index window)
+(define (%window-group-start-index window)
   (mark-index (%window-group-start-mark window)))
 
-(define-integrable (%window-group-end-index window)
+(define (%window-group-end-index window)
   (mark-index (%window-group-end-mark window)))
 
-(define-integrable (%window-group-start-index? window index)
+(define (%window-group-start-index? window index)
   (fix:<= index (%window-group-start-index window)))
 
-(define-integrable (%window-group-end-index? window index)
+(define (%window-group-end-index? window index)
   (fix:>= index (%window-group-end-index window)))
 
-(define-integrable (%window-line-start-index window index)
+(define (%window-line-start-index window index)
   (let ((start (%window-group-start-index window)))
     (or (%find-previous-newline (%window-group window) index start)
 	start)))
 
-(define-integrable (%window-line-end-index window index)
+(define (%window-line-end-index window index)
   (let ((end (%window-group-end-index window)))
     (or (%find-next-newline (%window-group window) index end)
 	end)))
@@ -662,10 +662,10 @@
 
 ;;;; Utilities
 
-(define-integrable (%window-extract-string window start end)
+(define (%window-extract-string window start end)
   (group-extract-string (%window-group window) start end))
 
-(define-integrable (%window-modeline-event! window type)
+(define (%window-modeline-event! window type)
   (window-modeline-event! (window-superior window) type))
 
 ;;;; Standard Methods
@@ -835,7 +835,7 @@
 	(%set-window-current-start-partial! window #f)))
   (%clear-window-outstanding-changes! window))
 
-(define-integrable (%clear-window-outstanding-changes! window)
+(define (%clear-window-outstanding-changes! window)
   (if (%window-buffer window)
       (update-modified-tick! window))
   (if (%window-start-clip-mark window)
@@ -846,7 +846,7 @@
 	(%set-window-end-clip-mark! window #f)))
   (%set-window-point-moved?! window #f))
 
-(define-integrable (update-modified-tick! window)
+(define (update-modified-tick! window)
   (%set-window-modified-tick! window
 			      (group-modified-tick (%window-group window))))
 
@@ -879,7 +879,7 @@
 
 ;;;; Buffer and Point
 
-(define-integrable (buffer-window/buffer window)
+(define (buffer-window/buffer window)
   (%window-buffer window))
 
 (define (buffer-window/set-buffer! window new-buffer)
@@ -916,7 +916,7 @@
 			     (%window-clip-daemon window))
   (%clear-window-buffer-state! window))
 
-(define-integrable (buffer-window/point window)
+(define (buffer-window/point window)
   (%window-point window))
 
 (define (buffer-window/set-point! window mark)

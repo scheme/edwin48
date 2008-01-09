@@ -69,7 +69,7 @@
 	    posn)))
       str))
 
-(define-integrable doc-string-buffer-length 512)
+(define doc-string-buffer-length 512)
 
 (define (->doc-string name posn)
   (define (out-of-range)

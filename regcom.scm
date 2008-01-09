@@ -184,8 +184,8 @@ With prefix arg, delete as well."
 (define buffer-position-tag
   "Buffer Position")
 
-(define-integrable (buffer-position-mark position)
+(define (buffer-position-mark position)
   (cadr position))
 
-(define-integrable (buffer-position-buffer position)
+(define (buffer-position-buffer position)
   (unhash (cddr position)))

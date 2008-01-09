@@ -107,10 +107,10 @@
 (define-prev-char-search group-find-previous-char-in-set
   xsubstring-find-previous-char-in-set)
 
-(define-integrable (%find-next-newline group start end)
+(define (%find-next-newline group start end)
   (group-find-next-char group start end #\newline))
 
-(define-integrable (%find-previous-newline group start end)
+(define (%find-previous-newline group start end)
   ;; Note reversal of index arguments here.
   (let ((index (group-find-previous-char group end start #\newline)))
     (and index

@@ -440,44 +440,44 @@
 
 ;;;; Tokens
 
-(define-integrable (make-rcs-id string)
+(define (make-rcs-id string)
   (cons 'IDENTIFIER string))
 
 (define (rcs-id? word)
   (and (pair? word)
        (eq? 'IDENTIFIER (car word))))
 
-(define-integrable (rcs-id-string rcs-id)
+(define (rcs-id-string rcs-id)
   (cdr rcs-id))
 
-(define-integrable (make-rcs-string contents)
+(define (make-rcs-string contents)
   (cons 'STRING contents))
 
 (define (rcs-string? word)
   (and (pair? word)
        (eq? 'STRING (car word))))
 
-(define-integrable (rcs-string-contents rcs-string)
+(define (rcs-string-contents rcs-string)
   (cdr rcs-string))
 
-(define-integrable (make-rcs-num string)
+(define (make-rcs-num string)
   (cons 'NUMBER string))
 
 (define (rcs-num? word)
   (and (pair? word)
        (eq? 'NUMBER (car word))))
 
-(define-integrable (rcs-num-string rcs-num)
+(define (rcs-num-string rcs-num)
   (cdr rcs-num))
 
-(define-integrable (make-rcs-colon)
+(define (make-rcs-colon)
   '(COLON))
 
 (define (rcs-colon? word)
   (and (pair? word)
        (eq? 'COLON (car word))))
 
-(define-integrable (make-rcs-semicolon)
+(define (make-rcs-semicolon)
   '(SEMICOLON))
 
 (define (rcs-semicolon? word)

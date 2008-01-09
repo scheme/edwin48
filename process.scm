@@ -82,16 +82,16 @@ Initialized from the SHELL environment variable."
   (notification-tick (cons #f #f))
   (input-registration #f))
 
-(define-integrable (process-arguments process)
+(define (process-arguments process)
   (subprocess-arguments (process-subprocess process)))
 
-(define-integrable (process-output-port process)
+(define (process-output-port process)
   (subprocess-output-port (process-subprocess process)))
 
-(define-integrable (process-status-tick process)
+(define (process-status-tick process)
   (subprocess-status-tick (process-subprocess process)))
 
-(define-integrable (process-exit-reason process)
+(define (process-exit-reason process)
   (subprocess-exit-reason (process-subprocess process)))
 
 (define (process-status process)
@@ -110,7 +110,7 @@ Initialized from the SHELL environment variable."
     (or (eq? 'RUNNING status)
 	(eq? 'STOPPED status))))
 
-(define-integrable (process-buffer process)
+(define (process-buffer process)
   (process-%buffer process))
 
 (define (set-process-buffer! process buffer)

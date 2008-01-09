@@ -50,10 +50,10 @@
 (define (output-port->mark port)
   (mark-temporary-copy (port/mark port)))
 
-(define-integrable (port/mark port)
+(define (port/mark port)
   (car (port/state port)))
 
-(define-integrable (port/buffer port)
+(define (port/buffer port)
   (cdr (port/state port)))
 
 (define (operation/flush-output port)

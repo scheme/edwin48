@@ -47,7 +47,7 @@
   (and (apply-hook? object)
        (eq? autoloading-procedure-tag (car (apply-hook-extra object)))))
 
-(define-integrable (autoloading-procedure/library-name procedure)
+(define (autoloading-procedure/library-name procedure)
   (cdr (apply-hook-extra procedure)))
 
 (define (define-autoload-procedure name package library-name)

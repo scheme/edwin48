@@ -99,7 +99,7 @@
   (%hash-number #f)
   %text)
 
-(define-integrable group-point group-%point)
+(define group-point group-%point)
 
 (define (make-group buffer)
   (let ((group (%make-group buffer)))
@@ -119,43 +119,43 @@
      (set-group-%text! group text)
      (set-group-text-descriptor! group (external-string-descriptor text)))))
 
-(define-integrable (group-text group)
+(define (group-text group)
   (group-%text group))
 
 (define (group-length group)
   (fix:- (xstring-length (group-text group)) (group-gap-length group)))
 
-(define-integrable (group-start-index group)
+(define (group-start-index group)
   (mark-index (group-start-mark group)))
 
-(define-integrable (group-end-index group)
+(define (group-end-index group)
   (mark-index (group-end-mark group)))
 
-(define-integrable (group-start-index? group index)
+(define (group-start-index? group index)
   (fix:<= index (group-start-index group)))
 
-(define-integrable (group-end-index? group index)
+(define (group-end-index? group index)
   (fix:>= index (group-end-index group)))
 
-(define-integrable (group-display-start-index group)
+(define (group-display-start-index group)
   (mark-index (group-display-start group)))
 
-(define-integrable (group-display-end-index group)
+(define (group-display-end-index group)
   (mark-index (group-display-end group)))
 
-(define-integrable (group-display-start-index? group index)
+(define (group-display-start-index? group index)
   (fix:<= index (group-display-start-index group)))
 
-(define-integrable (group-display-end-index? group index)
+(define (group-display-end-index? group index)
   (fix:>= index (group-display-end-index group)))
 
-(define-integrable (set-group-writeable! group)
+(define (set-group-writeable! group)
   (set-group-writeable?! group #t))
 
-(define-integrable (set-group-read-only! group)
+(define (set-group-read-only! group)
   (set-group-writeable?! group #f))
 
-(define-integrable (group-read-only? group)
+(define (group-read-only? group)
   (not (group-writeable? group)))
 
 (define (group-region group)
@@ -164,7 +164,7 @@
 (define (group-position->index group position)
   (group-position->index-integrable group position))
 
-(define-integrable (group-position->index-integrable group position)
+(define (group-position->index-integrable group position)
   (cond ((fix:<= position (group-gap-start group))
 	 position)
 	((fix:> position (group-gap-end group))
@@ -175,7 +175,7 @@
 (define (group-index->position group index left-inserting?)
   (group-index->position-integrable group index left-inserting?))
 
-(define-integrable (group-index->position-integrable group index
+(define (group-index->position-integrable group index
 						     left-inserting?)
   (cond ((fix:< index (group-gap-start group))
 	 index)
@@ -186,10 +186,10 @@
 	(else
 	 (group-gap-start group))))
 
-(define-integrable (set-group-point! group point)
+(define (set-group-point! group point)
   (set-group-point-index! group (mark-index point)))
 
-(define-integrable (set-group-point-index! group index)
+(define (set-group-point-index! group index)
   ;; Optimization causes lossage.  -- cph
   ;; (set-mark-index! (group-point group) index)
   (set-group-%point! group (make-permanent-mark group index #t)))
@@ -289,16 +289,16 @@
 			  buffer)
 			variable))
 
-(define-integrable (group-tab-width group)
+(define (group-tab-width group)
   (group-local-ref group (ref-variable-object tab-width)))
 
-(define-integrable (group-char-image-strings group)
+(define (group-char-image-strings group)
   (group-local-ref group (ref-variable-object char-image-strings)))
 
-(define-integrable (group-case-fold-search group)
+(define (group-case-fold-search group)
   (group-local-ref group (ref-variable-object case-fold-search)))
 
-(define-integrable (group-syntax-table group)
+(define (group-syntax-table group)
   (group-local-ref group (ref-variable-object syntax-table)))
 
 ;;;; Marks
@@ -327,7 +327,7 @@
   (if (not (mark? mark)) (error "not a mark" mark))
   mark)
 
-(define-integrable (make-mark group index)
+(define (make-mark group index)
   (make-temporary-mark group index #t))
 
 (define (move-mark-to! mark target)
@@ -338,7 +338,7 @@
 		       (mark-index mark)
 		       (mark-left-inserting? mark)))
 
-(define-integrable (mark-permanent-copy mark)
+(define (mark-permanent-copy mark)
   (mark-permanent! (mark-temporary-copy mark)))
 
 (define (mark-right-inserting mark)
@@ -374,13 +374,13 @@
 					    (group-marks group)))))
   mark)
 
-(define-integrable (mark-local-ref mark variable)
+(define (mark-local-ref mark variable)
   (group-local-ref (mark-group mark) variable))
 
-(define-integrable (mark~ mark1 mark2)
+(define (mark~ mark1 mark2)
   (eq? (mark-group mark1) (mark-group mark2)))
 
-(define-integrable (mark/~ mark1 mark2)
+(define (mark/~ mark1 mark2)
   (not (mark~ mark1 mark2)))
 
 (define (mark= mark1 mark2)
@@ -407,13 +407,13 @@
   (and (mark~ mark1 mark2)
        (not (fix:< (mark-index mark1) (mark-index mark2)))))
 
-(define-integrable (mark-buffer mark)
+(define (mark-buffer mark)
   (group-buffer (mark-group mark)))
 
-(define-integrable (group-start mark)
+(define (group-start mark)
   (group-start-mark (mark-group mark)))
 
-(define-integrable (group-end mark)
+(define (group-end mark)
   (group-end-mark (mark-group mark)))
 
 (define (group-start? mark)
@@ -428,10 +428,10 @@
 (define (group-display-end? mark)
   (group-display-end-index? (mark-group mark) (mark-index mark)))
 
-(define-integrable (mark-absolute-start mark)
+(define (mark-absolute-start mark)
   (group-absolute-start (mark-group mark)))
 
-(define-integrable (mark-absolute-end mark)
+(define (mark-absolute-end mark)
   (group-absolute-end (mark-group mark)))
 
 ;;; The next few procedures are simple algorithms that are haired up
@@ -631,9 +631,9 @@
 
 ;;;; Regions
 
-(define-integrable %make-region cons)
-(define-integrable region-start car)
-(define-integrable region-end cdr)
+(define %make-region cons)
+(define region-start car)
+(define region-end cdr)
 
 (define (make-region start end)
   (cond ((not (eq? (mark-group start) (mark-group end)))
@@ -649,11 +649,11 @@
        (mark? (cdr object))
        (mark<= (car object) (cdr object))))
 
-(define-integrable (region-group region)
+(define (region-group region)
   (mark-group (region-start region)))
 
-(define-integrable (region-start-index region)
+(define (region-start-index region)
   (mark-index (region-start region)))
 
-(define-integrable (region-end-index region)
+(define (region-end-index region)
   (mark-index (region-end region)))

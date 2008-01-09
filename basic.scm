@@ -286,7 +286,7 @@ For more information type the HELP key while entering the name."
   "False if Edwin must never beep."
   #t)
 
-(define-integrable (editor-beep)
+(define (editor-beep)
   (if (ref-variable beeping-allowed?)
       (screen-beep (selected-screen))))
 

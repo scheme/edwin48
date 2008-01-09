@@ -28,22 +28,22 @@
 ;;;; Buffer Windows: Mark <-> Coordinate Maps
 
 
-(define-integrable (buffer-window/mark->x window mark)
+(define (buffer-window/mark->x window mark)
   (buffer-window/index->x window (mark-index mark)))
 
-(define-integrable (buffer-window/mark->y window mark)
+(define (buffer-window/mark->y window mark)
   (buffer-window/index->y window (mark-index mark)))
 
-(define-integrable (buffer-window/mark->coordinates window mark)
+(define (buffer-window/mark->coordinates window mark)
   (buffer-window/index->coordinates window (mark-index mark)))
 
-(define-integrable (buffer-window/point-x window)
+(define (buffer-window/point-x window)
   (buffer-window/index->x window (%window-point-index window)))
 
-(define-integrable (buffer-window/point-y window)
+(define (buffer-window/point-y window)
   (buffer-window/index->y window (%window-point-index window)))
 
-(define-integrable (buffer-window/point-coordinates window)
+(define (buffer-window/point-coordinates window)
   (buffer-window/index->coordinates window (%window-point-index window)))
 
 (define (buffer-window/index->x window index)
@@ -153,7 +153,7 @@
 	(values (%window-start-line-index window)
 		(%window-start-line-y window)))))
 
-(define-integrable (outlines-valid? window)
+(define (outlines-valid? window)
   (and (fix:= (group-modified-tick (%window-group window))
 	      (%window-modified-tick window))
        (not (%window-start-clip-mark window))
@@ -584,5 +584,5 @@
 	  (else
 	   (fix:quotient column x-max)))))
 
-(define-integrable (coordinates->column x y x-size)
+(define (coordinates->column x y x-size)
   (fix:+ x (fix:* y (fix:- x-size 1))))

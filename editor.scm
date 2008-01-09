@@ -599,7 +599,7 @@ TRANSCRIPT    messages appear in transcript buffer, if it is enabled;
 (define (inferior-thread-output! flags)
   (without-interrupts (lambda () (inferior-thread-output!/unsafe flags))))
 
-(define-integrable (inferior-thread-output!/unsafe flags)
+(define (inferior-thread-output!/unsafe flags)
   (set-car! flags #t)
   (set! inferior-thread-changes? #t)
   (signal-thread-event editor-thread #f))

@@ -107,31 +107,31 @@
   (set! root-inferior (find-inferior inferiors window*))
   unspecific)
 
-(define-integrable (editor-frame-window0 window)
+(define (editor-frame-window0 window)
   (with-instance-variables editor-frame window ()
     (window0 (inferior-window root-inferior))))
 
-(define-integrable (editor-frame-typein-window window)
+(define (editor-frame-typein-window window)
   (with-instance-variables editor-frame window ()
     (inferior-window typein-inferior)))
 
-(define-integrable (editor-frame-selected-window window)
+(define (editor-frame-selected-window window)
   (with-instance-variables editor-frame window ()
     selected-window))
 
-(define-integrable (editor-frame-cursor-window window)
+(define (editor-frame-cursor-window window)
   (with-instance-variables editor-frame window ()
     cursor-window))
 
-(define-integrable (editor-frame-root-window window)
+(define (editor-frame-root-window window)
   (with-instance-variables editor-frame window ()
     (inferior-window root-inferior)))
 
-(define-integrable (editor-frame-screen window)
+(define (editor-frame-screen window)
   (with-instance-variables editor-frame window ()
     screen))
 
-(define-integrable (editor-frame-properties window)
+(define (editor-frame-properties window)
   (with-instance-variables editor-frame window ()
     properties))
 

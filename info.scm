@@ -1227,8 +1227,8 @@ The name may be an abbreviation of the reference name."
 	(read-buffer (current-buffer) pathname true)
 	(set-variable! info-current-subfile pathname))))
 
-(define-integrable subfile-filename car)
-(define-integrable subfile-index cdr)
+(define subfile-filename car)
+(define subfile-index cdr)
 
 (define (subfile-pathname subfile)
   (merge-pathnames (subfile-filename subfile)

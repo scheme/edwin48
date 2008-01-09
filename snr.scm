@@ -4540,10 +4540,10 @@ With prefix arg, replaces the file with the list information."
 	     (set-news-group:ignored-subjects! group (cons table #f))
 	     table))))
 
-(define-integrable (news-group:ignored-subjects-modified! group)
+(define (news-group:ignored-subjects-modified! group)
   (set-cdr! (news-group:ignored-subjects group) #t))
 
-(define-integrable (news-group:ignored-subjects-not-modified! group)
+(define (news-group:ignored-subjects-not-modified! group)
   (set-cdr! (news-group:ignored-subjects group) #f))
 
 (define (news-group:ignored-subjects-modified? group)
@@ -4654,8 +4654,8 @@ With prefix arg, replaces the file with the list information."
 
 ;;;; News-Thread Extensions
 
-(define-integrable news-thread:expanded? news-thread:reader-hook)
-(define-integrable set-news-thread:expanded?! set-news-thread:reader-hook!)
+(define news-thread:expanded? news-thread:reader-hook)
+(define set-news-thread:expanded?! set-news-thread:reader-hook!)
 
 (define (news-thread:first-header thread predicate)
   (let ((root (news-thread:root thread)))

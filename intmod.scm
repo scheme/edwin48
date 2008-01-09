@@ -754,10 +754,10 @@ If this is an error, the debugger examines the error condition."
 
 ;;;; Queue
 
-(define-integrable (make-queue)
+(define (make-queue)
   (cons '() '()))
 
-(define-integrable (queue-empty? queue)
+(define (queue-empty? queue)
   (null? (car queue)))
 
 (define (enqueue!/unsafe queue object)
@@ -829,49 +829,49 @@ If this is an error, the debugger examines the error condition."
   (output-registration #f read-only #t)
   (bytes-written 0))
 
-(define-integrable (port/thread port)
+(define (port/thread port)
   (interface-port-state/thread (port/state port)))
 
-(define-integrable (port/mark port)
+(define (port/mark port)
   (interface-port-state/mark (port/state port)))
 
-(define-integrable (port/buffer port)
+(define (port/buffer port)
   (mark-buffer (port/mark port)))
 
-(define-integrable (port/input-ring port)
+(define (port/input-ring port)
   (interface-port-state/input-ring (port/state port)))
 
-(define-integrable (port/expression-queue port)
+(define (port/expression-queue port)
   (interface-port-state/expression-queue (port/state port)))
 
-(define-integrable (port/current-queue-element port)
+(define (port/current-queue-element port)
   (interface-port-state/current-queue-element (port/state port)))
 
-(define-integrable (set-port/current-queue-element! port element)
+(define (set-port/current-queue-element! port element)
   (set-interface-port-state/current-queue-element! (port/state port) element))
 
-(define-integrable (port/command-char port)
+(define (port/command-char port)
   (interface-port-state/command-char (port/state port)))
 
-(define-integrable (set-port/command-char! port command-char)
+(define (set-port/command-char! port command-char)
   (set-interface-port-state/command-char! (port/state port) command-char))
 
-(define-integrable (port/output-queue port)
+(define (port/output-queue port)
   (interface-port-state/output-queue (port/state port)))
 
-(define-integrable (port/output-strings port)
+(define (port/output-strings port)
   (interface-port-state/output-strings (port/state port)))
 
-(define-integrable (set-port/output-strings! port strings)
+(define (set-port/output-strings! port strings)
   (set-interface-port-state/output-strings! (port/state port) strings))
 
-(define-integrable (port/output-registration port)
+(define (port/output-registration port)
   (interface-port-state/output-registration (port/state port)))
 
-(define-integrable (port/bytes-written port)
+(define (port/bytes-written port)
   (interface-port-state/bytes-written (port/state port)))
 
-(define-integrable (set-port/bytes-written! port n)
+(define (set-port/bytes-written! port n)
   (set-interface-port-state/bytes-written! (port/state port) n))
 
 ;;; Output operations

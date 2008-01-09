@@ -97,7 +97,7 @@
 	  (else
 	   value))))
 
-(define-integrable (within-typein-edit?)
+(define (within-typein-edit?)
   (not (null? typein-saved-windows)))
 
 (define (typein-edit-other-window)
@@ -163,7 +163,7 @@
     (window-home-cursor! window)
     (typein-edit-continuation (buffer-string (window-buffer window)))))
 
-(define-integrable (typein-string)
+(define (typein-string)
   (map-name/external->internal (buffer-string (current-buffer))))
 
 (define (set-typein-string! string #!optional update?)
