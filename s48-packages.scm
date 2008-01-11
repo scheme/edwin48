@@ -52,3 +52,8 @@
 	    unspecific)
   (open scheme interrupts util)
   (files s48-aliases))
+
+(define-structure literals
+    (export) ;; no exports
+  (open scheme ascii reading srfi-13)
+  (files s48-literals))
