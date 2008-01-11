@@ -1,94 +1,94 @@
-;;; -*-Scheme-*-
-;;;
-;;; $Id: artdebug.scm,v 1.37 2007/01/05 21:19:23 cph Exp $
-;;;
-;;; Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994,
-;;;     1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
-;;;     2006, 2007 Massachusetts Institute of Technology
-;;;
-;;; This file is part of MIT/GNU Scheme.
-;;;
-;;; MIT/GNU Scheme is free software; you can redistribute it and/or modify
-;;; it under the terms of the GNU General Public License as published by
-;;; the Free Software Foundation; either version 2 of the License, or (at
-;;; your option) any later version.
-;;;
-;;; MIT/GNU Scheme is distributed in the hope that it will be useful, but
-;;; WITHOUT ANY WARRANTY; without even the implied warranty of
-;;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-;;; General Public License for more details.
-;;;
-;;; You should have received a copy of the GNU General Public License
-;;; along with MIT/GNU Scheme; if not, write to the Free Software
-;;; Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301,
-;;; USA.
-;;;
-;;;
+#| -*-Scheme-*-
+
+$Id: artdebug.scm,v 1.37 2007/01/05 21:19:23 cph Exp $
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994,
+    1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
+    2006, 2007 Massachusetts Institute of Technology
+
+This file is part of MIT/GNU Scheme.
+
+MIT/GNU Scheme is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or (at
+your option) any later version.
+
+MIT/GNU Scheme is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with MIT/GNU Scheme; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301,
+USA.
+
+|#
 
 ;;;; Continuation Browser
 
 
-;;; TO DO
-;;;
-;;; Make environment browsing mode; the debugger mode can be a superset
-;;; of that mode: Add optional marker lines for environments.  If you do
-;;; the C-c C-a command to describe the environment frames in the current
-;;; subproblem or reduction, the debugger should use the correct
-;;; environment when you do evaluations in those environment frames.
-;;; Make commands for moving by environment level.  Later, change this to
-;;; execute Where in another buffer depending on the state of a flag.
-;;;
-;;; Make a variable that specifies whether to prompt the user if more
-;;; than a certain number of variables are about to be printed during an
-;;; environment-browsing command.
-;;;
-;;; By default, when the debugger starts, don't show history levels
-;;; inside the system.  To detect system code, see
-;;; ~arthur/new6001/detect.scm.  Predicate SYSTEM-FRAME? is already
-;;; in place.
-;;;
-;;; MarkF has code to use the correct syntax tables for evaluation.
-;;;
-;;; Add limits to the depth and breadth of objects printed by the
-;;; debugger, to avoid problems caused by displaying circular objects.
-;;; Note $se/evlcom.scm: TRANSCRIPT-LIST-DEPTH-LIMIT and
-;;; TRANSCRIPT-LIST-BREADTH-LIMIT.
-;;;
-;;; Make C-c C-k evaluate in the environment in which the error occurred.
-;;; Otherwise, the "Define x to a given value" restart for unbound
-;;; variable errors won't work.  This seems to be a bug in the regular
-;;; debugger, too.
-;;;
-;;; Make C-c C-z work in the case where an error happens during
-;;; evaluation of the return expression, the debugger starts on the new
-;;; error, and return is done from the second debugger straight through
-;;; the first back into the original computation.  The restart itself
-;;; works, but the message "Scheme error" is printed upon starting the
-;;; second debugger.
-;;;
-;;; Jinx: Depending on the state of a flag, never invoke debugger on
-;;; unbound variable errors from the expression you eval in the
-;;; interaction buffer (or debugger buffer).  Actually, how about a
-;;; general filter on conditions that will start the debugger?  Provide a
-;;; default filter for ignoring unbound variables.
-;;;
-;;; Jinx: Display the offending expression evaluated by the user.  Display
-;;; it just above the error message line.
-;;;
-;;; Make a way to restrict the possible restarts to not include restarts
-;;; that could stop Edwin.
-;;;
-;;; Make a narrow interface between Edwin and the debugger so it will be
-;;; easy to write this debugger for Emacs.
-;;;
-;;; Number input lines so that it is possible to tell the order in which
-;;; you evaluated your expressions.  This could be particularly useful
-;;; for TAs looking over students' shoulders.
-;;;
-;;; Once outline mode has been written for Edwin, add commands to expand
-;;; and contract subproblems and reductions.
-;;;
-;;;
+#| TO DO
+
+Make environment browsing mode; the debugger mode can be a superset
+of that mode: Add optional marker lines for environments.  If you do
+the C-c C-a command to describe the environment frames in the current
+subproblem or reduction, the debugger should use the correct
+environment when you do evaluations in those environment frames.
+Make commands for moving by environment level.  Later, change this to
+execute Where in another buffer depending on the state of a flag.
+
+Make a variable that specifies whether to prompt the user if more
+than a certain number of variables are about to be printed during an
+environment-browsing command.
+
+By default, when the debugger starts, don't show history levels
+inside the system.  To detect system code, see
+~arthur/new6001/detect.scm.  Predicate SYSTEM-FRAME? is already
+in place.
+
+MarkF has code to use the correct syntax tables for evaluation.
+
+Add limits to the depth and breadth of objects printed by the
+debugger, to avoid problems caused by displaying circular objects.
+Note $se/evlcom.scm: TRANSCRIPT-LIST-DEPTH-LIMIT and
+TRANSCRIPT-LIST-BREADTH-LIMIT.
+
+Make C-c C-k evaluate in the environment in which the error occurred.
+Otherwise, the "Define x to a given value" restart for unbound
+variable errors won't work.  This seems to be a bug in the regular
+debugger, too.
+
+Make C-c C-z work in the case where an error happens during
+evaluation of the return expression, the debugger starts on the new
+error, and return is done from the second debugger straight through
+the first back into the original computation.  The restart itself
+works, but the message "Scheme error" is printed upon starting the
+second debugger.
+
+Jinx: Depending on the state of a flag, never invoke debugger on
+unbound variable errors from the expression you eval in the
+interaction buffer (or debugger buffer).  Actually, how about a
+general filter on conditions that will start the debugger?  Provide a
+default filter for ignoring unbound variables.
+
+Jinx: Display the offending expression evaluated by the user.  Display
+it just above the error message line.
+
+Make a way to restrict the possible restarts to not include restarts
+that could stop Edwin.
+
+Make a narrow interface between Edwin and the debugger so it will be
+easy to write this debugger for Emacs.
+
+Number input lines so that it is possible to tell the order in which
+you evaluated your expressions.  This could be particularly useful
+for TAs looking over students' shoulders.
+
+Once outline mode has been written for Edwin, add commands to expand
+and contract subproblems and reductions.
+
+|#
 
 (define-variable debugger-confirm-return?
   "True means to prompt for confirmation in RETURN-FROM and RETURN-TO

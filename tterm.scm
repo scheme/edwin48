@@ -1,29 +1,29 @@
-;;; -*-Scheme-*-
-;;;
-;;; $Id: tterm.scm,v 1.45 2007/01/05 21:19:24 cph Exp $
-;;;
-;;; Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994,
-;;;     1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
-;;;     2006, 2007 Massachusetts Institute of Technology
-;;;
-;;; This file is part of MIT/GNU Scheme.
-;;;
-;;; MIT/GNU Scheme is free software; you can redistribute it and/or modify
-;;; it under the terms of the GNU General Public License as published by
-;;; the Free Software Foundation; either version 2 of the License, or (at
-;;; your option) any later version.
-;;;
-;;; MIT/GNU Scheme is distributed in the hope that it will be useful, but
-;;; WITHOUT ANY WARRANTY; without even the implied warranty of
-;;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-;;; General Public License for more details.
-;;;
-;;; You should have received a copy of the GNU General Public License
-;;; along with MIT/GNU Scheme; if not, write to the Free Software
-;;; Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301,
-;;; USA.
-;;;
-;;;
+#| -*-Scheme-*-
+
+$Id: tterm.scm,v 1.45 2007/01/05 21:19:24 cph Exp $
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994,
+    1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
+    2006, 2007 Massachusetts Institute of Technology
+
+This file is part of MIT/GNU Scheme.
+
+MIT/GNU Scheme is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or (at
+your option) any later version.
+
+MIT/GNU Scheme is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with MIT/GNU Scheme; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301,
+USA.
+
+|#
 
 ;;;; Termcap(3) Screen Implementation
 
@@ -1126,66 +1126,66 @@
 		       (baud-rate->index baud-rate)
 		       (ts-pad-char description))))
 
-;;; Calculate the insert and delete line costs.
-;;;
-;;; We keep the ID costs in a precomputed array based on the position at
-;;; which the I or D is performed.  Also, there are two kinds of ID costs:
-;;; the "once-only" and the "repeated".  This is to handle both those
-;;; terminals that are able to insert N lines at a time (once-only) and
-;;; those that must repeatedly insert one line.
-;;;
-;;; The cost to insert N lines at line L (0-origin indexing) is
-;;;
-;;; 	(+ (+ IL-OV1 (* IL-PF1 (- Y-SIZE L)))
-;;; 	   (* N (+ IL-OVN (* IL-PFN (- Y-SIZE L)))))
-;;;
-;;; IL-OV1 represents the basic insert line overhead.  IL-PF1 is the
-;;; padding required to allow the terminal time to move a line: insertion
-;;; at line L changes (- Y-SIZE L) lines.
-;;;
-;;; The first subexpression above is the overhead; the second is the
-;;; multiply factor.  Both are dependent only on the position at which the
-;;; insert is performed.  We store the overhead in INSERT-LINE-COST and
-;;; the multiply factor in INSERT-LINE-NEXT-COST.  Note however that any
-;;; insertion must include at least one multiply factor.  Rather than
-;;; compute this as INSERT-LINE-COST[line]+INSERT-LINE-NEXT-COST[line], we
-;;; add INSERT-LINE-NEXT-COST into INSERT-LINE-COST.  This is reasonable
-;;; because of the particular algorithm used.
-;;;
-;;; Deletion is essentially the same as insertion. 
-;;;
-;;; Note that the multiply factors are in tenths of characters.  |#
-;;;
-;;; (define (scrolling-vectors y-size overhead-1 factor-1 overhead-n factor-n)
-;;;   (let ((overhead (make-vector y-size))
-;;; 	(factor (make-vector y-size)))
-;;;     (let loop
-;;; 	((y 0)
-;;; 	 (o (fix:+ (fix:* overhead-1 10) (fix:* factor-1 y-size)))
-;;; 	 (n (fix:+ (fix:* overhead-n 10) (fix:* factor-n y-size))))
-;;;       (if (fix:< y y-size)
-;;; 	  (begin
-;;; 	    (vector-set! factor y (fix:quotient n 10))
-;;; 	    (let ((n (fix:- n factor-n)))
-;;; 	      (vector-set! overhead y (fix:quotient (fix:+ o n) 10))
-;;; 	      (loop (fix:1+ y) (fix:- o factor-1) n)))))
-;;;     (values overhead factor)))
-;;;
-;;; (define (resize-screen)
-;;;   (let* ((screen (selected-screen))
-;;; 	 (state (screen-state screen)))
-;;;     (if (not (terminal-state? state))
-;;; 	(editor-error "Not a terminal screen")
-;;; 	(let ((port console-i/o-port)
-;;; 	      (desc (terminal-state/description state)))
-;;; 	  (let ((x-size (output-port/x-size port))
-;;; 		(y-size (output-port/y-size port)))
-;;; 	    (if (or (not (= x-size (screen-x-size screen)))
-;;; 		    (not (= y-size (screen-y-size screen))))
-;;; 		(begin
-;;; 		  (without-interrupts
-;;; 		   (lambda ()
-;;; 		     (set-tn-x-size! desc x-size)
-;;; 		     (set-tn-y-size! desc y-size)
-;;; 		     (set-screen-size! screen x-size y-size)))
-;;; 		  (update-screen! screen #t))))))))
+#| Calculate the insert and delete line costs.
+
+We keep the ID costs in a precomputed array based on the position at
+which the I or D is performed.  Also, there are two kinds of ID costs:
+the "once-only" and the "repeated".  This is to handle both those
+terminals that are able to insert N lines at a time (once-only) and
+those that must repeatedly insert one line.
+
+The cost to insert N lines at line L (0-origin indexing) is
+
+	(+ (+ IL-OV1 (* IL-PF1 (- Y-SIZE L)))
+	   (* N (+ IL-OVN (* IL-PFN (- Y-SIZE L)))))
+
+IL-OV1 represents the basic insert line overhead.  IL-PF1 is the
+padding required to allow the terminal time to move a line: insertion
+at line L changes (- Y-SIZE L) lines.
+
+The first subexpression above is the overhead; the second is the
+multiply factor.  Both are dependent only on the position at which the
+insert is performed.  We store the overhead in INSERT-LINE-COST and
+the multiply factor in INSERT-LINE-NEXT-COST.  Note however that any
+insertion must include at least one multiply factor.  Rather than
+compute this as INSERT-LINE-COST[line]+INSERT-LINE-NEXT-COST[line], we
+add INSERT-LINE-NEXT-COST into INSERT-LINE-COST.  This is reasonable
+because of the particular algorithm used.
+
+Deletion is essentially the same as insertion. 
+
+Note that the multiply factors are in tenths of characters.  |#
+
+(define (scrolling-vectors y-size overhead-1 factor-1 overhead-n factor-n)
+  (let ((overhead (make-vector y-size))
+	(factor (make-vector y-size)))
+    (let loop
+	((y 0)
+	 (o (fix:+ (fix:* overhead-1 10) (fix:* factor-1 y-size)))
+	 (n (fix:+ (fix:* overhead-n 10) (fix:* factor-n y-size))))
+      (if (fix:< y y-size)
+	  (begin
+	    (vector-set! factor y (fix:quotient n 10))
+	    (let ((n (fix:- n factor-n)))
+	      (vector-set! overhead y (fix:quotient (fix:+ o n) 10))
+	      (loop (fix:1+ y) (fix:- o factor-1) n)))))
+    (values overhead factor)))
+
+(define (resize-screen)
+  (let* ((screen (selected-screen))
+	 (state (screen-state screen)))
+    (if (not (terminal-state? state))
+	(editor-error "Not a terminal screen")
+	(let ((port console-i/o-port)
+	      (desc (terminal-state/description state)))
+	  (let ((x-size (output-port/x-size port))
+		(y-size (output-port/y-size port)))
+	    (if (or (not (= x-size (screen-x-size screen)))
+		    (not (= y-size (screen-y-size screen))))
+		(begin
+		  (without-interrupts
+		   (lambda ()
+		     (set-tn-x-size! desc x-size)
+		     (set-tn-y-size! desc y-size)
+		     (set-screen-size! screen x-size y-size)))
+		  (update-screen! screen #t))))))))
