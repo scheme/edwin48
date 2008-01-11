@@ -247,7 +247,7 @@ No argument is equivalent to zero: just insert () and leave point between."
     ((ref-command up-list) 1)
     ((ref-command backward-char) 1)
     (do () ((not (within-indentation? (current-point))))
-      ((ref-command delete-indentation) #f))
+      ((ref-command delete-indentation) false))
     ((ref-command forward-char) 1)
     ((ref-command newline-and-indent))))
 

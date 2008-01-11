@@ -33,28 +33,28 @@
 Variable LPR-SWITCHES is a list of extra switches (strings) to pass to lpr."
   '()
   (lambda ()
-    (print-region/internal (buffer-region (current-buffer)) #f)))
+    (print-region/internal (buffer-region (current-buffer)) false)))
 
 (define-command print-buffer
   "Print buffer contents as with Unix command `lpr -p'.
 Variable LPR-SWITCHES is a list of extra switches (strings) to pass to lpr."
   '()
   (lambda ()
-    (print-region/internal (buffer-region (current-buffer)) #t)))
+    (print-region/internal (buffer-region (current-buffer)) true)))
 
 (define-command lpr-region
   "Print region contents as with Unix command `lpr'.
 Variable LPR-SWITCHES is a list of extra switches (strings) to pass to lpr."
   "r"
   (lambda  (region)
-    (print-region/internal region #f)))
+    (print-region/internal region false)))
 
 (define-command print-region
   "Print region contents as with Unix command `lpr -p'.
 Variable LPR-SWITCHES is a list of extra switches (strings) to pass to lpr."
   "r"
   (lambda  (region)
-    (print-region/internal region #t)))
+    (print-region/internal region true)))
 
 (define (print-region/internal region print-headers?)
   ((message-wrapper #f "Spooling")
@@ -85,7 +85,7 @@ Variable LPR-SWITCHES is a list of extra switches (strings) to pass to lpr."
 		 (call-printer (buffer-region temp-buffer))))))))))
 
 (define (print-region/default region print-headers? title buffer)
-  (shell-command region #f #f #f
+  (shell-command region false false false
 		 (string-append
 		  (ref-variable lpr-command buffer)
 		  (print/assemble-switches title
@@ -146,7 +146,7 @@ Variable LPR-SWITCHES is a list of extra switches (strings) to pass to lpr."
 		      (loop (cdr switches)))))))
 
 (define print/job-name
-  (let ((most-recent-name #f))
+  (let ((most-recent-name false))
     (lambda ()
       (and lpr-prompt-for-name?
 	   (let ((job-name
@@ -154,7 +154,7 @@ Variable LPR-SWITCHES is a list of extra switches (strings) to pass to lpr."
 				     most-recent-name
 				     'DEFAULT-TYPE 'INSERTED-DEFAULT)))
 	     (if (string-null? job-name)
-		 #f
+		 false
 		 (begin
 		   (set! most-recent-name job-name)
 		   job-name)))))))

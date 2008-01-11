@@ -164,7 +164,7 @@ The headers are delimited by a string found in mail-header-separator."
 (define-variable mail-header-function
   "A function of one argument, POINT (the current point), which inserts
 additional header lines into a mail message.  The function is called
-after all other headers are inserted.  If this variable is false, it
+after all other headers are inserted.  If this variable is #f, it
 is ignored."
   #f
   (lambda (object)

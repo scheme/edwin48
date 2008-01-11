@@ -80,7 +80,7 @@ is used to calculate the indentation for that form."
 (define (find-outer-container start indent-point)
   (let ((state (parse-partial-sexp start indent-point 0)))
     (if (mark= (parse-state-location state) indent-point)
-	(find-inner-container state #f false indent-point)
+	(find-inner-container state false false indent-point)
 	(find-outer-container (parse-state-location state) indent-point))))
 
 (define (find-inner-container state container last-sexp indent-point)
@@ -111,7 +111,7 @@ is used to calculate the indentation for that form."
 	(else
 	 (mark-column (parse-state-location state)))))
 
-;;; The following are #t when the indent hook is called:
+;;; The following are true when the indent hook is called:
 ;;;
 ;;; * CONTAINER < NORMAL-INDENT <= LAST-SEXP < INDENT-POINT
 ;;; * Since INDENT-POINT is a line start, LAST-SEXP is on a
@@ -246,17 +246,17 @@ is used to calculate the indentation for that form."
 		       (indent-code-rigidly start
 					    (forward-sexp start 1 'ERROR)
 					    shift-amount
-					    #f)))
+					    false)))
 		  ((within-indentation? (current-point))
 		   (set-current-point! start))))))))
 
 (define (indent-code-rigidly start end shift-amount nochange-regexp)
   (let ((end (mark-left-inserting end)))
-    (let loop ((start start) (state #f))
+    (let loop ((start start) (state false))
       (let ((start* (line-start start 1 'LIMIT)))
 	(if (mark< start* end)
 	    (let ((start start*)
-		  (state (parse-partial-sexp start start* #f false state)))
+		  (state (parse-partial-sexp start start* false false state)))
 	      (if (not (or (parse-state-in-string? state)
 			   (parse-state-in-comment? state)
 			   (and nochange-regexp
@@ -298,9 +298,9 @@ is used to calculate the indentation for that form."
   (let ((end (mark-permanent! (line-start (forward-sexp point 1 'ERROR) 0))))
     (if (mark< point end)
 	(let loop ((index point) (stack '()))
-	  (let next-line-start ((index index) (state #f))
+	  (let next-line-start ((index index) (state false))
 	    (let ((start (mark-right-inserting-copy (line-start index 1))))
-	      (let ((state (parse-partial-sexp index start #f false state)))
+	      (let ((state (parse-partial-sexp index start false false state)))
 		(let ((stack (adjust-stack (parse-state-depth state) stack)))
 		  (cond ((mark= start end)
 			 (if (not (or (parse-state-in-string? state)
@@ -361,4 +361,4 @@ is used to calculate the indentation for that form."
   (if (= -1 n) (cdr stack) (down-stack (1+ n) (cdr stack))))
 
 (define (up-stack n stack)
-  (if (= 1 n) (cons #f stack) (up-stack (-1+ n) (cons #f stack))))
+  (if (= 1 n) (cons false stack) (up-stack (-1+ n) (cons false stack))))

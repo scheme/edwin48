@@ -67,7 +67,7 @@
 (define (bios-initialize-package!)
   (set! bios-display-type
 	(make-display-type 'IBM-PC-BIOS
-			   #f
+			   false
 			   bios-available?
 			   make-bios-screen
 			   (lambda (screen)

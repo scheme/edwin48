@@ -49,7 +49,7 @@ where SECTION is the desired section of the manual, as in `tty(4)'."
 		  (substring topic
 			     (re-match-start-index 1 r)
 			     (re-match-end-index 1 r))))
-	  (set! section #f)))
+	  (set! section false)))
     (let ((buffer-name
 	   (if (ref-variable manual-entry-reuse-buffer?)
 	       "*Manual-Entry*"
@@ -64,7 +64,7 @@ where SECTION is the desired section of the manual, as in `tty(4)'."
 		 (if section (string-append section " ") "")
 		 topic
 		 "...")
-	(shell-command #f (buffer-point buffer) #f #f
+	(shell-command false (buffer-point buffer) false false
 		       (string-append (or (ref-variable manual-command)
 					  (if (file-exists? "/usr/bin/man")
 					      "/usr/bin/man"
@@ -79,7 +79,7 @@ where SECTION is the desired section of the manual, as in `tty(4)'."
 	(buffer-not-modified! buffer)
 	(set-buffer-read-only! buffer)
 	(set-buffer-point! buffer (buffer-start buffer))
-	(pop-up-buffer buffer #f)
+	(pop-up-buffer buffer false)
 	(message "Manual page ready")))))
 
 (define-command clean-manual-entry
@@ -94,29 +94,29 @@ The current buffer should contain a formatted manual entry."
   ;; Nuke headers: "MORE(1) UNIX Programmer's Manual MORE(1)"
   (nuke-regexp buffer
 	       "^ *\\([A-Za-z][-_A-Za-z0-9]*([-0-9A-Z]+)\\).*\\1$"
-	       #f)
+	       false)
   ;; Nuke vendor-specific footers
-  (nuke-regexp buffer manual-vendor-pattern #t)
+  (nuke-regexp buffer manual-vendor-pattern true)
   ;; Nuke generic footers
-  (nuke-regexp buffer "^[A-Za-z0-9_]*[ \t]*[0-9]+$" #f)
+  (nuke-regexp buffer "^[A-Za-z0-9_]*[ \t]*[0-9]+$" false)
   (crunch-blank-lines buffer)
   ;; Nuke blanks lines at start.
   (if (re-match-forward "\\([ \t]*\n\\)+"
 			(buffer-start buffer)
 			(buffer-end buffer)
-			#f)
+			false)
       (delete-match))
   ;; Nuke "Reformatting page" message, plus trailing blank lines.
   (if (re-match-forward "Reformatting \\(page\\|entry\\).*\n\\([ \t]*\n\\)*"
 			(buffer-start buffer)
 			(buffer-end buffer)
-			#f)
+			false)
       (delete-match))
   ;; Nuke blanks lines at end.
   (let ((end (buffer-end buffer)))
     (if (line-blank? (line-start end 0))
 	(delete-string (let loop ((mark (line-start end 0)))
-			 (let ((m (line-start mark -1 #f)))
+			 (let ((m (line-start mark -1 false)))
 			   (cond ((not m) mark)
 				 ((not (line-blank? m)) mark)
 				 (else (loop m)))))

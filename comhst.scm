@@ -91,7 +91,7 @@
     (list (prompt-for-string "History search backward"
 			     (ref-variable comint-last-input-match))))
   (lambda (string)
-    (comint-history-search string #t)))
+    (comint-history-search string true)))
 
 (define-command comint-history-search-forward
   "Search forwards through the input history for a matching substring."
@@ -99,12 +99,12 @@
     (list (prompt-for-string "History search forward"
 			     (ref-variable comint-last-input-match))))
   (lambda (string)
-    (comint-history-search string #f)))
+    (comint-history-search string false)))
 
 (define (comint-history-search string backward?)
   (let ((ring (ref-variable comint-input-ring))
 	(syntax-table (ref-variable syntax-table))
-	(pattern (re-compile-pattern (re-quote-string string) #f)))
+	(pattern (re-compile-pattern (re-quote-string string) false)))
     (let ((size (+ (ring-size ring) 1)))
       (call-with-values
 	  (lambda ()

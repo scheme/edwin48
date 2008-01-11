@@ -73,7 +73,7 @@
 		      (cond ((= found-level level)
 			     (re-match-start 0))
 			    ((< found-level level)
-			     #f)
+			     false)
 			    (else (next-topic (re-match-end 0)))))
 		    (re-match-start 0)))))))
 
@@ -91,7 +91,7 @@
 		       (cond ((= found-level level)
 			      (re-match-start 0))
 			     ((< found-level level)
-			      #f)
+			      false)
 			     (else (previous-topic (re-match-start 0)))))))))))
 
 (define (%forward-down-topic start end outline-pattern)

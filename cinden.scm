@@ -238,17 +238,17 @@ This is in addition to c-continued-statement-offset."
 
 (define (skip-comments&labels start end)
   (let ((gend (group-end start)))
-    (let loop ((mark start) (colon-line-end #f))
+    (let loop ((mark start) (colon-line-end false))
       (let ((mark (whitespace-end mark gend)))
 	(cond ((mark>= mark end)
-	       #f)
+	       false)
 	      ((or (char-match-forward #\# mark)
 		   (match-forward "//" mark))
 	       (loop (line-start mark 1 'LIMIT) colon-line-end))
 	      ((match-forward "/*" mark)
 	       (loop (or (search-forward "*/" mark gend) gend) colon-line-end))
 	      ((re-match-forward "case[ \t\n].*:\\|[a-zA-Z0-9_$]*[ \t\n]*:"
-				 mark gend #f)
+				 mark gend false)
 	       (loop (re-match-end 0) (line-end mark 0)))
 	      ((and colon-line-end (mark> colon-line-end mark))
 	       (- (mark-indentation mark)
@@ -263,8 +263,8 @@ This is in addition to c-continued-statement-offset."
     (if (mark< expression-start end)
 	(let loop
 	    ((start expression-start)
-	     (state #f)
-	     (indent-stack (list #f))
+	     (state false)
+	     (indent-stack (list false))
 	     (contain-stack (list expression-start))
 	     (last-depth 0))
 	  (call-with-values
@@ -300,7 +300,7 @@ This is in addition to c-continued-statement-offset."
     (if (and state (parse-state-in-comment? state))
 	(c-indent-line start))
     (let ((start* (line-start start 1)))
-      (let ((state* (parse-partial-sexp start start* #f #f state)))
+      (let ((state* (parse-partial-sexp start start* false false state)))
 	(cond ((mark= start* end)
 	       (values start* state*))
 	      ((parse-state-in-comment? state*)
@@ -358,9 +358,9 @@ This is in addition to c-continued-statement-offset."
 
 (define (looking-at-keyword? keyword start)
   (let ((end (line-end start 0)))
-    (and (re-match-forward (string-append keyword "\\b") start end #f)
+    (and (re-match-forward (string-append keyword "\\b") start end false)
 	 (not (re-match-forward (string-append keyword "\\s_") start end
-				#f)))))
+				false)))))
 
 (define (backward-to-noncomment start end)
   (let loop ((start start))
@@ -407,8 +407,8 @@ This is in addition to c-continued-statement-offset."
 	((> depth-delta 0)
 	 (let loop ((depth-delta depth-delta) (stack stack))
 	   (if (= 1 depth-delta)
-	       (cons #f stack)
-	       (loop (- depth-delta 1) (cons #f stack)))))
+	       (cons false stack)
+	       (loop (- depth-delta 1) (cons false stack)))))
 	(else
 	 (let loop ((depth-delta depth-delta) (stack stack))
 	   (if (= -1 depth-delta)

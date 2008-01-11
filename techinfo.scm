@@ -33,15 +33,15 @@
 
 (define-variable techinfo-web-buffer
   "Buffer which contains a copy of the TechInfo web file."
-  #f)
+  false)
 
 (define-variable techinfo-buffer
   "Buffer used for displaying TechInfo information."
-  #f)
+  false)
 
 (define-variable techinfo-current-node-list
   "Cached list of web file information for the current node."
-  #f)
+  false)
 
 (define-variable techinfo-attached-filesystems
   "List of filesystems already attached by this run of TechInfo.
@@ -51,7 +51,7 @@ attach will not be made."
 
 (define-variable techinfo-parent-list
   "List of parent nodes from this node to the root node."
-  #f)
+  false)
 
 (define-variable techinfo-history-list
   "List of TechInfo nodes previously visited."
@@ -61,7 +61,7 @@ attach will not be made."
   "True if AFS is not available by default, and the NFS->AFS
 translator on Atalanta is needed.  At Tech Square this variable
 is set to t.  At Athena it is nil."
-  #t)
+  true)
 
 ;;; Returns the line of the TechInfo web file which corresponds to node NUMBER.
 (define (techinfo-find-line string)
@@ -226,12 +226,12 @@ is set to t.  At Athena it is nil."
 	(begin
 	  (if (and (string=? the-filesys "afs")
 		   (ref-variable techinfo-need-to-attach-afs))
-	      (run-synchronous-process #f #f
-				       (->pathname "/usr/local/bin") #f
+	      (run-synchronous-process false false
+				       (->pathname "/usr/local/bin") false
 				       "attach" "-n" "-m" "/afs" "-e"
 				       "atalanta.mit.edu:/afs")
-	      (run-synchronous-process #f #f
-				       (->pathname "/usr/local/bin") #f
+	      (run-synchronous-process false false
+				       (->pathname "/usr/local/bin") false
 				       "attach" "-n" the-filesys))
 	  (set-variable! techinfo-attached-filesystems
 			 (cons the-filesys
@@ -251,19 +251,19 @@ is set to t.  At Athena it is nil."
 	    ((ref-command techinfo-goto-node) num))))))
 
 (define (techinfo-space-DWIM-leaf-node)
-  ((ref-command scroll-up) #f))
+  ((ref-command scroll-up) false))
 
 (define (techinfo-delete-DWIM-internal-node)
   ((ref-command techinfo-up)))
 
 (define (techinfo-delete-DWIM-leaf-node)
-  ((ref-command scroll-down) #f))
+  ((ref-command scroll-down) false))
 
 (define (techinfo-initialize)
   (if (not (member "ti_data" (ref-variable techinfo-attached-filesystems)))
       (begin
-	(run-synchronous-process #f #f (->pathname "/usr/local/bin")
-				 #f "attach" "-n" "ti_data")
+	(run-synchronous-process false false (->pathname "/usr/local/bin")
+				 false "attach" "-n" "ti_data")
 	(set-variable! techinfo-attached-filesystems
 		       (cons "ti_data"
 			     (ref-variable techinfo-attached-filesystems)))))

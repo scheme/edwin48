@@ -61,7 +61,7 @@ Empty list means the default, which is (\"~/mbox\" \"/usr/spool/mail/$USER\")
 (define-variable rmail-dont-reply-to-names
   "A regular expression specifying names to prune in replying to messages.
 #f means don't reply to yourself."
-  #f
+  false
   string-or-false?)
 
 (define-variable rmail-default-dont-reply-to-names
@@ -81,17 +81,17 @@ It is useful to set this variable in the site customisation file."
 (define-variable rmail-message-filter
   "If not #f, is a filter procedure for new headers in RMAIL.
 Called with the start and end marks of the header as arguments."
-  #f
+  false
   (lambda (object) (or (not object) (procedure? object))))
 
 (define-variable rmail-delete-after-output
   "True means automatically delete a message that is copied to a file."
-  #f
+  false
   boolean?)
 
 (define-variable rmail-reply-with-re
   "True means prepend subject with Re: in replies."
-  #f
+  false
   boolean?)
 
 (define-variable rmail-mode-hook
@@ -154,10 +154,10 @@ w	Edit the current message.  C-c C-c to return to Rmail."
       'NEVER)
     (define-variable-local-value! buffer
 	(ref-variable-object file-precious-flag)
-      #t)
+      true)
     (define-variable-local-value! buffer
 	(ref-variable-object require-final-newline)
-      #f)
+      false)
     (define-variable-local-value! buffer
       (ref-variable-object translate-file-data-on-output)
       #f)
@@ -229,12 +229,12 @@ together with two commands to return to regular RMAIL:
 (define (parse-file-inboxes buffer)
   (let ((start (buffer-start buffer))
 	(end (buffer-end buffer)))
-    (if (re-match-forward babyl-header-start-regexp start end #f)
+    (if (re-match-forward babyl-header-start-regexp start end false)
 	(let ((end
-	       (if (re-search-forward babyl-header-end-regexp start end #f)
+	       (if (re-search-forward babyl-header-end-regexp start end false)
 		   (re-match-start 0)
 		   end)))
-	  (let ((start (search-forward "\nMail:" start end #t)))
+	  (let ((start (search-forward "\nMail:" start end true)))
 	    (if start
 		(parse-comma-list start (line-end start 0))
 		'())))
@@ -369,7 +369,7 @@ but does not copy any new mail into the file."
   ()
   (lambda ()
     ((ref-command rmail-expunge))
-    ((ref-command save-buffer) #f)))
+    ((ref-command save-buffer) false)))
 
 ;;;; Mail input
 
@@ -400,10 +400,10 @@ and use that file as the inbox."
 	    (with-buffer-undo-disabled buffer
 	      (lambda ()
 		(if filename
-		    (get-new-mail buffer (list filename) #f)
+		    (get-new-mail buffer (list filename) false)
 		    (get-new-mail buffer
 				  (ref-variable rmail-inbox-list)
-				  #t))))))
+				  true))))))
 	(show-message
 	 buffer
 	 (let ((memo (buffer-msg-memo buffer)))
@@ -441,7 +441,7 @@ and use that file as the inbox."
 			   ;; old backup file now.
 			   (if (and (ref-variable make-backup-files buffer)
 				    modified?)
-			       #f
+			       false
 			       'NO-BACKUP))))
 	(if delete-inboxes?
 	    (for-each delete-file-no-errors inserted-inboxes))
@@ -510,7 +510,7 @@ and use that file as the inbox."
 	    (let ((start (buffer-start error-buffer))
 		  (end (buffer-end error-buffer)))
 	      (run-synchronous-process
-	       #f start #f #f
+	       false start false false
 	       (os/find-program "movemail"
 				(edwin-etc-directory)
 				(ref-variable exec-path))
@@ -519,7 +519,7 @@ and use that file as the inbox."
 	      (if (mark< start end)
 		  (error
 		   (let ((m
-			  (or (match-forward "movemail: " start end #f)
+			  (or (match-forward "movemail: " start end false)
 			      start)))
 		     (string-append
 		      "movemail: "
@@ -832,7 +832,7 @@ and reverse search is specified by a negative numeric arg."
 		    (let loop ((memo memo))
 		      (let ((memo (msg-memo/previous memo)))
 			(cond ((not memo)
-			       (values #f #f))
+			       (values false false))
 			      ((re-search-backward regexp
 						   (msg-memo/end-body memo)
 						   (msg-memo/start-body memo))
@@ -843,7 +843,7 @@ and reverse search is specified by a negative numeric arg."
 		    (let loop ((memo memo))
 		      (let ((memo (msg-memo/next memo)))
 			(cond ((not memo)
-			       (values #f #f))
+			       (values false false))
 			      ((re-search-forward regexp
 						  (msg-memo/start-body memo)
 						  (msg-memo/end-body memo))
@@ -861,7 +861,7 @@ and reverse search is specified by a negative numeric arg."
 	      (editor-failure "Search failed: " regexp)))))))
 
 (define search-last-regexp
-  #f)
+  false)
 
 (define (show-message buffer n)
   (if (not (eq? (buffer-major-mode buffer) (ref-mode-object rmail)))
@@ -874,7 +874,7 @@ and reverse search is specified by a negative numeric arg."
 		   (re-search-backward babyl-header-end-regexp
 				       (buffer-end buffer)
 				       start
-				       #f)))
+				       false)))
 	      (if m
 		  (narrow-to-region start (mark1+ m))))
 	    (set-buffer-point! buffer start))
@@ -907,13 +907,13 @@ and reverse search is specified by a negative numeric arg."
     (set-buffer-msg-memo! buffer memo)
     (widen start)
     (let ((end (msg-memo/end memo)))
-      (if (match-forward "\f\n0" start end #f)
+      (if (match-forward "\f\n0" start end false)
 	  (with-read-only-defeated start
 	    (lambda ()
 	      (reformat-message start end))))
       (clear-attribute! memo 'UNSEEN)
       (update-mode-line! buffer)
-      (let ((start (re-search-forward babyl-eooh-regexp start end #f)))
+      (let ((start (re-search-forward babyl-eooh-regexp start end false)))
 	(narrow-to-region start (mark-1+ end))
 	(set-buffer-point! buffer start))
 	(set-buffer-mark! buffer (mark-1+ end)))))
@@ -968,7 +968,7 @@ With prefix argument, delete and move backward."
   "Delete this message and move to previous nondeleted one.
 Deleted messages stay in the file until the \\[rmail-expunge] command is given."
   ()
-  (lambda () ((ref-command rmail-delete-forward) #t)))
+  (lambda () ((ref-command rmail-delete-forward) true)))
 
 (define-command rmail-expunge
   "Actually erase all deleted messages in the file."
@@ -1007,14 +1007,14 @@ Deleted messages stay in the file until the \\[rmail-expunge] command is given."
 		 (delete-string start end)
 		 (mark-temporary! end))
 	       (let ((previous (msg-memo/previous memo)))
-		 (if previous (set-msg-memo/next! previous #f)))))))
+		 (if previous (set-msg-memo/next! previous false)))))))
     (if new-memo
 	(begin
 	  (set-buffer-msg-memo! buffer new-memo)
 	  (msg-memo/number new-memo))
 	(begin
-	  (set-buffer-msg-memo! buffer #t)
-	  #f))))
+	  (set-buffer-msg-memo! buffer true)
+	  false))))
 
 ;;;; Mailing commands
 
@@ -1032,7 +1032,7 @@ original message into it."
   "Continue composing outgoing message previously being composed."
   ()
   (lambda ()
-    ((ref-command mail-other-window) #t)))
+    ((ref-command mail-other-window) true)))
 
 (define-command rmail-forward
   "Forward the current message to another user."
@@ -1146,36 +1146,36 @@ original message into it."
 (define (original-header-limits memo)
   (let ((start (msg-memo/start memo))
 	(end (msg-memo/end memo)))
-    (if (match-forward "\f\n0" start end #f)
+    (if (match-forward "\f\n0" start end false)
 	(begin
-	  (if (not (re-search-forward babyl-eooh-regexp start end #f))
+	  (if (not (re-search-forward babyl-eooh-regexp start end false))
 	      (editor-error))
 	  (let ((hstart (re-match-end 0)))
 	    (values hstart (header-end hstart end))))
 	(values
 	 (let ((start (line-start start 2 'ERROR)))
-	   (if (match-forward "Summary-line:" start end #t)
+	   (if (match-forward "Summary-line:" start end true)
 	       (line-start start 1 'ERROR)
 	       start))
 	 (begin
-	   (if (not (re-search-forward babyl-eooh-regexp start end #f))
+	   (if (not (re-search-forward babyl-eooh-regexp start end false))
 	       (editor-error))
 	   (re-match-start 0))))))
 
 (define (fetch-first-field field start end)
-  (let ((fs (re-search-forward (field-name->regexp field) start end #t)))
+  (let ((fs (re-search-forward (field-name->regexp field) start end true)))
     (and fs
 	 (extract-field fs end))))
 
 (define (fetch-last-field field start end)
-  (and (re-search-backward (field-name->regexp field) end start #t)
+  (and (re-search-backward (field-name->regexp field) end start true)
        (extract-field (re-match-end 0) end)))
 
 (define (fetch-all-fields field start end)
   (let ((strings
 	 (let ((regexp (field-name->regexp field)))
 	   (let loop ((start start))
-	     (let ((fs (re-search-forward regexp start end #t)))
+	     (let ((fs (re-search-forward regexp start end true)))
 	       (if fs
 		   (let ((string (extract-field fs end))
 			 (strings (loop fs)))
@@ -1192,7 +1192,7 @@ original message into it."
 (define (extract-field fs end)
   (let ((fe
 	 (skip-chars-backward " \t\n"
-			      (if (re-search-forward "^[^ \t]" fs end #f)
+			      (if (re-search-forward "^[^ \t]" fs end false)
 				  (re-match-start 0)
 				  end)
 			      fs)))
@@ -1203,7 +1203,7 @@ original message into it."
   (string-append "^" (re-quote-string field) "[ \t]*:[ \t]*"))
 
 (define (header-end start end)
-  (or (search-forward "\n\n" start end #f) end))
+  (or (search-forward "\n\n" start end false) end))
 
 (define (dont-reply-to addresses)
   (let ((pattern
@@ -1211,7 +1211,7 @@ original message into it."
 	  (string-append "\\(.*!\\|\\)\\("
 			 (ref-variable rmail-dont-reply-to-names)
 			 "\\)")
-	  #t)))
+	  true)))
     (let loop ((addresses addresses))
       (cond ((null? addresses)
 	     '())
@@ -1484,7 +1484,7 @@ buffer visiting that file."
 					      (vector-set! 
 					       rmail-summary-vector
 					       (- (msg-memo/number memo) 1)
-					       #f)))))
+					       false)))))
 				  (let ((point
 					 (line-start (msg-memo/start memo) 2)))
 				    (if (string-prefix?
@@ -1549,7 +1549,7 @@ Leaves original message, deleted, before the undigestified messages."
 		  (if m
 		      (begin
 			(move-mark-to! start m)
-			(if (or (match-forward "End " start end #t)
+			(if (or (match-forward "End " start end true)
 				(not
 				 (fetch-first-field "To"
 						    start
@@ -1573,7 +1573,7 @@ Leaves original message, deleted, before the undigestified messages."
 	      (memoize-messages-insert buffer start end memo)
 	      (mark-temporary! start)))))
       (show-message buffer (msg-memo/number memo))
-      ((ref-command rmail-delete-forward) #f))))
+      ((ref-command rmail-delete-forward) false))))
 
 (define (digest-summary-end start end)
   (if (not (re-search-forward digest-summary-separator-regexp
@@ -1582,7 +1582,7 @@ Leaves original message, deleted, before the undigestified messages."
   (replace-match digest-separator-replacement))
 
 (define (digest-message-end start end)
-  (and (re-search-forward digest-message-separator-regexp start end #f)
+  (and (re-search-forward digest-message-separator-regexp start end false)
        (replace-match digest-separator-replacement)))
 
 ;;;; Message memoization
@@ -1593,9 +1593,9 @@ Leaves original message, deleted, before the undigestified messages."
 	   (re-match-forward babyl-header-start-regexp
 			     (buffer-start buffer)
 			     end
-			     #f)))
+			     false)))
       (if m
-	  (let ((m (re-search-forward babyl-header-end-regexp m end #f)))
+	  (let ((m (re-search-forward babyl-header-end-regexp m end false)))
 	    (if m
 		(begin
 		  (set-buffer-msg-memo! buffer #f)
@@ -1610,7 +1610,7 @@ Leaves original message, deleted, before the undigestified messages."
 			     (and (msg-memo? memo) (msg-memo/last memo))))
       (lambda (start tail)
 	(if (not (msg-memo? memo))
-	    (set-buffer-msg-memo! buffer (or tail #t)))
+	    (set-buffer-msg-memo! buffer (or tail true)))
 	(let ((old-end (buffer-last-msg-end buffer)))
 	  (if old-end
 	      (mark-temporary! old-end)))
@@ -1633,13 +1633,13 @@ Leaves original message, deleted, before the undigestified messages."
 (define (memoize-messages* start end tail)
   (message "Counting messages...")
   (let loop ((start (mark-left-inserting-copy start)) (tail tail) (n 1))
-    (let ((mend (search-forward babyl-message-end-regexp start end #f)))
+    (let ((mend (search-forward babyl-message-end-regexp start end false)))
       (if mend
 	  (let ((mend (mark-left-inserting-copy mend)))
 	    (canonicalize-message-attributes start)
 	    (let ((memo
 		   (make-msg-memo tail
-				  #f
+				  false
 				  start
 				  (if tail (+ (msg-memo/number tail) 1) 1)
 				  (parse-attributes start))))
@@ -1667,7 +1667,7 @@ Leaves original message, deleted, before the undigestified messages."
 (define-structure (msg-memo (conc-name msg-memo/))
   previous
   next
-  (start #f read-only #t)
+  (start false read-only true)
   number
   attributes)
 
@@ -1679,7 +1679,7 @@ Leaves original message, deleted, before the undigestified messages."
 
 (define (msg-memo/start-body memo)
   (let ((start (msg-memo/start memo)))
-    (or (re-search-forward babyl-eooh-regexp start (msg-memo/end memo) #f)
+    (or (re-search-forward babyl-eooh-regexp start (msg-memo/end memo) false)
 	start)))
 
 (define (msg-memo/end-body memo)
@@ -1778,18 +1778,18 @@ Completion is performed over known labels when reading."
 (define (canonicalize-message-attributes mstart)
   (let ((start (attributes-start-mark mstart)))
     (let ((end (line-end start 0)))
-      (let loop ((m start) (in-labels? #f))
-	(cond ((re-match-forward " [^ ,]+," m end #f)
+      (let loop ((m start) (in-labels? false))
+	(cond ((re-match-forward " [^ ,]+," m end false)
 	       (loop (re-match-end 0) in-labels?))
-	      ((and (not in-labels?) (match-forward "," m end #f))
-	       => (lambda (m) (loop m #t)))
+	      ((and (not in-labels?) (match-forward "," m end false))
+	       => (lambda (m) (loop m true)))
 	      ((and in-labels? (mark= m end))
 	       unspecific)
-	      ((re-match-forward " *\\([^ ,]+\\)," m end #f)
+	      ((re-match-forward " *\\([^ ,]+\\)," m end false)
 	       (loop (replace-match " \\1,") in-labels?))
-	      ((and (not in-labels?) (re-match-forward " +," m end #f))
-	       (loop (replace-match ",") #t))
-	      ((and in-labels? (re-match-forward " +$" m end #f))
+	      ((and (not in-labels?) (re-match-forward " +," m end false))
+	       (loop (replace-match ",") true))
+	      ((and in-labels? (re-match-forward " +$" m end false))
 	       (delete-match))
 	      (else
 	       (editor-error "Malformed message attributes: "
@@ -1820,7 +1820,7 @@ Completion is performed over known labels when reading."
 	      (if (search-forward (attribute->string attribute)
 				  (attributes-start-mark start)
 				  (attributes-end-mark start)
-				  #t)
+				  true)
 		  (delete-match))
 	      (update-mode-line! (mark-buffer start))))))))
 
@@ -1884,7 +1884,7 @@ Completion is performed over known labels when reading."
 	 (re-match-forward babyl-message-start-regexp
 			   mstart
 			   (group-end mstart)
-			   #f)))
+			   false)))
     (if (not m)
 	(editor-error "Mark not at message start: " mstart))
     m))
@@ -1895,7 +1895,7 @@ Completion is performed over known labels when reading."
 (define (labels-start-mark mstart)
   (let ((m
 	 (let ((lstart (line-start mstart 1 'ERROR)))
-	   (search-forward ",," lstart (line-end lstart 0) #f))))
+	   (search-forward ",," lstart (line-end lstart 0) false))))
     (if (not m)
 	(editor-error "Can't find attributes/labels separator"))
     m))
@@ -1929,7 +1929,7 @@ Completion is performed over known labels when reading."
 (define (parse-label-list start end)
   (let loop ((m start))
     (if (mark< m end)
-	(let ((aend (char-search-forward #\, m end #f)))
+	(let ((aend (char-search-forward #\, m end false)))
 	  (let ((label
 		 (string-downcase
 		  (string-trim
@@ -1950,9 +1950,9 @@ Completion is performed over known labels when reading."
 	  (lambda ()
 	    (let ((start (msg-memo/start memo))
 		  (end (msg-memo/end memo)))
-	      (cond ((match-forward "\f\n0" start end #f)
+	      (cond ((match-forward "\f\n0" start end false)
 		     (reformat-message start end))
-		    ((match-forward "\f\n1" start end #f)
+		    ((match-forward "\f\n1" start end false)
 		     (unformat-message start end)))))))
       (set-current-point! (buffer-start buffer)))))
 
@@ -1960,12 +1960,12 @@ Completion is performed over known labels when reading."
   (let ((m (mark+ start 2)))
     (delete-right-char m)
     (insert-char #\1 m))
-  (if (not (re-search-forward babyl-eooh-regexp start end #f))
+  (if (not (re-search-forward babyl-eooh-regexp start end false))
       (editor-error))
   (let ((eooh (re-match-start 0)))
     (let ((hstart (mark-right-inserting-copy (line-start eooh 1 'ERROR))))
       (let ((hend
-	     (let ((m (search-forward "\n\n" hstart end #f)))
+	     (let ((m (search-forward "\n\n" hstart end false)))
 	       (if m
 		   (mark-left-inserting-copy m)
 		   (let ((m (mark-left-inserting-copy end)))
@@ -1977,11 +1977,11 @@ Completion is performed over known labels when reading."
 	(let ((regexp (ref-variable rmail-ignored-headers)))
 	  (if regexp
 	      (do ()
-		  ((not (re-search-forward regexp hstart hend #t)))
+		  ((not (re-search-forward regexp hstart hend true)))
 		(let ((m (line-start (re-match-start 0) 0)))
 		  (delete-string
 		   m
-		   (mark-1+ (re-search-forward "\n[^ \t]" m hend #f)))))))
+		   (mark-1+ (re-search-forward "\n[^ \t]" m hend false)))))))
 	(let ((filter (ref-variable rmail-message-filter)))
 	  (if filter
 	      (filter hstart hend)))
@@ -1994,10 +1994,10 @@ Completion is performed over known labels when reading."
     (insert-char #\0 m))
   (let ((start
 	 (let ((start (line-start start 2 'ERROR)))
-	   (if (match-forward "Summary-line:" start end #t)
+	   (if (match-forward "Summary-line:" start end true)
 	       (line-start start 1 'ERROR)
 	       start))))
-    (if (not (re-search-forward babyl-eooh-regexp start end #f))
+    (if (not (re-search-forward babyl-eooh-regexp start end false))
 	(editor-error))
     (let ((header (extract-and-delete-string start (re-match-start 0))))
       (let ((hstart (line-start start 1)))
@@ -2011,18 +2011,18 @@ Completion is performed over known labels when reading."
     (text-clip point end)
     (cond ((mark= point end)
 	   count)
-	  ((re-match-forward babyl-header-start-regexp point end #f)
+	  ((re-match-forward babyl-header-start-regexp point end false)
 	   (delete-string
 	    point
-	    (or (search-forward babyl-header-end-regexp point end #f) end))
+	    (or (search-forward babyl-header-end-regexp point end false) end))
 	   (loop point count))
-	  ((re-match-forward babyl-message-start-regexp point end #f)
+	  ((re-match-forward babyl-message-start-regexp point end false)
 	   (let ((m
-		  (or (search-forward babyl-message-end-regexp point end #f)
+		  (or (search-forward babyl-message-end-regexp point end false)
 		      (missing-end end "Babyl"))))
 	     (delete-string m (skip-chars-forward " \t\n" m end))
 	     (loop m (+ count 1))))
-	  ((re-match-forward umail-message-start-regexp point end #f)
+	  ((re-match-forward umail-message-start-regexp point end false)
 	   (let ((point (mark-right-inserting-copy point))
 		 (end (mark-left-inserting-copy end)))
 	     (nuke-pinhead-header point end)
@@ -2031,20 +2031,20 @@ Completion is performed over known labels when reading."
 	     (process-rfc822
 	      point
 	      count
-	      (if (re-search-forward umail-message-end-regexp point end #f)
+	      (if (re-search-forward umail-message-end-regexp point end false)
 		  (re-match-start 0)
 		  end))))
-	  ((re-match-forward mmdf-message-start-regexp point end #t)
+	  ((re-match-forward mmdf-message-start-regexp point end true)
 	   (let ((start (delete-match)))
 	     (process-rfc822
 	      start
 	      count
-	      (if (re-search-forward mmdf-message-end-regexp start end #t)
+	      (if (re-search-forward mmdf-message-end-regexp start end true)
 		  (mark-1+ (replace-match "\037"))
 		  (missing-end end "MMDF")))))
 	  (else
 	   (editor-error "error converting to Babyl format")
-	   #t)))
+	   true)))
 
   (define (process-rfc822 point count mend)
     (let ((mend (mark-left-inserting-copy mend)))
@@ -2079,15 +2079,15 @@ Completion is performed over known labels when reading."
     (lambda ()
       (let ((start (buffer-start buffer))
 	    (end (buffer-end buffer)))
-	(if (not (re-match-forward babyl-header-start-regexp start end #f))
+	(if (not (re-match-forward babyl-header-start-regexp start end false))
 	    (insert-string babyl-initial-header start))
-	(search-backward "\n\037" end start #f)
+	(search-backward "\n\037" end start false)
 	(let ((start (re-match-end 0)))
 	  (let ((m (skip-chars-forward "\n" start end)))
 	    (cond ((and (mark= m end)
 			(mark< start m))
 		   (delete-string start m))
-		  ((re-match-forward umail-message-start-regexp m end #f)
+		  ((re-match-forward umail-message-start-regexp m end false)
 		   (delete-string start m)
 		   (message "Converting to Babyl format...")
 		   (convert-region-to-babyl-format start end)
@@ -2095,16 +2095,16 @@ Completion is performed over known labels when reading."
 
 (define (nuke-pinhead-header start end)
   (let ((hend
-	 (or (search-forward "\n\n" start end #f)
+	 (or (search-forward "\n\n" start end false)
 	     (begin
 	       (insert-string "\n\n" end)
 	       end))))
-    (let ((has-from (search-forward "\nFrom:" start hend #t))
-	  (has-date (search-forward "\nDate:" start hend #t)))
+    (let ((has-from (search-forward "\nFrom:" start hend true))
+	  (has-date (search-forward "\nDate:" start hend true)))
       (if (and has-from has-date)
 	  (delete-string start (line-start start 1))
 	  (begin
-	    (re-match-forward umail-message-start-regexp start hend #f)
+	    (re-match-forward umail-message-start-regexp start hend false)
 	    (replace-match
 	     (let ((from "From: \\1")
 		   (date
@@ -2156,7 +2156,7 @@ Completion is performed over known labels when reading."
   "From \\([^ \n]*\\(\\|\".*\"[^ \n]*\\)\\)  ?\\([^ \n]*\\) \\([^ \n]*\\) *\\([0-9]*\\) \\([0-9:]*\\)\\( ?[A-Z]?[A-Z][A-Z]T\\| ?[-+]?[0-9][0-9][0-9][0-9]\\|\\) \\([1-9][0-9][0-9][0-9]\\) *\\(remote from .*\\)?$")
 
 (define umail-message-end-regexp
-  #f)
+  false)
 
 (define mmdf-message-start-regexp
   "^\001\001\001\001\n")

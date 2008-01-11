@@ -154,7 +154,7 @@ If any procedure returns #f, the buffer is not killed."
   "For each buffer, ask whether to kill it."
   ()
   (lambda ()
-    (kill-some-buffers #t)))
+    (kill-some-buffers true)))
 
 (define (kill-some-buffers prompt?)
   (for-each (lambda (buffer)
@@ -178,7 +178,7 @@ Also sets up any specified local variables of the file.
 Uses the visited file name, the -*- line, and the local variables spec."
   ()
   (lambda ()
-    (normal-mode (current-buffer) #f)))
+    (normal-mode (current-buffer) false)))
 
 (define-command toggle-mode-lock
   "Change whether this buffer has its major mode locked.
@@ -191,7 +191,7 @@ When locked, the buffer's major mode may not be changed."
 	    (buffer-remove! buffer 'MAJOR-MODE-LOCKED)
 	    (message "Major mode unlocked"))
 	  (begin
-	    (buffer-put! buffer 'MAJOR-MODE-LOCKED #t)
+	    (buffer-put! buffer 'MAJOR-MODE-LOCKED true)
 	    (message "Major mode locked"))))))
 
 (define-command not-modified
@@ -223,7 +223,7 @@ When locked, the buffer's major mode may not be changed."
 	    (string-append "Buffer "
 			   (buffer-name buffer)
 			   " contains changes.  Write them out")))
-      (write-buffer-interactive buffer #f)))
+      (write-buffer-interactive buffer false)))
 
 (define (new-buffer name)
   (create-buffer (new-buffer-name name)))
@@ -311,7 +311,7 @@ When locked, the buffer's major mode may not be changed."
 
 (define-variable select-buffer-create
   "If true, buffer selection commands may create new buffers."
-  #t
+  true
   boolean?)
 
 (define-variable select-buffer-not-found-hooks

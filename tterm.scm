@@ -338,7 +338,7 @@
 (define (initialize-package!)
   (set! console-display-type
 	(make-display-type 'CONSOLE
-			   #f
+			   false
 			   console-available?
 			   make-console-screen
 			   (lambda (screen)
@@ -351,7 +351,7 @@
   unspecific)
 
 (define (with-console-grabbed receiver)
-  (bind-console-state #f
+  (bind-console-state false
     (lambda (get-outside-state)
       (terminal-operation terminal-raw-input
 			  (port/input-channel console-i/o-port))
@@ -425,21 +425,21 @@
 				 scroll-region-cost
 				 key-table))
 		   (conc-name terminal-state/))
-  (description #f read-only #t)
-  (baud-rate-index #f read-only #t)
-  (baud-rate #f read-only #t)
-  (insert-line-cost #f read-only #t)
-  (insert-line-next-cost #f read-only #t)
-  (delete-line-cost #f read-only #t)
-  (delete-line-next-cost #f read-only #t)
-  (scroll-region-cost #f read-only #t)
-  (cursor-x #f)
-  (cursor-y #f)
-  (standout-mode? #f)
-  (insert-mode? #f)
-  (delete-mode? #f)
-  (scroll-region #f)
-  (key-table #f))
+  (description false read-only true)
+  (baud-rate-index false read-only true)
+  (baud-rate false read-only true)
+  (insert-line-cost false read-only true)
+  (insert-line-next-cost false read-only true)
+  (delete-line-cost false read-only true)
+  (delete-line-next-cost false read-only true)
+  (scroll-region-cost false read-only true)
+  (cursor-x false)
+  (cursor-y false)
+  (standout-mode? false)
+  (insert-mode? false)
+  (delete-mode? false)
+  (scroll-region false)
+  (key-table false))
 
 (define-syntax define-ts-accessor
   (sc-macro-transformer
@@ -494,8 +494,8 @@
 (define (console-enter! screen)
   (add-event-receiver! event:console-resize resize-screen)
   (maybe-output screen (ts-enter-termcap-mode (screen-description screen)))
-  (set-screen-cursor-x! screen #f)
-  (set-screen-cursor-y! screen #f))
+  (set-screen-cursor-x! screen false)
+  (set-screen-cursor-y! screen false))
 
 (define (console-exit! screen)
   (remove-event-receiver! event:console-resize resize-screen)
@@ -848,7 +848,7 @@
     (if scroll-region
 	(begin
 	  (%set-scroll-region screen 0 (tn-y-size (screen-description screen)))
-	  (set-screen-scroll-region! screen #f)))))
+	  (set-screen-scroll-region! screen false)))))
 
 (define (%set-scroll-region screen yl yu)
   (output-1 screen
@@ -861,8 +861,8 @@
 	      (if (not s)
 		  (error "can't set scroll region" screen))
 	      s))
-  (set-screen-cursor-x! screen #f)
-  (set-screen-cursor-y! screen #f))
+  (set-screen-cursor-x! screen false)
+  (set-screen-cursor-y! screen false))
 
 (define (%set-scroll-region-string description x-size y-size yl yu)
   (cond ((ts-set-scroll-region description)
@@ -878,7 +878,7 @@
 	 =>
 	 (lambda (ts-set-window)
 	   (parameterize-4 ts-set-window yl (fix:-1+ yu) 0 (fix:-1+ x-size))))
-	(else #f)))
+	(else false)))
 
 (define (highlight-if-desired screen highlight)
   (if highlight
@@ -891,7 +891,7 @@
   (if (and (not (screen-standout-mode? screen))
 	   (not (tn-standout-marker-width (screen-description screen))))
       (begin
-	(set-screen-standout-mode?! screen #t)
+	(set-screen-standout-mode?! screen true)
 	(maybe-output-1
 	 screen
 	 (ts-enter-standout-mode (screen-description screen))))))
@@ -899,35 +899,35 @@
 (define (exit-standout-mode screen)
   (if (screen-standout-mode? screen)
       (begin
-	(set-screen-standout-mode?! screen #f)
+	(set-screen-standout-mode?! screen false)
 	(maybe-output-1 screen
 			(ts-exit-standout-mode (screen-description screen))))))
 
 (define (enter-insert-mode screen)
   (if (not (screen-insert-mode? screen))
       (begin
-	(set-screen-insert-mode?! screen #t)
+	(set-screen-insert-mode?! screen true)
 	(maybe-output-1 screen
 			(ts-enter-insert-mode (screen-description screen))))))
 
 (define (exit-insert-mode screen)
   (if (screen-insert-mode? screen)
       (begin
-	(set-screen-insert-mode?! screen #f)
+	(set-screen-insert-mode?! screen false)
 	(maybe-output-1 screen
 			(ts-exit-insert-mode (screen-description screen))))))
 
 (define (enter-delete-mode screen)
   (if (not (screen-delete-mode? screen))
       (begin
-	(set-screen-delete-mode?! screen #t)
+	(set-screen-delete-mode?! screen true)
 	(maybe-output-1 screen
 			(ts-enter-delete-mode (screen-description screen))))))
 
 (define (exit-delete-mode screen)
   (if (screen-delete-mode? screen)
       (begin
-	(set-screen-delete-mode?! screen #f)
+	(set-screen-delete-mode?! screen false)
 	(maybe-output-1 screen
 			(ts-exit-delete-mode (screen-description screen))))))
 
@@ -1002,8 +1002,8 @@
 	     (error "wrote past end of line" cursor-x x-size))
 	    ((or (tf-magic-wrap description)
 		 (tf-lose-wrap description))
-	     (set-screen-cursor-x! screen #f)
-	     (set-screen-cursor-y! screen #f))
+	     (set-screen-cursor-x! screen false)
+	     (set-screen-cursor-y! screen false))
 	    ((tf-automatic-wrap description)
 	     (set-screen-cursor-x! screen 0)
 	     (set-screen-cursor-y! screen (fix:1+ (screen-cursor-y screen))))
@@ -1117,7 +1117,7 @@
 				(fix:+ c extra)
 				(fix:- (string-cost one-line 10) c))))
 	  (else
-	   (values #f #f)))))
+	   (values false false)))))
 
 (define (string-cost description baud-rate string n-lines)
   (string-length

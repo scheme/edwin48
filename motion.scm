@@ -35,7 +35,7 @@
 	((eq? limit? 'BEEP) (editor-beep) limit)
 	((eq? limit? 'FAILURE) (editor-failure) limit)
 	((eq? limit? 'ERROR) (editor-error))
-	((not limit?) #f)
+	((not limit?) false)
 	(else (error "Unknown limit type:" limit?))))
 
 (define (mark1+ mark #!optional limit?)

@@ -34,7 +34,7 @@
 
 (define (make-bufferset initial-buffer)
   (%make-bufferset (list initial-buffer)
-		   (let ((names (make-string-table 16 #f)))
+		   (let ((names (make-string-table 16 false)))
 		     (string-table-put! names
 					(buffer-name initial-buffer)
 					initial-buffer)

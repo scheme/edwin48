@@ -37,7 +37,7 @@
 ;;; will grow and shrink appropriately under such operations.  Also,
 ;;; it is possible to have pointers into a group, called MARKs, which
 ;;; continue to point to the "same place" under these operations; this
-;;; would not be #t of a string, elements of which are pointed at by
+;;; would not be true of a string, elements of which are pointed at by
 ;;; indices.
 
 ;;; As is stressed in the EMACS manual, marks point between characters

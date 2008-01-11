@@ -39,8 +39,8 @@
   (screen-clear-rectangle screen
 			  (fix:+ x-start xl) (fix:+ x-start xu)
 			  (fix:+ y-start yl) (fix:+ y-start yu)
-			  #f)
-  #t)
+			  false)
+  true)
 
 (define-method blank-window :update-display!
   blank-window:update-display!)
@@ -76,9 +76,9 @@
 	    (let loop ((y (fix:+ y-start yl)))
 	      (if (fix:< y yu)
 		  (begin
-		    (screen-output-char screen xl y #\| #f)
+		    (screen-output-char screen xl y #\| false)
 		    (loop (fix:+ y 1)))))))))
-  #t)
+  true)
 
 (define-method vertical-border-window :update-display!
   vertical-border-window:update-display!)
@@ -92,7 +92,7 @@
   (usual==> window :initialize! window*)
   (set! x-size 1)
   (set! y-size 1)
-  (set! enabled? #f))
+  (set! enabled? false))
 
 (define-method cursor-window (:set-x-size! window x)
   window				;ignore
@@ -113,15 +113,15 @@
 	   (fix:< xl xu)
 	   (fix:< yl yu))
       (screen-move-cursor screen x-start y-start))
-  #t)
+  true)
 
 (define-method cursor-window :update-display!
   cursor-window:update-display!)
 
 (define-method cursor-window (:enable! window)
-  (set! enabled? #t)
+  (set! enabled? true)
   (setup-redisplay-flags! redisplay-flags))
 
 (define-method cursor-window (:disable! window)
-  (set! enabled? #f)
-  (set-car! redisplay-flags #f))
+  (set! enabled? false)
+  (set-car! redisplay-flags false))

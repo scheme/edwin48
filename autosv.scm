@@ -31,12 +31,12 @@
 (define-variable auto-save-visited-file-name
   "True says auto-save a buffer in the file it is visiting, when practical.
 Normally auto-save files are written under other names."
-  #f
+  false
   boolean?)
 
 (define-variable auto-save-default
   "True says by default do auto-saving of every file-visiting buffer."
-  #t
+  true
   boolean?)
 (variable-permanent-local! (ref-variable-object auto-save-default))
 
@@ -49,7 +49,7 @@ Zero means disable autosaving."
 (define-variable delete-auto-save-files
   "True means delete a buffer's auto-save file
 when the buffer is saved for real."
-  #t
+  true
   boolean?)
 
 (define-command auto-save-mode
@@ -100,7 +100,7 @@ This file is not the file you visited; that changes only when you save."
 (define (disable-buffer-auto-save! buffer)
   (without-interrupts
    (lambda ()
-     (set-buffer-auto-save-pathname! buffer #f)
+     (set-buffer-auto-save-pathname! buffer false)
      (remove-group-microcode-entry (buffer-group buffer))
      (remove-kill-buffer-hook buffer auto-save-kill-buffer-hook))))
 

@@ -42,13 +42,13 @@
 
 (define-variable info-enable-edit
   "If true, the \\[info-edit] command in Info can edit the current node."
-  #f
+  false
   boolean?)
 
 (define-variable info-enable-active-nodes
   "If true, allows Info to execute Scheme code associated with nodes.
 The Scheme code is executed when the node is selected."
-  #t
+  true
   boolean?)
 
 (define-variable info-selection-key
@@ -103,7 +103,7 @@ for initializing `info-directory-list' when Info is started."
 
 (define-variable info-previous-search
   "Default search string for Info \\[info-search] command to search for."
-  #f)
+  false)
 
 (define-variable info-history
   "List of info nodes user has visited.
@@ -112,16 +112,16 @@ Each element of list is a vector #(FILENAME NODENAME BUFFERPOS)."
 
 (define-variable info-current-file
   "Info file that Info is now looking at, or #F."
-  #f)
+  false)
 
 (define-variable info-current-subfile
   "Info subfile that is actually in the *info* buffer now,
 or #F if current info file is not split into subfiles."
-  #f)
+  false)
 
 (define-variable info-current-node
   "Name of node that Info is now looking at, or #F."
-  #f)
+  false)
 
 (define-variable info-tag-table-start
   "Mark pointing to beginning of current Info file's tag table,
@@ -170,24 +170,24 @@ Advanced commands:
     (define-variable-local-value! buffer (ref-variable-object syntax-table)
       text-mode:syntax-table)
     (define-variable-local-value! buffer (ref-variable-object case-fold-search)
-      #t)
+      true)
     (define-variable-local-value! buffer (ref-variable-object info-history)
       (ref-variable info-history buffer))
     (define-variable-local-value! buffer
 	(ref-variable-object info-current-file)
-      #f)
+      false)
     (define-variable-local-value! buffer
 	(ref-variable-object info-current-subfile)
-      #f)
+      false)
     (define-variable-local-value! buffer
 	(ref-variable-object info-current-node)
-      #f)
+      false)
     (define-variable-local-value! buffer
 	(ref-variable-object info-tag-table-start)
-      #f)
+      false)
     (define-variable-local-value! buffer
 	(ref-variable-object info-tag-table-end)
-      #f)
+      false)
     (info-set-mode-line! buffer)))
 
 (define-key 'info #\space 'scroll-up)
@@ -320,7 +320,7 @@ Advanced commands:
       (with-selected-buffer buffer
 	(lambda ()
 	  (let loop ()
-	    (update-selected-screen! #f)
+	    (update-selected-screen! false)
 	    (let ((end-visible?
 		   (window-mark-visible? (current-window)
 					 (buffer-end buffer))))
@@ -334,13 +334,13 @@ Advanced commands:
 		      (keyboard-read)
 		      (if (not end-visible?)
 			  (begin
-			    ((ref-command scroll-up) #f)
+			    ((ref-command scroll-up) false)
 			    (loop))))))))
 	  (clear-message))))))
 
 (define-command info-edit
   "Edit the contents of this Info node.
-Allowed only if the variable Info Enable Edit is not #f."
+Allowed only if the variable Info Enable Edit is not false."
   ()
   (lambda ()
     (if (not (ref-variable info-enable-edit))
@@ -579,7 +579,7 @@ except for \\[info-cease-edit] to return to Info."
 	      (loop item)))))))
 
 (define (next-menu-item mark)
-  (and (re-search-forward menu-item-regexp mark (group-end mark) #f)
+  (and (re-search-forward menu-item-regexp mark (group-end mark) false)
        (re-match-start 1)))
 
 (define (current-menu-item mark)
@@ -590,11 +590,11 @@ except for \\[info-cease-edit] to return to Info."
 	 (re-search-forward menu-item-regexp
 			    (mark-1+ (line-start mark 0) 'LIMIT)
 			    (line-end mark 0)
-			    #f)
+			    false)
 	 (re-match-start 1))))
 
 (define (menu-item-name item)
-  (let ((colon (char-search-forward #\: item (line-end item 0) #f)))
+  (let ((colon (char-search-forward #\: item (line-end item 0) false)))
     (if (not colon)
 	(error "Menu item missing colon."))
     (if (match-forward "::" (mark-1+ colon))
@@ -640,10 +640,10 @@ The name may be an abbreviation of the reference name."
 	      (collect-cref-items item)))))
 
 (define (next-cref-item start)
-  (re-search-forward cross-reference-item-regexp start (group-end start) #t))
+  (re-search-forward cross-reference-item-regexp start (group-end start) true))
 
 (define (cref-item-keyword item)
-  (let ((colon (char-search-forward #\: item (group-end item) #f)))
+  (let ((colon (char-search-forward #\: item (group-end item) false)))
     (if (not colon)
 	(error "Cross reference missing colon."))
     (%cref-item-keyword item (mark-1+ colon))))
@@ -654,7 +654,7 @@ The name may be an abbreviation of the reference name."
     (string-trim string)))
 
 (define (cref-item-name item)
-  (let ((colon (char-search-forward #\: item (group-end item) #f)))
+  (let ((colon (char-search-forward #\: item (group-end item) false)))
     (if (not colon)
 	(error "Cross reference missing colon."))
     (if (match-forward "::" (mark-1+ colon))
@@ -974,7 +974,7 @@ The name may be an abbreviation of the reference name."
 		(receiver filename
 			  (if (string-null? nodename) "Top" nodename)))
 	      (error "PARSE-NODE-NAME: Missing close paren" name)))
-	(receiver #f (if (string-null? name) "Top" name)))))
+	(receiver false (if (string-null? name) "Top" name)))))
 
 (define (select-node point)
   (let ((node (node-start point (group-start point))))
@@ -1023,7 +1023,7 @@ The name may be an abbreviation of the reference name."
 		       (ref-variable info-history))))
 
 (define (node-start start end)
-  (line-start (or (search-backward "\n\037" start end #f)
+  (line-start (or (search-backward "\n\037" start end false)
 		  (editor-error))
 	      2
 	      'ERROR))
@@ -1034,7 +1034,7 @@ The name may be an abbreviation of the reference name."
 (define (node-end node)
   (let ((end (group-end node)))
     (let loop ((start node))
-      (let ((mark (re-search-forward "[\f\037]" start end #f)))
+      (let ((mark (re-search-forward "[\f\037]" start end false)))
 	(if (not mark)
 	    end
 	    (let ((m (re-match-start 0)))
@@ -1043,7 +1043,7 @@ The name may be an abbreviation of the reference name."
 		  (loop mark))))))))
 
 (define (next-node start end)
-  (let ((mark (search-forward "\n\037" start end #f)))
+  (let ((mark (search-forward "\n\037" start end false)))
       (and mark
 	   (line-start mark 1))))
 
@@ -1133,7 +1133,7 @@ The name may be an abbreviation of the reference name."
 
 (define (extract-tag-entry node)
   (let ((end (line-end node 0)))
-    (let ((mark (search-forward "Node:" node end #t)))
+    (let ((mark (search-forward "Node:" node end true)))
       (and mark
 	   (string-trim
 	    (extract-string node
@@ -1150,14 +1150,14 @@ The name may be an abbreviation of the reference name."
 	 (mark (line-start end -8))
 	 (tag-table-end
 	  (and mark
-	       (search-forward tag-table-end-string mark end #t)
+	       (search-forward tag-table-end-string mark end true)
 	       (re-match-start 0)))
 	 (tag-table-start
 	  (and tag-table-end
 	       (search-backward tag-table-start-string
 				tag-table-end
 				(buffer-start buffer)
-				#t)
+				true)
 	       (re-match-end 0))))
     (if (and tag-table-end (not tag-table-start))
 	(begin
@@ -1188,7 +1188,7 @@ The name may be an abbreviation of the reference name."
 	       (or (search-forward (string-append "Node: " nodename "\177")
 				   (ref-variable info-tag-table-start)
 				   (ref-variable info-tag-table-end)
-				   #t)
+				   true)
 		   (editor-error "No such node: " nodename))))
 	  ;; Force order of events, since read-subfile has side-effect.
 	  (let ((index
@@ -1217,14 +1217,14 @@ The name may be an abbreviation of the reference name."
 		(or (search-forward "\n\037"
 				    (buffer-start buffer)
 				    (buffer-end buffer)
-				    #f)
+				    false)
 		    (editor-error))))))
 	(loop (cdr subfiles)))))
 
 (define (set-current-subfile! pathname)
   (if (not (equal? pathname (ref-variable info-current-subfile)))
       (begin
-	(read-buffer (current-buffer) pathname #t)
+	(read-buffer (current-buffer) pathname true)
 	(set-variable! info-current-subfile pathname))))
 
 (define subfile-filename car)
@@ -1242,12 +1242,12 @@ The name may be an abbreviation of the reference name."
 		 (or (search-forward "\n\037\nIndirect:\n"
 				     (group-start start)
 				     start
-				     #t)
+				     true)
 		     (editor-error)))))
 	   (if (match-forward "\037" start)
 	       '()
 	       (begin
-		 (if (not (search-forward ": " start (group-end start) #f))
+		 (if (not (search-forward ": " start (group-end start) false))
 		     (editor-error))
 		 (let* ((colon (re-match-start 0))
 			(index (read-index-from-mark (re-match-end 0))))

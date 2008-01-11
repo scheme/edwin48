@@ -30,7 +30,7 @@
 
 (define-variable case-replace
   "If true, means replacement commands should preserve case."
-  #t
+  true
   boolean?)
 
 (define (replace-string-arguments name)
@@ -44,25 +44,25 @@
 (define-command replace-string
   "Replace occurrences of FROM-STRING with TO-STRING.
 Preserve case in each match if  case-replace  and  case-fold-search
-are #t and FROM-STRING has no uppercase letters.
-Third arg DELIMITED (prefix arg if interactive) #t means replace
+are true and FROM-STRING has no uppercase letters.
+Third arg DELIMITED (prefix arg if interactive) true means replace
 only matches surrounded by word boundaries."
   (lambda () (replace-string-arguments "Replace string"))
   (lambda (from-string to-string delimited)
-    (replace-string from-string to-string delimited #f #f)
+    (replace-string from-string to-string delimited false false)
     (message "Done")))
 
 (define-command replace-regexp
   "Replace things after point matching REGEXP with TO-STRING.
 Preserve case in each match if case-replace and case-fold-search
-are #t and REGEXP has no uppercase letters.
-Third arg DELIMITED (prefix arg if interactive) #t means replace
+are true and REGEXP has no uppercase letters.
+Third arg DELIMITED (prefix arg if interactive) true means replace
 only matches surrounded by word boundaries.
 In TO-STRING, \\& means insert what matched REGEXP,
 and \\<n> means insert what matched <n>th \\(...\\) in REGEXP."
   (lambda () (replace-string-arguments "Replace regexp"))
   (lambda (regexp to-string delimited)
-    (replace-string regexp to-string delimited #f #t)
+    (replace-string regexp to-string delimited false true)
     (message "Done")))
 
 (define-command query-replace
@@ -71,12 +71,12 @@ As each match is found, the user must type a character saying
 what to do with it.  For directions, type \\[help-command] at that time.
 
 Preserve case in each replacement if  case-replace  and  case-fold-search
-are #t and FROM-STRING has no uppercase letters.
-Third arg DELIMITED (prefix arg if interactive) #t means replace
+are true and FROM-STRING has no uppercase letters.
+Third arg DELIMITED (prefix arg if interactive) true means replace
 only matches surrounded by word boundaries."
   (lambda () (replace-string-arguments "Query replace"))
   (lambda (from-string to-string delimited)
-    (replace-string from-string to-string delimited #t #f)
+    (replace-string from-string to-string delimited true false)
     (message "Done")))
 
 (define-command query-replace-regexp
@@ -85,14 +85,14 @@ As each match is found, the user must type a character saying
 what to do with it.  For directions, type \\[help-command] at that time.
 
 Preserve case in each replacement if  case-replace  and  case-fold-search
-are #t and REGEXP has no uppercase letters.
-Third arg DELIMITED (prefix arg if interactive) #t means replace
+are true and REGEXP has no uppercase letters.
+Third arg DELIMITED (prefix arg if interactive) true means replace
 only matches surrounded by word boundaries.
 In TO-STRING, \\& means insert what matched REGEXP,
 and \\<n> means insert what matched <n>th \\(...\\) in REGEXP."
   (lambda () (replace-string-arguments "Query replace regexp"))
   (lambda (regexp to-string delimited)
-    (replace-string regexp to-string delimited #t #t)
+    (replace-string regexp to-string delimited true true)
     (message "Done")))
 
 (define (replace-string source target delimited? query? regexp?)
@@ -118,7 +118,7 @@ and \\<n> means insert what matched <n>th \\(...\\) in REGEXP."
       (let ((done
 	     (lambda ()
 	       (set-current-point! point)
-	       (done #f))))
+	       (done false))))
 	(cond ((not (find-next-occurrence point))
 	       (done))
 	      ((mark< point (re-match-end 0))
@@ -131,15 +131,15 @@ and \\<n> means insert what matched <n>th \\(...\\) in REGEXP."
     (define (query-loop point)
       (undo-boundary! point)
       (cond ((not (find-next-occurrence point))
-	     (done #f))
+	     (done false))
 	    ((mark< point (re-match-end 0))
 	     (set-current-mark! point)
 	     (set-current-point! (re-match-end 0))
-	     (perform-query #f (re-match-data)))
+	     (perform-query false (re-match-data)))
 	    ((not (group-end? point))
 	     (query-loop (mark1+ point)))
 	    (else
-	     (done #f))))
+	     (done false))))
 
     (define (find-next-occurrence start)
       (if (or regexp? delimited?)
@@ -163,7 +163,7 @@ and \\<n> means insert what matched <n>th \\(...\\) in REGEXP."
 		      (char=? key (remap-alias-key key*))
 		      (begin
 			(keyboard-read)
-			#t)))))
+			true)))))
 	  (cond ((test-for #\C-h)
 		 (with-output-to-help-display
 		  (lambda ()
@@ -179,20 +179,20 @@ C-R to enter recursive edit, C-W to delete match and recursive edit,
 		 (perform-query replaced? match-data))
 		((or (test-for #\altmode)
 		     (test-for #\q))
-		 (done #t))
+		 (done true))
 		((test-for #\^)
 		 (set-current-point! (current-mark))
-		 (perform-query #t match-data))
+		 (perform-query true match-data))
 		((or (test-for #\space)
 		     (test-for #\y))
 		 (if (not replaced?) (perform-replacement match-data))
 		 (query-loop (current-point)))
 		((test-for #\.)
 		 (if (not replaced?) (perform-replacement match-data))
-		 (done #t))
+		 (done true))
 		((test-for #\,)
 		 (if (not replaced?) (perform-replacement match-data))
-		 (perform-query #t match-data))
+		 (perform-query true match-data))
 		((test-for #\!)
 		 (if (not replaced?) (perform-replacement match-data))
 		 (replacement-loop (current-point)))
@@ -200,7 +200,7 @@ C-R to enter recursive edit, C-W to delete match and recursive edit,
 		     (test-for #\n))
 		 (query-loop (current-point)))
 		((test-for #\C-l)
-		 ((ref-command recenter) #f)
+		 ((ref-command recenter) false)
 		 (perform-query replaced? match-data))
 		((test-for #\C-r)
 		 (edit)
@@ -208,9 +208,9 @@ C-R to enter recursive edit, C-W to delete match and recursive edit,
 		((test-for #\C-w)
 		 (if (not replaced?) (delete-match))
 		 (edit)
-		 (perform-query #t match-data))
+		 (perform-query true match-data))
 		(else
-		 (done #t))))))
+		 (done true))))))
 
     (define (edit)
       (clear-message)

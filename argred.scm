@@ -63,7 +63,7 @@ Used more than once, this command multiplies the argument by 4 each time."
     (negative-argument argument (auto-argument-mode?))))
 
 (define (negative-argument argument mode)
-  (set-command-argument! (cond ((eq? '- argument) #f)
+  (set-command-argument! (cond ((eq? '- argument) false)
 			       ((number? argument) (- argument))
 			       (else '-))
 			 mode))
@@ -73,7 +73,7 @@ Used more than once, this command multiplies the argument by 4 each time."
 Digits following this command become part of the argument."
   "P"
   (lambda (argument)
-    (let ((mode (if argument (auto-argument-mode?) #t)))
+    (let ((mode (if argument (auto-argument-mode?) true)))
       (if (let ((key (last-command-key)))
 	    (and (char? key)
 		 (char=? #\- (char-base key))))
@@ -134,7 +134,7 @@ Otherwise, the character inserts itself."
   (eq? '- argument))
 
 (define (command-argument-value argument)
-  (cond ((not argument) #f)
+  (cond ((not argument) false)
 	((eq? '- argument) -1)
 	((pair? argument) (car argument))
 	(else argument)))

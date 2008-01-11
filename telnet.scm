@@ -97,7 +97,7 @@ use it instead of the default."
   "Send input to telnet process.
 The input is entered in the history ring."
   ()
-  (lambda () (comint-send-input "\n" #t)))
+  (lambda () (comint-send-input "\n" true)))
 
 (define-command telnet-self-send
   "Immediately send the last command key to the telnet process.

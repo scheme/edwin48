@@ -150,11 +150,11 @@
    end-clip-mark
 
    ;; This flag is set to #F at the end of a display update, and
-   ;; subsequently set to a #t value if the point has moved, or if
+   ;; subsequently set to a true value if the point has moved, or if
    ;; it was inside a changed region, or if it was outside a clipping
    ;; region, or any of several other conditions that could possibly
    ;; affect the validity of our idea about where point is.  However,
-   ;; there are two possible #t values: #T means that the START-MARK
+   ;; there are two possible true values: #T means that the START-MARK
    ;; for the window has been recomputed and is known to be correct.
    ;; 'SINCE-START-MARK means the new START-MARK has not yet been
    ;; computed.

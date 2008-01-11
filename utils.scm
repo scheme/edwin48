@@ -179,11 +179,11 @@
       (cond ((or (char=? char #\Y)
 		 (char=? char #\Space))
 	     (write-string "Yes")
-	     #t)
+	     true)
 	    ((or (char=? char #\N)
 		 (char=? char #\Rubout))
 	     (write-string "No")
-	     #f)
+	     false)
 	    (else
 	     (if (not (char=? char #\newline))
 		 (beep))

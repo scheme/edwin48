@@ -34,8 +34,8 @@
 	(start (mark-index mark)))
     (let ((n (string-length string)))
       (group-insert-substring! group start string 0 n)
-      (%make-region (make-temporary-mark group start #f)
-		    (make-temporary-mark group (+ start n) #t)))))
+      (%make-region (make-temporary-mark group start false)
+		    (make-temporary-mark group (+ start n) true)))))
 
 (define (region-insert-string! mark string)
   (group-insert-substring! (mark-group mark) (mark-index mark)
@@ -92,8 +92,8 @@
   (%group-narrow! group start end))
 
 (define (%group-narrow! group start end)
-  (let ((start (make-permanent-mark group start #f))
-	(end (make-permanent-mark group end #t)))
+  (let ((start (make-permanent-mark group start false))
+	(end (make-permanent-mark group end true)))
     (set-group-start-mark! group start)
     (set-group-end-mark! group end)
     (set-group-display-start! group start)

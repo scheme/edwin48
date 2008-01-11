@@ -221,20 +221,20 @@
   (not (skip-chars-forward " \t"
 			   (region-start region)
 			   (region-end region)
-			   #f)))
+			   false)))
 
 (define (line-blank? mark)
   (not (skip-chars-forward " \t"
 			   (line-start mark 0)
 			   (line-end mark 0)
-			   #f)))
+			   false)))
 
 (define (find-previous-blank-line mark)
   (let ((start (line-start mark -1)))
     (and start
 	 (let loop ((mark start))
 	   (cond ((line-blank? mark) mark)
-		 ((group-start? mark) #f)
+		 ((group-start? mark) false)
 		 (else (loop (line-start mark -1))))))))
 
 (define (find-next-blank-line mark)
@@ -242,7 +242,7 @@
     (and start
 	 (let loop ((mark start))
 	   (cond ((line-blank? mark) mark)
-		 ((group-start? mark) #f)
+		 ((group-start? mark) false)
 		 (else (loop (line-start mark 1))))))))
 
 (define (find-previous-non-blank-line mark)
@@ -250,7 +250,7 @@
     (and start
 	 (let loop ((mark start))
 	   (cond ((not (line-blank? mark)) mark)
-		 ((group-start? mark) #f)
+		 ((group-start? mark) false)
 		 (else (loop (line-start mark -1))))))))
 
 (define (find-next-non-blank-line mark)
@@ -258,7 +258,7 @@
     (and start
 	 (let loop ((mark start))
 	   (cond ((not (line-blank? mark)) mark)
-		 ((group-start? mark) #f)
+		 ((group-start? mark) false)
 		 (else (loop (line-start mark 1))))))))
 
 ;;;; Indentation

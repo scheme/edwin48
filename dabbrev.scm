@@ -30,12 +30,12 @@
 
 (define-variable dabbrevs-backward-only
   "If true, dabbrevs-expand only looks backwards."
-  #f
+  false
   boolean?)
 
 (define-variable-per-buffer dabbrevs-limit
   "Limits region searched by dabbrevs-expand to that many chars away (local)."
-  #f
+  false
   (lambda (object)
     (or (not object)
 	(exact-integer? object))))
@@ -56,15 +56,15 @@
 
 (define-variable-per-buffer last-dabbrevs-abbrev-location
   "Location last abbreviation began (local)."
-  #f)
+  false)
 
 (define-variable-per-buffer last-dabbrevs-expansion
   "Last expansion of an abbreviation (local)."
-  #f)
+  false)
 
 (define-variable-per-buffer last-dabbrevs-expansion-location
   "Location the last expansion was found (local)."
-  #f)
+  false)
 
 (define dabbrev-tag "Dabbrev")
 
@@ -92,7 +92,7 @@ with the next possible expansion not yet tried."
 
 	(define (search&setup-table count direction)
 	  (let loop ((n count)
-		     (expansion #f)
+		     (expansion false)
 		     (start
 		      (or (ref-variable last-dabbrevs-expansion-location)
 			  (current-point))))
@@ -103,7 +103,7 @@ with the next possible expansion not yet tried."
 		      (dabbrevs-search start pattern direction do-case))
 		  (lambda (loc expansion)
 		    (if (not expansion)
-			(values #f #f)
+			(values false false)
 			(begin
 			  (set-variable!
 			   last-dabbrev-table
@@ -114,7 +114,7 @@ with the next possible expansion not yet tried."
 	(define (step3 loc expansion)
 	  (if (not expansion)
 	      (let ((first (string=? abbrev old)))
-		(set-variable! last-dabbrevs-abbrev-location #f)
+		(set-variable! last-dabbrevs-abbrev-location false)
 		(if (not first)
 		    (let* ((end (current-point))
 			   (start (mark- end (string-length old))))
@@ -139,7 +139,7 @@ with the next possible expansion not yet tried."
 				   (string-length expansion)))))
 		;; First put back the original abbreviation with its original
 		;; case pattern.
-		(replace-match abbrev #f #t)
+		(replace-match abbrev false true)
 		(search-forward abbrev
 				place
 				(buffer-end (current-buffer)))
@@ -147,7 +147,7 @@ with the next possible expansion not yet tried."
 				   (string-downcase expansion)
 				   expansion)
 			       do-case
-			       #t)
+			       true)
 		;; Save state for re-expand.
 		(set-variable! last-dabbrevs-abbreviation abbrev)
 		(set-variable! last-dabbrevs-expansion expansion)
@@ -160,20 +160,20 @@ with the next possible expansion not yet tried."
 	      (step3 loc expansion)
 	      ;; Look forward
 	      (with-values (lambda ()
-			     (search&setup-table (max 1 (- which)) #f))
+			     (search&setup-table (max 1 (- which)) false))
 		(lambda (loc expansion)
 		  (set-variable! last-dabbrevs-direction -1)
 		  (step3 loc expansion)))))
 
 	;; Try looking backward unless inhibited.
 	(if (< which 0)
-	    (step2 loc #f)
+	    (step2 loc false)
 	    (with-values (lambda ()
-			   (search&setup-table (max 1 which) #t))
+			   (search&setup-table (max 1 which) true))
 	      (lambda (loc expansion)
 		(if (not expansion)
 		    (set-variable! last-dabbrevs-expansion-location
-				   #f))
+				   false))
 		(set-variable! last-dabbrevs-direction (min 1 which))
 		(step2 loc expansion))))))
 
@@ -182,7 +182,7 @@ with the next possible expansion not yet tried."
 	     (start (backward-word loc 1 'ERROR))
 	     (abbrev (extract-string start loc)))
 	(set-variable! last-dabbrevs-abbrev-location start)
-	(set-variable! last-dabbrevs-expansion-location #f)
+	(set-variable! last-dabbrevs-expansion-location false)
 	(set-variable! last-dabbrev-table '())
 	(do-abbrev loc
 		   abbrev
@@ -196,10 +196,10 @@ with the next possible expansion not yet tried."
 
     (if (and (not arg)
 	     (command-message-receive dabbrev-tag
-				      (lambda () #t)
-				      (lambda () #f))
+				      (lambda () true)
+				      (lambda () false))
 	     (ref-variable last-dabbrevs-abbrev-location))
-	(do-abbrev #f
+	(do-abbrev false
 		   (ref-variable last-dabbrevs-abbreviation)
 		   (ref-variable last-dabbrevs-expansion)
 		   (ref-variable last-dabbrevs-direction))
@@ -207,7 +207,7 @@ with the next possible expansion not yet tried."
 
 ;; Search function used by dabbrevs library.  
 ;; pattern is string to find as prefix of word.
-;; reverse? is true for reverse search, #f for forward.
+;; reverse? is true for reverse search, false for forward.
 ;; Variable abbrevs-limit controls the maximum search region size.
 
 ;; Table of expansions already seen is examined in buffer last-dabbrev-table,
@@ -215,7 +215,7 @@ with the next possible expansion not yet tried."
 ;; Note that to prevent finding the abbrev itself it must have been
 ;; entered in the table.
 
-;; Values are #f if no expansion found.
+;; Values are false if no expansion found.
 ;; After a succesful search, values are a mark right after the expansion,
 ;; and the expansion itself.
 
@@ -231,7 +231,7 @@ with the next possible expansion not yet tried."
     (let loop ((posn start))
       (if (not ((if reverse? re-search-backward re-search-forward)
 		pattern posn limit))
-	  (values #f #f)
+	  (values false false)
 	  (let ((start (re-match-start 0))
 		(end (re-match-end 0)))
 	    (let* ((result (extract-string start end))

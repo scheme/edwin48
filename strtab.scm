@@ -76,7 +76,7 @@
       index				;ignore
       (string-table-entry-value entry))
     (if (default-object? if-not-found)
-	(lambda (index) index #f)
+	(lambda (index) index false)
 	if-not-found)))
 
 (define (string-table-put! table string value)
@@ -108,8 +108,8 @@
 	(let ((new-size (-1+ size)))
 	  (vector-set! vector new-size '())
 	  (set-string-table-size! table new-size)))
-      #t)
-    (lambda (index) index #f)))
+      true)
+    (lambda (index) index false)))
 
 (define (string-table-complete table string
 			       if-unique if-not-unique if-not-found)

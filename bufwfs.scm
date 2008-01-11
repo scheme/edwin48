@@ -57,7 +57,7 @@
 			  start-column
 			  y y-size)
 	    (loop (make-outline window (fix:- end-index start-index) y-size
-				#f outline)
+				false outline)
 		  start-index
 		  y))))))
 
@@ -91,7 +91,7 @@
 				      (fix:- end-index start-index)
 				      y-size
 				      outline
-				      #f)
+				      false)
 			end-index
 			(fix:+ y y-size)))))
 	    (begin
@@ -137,7 +137,7 @@
 				      (fix:- end-index start-index)
 				      y-size
 				      outline
-				      #f)
+				      false)
 			end-index
 			(fix:+ y y-size))))))))))
 
@@ -150,7 +150,7 @@
 	(x-size (window-x-size window))
 	(y-size (window-y-size window))
 	(group-end (%window-group-end-index window)))
-    (let loop ((outline #f) (start-index (o3-index start)) (y (o3-y start)))
+    (let loop ((outline false) (start-index (o3-index start)) (y (o3-y start)))
       (let ((index&column
 	     (group-line-columns group start-index group-end
 				 start-column tab-width char-image-strings)))
@@ -166,7 +166,7 @@
 				 (fix:- end-index start-index)
 				 line-y
 				 outline
-				 #f))
+				 false))
 		  (y (fix:+ y line-y)))
 	      (if (not outline)
 		  (set-o3-outline! start outline*))
@@ -235,7 +235,7 @@
 					      (screen-get-output-line
 					       screen
 					       (if (fix:< y yl) yl y)
-					       xl* xu #f)))
+					       xl* xu false)))
 					 (do ((x xl* (fix:+ x 1)))
 					     ((fix:= x xu))
 					   (string-set! line x #\space)))))
@@ -286,7 +286,7 @@
 	      (deallocate-outlines! window start-outline (o3-outline end))
 	      (deallocate-o3! window start)
 	      (deallocate-o3! window end)
-	      #f)
+	      false)
 	    (begin
 	      (if (fix:> (o3-y end) (window-y-size window))
 		  (let ((outline (o3-outline end)))
@@ -347,12 +347,12 @@
 	  (begin
 	    (set-o3-y! start new-start-y)
 	    (set-o3-y! end (fix:- yu amount))
-	    #t)
+	    true)
 	  (begin
 	    (deallocate-outlines! window (o3-outline start) (o3-outline end))
 	    (deallocate-o3! window start)
 	    (deallocate-o3! window end)
-	    #f)))))
+	    false)))))
 
 (define (scroll-lines-down window start end new-start-y)
   (let ((y-size (window-y-size window)))
@@ -363,7 +363,7 @@
 	  (deallocate-outlines! window (o3-outline start) (o3-outline end))
 	  (deallocate-o3! window start)
 	  (deallocate-o3! window end)
-	  #f)
+	  false)
 	(let ((new-start-y
 	       (if (fix:< (o3-y start) 0)
 		   (let ((outline (o3-outline start)))
@@ -424,9 +424,9 @@
 	  (begin
 	    (set-o3-y! start new-start-y)
 	    (set-o3-y! end (fix:+ yu amount))
-	    #t)
+	    true)
 	  (begin
 	    (deallocate-outlines! window (o3-outline start) (o3-outline end))
 	    (deallocate-o3! window start)
 	    (deallocate-o3! window end)
-	    #f)))))
+	    false)))))

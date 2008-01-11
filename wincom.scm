@@ -507,7 +507,7 @@ Also kills any pop up window it may have created."
 
 (define (pop-up-buffer buffer select? #!optional options)
   ;; If some new window is created by this procedure, it is returned
-  ;; as the value.  Otherwise the value is false.
+  ;; as the value.  Otherwise the value is #f.
   (let* ((select? (if (default-object? select?) #f select?))
 	 (options (if (default-object? options) '() options))
 	 (screen (pop-up-buffer-option options 'SCREEN (selected-screen)))
