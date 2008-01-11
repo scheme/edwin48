@@ -46,7 +46,7 @@ USA.
 	   (spacenum (- column2 column1))
 	   (spacenum$ (make-string spacenum #\space)))
       (define (iter line-mark ring-list)
-	(let ((perm-mark (if line-mark (mark-left-inserting line-mark) false)))
+	(let ((perm-mark (if line-mark (mark-left-inserting line-mark) #f)))
 	  (if (or (not perm-mark) (mark> perm-mark last))
 	      ring-list
 	      (let* ((mark-1
@@ -84,14 +84,14 @@ The text previously in the region is not overwritten by the blanks,
 but instead winds up to the right of the rectangle."
   ()
   (lambda ()
-    (delete-rectangle (current-mark) (current-point) true true)))
+    (delete-rectangle (current-mark) (current-point) #t #t)))
 
 (define-command clear-rectangle
   "Blank out rectangle with corners at point and mark.
 The text previously in the region is overwritten by the blanks."
   ()
   (lambda ()
-    (delete-rectangle (current-mark) (current-point) true)))
+    (delete-rectangle (current-mark) (current-point) #t)))
 
 (define (make-space-to-column column mark)
   (let ((mark (mark-permanent! mark)))

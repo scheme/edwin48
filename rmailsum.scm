@@ -36,17 +36,17 @@ USA.
 (define-variable-per-buffer rmail-buffer
   "Corresponding RMAIL buffer for a summary buffer.
 FALSE means buffer is not a summary buffer."
-  false
+  #f
   (lambda (x) (or (not x) (buffer? x))))
 
 (define-variable-per-buffer rmail-summary-buffer
   "Corresponding RMAIL-summary buffer for an RMAIL buffer."
-  false
+  #f
   (lambda (x) (or (not x) (buffer? x))))
 
 (define-variable-per-buffer rmail-summary-vector
   "Vector of header lines."
-  false
+  #f
   (lambda (x) (or (not x) (vector? x))))
 
 (define-variable rmail-summary-mode-hook
@@ -62,36 +62,36 @@ FALSE means buffer is not a summary buffer."
   "Display a summary of all messages, one line per message."
   '()
   (lambda ()
-    (rmail-new-summary "All" false)))
-#|
-(define rmail-summary-by-labels
-  "Display a summary of all messages with one or more LABELS.
- LABELS should be a string containing the desired labels, separated by commas."
-  "sLabels to summarize by: "
-  (lambda (labels)
-    (if (string=? labels "")
- 	(set! labels (or rmail-last-multi-labels
- 			 (error "No label specified"))))
-    (set! rmail-last-multi-labels labels)
-    (rmail-new-summary (string-append "labels " labels)
- 		       rmail-message-labels?
- 		       (string-append ", \\("
-				      (mail-comma-list-regexp labels)
-				      "\\),"))))
-
-(define rmail-summary-by-recipients
-  "Display a summary of all messages with the given RECIPIENTS.
-Normally checks the To, From and Cc fields of headers;
-but if PRIMARY-ONLY is non-nil (prefix arg given),
- only look in the To and From fields.
-RECIPIENTS is a string of names separated by commas."
-  (interactive "sRecipients to summarize by: \nP")
-  (lambda (recipients primary-only)
-    (rmail-new-summary
-     (string-append "recipients " recipients)
-     rmail-message-recipients?
-     (mail-comma-list-regexp recipients) primary-only)))
-|#
+    (rmail-new-summary "All" #f)))
+;;;
+;;; (define rmail-summary-by-labels
+;;;   "Display a summary of all messages with one or more LABELS.
+;;;  LABELS should be a string containing the desired labels, separated by commas."
+;;;   "sLabels to summarize by: "
+;;;   (lambda (labels)
+;;;     (if (string=? labels "")
+;;;  	(set! labels (or rmail-last-multi-labels
+;;;  			 (error "No label specified"))))
+;;;     (set! rmail-last-multi-labels labels)
+;;;     (rmail-new-summary (string-append "labels " labels)
+;;;  		       rmail-message-labels?
+;;;  		       (string-append ", \\("
+;;; 				      (mail-comma-list-regexp labels)
+;;; 				      "\\),"))))
+;;;
+;;; (define rmail-summary-by-recipients
+;;;   "Display a summary of all messages with the given RECIPIENTS.
+;;; Normally checks the To, From and Cc fields of headers;
+;;; but if PRIMARY-ONLY is non-nil (prefix arg given),
+;;;  only look in the To and From fields.
+;;; RECIPIENTS is a string of names separated by commas."
+;;;   (interactive "sRecipients to summarize by: \nP")
+;;;   (lambda (recipients primary-only)
+;;;     (rmail-new-summary
+;;;      (string-append "recipients " recipients)
+;;;      rmail-message-recipients?
+;;;      (mail-comma-list-regexp recipients) primary-only)))
+;;;
 
 (define-command rmail-summary-by-recipients
   "Display a summary of all messages with the given RECIPIENTS.
@@ -121,7 +121,7 @@ RECIPIENTS is a string of names separated by commas."
 		   (cons (string-trim the-string)
 			 (map (lambda (x) (string-append x "\\|"))
 			      the-new-list))))
-	   true)))))
+	   #t)))))
 
 (define (rmail-message-recipients? memo recip-regexp primary-only)
   (without-clipping
@@ -157,7 +157,7 @@ RECIPIENTS is a string of names separated by commas."
 					 the-rmail-summary-buffer)
 	(define-variable-local-value! the-rmail-summary-buffer
 	    (ref-variable-object rmail-summary-vector)
-	  (make-vector number-of-messages false))
+	  (make-vector number-of-messages #f))
 	(select-buffer-other-window the-rmail-summary-buffer)
 	(select-buffer-other-window the-rmail-buffer))
       (let ((summary-msgs ())
@@ -213,7 +213,7 @@ RECIPIENTS is a string of names separated by commas."
 		  rmail-summary-buffer))
 	(define-variable-local-value! rmail-buffer
 	    (ref-variable-object rmail-summary-buffer)
-	  false))))
+	  #f))))
 
 (define (rmail-make-summary-line memo)
   (let ((new-summary-line-count 0))
@@ -268,7 +268,7 @@ RECIPIENTS is a string of names separated by commas."
 		       (string-tail
 			(extract-string point (line-start point 1))
 			14))
-		     false))))
+		     #f))))
 	  ;; If we didn't get a valid status line from the message,
 	  ;; make a new one and put it in the message.
 	  (or line
@@ -509,7 +509,7 @@ Entering this mode calls value of hook variable rmail-summary-mode-hook."
 			(set-buffer-read-only! (current-buffer))))
 		  (let ((rmail-buffer (ref-variable rmail-buffer)))
 		    (show-message rmail-buffer the-message-number)
-		    (pop-up-buffer rmail-buffer false)))))))))
+		    (pop-up-buffer rmail-buffer #f)))))))))
 
 (define-command rmail-summary-next-message
   "Goto ARGth previous message."
@@ -585,7 +585,7 @@ shown in the RMAIL buffer, warp to the appropriate message."
 			  (scroll-window
 			   window
 			   (standard-scroll-window-argument window arg 1)
-			   (lambda () true)))
+			   (lambda () #t)))
 			(select-buffer-other-window
 			 (ref-variable rmail-summary-buffer)))
 		      (begin
@@ -612,7 +612,7 @@ shown in the RMAIL buffer, warp to the appropriate message."
     (let ((window (current-window)))
       (scroll-window window
 		     (standard-scroll-window-argument window arg -1)
-		     (lambda () true)))
+		     (lambda () #t)))
     (select-buffer-other-window (ref-variable rmail-summary-buffer))))
 
 (define-command rmail-summary-delete-message

@@ -230,14 +230,14 @@ USA.
     (let loop ()
       (if (and (not (keyboard-peek-no-hang))
 	       (< (real-time-clock) time-limit)
-	       (update-screens! false))
+	       (update-screens! #f))
 	  (loop)))))
 
 (define sleep-for
   sleep-current-thread)
 
 (define (reposition-window-top mark)
-  (if (not (and mark (set-window-start-mark! (current-window) mark false)))
+  (if (not (and mark (set-window-start-mark! (current-window) mark #f)))
       (editor-beep)))
 
 (define (narrow-to-region mark #!optional point)

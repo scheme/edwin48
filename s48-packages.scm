@@ -49,8 +49,7 @@
 
 (define-structure aliases
     (export without-interrupts
-	    unspecific
-	    true false)
+	    unspecific)
   (open scheme interrupts util)
   (files s48-aliases))
 

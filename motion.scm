@@ -35,7 +35,7 @@ USA.
 	((eq? limit? 'BEEP) (editor-beep) limit)
 	((eq? limit? 'FAILURE) (editor-failure) limit)
 	((eq? limit? 'ERROR) (editor-error))
-	((not limit?) false)
+	((not limit?) #f)
 	(else (error "Unknown limit type:" limit?))))
 
 (define (mark1+ mark #!optional limit?)

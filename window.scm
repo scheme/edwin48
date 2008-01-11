@@ -109,7 +109,7 @@ USA.
     (setup-redisplay-flags! flags)
     (for-each-inferior window
       (lambda (inferior)
-	(set-inferior-redisplay-flags! inferior (cons false flags))
+	(set-inferior-redisplay-flags! inferior (cons #f flags))
 	(==> (inferior-window inferior) :set-superior! window)))))
 
 (define (window-size window receiver)
@@ -157,9 +157,9 @@ USA.
   (let ((window* (make-object class)))
     (let ((inferior
 	   (%make-inferior window*
-			   false
-			   false
-			   (cons false (window-redisplay-flags window)))))
+			   #f
+			   #f
+			   (cons #f (window-redisplay-flags window)))))
       (set-window-inferiors! window (cons inferior (window-inferiors window)))
       (==> window* :initialize! window)
       inferior)))
@@ -167,9 +167,9 @@ USA.
 (define (add-inferior! window window*)
   (let ((inferior
 	 (%make-inferior window*
-			 false
-			 false
-			 (cons false (window-redisplay-flags window)))))
+			 #f
+			 #f
+			 (cons #f (window-redisplay-flags window)))))
     (set-window-inferiors! window (cons inferior (window-inferiors window)))
     (==> window* :set-superior! window)
     inferior))
@@ -234,11 +234,11 @@ USA.
 (define (clip-window-region-1 al au bs receiver)
   (if (fix:< 0 al)
       (if (fix:< au bs)
-	  (if (fix:< al au) (receiver al au) true)
-	  (if (fix:< al bs) (receiver al bs) true))
+	  (if (fix:< al au) (receiver al au) #t)
+	  (if (fix:< al bs) (receiver al bs) #t))
       (if (fix:< au bs)
-	  (if (fix:< 0 au) (receiver 0 au) true)
-	  (if (fix:< 0 bs) (receiver 0 bs) true))))
+	  (if (fix:< 0 au) (receiver 0 au) #t)
+	  (if (fix:< 0 bs) (receiver 0 bs) #t))))
 
 (define (salvage-inferiors! window)
   (for-each-inferior-window window (lambda (window) (==> window :salvage!))))
@@ -426,7 +426,7 @@ USA.
 
 (define (set-inferior-position! inferior position)
   (if (not position)
-      (set-inferior-start! inferior false false)
+      (set-inferior-start! inferior #f #f)
       (set-inferior-start! inferior (car position) (cdr position))))
 
 (define (inferior-needs-redisplay? inferior)
@@ -436,13 +436,13 @@ USA.
   (if (and (inferior-x-start inferior) (inferior-y-start inferior))
       (if (not (car (inferior-redisplay-flags inferior)))
 	  (setup-redisplay-flags! (inferior-redisplay-flags inferior)))
-      (set-car! (inferior-redisplay-flags inferior) false)))
+      (set-car! (inferior-redisplay-flags inferior) #f)))
 
 (define (setup-redisplay-flags! flags)
   (let loop ((flags flags))
     (if (not (or (null? flags) (car flags)))
 	(begin
-	  (set-car! flags true)
+	  (set-car! flags #t)
 	  (loop (cdr flags))))))
 
 (define (inferior-x-size inferior)
@@ -488,7 +488,7 @@ USA.
 	(values window x y)
 	(let loop ((inferiors (window-inferiors window)))
 	  (if (null? inferiors)
-	      (values false false false)
+	      (values #f #f #f)
 	      (let ((inferior (car inferiors)))
 		(let ((x-start (inferior-x-start inferior))
 		      (y-start (inferior-y-start inferior)))

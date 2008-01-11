@@ -179,11 +179,11 @@ USA.
       (cond ((or (char=? char #\Y)
 		 (char=? char #\Space))
 	     (write-string "Yes")
-	     true)
+	     #t)
 	    ((or (char=? char #\N)
 		 (char=? char #\Rubout))
 	     (write-string "No")
-	     false)
+	     #f)
 	    (else
 	     (if (not (char=? char #\newline))
 		 (beep))

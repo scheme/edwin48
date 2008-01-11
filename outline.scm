@@ -73,7 +73,7 @@ USA.
 		      (cond ((= found-level level)
 			     (re-match-start 0))
 			    ((< found-level level)
-			     false)
+			     #f)
 			    (else (next-topic (re-match-end 0)))))
 		    (re-match-start 0)))))))
 
@@ -91,7 +91,7 @@ USA.
 		       (cond ((= found-level level)
 			      (re-match-start 0))
 			     ((< found-level level)
-			      false)
+			      #f)
 			     (else (previous-topic (re-match-start 0)))))))))))
 
 (define (%forward-down-topic start end outline-pattern)

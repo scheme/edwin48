@@ -32,7 +32,7 @@ USA.
 
 (define-command shell-command
   "Execute string COMMAND in inferior shell; display output, if any.
-Optional second arg true (prefix arg, if interactive) means
+Optional second arg #t (prefix arg, if interactive) means
 insert output in current buffer after point (leave mark after it)."
   "sShell command\nP"
   (lambda (command insert-at-point?)
@@ -43,11 +43,11 @@ insert output in current buffer after point (leave mark after it)."
 		(barf-if-read-only))
 	    (let ((point (current-point)))
 	      (push-current-mark! point)
-	      (shell-command false point directory command))
+	      (shell-command #f point directory command))
 	    ((ref-command exchange-point-and-mark)))
 	  (shell-command-pop-up-output
 	   (lambda (output-mark)
-	      (shell-command false output-mark directory command)))))))
+	      (shell-command #f output-mark directory command)))))))
 
 (define-command shell-command-on-region
   "Execute string COMMAND in inferior shell with region as input.
@@ -91,7 +91,7 @@ Prefix arg means replace the region with it."
       (generate-output start)
       (set-buffer-point! buffer start)
       (if (mark< start (buffer-end buffer))
-	  (pop-up-buffer buffer false)
+	  (pop-up-buffer buffer #f)
 	  (message "(Shell Command completed with no output)")))))
 
 (define (shell-command input-region output-mark directory command)

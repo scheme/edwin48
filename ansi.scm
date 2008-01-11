@@ -73,48 +73,48 @@ USA.
 
       (%make-termcap-description
        "ansi.sys"		        ; terminal-type-name
-       false				; delete-is-insert-mode?
-       false				; enter/exit-standout-mode-same?
+       #f				; delete-is-insert-mode?
+       #f				; enter/exit-standout-mode-same?
        (and full? "\033[P")		; insert/delete-char-ok?
        (and full? "\033[M")		; insert/delete-line-ok?
-       false				; scroll-region-ok?
+       #f				; scroll-region-ok?
        #t				; tf-automatic-wrap
-       false				; tf-cursor-backwards-wrap
-       false				; tf-generic
-       false				; tf-hardcopy
-       false				; tf-hazeltine
-       false				; tf-insert-mode-motion
-       false				; tf-lose-wrap
-       false				; tf-magic-wrap
-       false				; tf-memory-above-screen
-       false				; tf-memory-below-screen
-       false				; tf-meta-key
-       false				; tf-must-write-spaces
-       false				; tf-newline-doesnt-scroll
-       false				; tf-overstrike
-       false				; tf-overstrike-space-erase
-       false				; tf-overwrite-preserves-standout
-       false				; tf-standout-mode-motion
-       false				; tf-teleray
-       false				; tf-underscore
-       false				; tn-memory-lines
-       false				; tn-minimum-padding-speed
-       false				; tn-standout-marker-width
+       #f				; tf-cursor-backwards-wrap
+       #f				; tf-generic
+       #f				; tf-hardcopy
+       #f				; tf-hazeltine
+       #f				; tf-insert-mode-motion
+       #f				; tf-lose-wrap
+       #f				; tf-magic-wrap
+       #f				; tf-memory-above-screen
+       #f				; tf-memory-below-screen
+       #f				; tf-meta-key
+       #f				; tf-must-write-spaces
+       #f				; tf-newline-doesnt-scroll
+       #f				; tf-overstrike
+       #f				; tf-overstrike-space-erase
+       #f				; tf-overwrite-preserves-standout
+       #f				; tf-standout-mode-motion
+       #f				; tf-teleray
+       #f				; tf-underscore
+       #f				; tn-memory-lines
+       #f				; tn-minimum-padding-speed
+       #f				; tn-standout-marker-width
        columns				; tn-x-size
        lines				; tn-y-size
        "\a"				; ts-audible-bell
        "\033[K"				; ts-clear-line
-       false				; ts-clear-multi-char
+       #f				; ts-clear-multi-char
        "\033[H\033[J"			; ts-clear-screen
        "\033[J"				; ts-clear-to-bottom
        "\n"				; ts-cursor-down
-       false				; ts-cursor-down-multi
+       #f				; ts-cursor-down-multi
        "\b"				; ts-cursor-left
-       false				; ts-cursor-left-multi
+       #f				; ts-cursor-left-multi
        "\r"				; ts-cursor-line-start
-       false				; ts-cursor-lower-left
+       #f				; ts-cursor-lower-left
        "\033[%i%d;%dH"			; ts-cursor-move
-       false				; ts-cursor-move-x
+       #f				; ts-cursor-move-x
        "\033[C"				; ts-cursor-right
        (and full? "\033[%dC")		; ts-cursor-right-multi
        "\033[A"				; ts-cursor-up
@@ -124,30 +124,30 @@ USA.
        (and full? "\033[M")		; ts-delete-line
        (and full? "\033[%dP")		; ts-delete-multi-char
        (and full? "\033[%dM")		; ts-delete-multi-line
-       false				; ts-enhance-cursor
-       false				; ts-enter-delete-mode
-       false ;"\033[4h"			; ts-enter-insert-mode
+       #f				; ts-enhance-cursor
+       #f				; ts-enter-delete-mode
+       #f ;"\033[4h"			; ts-enter-insert-mode
        standout;"\033[7m"		; ts-enter-standout-mode
        (and full? "\033[1p")		; ts-enter-termcap-mode
-       false				; ts-exit-delete-mode
-       false ;"\033[4l"			; ts-exit-insert-mode
+       #f				; ts-exit-delete-mode
+       #f ;"\033[4l"			; ts-exit-insert-mode
        normal;"\033[0m"			; ts-exit-standout-mode
        (and full? "\033[0p")		; ts-exit-termcap-mode
        "\n"				; ts-forward-scroll
-       false				; ts-forward-scroll-multi
+       #f				; ts-forward-scroll-multi
        (and full? "\033[@")		; ts-insert-char
        (and full? "\033[L")		; ts-insert-line
        (and full? "\033[%d@")		; ts-insert-multi-char
        (and full? "\033[%dL")		; ts-insert-multi-line
-       false				; ts-invisible-cursor
-       false				; ts-normal-cursor
-       false				; ts-pad-char
-       false				; ts-pad-inserted-char
-       false				; ts-reverse-scroll
-       false				; ts-reverse-scroll-multi
-       false				; ts-set-scroll-region
-       false				; ts-set-scroll-region-1
-       false				; ts-set-window
-       false				; ts-visible-bell
+       #f				; ts-invisible-cursor
+       #f				; ts-normal-cursor
+       #f				; ts-pad-char
+       #f				; ts-pad-inserted-char
+       #f				; ts-reverse-scroll
+       #f				; ts-reverse-scroll-multi
+       #f				; ts-set-scroll-region
+       #f				; ts-set-scroll-region-1
+       #f				; ts-set-window
+       #f				; ts-visible-bell
        '()                              ; termcap-description-keys
        ))))

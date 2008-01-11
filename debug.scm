@@ -828,7 +828,7 @@ Set this variable to #F to disable this abbreviation."
 	(exact-nonnegative-integer? object))))
 
 (define-variable debugger-show-help-message?
-  "True means show the help message, false means don't."
+  "True means show the help message, #f means don't."
   #T
   boolean?)
 

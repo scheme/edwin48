@@ -55,7 +55,7 @@ If prefix argument REVERSE is non-nil, sort them in reverse order."
   (lambda (reverse)
     (rmail-sort-messages 
      reverse
-     (let ((re-pattern (re-compile-pattern "^\\(re:[ \t]+\\)*" true)))
+     (let ((re-pattern (re-compile-pattern "^\\(re:[ \t]+\\)*" #t)))
        (lambda (memo)
 	 (let ((key
 		(or (fetch-first-field "subject" 
@@ -144,11 +144,11 @@ If prefix argument REVERSE is non-nil, sort them in reverse order."
        (msg-memo/start (msg-memo/first (current-msg-memo)))
        (msg-memo/end (msg-memo/last (current-msg-memo))))
       (let loop ((n 0)
-		 (previous false)
+		 (previous #f)
 		 (the-memo (caddr (vector-ref sort-vect 0)))
 		 (next (if (>= nummsg 2)
 			   (caddr (vector-ref sort-vect 1))
-			   false)))
+			   #f)))
 	(set-msg-memo/previous! the-memo previous)
 	(set-msg-memo/next! the-memo next)
 	(if (< n nummsg)
@@ -160,10 +160,10 @@ If prefix argument REVERSE is non-nil, sort them in reverse order."
 	      (loop (1+ n) the-memo next
 		    (if (< (1+ n) nummsg)
 			(caddr (vector-ref sort-vect (1+ n)))
-			false)))
+			#f)))
 	    (insert-string (cadr (vector-ref sort-vect n)))))
       (set-buffer-read-only! (current-buffer))
-      (set-buffer-msg-memo! (current-buffer) false)
+      (set-buffer-msg-memo! (current-buffer) #f)
       (memoize-buffer (current-buffer))
       (show-message (current-buffer) current-msg-num))))
 

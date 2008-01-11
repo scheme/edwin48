@@ -34,7 +34,7 @@ USA.
 
 (define (make-bufferset initial-buffer)
   (%make-bufferset (list initial-buffer)
-		   (let ((names (make-string-table 16 false)))
+		   (let ((names (make-string-table 16 #f)))
 		     (string-table-put! names
 					(buffer-name initial-buffer)
 					initial-buffer)

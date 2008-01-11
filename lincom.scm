@@ -248,7 +248,7 @@ and indent the new line indent according to mode."
 
 (define-variable-per-buffer indent-tabs-mode
   "If false, do not use tabs for indentation or horizontal spacing."
-  true
+  #t
   boolean?)
 
 (define-command indent-tabs-mode
@@ -294,7 +294,7 @@ An indent point is a non-whitespace character following whitespace."
 (define-variable indent-region-procedure
   "Function which is short cut to indent each line in region with Tab.
 #F means really call Tab on each line."
-  false
+  #f
   (lambda (object)
     (or (false? object)
 	(and (procedure? object)
@@ -456,7 +456,7 @@ With argument, join this line to following line."
       (delete-string point (line-start point 1 'ERROR))
       (if fill-prefix
 	  (let ((m
-		 (match-forward fill-prefix point (line-end point 0) false)))
+		 (match-forward fill-prefix point (line-end point 0) #f)))
 	    (if m
 		(delete-string point m))))
       (mark-temporary! point)
@@ -513,7 +513,7 @@ The variable tab-width controls the action."
 	(end (mark-left-inserting-copy end))
 	(tab-width (group-tab-width (mark-group start))))
     (do ()
-	((not (re-search-forward "[ \t][ \t]+" start end false)))
+	((not (re-search-forward "[ \t][ \t]+" start end #f)))
       (move-mark-to! start (re-match-start 0))
       (let ((end-column (mark-column (re-match-end 0))))
 	(delete-string start (re-match-end 0))

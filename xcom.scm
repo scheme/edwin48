@@ -62,7 +62,7 @@ USA.
   "sSet foreground color"
   (lambda (color)
     (x-window-set-foreground-color (current-xterm) color)
-    (update-screen! (selected-screen) true)))
+    (update-screen! (selected-screen) #t)))
 
 (define-command set-background-color
   "Set background color of selected frame to COLOR."
@@ -71,7 +71,7 @@ USA.
     (let ((xterm (current-xterm)))
       (x-window-set-background-color xterm color)
       (x-window-clear xterm))
-    (update-screen! (selected-screen) true)))
+    (update-screen! (selected-screen) #t)))
 
 (define-command set-border-color
   "Set border color of selected frame to COLOR."
@@ -96,7 +96,7 @@ USA.
   "nSet border width"
   (lambda (width)
     (x-window-set-border-width (current-xterm) (max 0 width))
-    (update-screen! (selected-screen) true)))
+    (update-screen! (selected-screen) #t)))
 
 (define-command set-internal-border-width
   "Set internal border width of selected frame to WIDTH."
