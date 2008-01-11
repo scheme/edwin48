@@ -57,10 +57,6 @@
 (define (region-count-chars region)
   (fix:- (region-end-index region) (region-start-index region)))
 
-(define mark+)
-(define mark-)
-(let ()
-
 (define (%mark+ mark n limit?)
   (let ((group (mark-group mark))
 	(new-index (fix:+ (mark-index mark) n)))
@@ -75,21 +71,18 @@
 	(limit-mark-motion limit? (group-start-mark group))
 	(make-mark group new-index))))
 
-(set! mark+
-(named-lambda (mark+ mark n #!optional limit?)
+(define (mark+ mark+ mark n #!optional limit?)
   (let ((limit? (and (not (default-object? limit?)) limit?)))
     (cond ((fix:positive? n) (%mark+ mark n limit?))
 	  ((fix:negative? n) (%mark- mark (fix:- 0 n) limit?))
-	  (else mark)))))
+	  (else mark))))
 
-(set! mark-
-(named-lambda (mark- mark n #!optional limit?)
+(define (mark- mark- mark n #!optional limit?)
   (let ((limit? (and (not (default-object? limit?)) limit?)))
     (cond ((fix:positive? n) (%mark- mark n limit?))
 	  ((fix:negative? n) (%mark+ mark (fix:- 0 n) limit?))
-	  (else mark)))))
+	  (else mark))))
 
-)
 
 ;;;; Motion by Lines
 
