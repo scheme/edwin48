@@ -54,6 +54,16 @@
   (open scheme interrupts util)
   (files s48-aliases))
 
+(define-structure lists
+    (export find-matching-item
+	    keep-matching-items
+	    delete-matching-items
+	    delq!
+	    list-deletor!
+	    for-all? there-exists?)
+  (open scheme srfi-1)
+  (files s48-lists))
+
 (define-structure literals
     (export) ;; no exports
   (open scheme ascii reading srfi-13)
