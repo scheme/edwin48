@@ -31,16 +31,6 @@ USA.
 (define (ring-list ring)
   (list-copy (vector-ref ring 2)))
 
-(define make-ring)
-(define ring-size)
-(define ring-clear!)
-(define ring-empty?)
-(define ring-push!)
-(define ring-pop!)
-(define ring-ref)
-(define ring-set!)
-(let ()
-
 (define (list-ref l i)
   (cond ((null? l) (error "Index too large" 'LIST-REF))
 	((zero? i) (car l))
@@ -59,45 +49,36 @@ USA.
 	(else (list-truncate! (cdr l) (-1+ i))))
   unspecific)
 
-(set! make-ring
-(named-lambda (make-ring size)
+(define (make-ring size)
   (if (< size 1)
       (error "Ring size too small" size)
-      (vector "Ring" size '()))))
+      (vector "Ring" size '())))
 
-(set! ring-size
-(named-lambda (ring-size ring)
-  (length (vector-ref ring 2))))
+(define (ring-size ring)
+  (length (vector-ref ring 2)))
 
-(set! ring-clear!
-(named-lambda (ring-clear! ring)
+(define (ring-clear! ring)
   (vector-set! ring 2 '())
-  unspecific))
+  unspecific)
 
-(set! ring-empty?
-(named-lambda (ring-empty? ring)
-  (null? (vector-ref ring 2))))
+(define (ring-empty? ring)
+  (null? (vector-ref ring 2)))
 
-(set! ring-push!
-(named-lambda (ring-push! ring object)
+
+(define (ring-push! ring object)
   (vector-set! ring 2 (cons object (vector-ref ring 2)))
-  (list-truncate! (vector-ref ring 2) (vector-ref ring 1))))
+  (list-truncate! (vector-ref ring 2) (vector-ref ring 1)))
 
-(set! ring-pop!
-(named-lambda (ring-pop! ring)
+(define (ring-pop! ring)
   (let ((l (vector-ref ring 2)))
     (if (null? l)
 	(error "Ring empty" ring)
 	(let ((object (car l)))
 	  (vector-set! ring 2 (append! (cdr l) (list object)))
-	  object)))))
+	  object))))
 
-(set! ring-ref
-(named-lambda (ring-ref ring index)
-  (list-ref (vector-ref ring 2) (modulo index (ring-size ring)))))
+(define (ring-ref ring index)
+  (list-ref (vector-ref ring 2) (modulo index (ring-size ring))))
 
-(set! ring-set!
-(named-lambda (ring-set! ring index object)
-  (list-set! (vector-ref ring 2) (modulo index (ring-size ring)) object)))
-
-)
+(define (ring-set! ring index object)
+  (list-set! (vector-ref ring 2) (modulo index (ring-size ring)) object))
