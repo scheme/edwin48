@@ -201,7 +201,7 @@ evaluated in the specified inferior REPL buffer."
 	 (car buffers))))
 
 (define (repl-buffer-list)
-  (set! repl-buffers (list-transform-positive repl-buffers buffer-alive?))
+  (set! repl-buffers (keep-matching-items repl-buffers buffer-alive?))
   repl-buffers)
 
 (define (repl-buffer? buffer)

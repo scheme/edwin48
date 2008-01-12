@@ -73,7 +73,7 @@ USA.
 		    (+ code (if (<= #x01 code #x1A) #x60 #x40)))
 		  (fix:or (char-bits key) char-bit:control)))
       (let ((entry
-	     (list-search-positive alias-keys
+	     (find-matching-item alias-keys
 	       (lambda (entry)
 		 (eqv? (cdr entry) key)))))
 	(if entry

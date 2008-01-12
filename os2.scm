@@ -48,7 +48,7 @@ USA.
 	(let ((pathnames (directory-read file #f)))
 	  (if all-files?
 	      pathnames
-	      (list-transform-positive pathnames
+	      (keep-matching-items pathnames
 		(let ((mask
 		       (fix:or os2-file-mode/hidden os2-file-mode/system)))
 		  (lambda (pathname)

@@ -457,7 +457,7 @@ except for \\[info-cease-edit] to return to Info."
 		  (let ((current-item (current-menu-item (current-point))))
 		    (and current-item
 			 (let ((current-index (mark-index current-item)))
-			   (list-search-positive item-alist
+			   (find-matching-item item-alist
 			     (lambda (entry)
 			       (= current-index (cdr entry)))))))))
 	     (if current-entry
@@ -860,7 +860,7 @@ The name may be an abbreviation of the reference name."
       (for-each
        (lambda (submenu)
 	 (let ((nodename (car submenu)))
-	   (if (not (or (list-search-positive menu-items
+	   (if (not (or (find-matching-item menu-items
 			  (lambda (item)
 			    (string-ci=? item nodename)))
 			(re-search-forward (string-append "^\\* "

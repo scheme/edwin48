@@ -656,7 +656,7 @@ option, instead taking -P <filename>."
   set-file-modes!)
 
 (define (os/rmail-spool-directory)
-  (or (list-search-positive
+  (or (find-matching-item
 	  '("/var/spool/mail/" "/var/mail/" "/usr/spool/mail/" "/usr/mail/")
 	file-directory?)
       "/usr/spool/mail/"))

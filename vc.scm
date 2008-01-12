@@ -931,7 +931,7 @@ Normally shows only locked files; prefix arg says to show all files."
     buffer))
 
 (define (get-vc-dired-buffer directory)
-  (or (list-search-positive (buffer-list)
+  (or (find-matching-item (buffer-list)
 	(lambda (buffer)
 	  (let ((spec (buffer-get buffer 'VC-DIRECTORY-SPEC #f)))
 	    (and spec

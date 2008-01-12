@@ -66,7 +66,7 @@ USA.
        (let ((entries (directory-read file #f #t)))
 	 (if all-files?
 	     entries
-	     (list-transform-positive entries
+	     (keep-matching-items entries
 	       (let ((mask
 		      (fix:or nt-file-mode/hidden nt-file-mode/system)))
 		 (lambda (entry)

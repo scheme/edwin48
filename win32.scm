@@ -239,7 +239,7 @@ USA.
       (error "Screen has unexpectedly vanished" screen)))
 
 (define (handle->win32-screen handle)
-  (list-search-positive win32-screens
+  (find-matching-item win32-screens
     (lambda (screen) (eqv? handle (state/handle (screen-state screen))))))
 
 (define (screen-name screen)

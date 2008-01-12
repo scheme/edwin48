@@ -709,7 +709,7 @@ USA.
   (let ((gdbf (news-group:header-gdbf group #t)))
     (if gdbf
 	(let ((keys
-	       (list-transform-negative (map ->key numbers)
+	       (delete-matching-items (map ->key numbers)
 		 (lambda (key)
 		   (gdbm-exists? gdbf key)))))
 	  (if (not (null? keys))
@@ -1083,7 +1083,7 @@ USA.
 			   (prune-header-alist alist)))))
 
 (define (prune-header-alist alist)
-  (list-transform-positive alist
+  (keep-matching-items alist
     (lambda (entry)
       (or (string-ci=? (car entry) "subject")
 	  (string-ci=? (car entry) "references")
@@ -1483,7 +1483,7 @@ USA.
 
 (define (compute-redundant-relatives step table header)
   (let ((relatives (step header)))
-    (list-transform-positive relatives
+    (keep-matching-items relatives
       (lambda (child)
 	(there-exists? relatives
 	  (lambda (child*)
@@ -1559,7 +1559,7 @@ USA.
 
 (define (discard-useless-dummy-headers dummy-headers)
   (for-each maybe-discard-dummy-header dummy-headers)
-  (list-transform-negative dummy-headers
+  (delete-matching-items dummy-headers
     (lambda (header)
       (null? (news-header:followups header)))))
 

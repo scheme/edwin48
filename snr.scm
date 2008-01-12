@@ -397,7 +397,7 @@ Only one News reader may be open per server; if a previous News reader
 ;;;; News-Server Buffer
 
 (define (find-news-server-buffer server)
-  (list-search-positive (buffer-list)
+  (find-matching-item (buffer-list)
     (lambda (buffer)
       (and (news-server-buffer? buffer)
 	   (string-ci=? (news-server-buffer:server buffer) server)))))
@@ -2231,7 +2231,7 @@ This command has no effect if the variable
 		(update-subsequent-news-header-lines (buffer-start buffer))
 		(buffer-put! buffer 'NEWS-THREADS
 			     (list->vector
-			      (list-transform-negative threads
+			      (delete-matching-items threads
 				news-thread:all-articles-deleted?)))
 		(if (and on-header?
 			 (not (region-get (current-point) 'NEWS-HEADER #f)))
@@ -2820,9 +2820,9 @@ While composing the reply, use \\[mail-yank-original] to yank the
 	   select-buffer-other-window)))))
 
 (define (merge-header-alists x y)
-  (append (list-transform-negative x
+  (append (delete-matching-items x
 	    (lambda (entry)
-	      (list-search-positive y
+	      (find-matching-item y
 		(lambda (entry*)
 		  (string-ci=? (car entry) (car entry*))))))
 	  y))
@@ -4136,7 +4136,7 @@ With prefix arg, replaces the file with the list information."
        (if (or (command-argument-multiplier-only? argument)
 	       (ref-variable news-group-show-seen-headers buffer))
 	   threads
-	   (list-transform-negative threads
+	   (delete-matching-items threads
 	     news-thread:all-articles-deleted?))))))
 
 (define (news-group:get-headers group argument buffer)

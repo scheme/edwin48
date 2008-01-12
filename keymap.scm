@@ -152,7 +152,7 @@ Previous contents of that buffer are killed first."
   (map (lambda (element)
 	 (cons (xkey->name (car element))
 	       (command-name-string (cdr element))))
-       (sort (list-transform-negative elements
+       (sort (delete-matching-items elements
 	       (lambda (element)
 		 (button? (car element))))
 	     (lambda (a b) (xkey<? (car a) (car b))))))
@@ -162,7 +162,7 @@ Previous contents of that buffer are killed first."
     (let ((make-entry
 	   (lambda (prefix element)
 	     (let ((entry
-		    (list-search-positive prefix-alist
+		    (find-matching-item prefix-alist
 		      (lambda (entry)
 			(string=? (car entry) prefix)))))
 	       (if entry

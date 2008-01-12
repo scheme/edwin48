@@ -442,7 +442,7 @@ With argument, saves all with no questions."
 (define (save-some-buffers no-confirmation? exiting?)
   (let ((buffers
 	 (let ((exiting? (and (not (default-object? exiting?)) exiting?)))
-	   (list-transform-positive (buffer-list)
+	   (keep-matching-items (buffer-list)
 	     (lambda (buffer)
 	       (and (buffer-modified? buffer)
 		    (or (buffer-pathname buffer)
@@ -482,7 +482,7 @@ all buffers."
 
 (define (pathname->buffer pathname)
   (let ((pathname (->pathname pathname)))
-    (list-search-positive (buffer-list)
+    (find-matching-item (buffer-list)
       (lambda (buffer)
 	(equal? pathname (buffer-pathname buffer))))))
 
@@ -845,7 +845,7 @@ Prefix arg means treat the plaintext file as binary data."
 		       (lambda ()
 			 (canonicalize-filename-completions
 			  directory
-			  (list-transform-positive filenames
+			  (keep-matching-items filenames
 			    (lambda (filename)
 			      (string-prefix? string filename))))))))))
 	     (cond ((null? filenames)
@@ -854,7 +854,7 @@ Prefix arg means treat the plaintext file as binary data."
 		    (unique-case (car filenames)))
 		   (else
 		    (let ((filtered-filenames
-			   (list-transform-negative filenames
+			   (delete-matching-items filenames
 			     (lambda (filename)
 			       (completion-ignore-filename?
 				(merge-pathnames filename directory))))))

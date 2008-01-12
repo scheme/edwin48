@@ -67,7 +67,7 @@ USA.
 				(set-comtab-alist! comtab alist)))
 			     (let* ((vector (make-vector 256 #f))
 				    (alist
-				     (list-transform-negative alist
+				     (delete-matching-items alist
 				       (lambda (entry)
 					 (let ((key (car entry)))
 					   (and (char? key)

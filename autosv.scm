@@ -154,7 +154,7 @@ This file is not the file you visited; that changes only when you save."
 
 (define (do-auto-save)
   (let ((buffers
-	 (list-transform-positive (buffer-list)
+	 (keep-matching-items (buffer-list)
 	   (lambda (buffer)
 	     (and (buffer-auto-save-pathname buffer)
 		  (buffer-auto-save-modified? buffer)

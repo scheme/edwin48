@@ -41,7 +41,7 @@ USA.
 			  (list (scm-file source))
 			  '())
 		      (map bin-file
-			   (list-transform-positive dependencies
+			   (keep-matching-items dependencies
 			     (if source-time
 				 (lambda (dependency)
 				   (let ((bin-time (bin-time dependency)))

@@ -514,7 +514,7 @@ USA.
   (let ((environment (bline/evaluation-environment bline)))
     (bline/attached-buffer bline 'ENVIRONMENT-BROWSER
       (lambda ()
-	(or (list-search-positive (buffer-list)
+	(or (find-matching-item (buffer-list)
 	      (lambda (buffer)
 		(let ((browser (buffer-get buffer 'BROWSER)))
 		  (and browser (eq? environment (browser/object browser))))))
@@ -1051,7 +1051,7 @@ The buffer below shows the current subproblem or reduction.
       buffer)))
 
 (define (find-debugger-buffers)
-  (list-transform-positive (buffer-list)
+  (keep-matching-items (buffer-list)
     (let ((debugger-mode (ref-mode-object continuation-browser)))
       (lambda (buffer)
 	(eq? (buffer-major-mode buffer) debugger-mode)))))

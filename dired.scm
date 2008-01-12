@@ -158,7 +158,7 @@ Type `h' after entering dired for more info."
 	    buffer)))))
 
 (define (find-dired-buffer directory-spec)
-  (list-search-positive (buffer-list)
+  (find-matching-item (buffer-list)
     (lambda (buffer)
       (equal? directory-spec (buffer-get buffer 'DIRED-DIRECTORY-SPEC)))))
 

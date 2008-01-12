@@ -888,7 +888,7 @@ Prefix argument means do not kill the debugger buffer."
 
 (define (continuation-browser-abort restarts)
   (let ((restart
-	 (list-search-positive restarts
+	 (find-matching-item restarts
 	   (lambda (restart)
 	     (eq? (restart/name restart) 'abort)))))
     (if (not restart)

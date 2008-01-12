@@ -350,7 +350,7 @@ USA.
 			      (cddr addr-spec))))))))))
 
 (define (rfc822:strip-comments tokens)
-  (list-transform-negative tokens
+  (delete-matching-items tokens
     (lambda (token)
       (and (string? token)
 	   (char=? #\( (string-ref token 0))))))

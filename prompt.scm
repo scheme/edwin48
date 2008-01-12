@@ -730,7 +730,7 @@ a repetition of this command will exit."
 		(let ((try-suffix
 		       (lambda (suffix if-not-found)
 			 (let ((completions
-				(list-transform-positive completions
+				(keep-matching-items completions
 				  (let ((prefix (string-append string suffix)))
 				    (if (case-insensitive-completion?)
 					(lambda (completion)
