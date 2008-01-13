@@ -100,7 +100,7 @@ USA.
   (without-interrupts
     (lambda ()
       (prepare-gap-for-insert! group index n)
-      (xsubstring-fill! (group-text group) index (fix:+ index n) char)
+      (substring-fill! (group-text group) index (fix:+ index n) char)
       (finish-group-insert! group index n))))
 
 (define (group-insert-string! group index string)

@@ -63,11 +63,11 @@ USA.
 				    (GROUP-GAP-LENGTH GROUP))))))))))))
 
 (define-next-char-search group-find-next-char
-  xsubstring-find-next-char)
+  substring-find-next-char)
 (define-next-char-search group-find-next-char-ci
-  xsubstring-find-next-char-ci)
+  substring-find-next-char-ci)
 (define-next-char-search group-find-next-char-in-set
-  xsubstring-find-next-char-in-set)
+  substring-find-next-char-in-set)
 
 (define-syntax define-prev-char-search
   (sc-macro-transformer
@@ -101,11 +101,11 @@ USA.
 				      CHAR)))))))))
 
 (define-prev-char-search group-find-previous-char
-  xsubstring-find-previous-char)
+  substring-find-previous-char)
 (define-prev-char-search group-find-previous-char-ci
-  xsubstring-find-previous-char-ci)
+  substring-find-previous-char-ci)
 (define-prev-char-search group-find-previous-char-in-set
-  xsubstring-find-previous-char-in-set)
+  substring-find-previous-char-in-set)
 
 (define (%find-next-newline group start end)
   (group-find-next-char group start end #\newline))
