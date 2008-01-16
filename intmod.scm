@@ -201,7 +201,7 @@ evaluated in the specified inferior REPL buffer."
 	 (car buffers))))
 
 (define (repl-buffer-list)
-  (set! repl-buffers (keep-matching-items repl-buffers buffer-alive?))
+  (set! repl-buffers (filter buffer-alive? repl-buffers))
   repl-buffers)
 
 (define (repl-buffer? buffer)
@@ -910,9 +910,9 @@ If this is an error, the debugger examines the error condition."
 	      (transcript-write value #f))))))
 
 (define (mark-visible? mark)
-  (there-exists? (buffer-windows (mark-buffer mark))
-    (lambda (window)
-      (window-mark-visible? window mark))))
+  (any (lambda (window)
+	 (window-mark-visible? window mark))
+       (buffer-windows (mark-buffer mark))))
 
 (define (enqueue-output-string! port string)
   (without-interrupts

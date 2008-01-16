@@ -709,9 +709,9 @@ USA.
   (let ((gdbf (news-group:header-gdbf group #t)))
     (if gdbf
 	(let ((keys
-	       (delete-matching-items (map ->key numbers)
-		 (lambda (key)
-		   (gdbm-exists? gdbf key)))))
+	       (remove (lambda (key)
+			 (gdbm-exists? gdbf key))
+		        (map ->key numbers))))
 	  (if (not (null? keys))
 	      (read-headers group keys #t '()
 			    (lambda (key reply replies)
@@ -1083,13 +1083,14 @@ USA.
 			   (prune-header-alist alist)))))
 
 (define (prune-header-alist alist)
-  (keep-matching-items alist
-    (lambda (entry)
-      (or (string-ci=? (car entry) "subject")
-	  (string-ci=? (car entry) "references")
-	  (string-ci=? (car entry) "from")
-	  (string-ci=? (car entry) "lines")
-	  (string-ci=? (car entry) "xref")))))
+
+  (filter (lambda (entry)
+	    (or (string-ci=? (car entry) "subject")
+		(string-ci=? (car entry) "references")
+		(string-ci=? (car entry) "from")
+		(string-ci=? (car entry) "lines")
+		(string-ci=? (car entry) "xref")))
+	  alist))
 
 (define (header-text-parser name)
   (let ((key (string-append name ":")))
@@ -1375,7 +1376,7 @@ USA.
       ;; is reasonable since I've already seen bad references during the
       ;; first few days of testing.
       (let ((tokens (parse-references-list (news-header:references header))))
-	(if (for-all? tokens valid-message-id?)
+	(if (every valid-message-id? tokens)
 	    tokens
 	    '()))
       '()))
@@ -1483,13 +1484,14 @@ USA.
 
 (define (compute-redundant-relatives step table header)
   (let ((relatives (step header)))
-    (keep-matching-items relatives
+    (filter
       (lambda (child)
-	(there-exists? relatives
-	  (lambda (child*)
-	    (and (not (eq? child* child))
-		 (memq child
-		       (compute-header-relatives step table child*)))))))))
+	(any (lambda (child*)
+	       (and (not (eq? child* child))
+		    (memq child
+			  (compute-header-relatives step table child*))))
+	     relatives))
+      relatives)))
 
 (define (compute-header-relatives step table header)
   (let loop ((header header))
@@ -1559,9 +1561,9 @@ USA.
 
 (define (discard-useless-dummy-headers dummy-headers)
   (for-each maybe-discard-dummy-header dummy-headers)
-  (delete-matching-items dummy-headers
-    (lambda (header)
-      (null? (news-header:followups header)))))
+  (remove (lambda (header)
+	    (null? (news-header:followups header)))
+	  dummy-headers))
 
 (define (maybe-discard-dummy-header header)
   (let ((children (news-header:followups header)))

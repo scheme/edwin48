@@ -55,7 +55,7 @@ is used to calculate the indentation for that form."
     (and (pair? object)
 	 (symbol? (car object))
 	 (alist? (cdr object))
-	 (for-all? (cdr object) (lambda (entry) (string? (car entry)))))))
+	 (every (lambda (entry) (string? (car entry))) (cdr object)))))
 
 (define-variable lisp-body-indent
   "Number of extra columns to indent the body of a special form."

@@ -10,8 +10,8 @@
 	  errors
           define-record-type*
 	  fixnum
-	  lists
           weak-pair
+	  srfi-1
           srfi-13
           srfi-23
 	  strings

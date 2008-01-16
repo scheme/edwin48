@@ -66,10 +66,10 @@ Includes the new backup.  Must be > 0."
 	  (list-copy dos/backup-suffixes))
   (lambda (extensions)
     (and (list? extensions)
-	 (for-all? extensions
-	   (lambda (extension)
-	     (and (string? extension)
-		  (not (string-null? extension))))))))
+	 (every (lambda (extension)
+		  (and (string? extension)
+		       (not (string-null? extension))))
+		 extensions))))
 
 ;;;; Filename I/O
 
@@ -287,9 +287,9 @@ Switches may be concatenated, e.g. `-lt' is equivalent to `-l -t'."
   "$TMP\\edwin.bak")
 
 (define (os/backup-filename? filename)
-  (or (there-exists? dos/backup-suffixes
-	(lambda (suffix)
-	  (string-suffix? suffix filename)))
+  (or (any (lambda (suffix)
+	     (string-suffix? suffix filename))
+	   dos/backup-suffixes)
       (let ((type (pathname-type filename)))
 	(and (string? type)
 	     (or (string-ci=? "bak" type)
@@ -422,9 +422,9 @@ Switches may be concatenated, e.g. `-lt' is equivalent to `-l -t'."
   (or (os/backup-filename? filename)
       (os/auto-save-filename? filename)
       (and (not (file-directory? filename))
-	   (there-exists? (ref-variable completion-ignored-extensions)
-   	     (lambda (extension)
-	       (string-suffix? extension filename))))))
+	   (any (lambda (extension)
+		  (string-suffix? extension filename))
+		(ref-variable completion-ignored-extensions)))))
 
 (define (os/init-file-name) "~/edwin.ini")
 (define (os/abbrev-file-name) "~/abbrevs.scm")

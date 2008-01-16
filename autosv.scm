@@ -154,12 +154,12 @@ This file is not the file you visited; that changes only when you save."
 
 (define (do-auto-save)
   (let ((buffers
-	 (keep-matching-items (buffer-list)
-	   (lambda (buffer)
-	     (and (buffer-auto-save-pathname buffer)
-		  (buffer-auto-save-modified? buffer)
-		  (<= (* 10 (buffer-save-length buffer))
-		      (* 13 (buffer-length buffer))))))))
+	 (filter (lambda (buffer)
+		   (and (buffer-auto-save-pathname buffer)
+			(buffer-auto-save-modified? buffer)
+			(<= (* 10 (buffer-save-length buffer))
+			    (* 13 (buffer-length buffer)))))
+		 (buffer-list))))
     (if (not (null? buffers))
 	(begin
 	  (temporary-message "Auto saving...")

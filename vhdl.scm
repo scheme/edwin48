@@ -454,9 +454,9 @@ USA.
   #f)
 
 (define (in-configuration? stack)
-  (there-exists? stack
-    (lambda (entry)
-      (equal? 'CONFIGURATION (keyparser-stack-entry/keyword entry)))))
+  (any (lambda (entry)
+	 (equal? 'CONFIGURATION (keyparser-stack-entry/keyword entry)))
+       stack))
 
 (define-matched-keyword 'BLOCK-CONFIGURATION "for"
   (lambda (mark stack)

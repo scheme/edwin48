@@ -353,7 +353,7 @@ USA.
 				      (options/seen option-structure)))
 	     (if (not (let ((predicate (cadr entry)))
 			(if (pair? predicate)
-			    (there-exists? predicate (lambda (p) (p arg)))
+			    (any (lambda (p) (p arg)) predicate)
 			    (predicate arg))))
 		 (error "Not a valid option argument:" arg))
 	     ((cddr entry) option-structure arg)
@@ -730,15 +730,16 @@ a repetition of this command will exit."
 		(let ((try-suffix
 		       (lambda (suffix if-not-found)
 			 (let ((completions
-				(keep-matching-items completions
-				  (let ((prefix (string-append string suffix)))
-				    (if (case-insensitive-completion?)
-					(lambda (completion)
-					  (string-prefix-ci? prefix
-							     completion))
-					(lambda (completion)
-					  (string-prefix? prefix
-							  completion)))))))
+				(filter
+				 (let ((prefix (string-append string suffix)))
+				   (if (case-insensitive-completion?)
+				       (lambda (completion)
+					 (string-prefix-ci? prefix
+							    completion))
+				       (lambda (completion)
+					 (string-prefix? prefix
+							 completion))))
+				 completions)))
 			   (cond ((null? completions)
 				  (if-not-found))
 				 ((null? (cdr completions))

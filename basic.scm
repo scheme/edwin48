@@ -342,15 +342,15 @@ With argument, saves visited file first."
 
 (define (save-buffers-and-exit no-confirmation? noun exit)
   (save-some-buffers no-confirmation? #t)
-  (if (and (or (not (there-exists? (buffer-list)
-		      (lambda (buffer)
-			(and (buffer-modified? buffer)
-			     (buffer-pathname buffer)))))
+  (if (and (or (not (any (lambda (buffer)
+			   (and (buffer-modified? buffer)
+				(buffer-pathname buffer)))
+			 (buffer-list)))
 	       (prompt-for-yes-or-no? "Modified buffers exist; exit anyway"))
-	   (if (there-exists? (process-list)
-		 (lambda (process)
-		   (and (not (process-kill-without-query process))
-			(process-runnable? process))))
+	   (if (any (lambda (process)
+		      (and (not (process-kill-without-query process))
+			   (process-runnable? process)))
+		    (process-list))
 	       (and (prompt-for-yes-or-no?
 		     "Active processes exist; kill them and exit anyway")
 		    (begin

@@ -397,10 +397,10 @@ Only one News reader may be open per server; if a previous News reader
 ;;;; News-Server Buffer
 
 (define (find-news-server-buffer server)
-  (find-matching-item (buffer-list)
-    (lambda (buffer)
-      (and (news-server-buffer? buffer)
-	   (string-ci=? (news-server-buffer:server buffer) server)))))
+  (find (lambda (buffer)
+	  (and (news-server-buffer? buffer)
+	       (string-ci=? (news-server-buffer:server buffer) server)))
+	(buffer-list)))
 
 (define (make-news-server-buffer server)
   (create-news-buffer (news-buffer-name server "subscribed-groups")
@@ -2231,8 +2231,8 @@ This command has no effect if the variable
 		(update-subsequent-news-header-lines (buffer-start buffer))
 		(buffer-put! buffer 'NEWS-THREADS
 			     (list->vector
-			      (delete-matching-items threads
-				news-thread:all-articles-deleted?)))
+			      (remove news-thread:all-articles-deleted?
+				      threads)))
 		(if (and on-header?
 			 (not (region-get (current-point) 'NEWS-HEADER #f)))
 		    (let ((ls
@@ -2820,12 +2820,12 @@ While composing the reply, use \\[mail-yank-original] to yank the
 	   select-buffer-other-window)))))
 
 (define (merge-header-alists x y)
-  (append (delete-matching-items x
-	    (lambda (entry)
-	      (find-matching-item y
-		(lambda (entry*)
-		  (string-ci=? (car entry) (car entry*))))))
-	  y))
+  (append
+   (remove (lambda (entry)
+	     (find (lambda (entry*) (string-ci=? (car entry) (car entry*)))
+		   y))
+	   x)
+   y))
 
 (define (news-article-buffer:rfc822-reply-headers article-buffer)
   (call-with-temporary-buffer " news conversion"
@@ -3258,7 +3258,7 @@ C-c C-q  mail-fill-yanked-message (fill what was yanked)."
        (>= (length entry) 2)
        (string? (car entry))
        (boolean? (cadr entry))
-       (for-all? (cddr entry) range?)))
+       (every range? (cddr entry))))
 
 (define ((convert-groups-init-file-entry-type-1 connection) entry)
   (make-news-group-1 connection (car entry) (cadr entry) #f (cddr entry)
@@ -3270,7 +3270,7 @@ C-c C-q  mail-fill-yanked-message (fill what was yanked)."
        (string? (car entry))
        (boolean? (cadr entry))
        (valid-group-server-info? (caddr entry))
-       (for-all? (cdddr entry) range?)))
+       (every range? (cdddr entry))))
 
 (define ((convert-groups-init-file-entry-type-2 connection) entry)
   (make-news-group-1 connection
@@ -3287,8 +3287,8 @@ C-c C-q  mail-fill-yanked-message (fill what was yanked)."
        (string? (vector-ref entry 0))
        (boolean? (vector-ref entry 1))
        (valid-group-server-info? (vector-ref entry 2))
-       (for-all? (vector-ref entry 3) range?)
-       (for-all? (vector-ref entry 4) range?)))
+       (every range? (vector-ref entry 3))
+       (every range? (vector-ref entry 4))))
 
 (define ((convert-groups-init-file-entry-type-3 connection) entry)
   (make-news-group-1 connection
@@ -3305,9 +3305,9 @@ C-c C-q  mail-fill-yanked-message (fill what was yanked)."
        (string? (vector-ref entry 0))
        (boolean? (vector-ref entry 1))
        (valid-group-server-info? (vector-ref entry 2))
-       (for-all? (vector-ref entry 3) range?)
-       (for-all? (vector-ref entry 4) range?)
-       (for-all? (vector-ref entry 5) range?)))
+       (every range? (vector-ref entry 3))
+       (every range? (vector-ref entry 4))
+       (every range? (vector-ref entry 5))))
 
 (define ((convert-groups-init-file-entry-type-4 connection) entry)
   (make-news-group-1 connection
@@ -3367,7 +3367,7 @@ C-c C-q  mail-fill-yanked-message (fill what was yanked)."
 		   (* (ref-variable news-group-ignored-subject-retention #f)
 		      86400))))
 	   (and (or (news-group:ignored-subjects-modified? group)
-		    (there-exists? entries (lambda (entry) (< (cdr entry) t))))
+		    (any (lambda (entry) (< (cdr entry) t)) entries))
 		(begin
 		  (write-init-file (ignored-subjects-file-pathname group)
 				   buffer
@@ -4136,8 +4136,7 @@ With prefix arg, replaces the file with the list information."
        (if (or (command-argument-multiplier-only? argument)
 	       (ref-variable news-group-show-seen-headers buffer))
 	   threads
-	   (delete-matching-items threads
-	     news-thread:all-articles-deleted?))))))
+	   (remove news-thread:all-articles-deleted? threads))))))
 
 (define (news-group:get-headers group argument buffer)
   (let ((connection (news-group:connection group))

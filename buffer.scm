@@ -214,7 +214,7 @@ The buffer is guaranteed to be deselected at that time."
   (set-buffer-windows! buffer (delq! window (buffer-windows buffer))))
 
 (define (buffer-visible? buffer)
-  (there-exists? (buffer-windows buffer) window-visible?))
+  (any window-visible? (buffer-windows buffer)))
 
 (define (buffer-x-size buffer)
   (let ((windows (buffer-windows buffer)))

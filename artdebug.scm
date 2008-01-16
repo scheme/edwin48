@@ -888,9 +888,8 @@ Prefix argument means do not kill the debugger buffer."
 
 (define (continuation-browser-abort restarts)
   (let ((restart
-	 (find-matching-item restarts
-	   (lambda (restart)
-	     (eq? (restart/name restart) 'abort)))))
+	 (find (lambda (restart) (eq? (restart/name restart) 'abort))
+	       restarts)))
     (if (not restart)
 	(editor-error "Can't find an abort restart")
 	(fluid-let ((hook/invoke-restart

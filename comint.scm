@@ -478,10 +478,10 @@ This is a good thing to set in mode hooks."
   (list comint-dynamic-complete-filename)
   (lambda (object)
     (and (list? object)
-	 (for-all? object
-	   (lambda (object)
-	     (and (procedure? object)
-		  (procedure-arity-valid? object 0)))))))
+	 (every (lambda (object)
+		  (and (procedure? object)
+		       (procedure-arity-valid? object 0)))
+		object))))
 
 (define-command comint-dynamic-complete
   "Dynamically perform completion at point.

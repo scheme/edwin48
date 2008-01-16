@@ -238,11 +238,11 @@ with the next possible expansion not yet tried."
 		   (test (if do-case
 			     (string-downcase result)
 			     result)))
-	      (if (there-exists? (ref-variable last-dabbrev-table)
-		    (lambda (example)
-		      (string=? test
-				(if do-case
-				    (string-downcase example)
-				    example))))
+	      (if (any (lambda (example)
+			 (string=? test
+				   (if do-case
+				       (string-downcase example)
+				       example)))
+		       (ref-variable last-dabbrev-table))
 		  (loop (if reverse? start end))
 		  (values end result))))))))

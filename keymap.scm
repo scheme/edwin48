@@ -142,9 +142,9 @@ Previous contents of that buffer are killed first."
 	  (if (and (pair? (cdr comtabs))
 		   (comtab? (cadr comtabs))
 		   (or global?
-		       (not (there-exists? global-modes
-			      (lambda (mode)
-				(eq? (cdr comtabs) (mode-comtabs mode)))))))
+		       (not (any (lambda (mode)
+				   (eq? (cdr comtabs) (mode-comtabs mode)))
+				 global-modes))))
 	      (loop (cdr comtabs))
 	      '()))))
 
@@ -152,9 +152,8 @@ Previous contents of that buffer are killed first."
   (map (lambda (element)
 	 (cons (xkey->name (car element))
 	       (command-name-string (cdr element))))
-       (sort (delete-matching-items elements
-	       (lambda (element)
-		 (button? (car element))))
+       (sort (remove (lambda (element) (button? (car element)))
+		     elements)
 	     (lambda (a b) (xkey<? (car a) (car b))))))
 
 (define (sort-by-prefix elements)
@@ -162,9 +161,9 @@ Previous contents of that buffer are killed first."
     (let ((make-entry
 	   (lambda (prefix element)
 	     (let ((entry
-		    (find-matching-item prefix-alist
-		      (lambda (entry)
-			(string=? (car entry) prefix)))))
+		    (find (lambda (entry)
+			    (string=? (car entry) prefix))
+			  prefix-alist)))
 	       (if entry
 		   (set-cdr! entry (cons element (cdr entry)))
 		   (set! prefix-alist

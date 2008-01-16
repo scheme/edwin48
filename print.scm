@@ -133,9 +133,9 @@ Variable LPR-SWITCHES is a list of extra switches (strings) to pass to lpr."
 			       (list (string-append "-J \"" job-name "\""))
 			       '()))
 			 (if (and title
-				  (not (there-exists? switches
-					 (lambda (switch)
-					   (string-prefix? "-T" switch)))))
+				  (not (any (lambda (switch)
+					      (string-prefix? "-T" switch))
+					    switches)))
 			     (list (string-append "-T \"" title "\""))
 			     '())
 			 switches))))

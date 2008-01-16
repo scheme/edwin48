@@ -41,15 +41,16 @@ USA.
 			  (list (scm-file source))
 			  '())
 		      (map bin-file
-			   (keep-matching-items dependencies
-			     (if source-time
-				 (lambda (dependency)
-				   (let ((bin-time (bin-time dependency)))
-				     (or (not bin-time)
-					 (< source-time bin-time))))
-				 (lambda (dependency)
-				   dependency ;ignore
-				   #t))))))))
+			   (filter
+			    (if source-time
+				(lambda (dependency)
+				  (let ((bin-time (bin-time dependency)))
+				    (or (not bin-time)
+					(< source-time bin-time))))
+				(lambda (dependency)
+				  dependency ;ignore
+				  #t))
+			    dependencies))))))
 	      (if (not (null? reasons))
 		  (begin
 		    #|

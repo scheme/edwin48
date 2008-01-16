@@ -46,10 +46,10 @@ Each element is a string (directory name) or #F (try default directory)."
   '()
   (lambda (exec-path)
     (and (list? exec-path)
-	 (for-all? exec-path
-	   (lambda (element)
-	     (or (not element)
-		 (pathname? element)))))))
+	 (every (lambda (element)
+		  (or (not element)
+		      (pathname? element)))
+		exec-path))))
 
 (define-variable process-connection-type
   "Control type of device used to communicate with subprocesses.

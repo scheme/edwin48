@@ -322,9 +322,8 @@ is inserted."
     (let ((given-header?
 	   (lambda (name null-true?)
 	     (let ((header
-		    (find-matching-item headers
-		      (lambda (header)
-			(string-ci=? (car header) name)))))
+		    (find (lambda (header) (string-ci=? (car header) name))
+			  headers)))
 	       (and header
 		    (cadr header)
 		    (if null-true?
@@ -943,13 +942,13 @@ the user from the mailer."
 			     (smtp-command/rcpt port recipient))
 			   recipients)))
 		 (if (if require-valid?
-			 (for-all? responses valid-response?)
-			 (there-exists? responses valid-response?))
+			 (every valid-response? responses)
+			 (any   valid-response? responses))
 		     (smtp-command/data port message-pathname)
 		     (smtp-command/rset port))
 		 (smtp-command/quit port)
 		 responses)))))
-      (cond ((not (for-all? responses valid-response?))
+      (cond ((not (every valid-response? responses))
 	     (pop-up-temporary-buffer "*SMTP-invalid*"
 				      '(READ-ONLY FLUSH-ON-SPACE)
 	       (lambda (buffer window)
@@ -970,8 +969,8 @@ the user from the mailer."
 	     (pop-up-buffer trace-buffer #f)))
       (message "Sending..."
 	       (if (if require-valid?
-		       (for-all? responses valid-response?)
-		       (there-exists? responses valid-response?))
+		       (every valid-response? responses)
+		       (any   valid-response? responses))
 		   "done"
 		   "aborted")))))
 
@@ -1065,7 +1064,7 @@ the user from the mailer."
   (smtp-drain-output port)
   (let ((response (smtp-read-line port)))
     (let ((n (smtp-response-number response)))
-      (if (not (there-exists? numbers (lambda (n*) (= n n*))))
+      (if (not (any (lambda (n*) (= n n*)) numbers))
 	  (editor-error response))
       (if (smtp-response-continued? response)
 	  (let loop ((responses (list response)))
@@ -1574,15 +1573,14 @@ Otherwise, the MIME type is determined from the file's suffix;
 	     (if prompt?
 		 (do-mime)
 		 (let ((entry
-			(find-matching-item
-			    (ref-variable file-type-to-mime-type buffer)
-			  (lambda (entry)
-			    (cond ((string? type)
-				   (string-ci=? (car entry) type))
-				  ((not type)
-				   (not (car entry)))
-				  (else
-				   (eq? type 'WILD)))))))
+			(find (lambda (entry)
+				(cond ((string? type)
+				       (string-ci=? (car entry) type))
+				      ((not type)
+				       (not (car entry)))
+				      (else
+				       (eq? type 'WILD))))
+			      (ref-variable file-type-to-mime-type buffer))))
 		   (cond (entry (make-mime-type (cadr entry) (caddr entry)))
 			 ((pathname-mime-type pathname))
 			 (else
@@ -1616,9 +1614,9 @@ This is a list, each element of which is a list of three items:
 	(and (list? x)
 	     (= (length x) 3)
 	     (or (not (car x)) (string? (car x)))
-	     (there-exists? mime-top-level-types
-	       (lambda (e)
-		 (eq? (cdr e) (cadr x))))
+	     (any (lambda (e)
+		    (eq? (cdr e) (cadr x)))
+		  mime-top-level-types)
 	     (symbol? (caddr x)))))))
 
 (define mime-top-level-types

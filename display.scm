@@ -87,11 +87,11 @@ USA.
   ((display-type/operation/with-interrupts-disabled display-type) thunk))
 
 (define (editor-display-types)
-  (keep-matching-items display-types display-type/available?))
+  (filter display-type/available? display-types))
 
 (define (name->display-type name)
   (let ((display-type
-	 (find-matching-item display-types
-	   (lambda (display-type)
-	     (eq? name (display-type/name display-type))))))
+	 (find (lambda (display-type)
+		 (eq? name (display-type/name display-type)))
+	       display-types)))
     display-type))

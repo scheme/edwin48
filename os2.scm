@@ -48,11 +48,12 @@ USA.
 	(let ((pathnames (directory-read file #f)))
 	  (if all-files?
 	      pathnames
-	      (keep-matching-items pathnames
-		(let ((mask
-		       (fix:or os2-file-mode/hidden os2-file-mode/system)))
-		  (lambda (pathname)
-		    (fix:= (fix:and (file-modes pathname) mask) 0)))))))
+	      (filter
+	       (let ((mask
+		      (fix:or os2-file-mode/hidden os2-file-mode/system)))
+		 (lambda (pathname)
+		   (fix:= (fix:and (file-modes pathname) mask) 0)))
+	        pathnames))))
        (result '()))
     (if (null? pathnames)
 	result

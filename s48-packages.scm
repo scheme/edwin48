@@ -50,19 +50,10 @@
 (define-structure aliases
     (export without-interrupts
 	    unspecific
-	    1+ -1+)
-  (open scheme interrupts util)
+	    1+ -1+
+	    delq! list-deletor!)
+  (open scheme interrupts util srfi-1)
   (files s48-aliases))
-
-(define-structure lists
-    (export find-matching-item
-	    keep-matching-items
-	    delete-matching-items
-	    delq!
-	    list-deletor!
-	    for-all? there-exists?)
-  (open scheme srfi-1)
-  (files s48-lists))
 
 (define-structure literals
     (export) ;; no exports

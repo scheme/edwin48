@@ -121,9 +121,8 @@ Reads the new name in the echo area."
 (define (kill-buffer-interactive buffer)
   (if (not (other-buffer buffer)) (editor-error "Only one buffer"))
   (save-buffer-changes buffer)
-  (if (for-all? (ref-variable kill-buffer-query-procedures buffer)
-	(lambda (procedure)
-	  (procedure buffer)))
+  (if (every (lambda (procedure) (procedure buffer))
+	     (ref-variable kill-buffer-query-procedures buffer))
       (kill-buffer buffer)
       (message "Buffer not killed.")))
 
@@ -148,7 +147,7 @@ Reads the new name in the echo area."
 Each procedure is called with one argument, the buffer being killed.
 If any procedure returns #f, the buffer is not killed."
   (list kill-buffer-query-modified kill-buffer-query-process)
-  (lambda (object) (and (list? object) (for-all? object procedure?))))
+  (lambda (object) (and (list? object) (every procedure? object))))
 
 (define-command kill-some-buffers
   "For each buffer, ask whether to kill it."

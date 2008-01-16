@@ -236,9 +236,10 @@ The following commands evaluate Scheme expressions:
 			       (string-downcase prefix)
 			       prefix))))
 		     (if bound-only?
-			 (keep-matching-items completions
-			   (lambda (name)
-			     (environment-bound? environment name)))
+			 (filter
+			  (lambda (name)
+			    (environment-bound? environment name))
+			  completions)
 			 completions)))))
 	    (cond ((not (pair? completions))
 		   (if-not-found))

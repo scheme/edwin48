@@ -85,11 +85,11 @@ filename suffix \".bf\"."
 
 (define (r/w-file-methods? objects)
   (and (list? objects)
-       (for-all? objects
-	 (lambda (object)
-	   (and (pair? object)
-		(procedure? (car object))
-		(procedure? (cdr object)))))))
+       (every (lambda (object)
+		(and (pair? object)
+		     (procedure? (car object))
+		     (procedure? (cdr object))))
+	      objects)))
 
 (define-variable read-file-methods
   "List of alternate methods to be used for reading a file into a buffer.
@@ -307,10 +307,10 @@ of the predicates is satisfied, the file is written in the usual way."
 
 (define (string->mode-alist? object)
   (and (alist? object)
-       (for-all? object
-	 (lambda (association)
-	   (and (string? (car association))
-		(->mode? (cdr association)))))))
+       (every (lambda (association)
+		(and (string? (car association))
+		     (->mode? (cdr association))))
+	      object)))
 
 (define (->mode? object)
   (or (mode? object)

@@ -611,9 +611,9 @@ The buffer is guaranteed to be selected at that time."
     (and (weak-pair? buffers)
 	 (or (not (let ((buffer (weak-car buffers)))
 		    (and buffer
-			 (there-exists? (buffer-windows buffer)
-			   (lambda (window)
-			     (eq? (window-screen window) screen))))))
+			 (any (lambda (window)
+				(eq? (window-screen window) screen))
+			      (buffer-windows buffer)))))
 	     (weak-cdr buffers)))))
 
 (define setting-up-buffer-layout? #f)

@@ -192,11 +192,10 @@ Includes the new backup.  Must be > 0."
 
 (define (os/newest-backup pathname)
   (or (os/newest-numeric-backup pathname)
-      (find-matching-item
-          (os/directory-list-completions
-           (directory-namestring pathname)
-           (string-append (file-namestring pathname) "~"))
-        os/backup-filename?)))
+      (find os/backup-filename?
+	    (os/directory-list-completions
+	     (directory-namestring pathname)
+	     (string-append (file-namestring pathname) "~")))))
 
 (define (os/buffer-backup-pathname truename buffer)
   (call-with-values
@@ -317,9 +316,9 @@ Includes the new backup.  Must be > 0."
 
 (define (os/completion-ignore-filename? filename)
   (and (not (file-test-no-errors file-directory? filename))
-       (there-exists? (ref-variable completion-ignored-extensions)
-         (lambda (extension)
-	   (string-suffix? extension filename)))))
+       (any (lambda (extension)
+	      (string-suffix? extension filename))
+	    (ref-variable completion-ignored-extensions))))
 
 (define (os/completion-ignored-extensions)
   (append (list ".bin" ".com" ".ext"
@@ -336,10 +335,10 @@ Includes the new backup.  Must be > 0."
   (os/completion-ignored-extensions)
   (lambda (extensions)
     (and (list? extensions)
-	 (for-all? extensions
-	   (lambda (extension)
-	     (and (string? extension)
-		  (not (string-null? extension))))))))
+	 (every (lambda (extension)
+		  (and (string? extension)
+		       (not (string-null? extension))))
+		extensions))))
 
 (define (os/init-file-name) "~/.edwin")
 (define (os/abbrev-file-name) "~/.abbrev_defs")
@@ -656,9 +655,8 @@ option, instead taking -P <filename>."
   set-file-modes!)
 
 (define (os/rmail-spool-directory)
-  (or (find-matching-item
-	  '("/var/spool/mail/" "/var/mail/" "/usr/spool/mail/" "/usr/mail/")
-	file-directory?)
+  (or (find file-directory?
+	    '("/var/spool/mail/" "/var/mail/" "/usr/spool/mail/" "/usr/mail/"))
       "/usr/spool/mail/"))
 
 (define (os/rmail-primary-inbox-list system-mailboxes)
@@ -666,9 +664,8 @@ option, instead taking -P <filename>."
 
 (define (os/sendmail-program)
   (or (os/find-program "sendmail" #f (ref-variable exec-path) #f)
-      (find-matching-item
-	  '("/usr/sbin/sendmail" "/usr/lib/sendmail" "/usr/ucblib/sendmail")
-	file-executable?)
+      (find file-executable?
+	    '("/usr/sbin/sendmail" "/usr/lib/sendmail" "/usr/ucblib/sendmail"))
       "fakemail"))
 
 (define (os/newsrc-file-name server)

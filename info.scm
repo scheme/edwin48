@@ -457,9 +457,8 @@ except for \\[info-cease-edit] to return to Info."
 		  (let ((current-item (current-menu-item (current-point))))
 		    (and current-item
 			 (let ((current-index (mark-index current-item)))
-			   (find-matching-item item-alist
-			     (lambda (entry)
-			       (= current-index (cdr entry)))))))))
+			   (find (lambda (entry) (= current-index (cdr entry)))
+				 item-alist))))))
 	     (if current-entry
 		 (prompt-for-alist-value "Menu item"
 					 item-alist
@@ -860,9 +859,8 @@ The name may be an abbreviation of the reference name."
       (for-each
        (lambda (submenu)
 	 (let ((nodename (car submenu)))
-	   (if (not (or (find-matching-item menu-items
-			  (lambda (item)
-			    (string-ci=? item nodename)))
+	   (if (not (or (find (lambda (item) (string-ci=? item nodename))
+			      menu-items)
 			(re-search-forward (string-append "^\\* "
 							  (re-quote-string
 							   nodename)
@@ -931,9 +929,9 @@ The name may be an abbreviation of the reference name."
 			     (let ((info-dir (edwin-info-directory)))
 			       (if (and info-dir
 					(file-directory? info-dir)
-					(not (there-exists? directories
-					       (lambda (dir)
-						 (pathname=? info-dir dir)))))
+					(not (any (lambda (dir)
+						    (pathname=? info-dir dir))
+						  directories)))
 				   (append directories (list info-dir))
 				   directories))))))
 		 (set-variable-local-value! buffer variable directories)

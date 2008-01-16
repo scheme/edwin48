@@ -210,7 +210,7 @@ USA.
 
 (define (list-of-type? object predicate)
   (and (list? object)
-       (for-all? object predicate)))
+       (every predicate object)))
 
 (define (dotimes n procedure)
   (define (loop i)

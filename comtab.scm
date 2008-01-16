@@ -67,17 +67,17 @@ USA.
 				(set-comtab-alist! comtab alist)))
 			     (let* ((vector (make-vector 256 #f))
 				    (alist
-				     (delete-matching-items alist
-				       (lambda (entry)
-					 (let ((key (car entry)))
-					   (and (char? key)
-						(< (char->integer key) 256)
-						(begin
-						  (vector-set!
-						   vector
-						   (char->integer key)
-						   (cdr entry))
-						  #t)))))))
+				     (remove (lambda (entry)
+					       (let ((key (car entry)))
+						 (and (char? key)
+						      (< (char->integer key) 256)
+						      (begin
+							(vector-set!
+							 vector
+							 (char->integer key)
+							 (cdr entry))
+							#t))))
+					     alist)))
 			       (without-interrupts
 				(lambda ()
 				  (set-comtab-vector! comtab vector)
@@ -131,7 +131,7 @@ USA.
 (define (list-of-comtabs? object)
   (and (not (null? object))
        (list? object)
-       (for-all? object comtab?)))
+       (every comtabs? object)))
 
 (define (comtab-key? object)
   (or (key? object)
