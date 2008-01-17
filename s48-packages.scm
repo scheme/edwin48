@@ -67,3 +67,8 @@
   (open (modify scheme (hide string-fill!)) srfi-13)
   (files s48-strings))
 
+(define-structure define-opt
+    (export (define* :syntax))
+  (open scheme srfi-1 let-opt)
+  (for-syntax (open scheme let-opt (subset signals (syntax-error)) srfi-1))
+  (files s48-define-opt))
