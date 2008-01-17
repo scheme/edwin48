@@ -33,7 +33,7 @@ USA.
     (if (> n l)
 	(let ((result (make-string n)))
 	  (substring-move-right! string 0 l result 0)
-	  (substring-fill! result l n #\space)
+	  (string-fill! result #\space l n)
 	  result)
 	string)))
 
@@ -42,7 +42,7 @@ USA.
     (let ((delta (- n l)))
       (if (positive? delta)
 	  (let ((result (make-string n)))
-	    (substring-fill! result 0 delta #\space)
+	    (string-fill! result #\space0 delta)
 	    (substring-move-right! string 0 l result delta)
 	    result)
 	  string))))

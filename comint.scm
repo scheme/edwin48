@@ -93,7 +93,7 @@ This is a good thing to set in mode hooks."
      (let ((group (mark-group mark)))
        (let loop ((start start))
 	 (let ((cr
-		(or (substring-find-next-char string start end #\return)
+		(or (string-index string #\return start end)
 		    end))
 	       (index (mark-index mark)))
 	   (group-insert-substring! group index string start cr)

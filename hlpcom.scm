@@ -365,7 +365,7 @@ If you want VALUE to be a string, you must surround it with doublequotes."
 
     (define (find-escape start* comtabs)
       (let loop ((start start*))
-	(let ((index (substring-find-next-char string start end #\\)))
+	(let ((index (string-index string #\\ start end)))
 	  (if (not index)
 	      (list (substring string start* end))
 	      (let ((next (fix:+ index 1)))
@@ -388,7 +388,7 @@ If you want VALUE to be a string, you must surround it with doublequotes."
       (cons (substring string start slash)
 	    (let ((start (fix:+ slash 2)))
 	      (let ((terminator
-		     (substring-find-next-char string start end char)))
+		     (string-index string char start end)))
 		(if (not terminator)
 		    (error "Missing terminator character:" char))
 		(procedure (intern (substring string start terminator))

@@ -344,7 +344,7 @@ Grumbles if PROC is an undocumented primitive."
   (if (primitive-procedure? proc)
       (let ((doc-string (primitive-procedure-documentation proc)))
 	(if doc-string
-	    (let ((newline (string-find-next-char doc-string #\newline)))
+	    (let ((newline (string-index doc-string #\newline)))
 	      (if newline
 		  (string-head doc-string newline)
 		  doc-string))

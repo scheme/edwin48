@@ -505,7 +505,7 @@ With a prefix argument you can edit the current listing switches instead."
 	   (let ((index
 		  (and (string-prefix? "-" (car switches))
 		       (not (string-prefix? "--" (car switches)))
-		       (string-find-next-char (car switches) switch))))
+		       (string-index (car switches) switch))))
 	     (if index
 		 (let ((s1
 			(string-append (string-head (car switches) index)
@@ -611,7 +611,7 @@ When renaming multiple or marked files, you specify a directory."
 
 (define (dired-create-one-file lstart from singular-verb operation)
   (let ((to
-	 (prompt-for-pathname (string-append (string-capitalize singular-verb)
+	 (prompt-for-pathname (string-append (string-titlecase singular-verb)
 					     " "
 					     (file-namestring from)
 					     " to")
@@ -623,7 +623,7 @@ When renaming multiple or marked files, you specify a directory."
 					   (pathname-as-directory to))
 			  to))))
       (if condition
-	  (editor-error (string-capitalize singular-verb)
+	  (editor-error (string-titlecase singular-verb)
 			" failed: "
 			(condition/report-string condition))))))
 
@@ -634,7 +634,7 @@ When renaming multiple or marked files, you specify a directory."
 	   (lambda ()
 	     (dired-pop-up-files-window filenames)
 	     (prompt-for-existing-directory
-	      (string-append (string-capitalize singular-verb)
+	      (string-append (string-titlecase singular-verb)
 			     " these files to directory")
 	      #f))))))
     (for-each (lambda (filename)
@@ -651,7 +651,7 @@ When renaming multiple or marked files, you specify a directory."
 		       (cons (file-namestring (caar filenames)) failures)
 		       failures)))
 	    ((not (null? failures))
-	     (message (string-capitalize plural-verb)
+	     (message (string-titlecase plural-verb)
 		      " failed: "
 		      (reverse! failures)))))
     (for-each (lambda (filename)

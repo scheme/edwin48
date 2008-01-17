@@ -110,7 +110,7 @@ RECIPIENTS is a string of names separated by commas."
 (define (mail-comma-list-regexp the-string)
   (let loop ((the-string (string-trim the-string))
 	     (the-new-list '()))
-    (let ((pos (string-find-next-char the-string #\,)))
+    (let ((pos (string-index the-string #\,)))
       (if pos
 	  (loop (string-tail the-string (1+ pos))
 		(cons (string-trim (string-head the-string pos))
@@ -282,7 +282,7 @@ RECIPIENTS is a string of names separated by commas."
 		(set! line (rmail-make-basic-summary-line inner-begin end))
 		(insert-string (string-append "Summary-line: " line)
 			       (line-start start 2))))
-	  (set! pos (string-find-next-char line #\#))
+	  (set! pos (string-index line #\#))
 	  (let ((num (msg-memo/number memo)))
 	    (vector-set! (ref-variable rmail-summary-vector
 				       (ref-variable rmail-summary-buffer))
@@ -352,7 +352,7 @@ RECIPIENTS is a string of names separated by commas."
 		       (mail-extract-real-name the-new-mark
 					       the-new-end-mark))))
 		(len (string-length from))
-		(mch (string-find-next-char-in-set from (char-set #\@ #\%))))
+		(mch (string-index from (char-set #\@ #\%))))
 	   (string-pad-right
 	    (if (not mch)
 		(string-head from (if (> len 25) 25 len))

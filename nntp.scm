@@ -1042,7 +1042,7 @@ USA.
 	((and (not (string-null? (car lines)))
 	      (not (or (char=? #\space (string-ref (car lines) 0))
 		       (char=? #\tab (string-ref (car lines) 0))))
-	      (string-find-next-char (car lines) #\:))
+	      (string-index (car lines) #\:))
 	 => (lambda (colon)
 	      (let ((unfold
 		     (lambda (rest)
@@ -1067,7 +1067,7 @@ USA.
 			((and (not (string-null? (car lines)))
 			      (or (char=? #\space (string-ref (car lines) 0))
 				  (char=? #\tab (string-ref (car lines) 0)))
-			      (string-find-next-char-in-set
+			      (string-index
 			       (car lines) char-set:not-whitespace))
 			 (loop (cdr lines) (cons (car lines) rest)))
 			(else
@@ -1212,7 +1212,7 @@ USA.
   (let loop ((tokens (string-tokenize (news-header:%xref header))))
     (if (null? tokens)
 	tokens
-	(let ((colon (string-find-next-char (car tokens) #\:))
+	(let ((colon (string-index (car tokens) #\:))
 	      (rest (loop (cdr tokens))))
 	  (if colon
 	      (cons (cons (string-head (car tokens) colon)
@@ -1692,7 +1692,7 @@ USA.
 	     (or (char=? #\r (string-ref subject 0))
 		 (char=? #\R (string-ref subject 0))))
 	(let loop ((start 0))
-	  (if (substring-prefix-ci? "re:" 0 3 subject start end)
+	  (if (string-prefix-ci? "re:" subject 0 3 start end)
 	      (loop (substring-skip-leading-space subject
 						  (fix:+ start 3)
 						  end))
@@ -1711,7 +1711,7 @@ USA.
 (define (compare-subjects x y)
   (let ((xe (string-length x))
 	(ye (string-length y)))
-    (let ((i (substring-match-forward-ci x 0 xe y 0 ye)))
+    (let ((i (string-prefix-length-ci x y 0 xe 0 ye)))
       (if (fix:= i xe)
 	  (if (fix:= i ye)
 	      'EQUAL
@@ -1816,15 +1816,14 @@ USA.
       (if (fix:= start end)
 	  (reverse! tokens)
 	  (let ((delimiter
-		 (or (substring-find-next-char-in-set string start end white)
+		 (or (string-index string white start end)
 		     end)))
-	    (loop (or (substring-find-next-char-in-set
-		       string delimiter end not-white)
+	    (loop (or (string-index string not-white delimiter end)
 		      end)
 		  (cons (substring string start delimiter) tokens)))))))
 
 (define (string-first-token string)
-  (let ((index (string-find-next-char-in-set string char-set:whitespace)))
+  (let ((index (string-index string char-set:whitespace)))
     (if index
 	(string-head string index)
 	string)))

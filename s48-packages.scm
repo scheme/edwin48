@@ -61,16 +61,7 @@
   (files s48-literals))
 
 (define-structure strings
-    (export string-capitalize
-	    string-find-next-char substring-find-next-char
-	    string-find-next-char-ci substring-find-next-char-ci
-	    string-find-next-char-in-set substring-find-next-char-in-set
-	    string-find-previous-char substring-find-previous-char
-	    string-find-previous-char-ci substring-find-previous-char-ci
-	    string-find-previous-char-in-set substring-find-previous-char-in-set
-	    substring-prefix-ci?
-	    string-match-forward substring-match-forward-ci
-	    substring-move-left! substring-move-right!
-	    substring-fill!)
+    (export substring-move-left! substring-move-right!
+	    string-head string-tail)
   (open (modify scheme (hide string-fill!)) srfi-13)
   (files s48-strings))

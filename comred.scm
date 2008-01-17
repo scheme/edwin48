@@ -399,10 +399,8 @@ USA.
 			     0)))
 		     (if (< index end)
 			 (let ((newline
-				(substring-find-next-char specification
-							  index
-							  end
-							  #\newline)))
+				(string-index specification #\newline
+					      index end)))
 			   (with-values
 			       (lambda ()
 				 (interactive-argument

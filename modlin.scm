@@ -213,7 +213,7 @@ If #F, the normal method is used."
     (let loop ((start 0) (column column))
       (if (and (< start end)
 	       (< column max-end))
-	  (let ((percent (substring-find-next-char element start end #\%)))
+	  (let ((percent (string-index element #\% start end)))
 	    (if (not percent)
 		(display-substring element start end
 				   line column min-end max-end)
@@ -338,7 +338,7 @@ If #F, the normal method is used."
 (define (display-pad line column min-end)
   (if (< column min-end)
       (begin
-	(substring-fill! line column min-end #\space)
+	(string-fill! line #\space column min-end)
 	min-end)
       column))
 

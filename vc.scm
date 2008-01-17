@@ -2503,7 +2503,7 @@ the value of vc-log-mode-hook."
 ;;;; Utilities
 
 (define (blank-string? string)
-  (not (string-find-next-char-in-set string char-set:not-whitespace)))
+  (not (string-index string char-set:not-whitespace)))
 
 (define (subdirectory-pathname pathname name)
   (let ((directory (directory-pathname pathname)))

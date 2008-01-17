@@ -964,7 +964,7 @@ The name may be an abbreviation of the reference name."
 (define (parse-node-name name receiver)
   (let ((name (string-trim name)))
     (if (char=? (string-ref name 0) #\()
-	(let ((index (string-find-next-char name #\))))
+	(let ((index (string-index name #\))))
 	  (if index
 	      (let ((filename (string-trim (substring name 1 index)))
 		    (nodename (string-trim (substring name (1+ index)

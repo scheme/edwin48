@@ -202,7 +202,7 @@ USA.
 	 text
 	 (search-state-forward? state)
 	 (cond ((and (search-state-regexp? state)
-		     (string-find-next-char-in-set string regexp-retry-chars))
+		     (string-index string regexp-retry-chars))
 		(search-state-initial-point state))
 	       ((search-state-forward? state)
 		(search-state-start-point state))

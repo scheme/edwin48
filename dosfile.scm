@@ -74,7 +74,7 @@ Includes the new backup.  Must be > 0."
 ;;;; Filename I/O
 
 (define (os/trim-pathname-string string prefix)
-  (let ((index (string-match-forward prefix string)))
+  (let ((index (string-prefix-length prefix string)))
     (if (and index
 	     (or (fix:= index (string-length prefix))
 		 (and (fix:> index 0)
@@ -101,7 +101,7 @@ Includes the new backup.  Must be > 0."
 		(let ((index (- length width)))
 		  (if (char=? #\\ (string-ref filename index))
 		      index
-		      (or (substring-find-next-char filename index length #\\)
+		      (or (string-index filename #\\ index length)
 			  (fix:+ index 1))))
 		length)))
 	  (string-set! result 0 #\$)
@@ -184,8 +184,8 @@ Switches may be concatenated, e.g. `-lt' is equivalent to `-l -t'."
 		   (list (cons (file-namestring file) attributes))
 		   '()))
 	     (sort (dos/read-dired-files file
-					 (string-find-next-char switches #\a))
-		   (if (string-find-next-char switches #\t)
+					 (string-index switches #\a))
+		   (if (string-index switches #\t)
 		       (lambda (x y)
 			 (> (file-attributes/modification-time (cdr x))
 			    (file-attributes/modification-time (cdr y))))

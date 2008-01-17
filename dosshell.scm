@@ -192,7 +192,7 @@ With argument, don't skip the prompt -- go straight to column 0."
 
 (define (pseudo-execute command dir output-mark)
   (let* ((command (string-trim command))
-	 (next (string-find-next-char-in-set command char-set:whitespace))
+	 (next (string-index command char-set:whitespace))
 	 (prog (if (not next)
 		   command
 		   (substring command 0 next))))
@@ -217,7 +217,7 @@ With argument, don't skip the prompt -- go straight to column 0."
 (define (pseudo-parse-directory dir prog args)
   (cond ((string-null? args)
 	 #f)
-	((string-find-next-char-in-set args char-set:whitespace)
+	((string-index args char-set:whitespace)
 	 (pseudo-error "Too many arguments" prog args))
 	(else
 	 (let ((dir (merge-pathnames args dir)))

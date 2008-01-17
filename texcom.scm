@@ -204,12 +204,12 @@ With negative argument, capitalize previous words but do not move."
 		  (begin
 		    (region-transform! (make-region start m)
 		      (lambda (string)
-			(string-capitalize! string)
+			(string-titlecase! string)
 			string))
 		    (loop m))
 		  (region-transform! (make-region start end)
 		    (lambda (string)
-		      (string-capitalize! string)
+		      (string-titlecase! string)
 		      string)))))))))
 
 ;;;; Sentences

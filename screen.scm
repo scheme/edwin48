@@ -454,12 +454,12 @@ USA.
 			     (begin
 			       (string-move! (vector-ref current-contents y)
 					     (vector-ref new-contents y))
-			       (substring-fill! (vector-ref new-contents y)
-						xl xu #\space))
+			       (string-fill! (vector-ref new-contents y)
+					     #\space xl xu))
 			     (string-fill! (vector-ref new-contents y)
 					   #\space)))
-		       (substring-fill! (vector-ref new-contents y)
-					xl xu #\space))
+		       (string-fill! (vector-ref new-contents y)
+				     #\space xl xu))
 		   (cond ((line-highlights-enabled? new-matrix y)
 			  (set-subline-highlights! new-matrix y xl xu face))
 			 ((not (default-face? face))
@@ -595,13 +595,13 @@ USA.
 				  (fix:= xu (screen-x-size screen)))
 			     (do ((y yl (fix:1+ y)))
 				 ((fix:= y yu))
-			       (substring-fill! (vector-ref contents y) xl xu
-						#\space)
+			       (string-fill! (vector-ref contents y) #\space
+					     xl xu)
 			       (disable-line-highlights! current-matrix y))
 			     (do ((y yl (fix:1+ y)))
 				 ((fix:= y yu))
-			       (substring-fill! (vector-ref contents y) xl xu
-						#\space)
+			       (string-fill! (vector-ref contents y) #\space
+					     xl xu)
 			       (if (line-highlights-enabled? current-matrix y)
 				   (clear-subline-highlights! current-matrix y
 							      xl xu))))))
@@ -639,13 +639,13 @@ USA.
 				(fix:= xu (screen-x-size screen)))
 			   (do ((y (fix:- yu amount) (fix:1+ y)))
 			       ((fix:= y yu))
-			     (substring-fill! (vector-ref contents y) xl xu
-					      #\space)
+			     (string-fill! (vector-ref contents y) #\space
+					   xl xu)
 			     (disable-line-highlights! current-matrix y))
 			   (do ((y (fix:- yu amount) (fix:1+ y)))
 			       ((fix:= y yu))
-			     (substring-fill! (vector-ref contents y) xl xu
-					      #\space)
+			     (string-fill! (vector-ref contents y) #\space
+					   xl xu)
 			     (if (line-highlights-enabled? current-matrix y)
 				 (clear-subline-highlights! current-matrix y
 							    xl xu)))))

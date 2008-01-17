@@ -55,32 +55,32 @@ USA.
 		  parse-comment
 		  parse-short-form
 		  parse-long-form)
-  (let ((start (string-find-next-char-in-set line char-set:not-whitespace))
+  (let ((start (string-index line char-set:not-whitespace))
 	(end (string-length line)))
     (cond ((not start)
 	   parse-blank)
 	  ((char=? #\; (string-ref line start))
 	   parse-comment)
 	  (else
-	   (let ((colon (substring-find-previous-char line start end #\:)))
+	   (let ((colon (string-index-right line #\: start end)))
 	     (if colon
-		 (if (substring-find-next-char-in-set line (+ colon 1) end
-						      char-set:not-whitespace)
+		 (if (string-index line char-set:not-whitespace
+				   (+ colon 1) end)
 		     parse-short-form
 		     parse-long-form)
 		 parse-long-form))))))
 
 (define (comment-line? line)
-  (let ((start (string-find-next-char-in-set line char-set:not-whitespace)))
+  (let ((start (string-index line char-set:not-whitespace)))
     (and start
 	 (char=? #\; (string-ref line start)))))
 
 (define (long-form-separator-line? line)
   ;; blank
-  (not (string-find-next-char-in-set line char-set:not-whitespace)))
+  (not (string-index line char-set:not-whitespace)))
 
 (define (split-colon-line line)
-  (let ((colon (string-find-next-char line #\:)))
+  (let ((colon (string-index line #\:)))
     (if colon
 	(cons (string-trim (string-head line colon))
 	      (string-trim (string-tail line (+ colon 1))))
@@ -117,7 +117,7 @@ USA.
 (define (parse-neutral/long-form port line forms)
   (let* ((header
 	  (string-trim
-	   (let ((colon (string-find-previous-char line #\:)))
+	   (let ((colon (string-index-right line #\:)))
 	     (if colon
 		 (string-head line colon)
 		 line))))

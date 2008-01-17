@@ -134,8 +134,7 @@ Includes the new backup.  Must be > 0."
 		filename
 		(let ((index (- length width)))
 		  (or (and (not (char=? #\/ (string-ref filename index)))
-			   (substring-find-next-char filename index length
-						     #\/))
+			   (string-index filename #\/ index length))
 		      (1+ index)))
 		length)))
 	  (string-set! result 0 #\$)
@@ -357,7 +356,7 @@ Includes the new backup.  Must be > 0."
   ;; This could be more sophisticated, but is what the edwin
   ;; code was originally doing.
   (and (string? filename)
-       (string-find-next-char filename #\#)))
+       (string-index filename #\#)))
 
 (define (os/read-file-methods)
   `((,read/write-compressed-file?
@@ -517,7 +516,7 @@ CANNOT contain the 'F' option."
   (let ((end (string-length switches)))
     (let loop ((start 0))
       (if (fix:< start end)
-	  (let ((space (substring-find-next-char switches start end #\space)))
+	  (let ((space (string-index switches #\space start end)))
 	    (if space
 		(cons (substring switches start space)
 		      (loop (fix:+ space 1)))
@@ -526,9 +525,9 @@ CANNOT contain the 'F' option."
 
 (define (dired-pathname-wild? pathname)
   (let ((namestring (file-namestring pathname)))
-    (or (string-find-next-char namestring #\*)
-	(string-find-next-char namestring #\?)
-	(string-find-next-char namestring #\[))))
+    (or (string-index index namestring #\*)
+	(string-index index namestring #\?)
+	(string-index index namestring #\[))))
 
 ;;;; Subprocess/Shell Support
 

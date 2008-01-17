@@ -333,7 +333,7 @@ This does not affect internal errors or evaluation errors."
 
 (define (standard-error-report error-type condition in-prompt?)
   (let ((type-string
-	 (string-append (string-capitalize (symbol->string error-type))
+	 (string-append (string-titlecase (symbol->string error-type))
 			" error"))
 	(report-string (condition/report-string condition))
 	(get-error-buffer
@@ -373,7 +373,7 @@ This does not affect internal errors or evaluation errors."
       (let ((fit-report
 	     (lambda ()
 	       (if (and (not in-prompt?)
-			(not (string-find-next-char report-string #\newline))
+			(not (string-index report-string #\newline))
 			(< (string-columns report-string 0 8
 					   (ref-variable char-image-strings
 							 #f))

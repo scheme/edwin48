@@ -112,7 +112,7 @@ USA.
 		 ;; replacement to match the pattern.
 		 (let ((replaced (extract-string start end)))
 		   (cond ((string-capitalized? replaced)
-			  (string-capitalize replacement))
+			  (string-titlecase replacement))
 			 ((string-upper-case? replaced)
 			  (string-upcase replacement))
 			 (else replacement)))
@@ -124,11 +124,11 @@ USA.
 
 (define (re-substitute-registers pattern)
   (let ((end (string-length pattern)))
-    (if (substring-find-next-char pattern 0 end #\\)
+    (if (string-index pattern #\\ 0 end)
 	(apply
 	 string-append
 	 (let loop ((start 0))
-	   (let ((slash (substring-find-next-char pattern start end #\\)))
+	   (let ((slash (string-index pattern #\\ start end)))
 	     (if slash
 		 (cons (substring pattern start slash)
 		       (let ((next (+ slash 1)))

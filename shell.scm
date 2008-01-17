@@ -452,7 +452,7 @@ those that effect file completion."
   (let loop ((prefix (car strings)) (strings (cdr strings)))
     (if (null? strings)
 	prefix
-	(loop (let ((n (string-match-forward prefix (car strings))))
+	(loop (let ((n (string-prefix-length prefix (car strings))))
 		(if (fix:< n (string-length prefix))
 		    (string-head prefix n)
 		    prefix))

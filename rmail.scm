@@ -785,7 +785,7 @@ With prefix argument N moves backward N messages with these labels."
 (define (burst-string string delimiter)
   (let ((end (string-length string)))
     (let loop ((start 0) (result '()))
-      (let ((index (substring-find-next-char string start end delimiter)))
+      (let ((index (string-inex string delimiter start end)))
 	(if index
 	    (loop (fix:+ index 1)
 		  (cons (substring string start index) result))

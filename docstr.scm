@@ -194,7 +194,7 @@ USA.
 
 (define (description-first-line description)
   (let ((string (description->string description)))
-    (let ((index (string-find-next-char string #\newline)))
+    (let ((index (string-index string #\newline)))
       (if index
 	  (substring string 0 index)
 	  string))))

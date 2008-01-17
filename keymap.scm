@@ -174,7 +174,7 @@ Previous contents of that buffer are killed first."
 		    (let ((has-prefix
 			   (lambda (index)
 			     (make-entry (string-head string index) element)))
-			  (index (string-find-previous-char string #\space)))
+			  (index (string-index-right string #\space)))
 		      (if index
 			  (has-prefix (1+ index))
 			  (let ((end (string-length string)))

@@ -188,8 +188,8 @@ USA.
 
 (define (strip-position-from-geometry geometry)
   (let ((sign
-	 (or (string-find-next-char geometry #\+)
-	     (string-find-next-char geometry #\-))))
+	 (or (string-index geometry #\+)
+	     (string-index geometry #\-))))
     (if sign
 	(string-head geometry sign)
 	geometry)))
@@ -421,7 +421,7 @@ USA.
 		   (else
 		    (let ((i
 			   (and signal-interrupts?
-				(string-find-previous-char string #\BEL))))
+				(string-index-right string #\BEL))))
 		      (if i
 			  (begin
 			    (set! start (fix:+ i 1))
@@ -594,7 +594,7 @@ USA.
   (cond ((and signal-interrupts?
 	      (vector? event)
 	      (fix:= event-type:key-press (vector-ref event 0))
-	      (string-find-next-char (vector-ref event 2) #\BEL))
+	      (string-index (vector-ref event 2) #\BEL))
 	 (clean-event-queue x-display-events)
 	 (signal-interrupt!))
 	((and (vector? event)

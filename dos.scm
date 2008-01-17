@@ -99,7 +99,7 @@ USA.
     (let ((n-newlines
 	   (let loop ((start 0) (n-newlines 0))
 	     (let ((newline
-		    (substring-find-next-char string start end #\newline)))
+		    (string-index string #\newline start end)))
 	       (if newline
 		   (loop (fix:+ newline 1) (fix:+ n-newlines 1))
 		   n-newlines)))))
@@ -108,7 +108,7 @@ USA.
 	  (let ((copy (make-string (fix:+ end n-newlines))))
 	    (let loop ((start 0) (cindex 0))
 	      (let ((newline
-		     (substring-find-next-char string start end #\newline)))
+		     (string-index string #\newline start end)))
 		(if newline
 		    (begin
 		      (%substring-move! string start newline copy cindex)
@@ -124,7 +124,7 @@ USA.
     (let ((n-crlfs
 	   (let loop ((start 0) (n-crlfs 0))
 	     (let ((cr
-		    (substring-find-next-char string start end #\return)))
+		    (string-index string #\return start end)))
 	       (if (and cr
 			(not (fix:= (fix:+ cr 1) end))
 			(char=? (string-ref string (fix:+ cr 1)) #\linefeed))
@@ -135,7 +135,7 @@ USA.
 	  (let ((copy (make-string (fix:- end n-crlfs))))
 	    (let loop ((start 0) (cindex 0))
 	      (let ((cr
-		     (substring-find-next-char string start end #\return)))
+		     (string-index string #\return start end)))
 		(if (not cr)
 		    (%substring-move! string start end copy cindex)
 		    (let ((cr

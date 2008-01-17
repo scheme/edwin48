@@ -83,7 +83,7 @@ is set to t.  At Athena it is nil."
 	       (end (string-length string))
 	       (the-list '()))
       (let ((next-index
-	     (substring-find-next-char string start end char)))
+	     (string-index string char start end)))
 	(if next-index
 	    (loop (1+ next-index)
 		  end

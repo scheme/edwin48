@@ -37,8 +37,8 @@ USA.
 
 (define (rfc822:header-field-name? string start end)
   (and (fix:< start end)
-       (not (substring-find-next-char-in-set
-	     string start end rfc822:char-set:not-header-constituents))))
+       (not (string-index
+	     string rfc822:char-set:not-header-constituents start end))))
 
 (define char-set:rfc822-quoted
   (char-set-invert
@@ -46,7 +46,7 @@ USA.
 		   (apply char-set (string->list " !#$%&'*+-/=?^_`{|}~")))))
 
 (define (rfc822:quote-string string)
-  (if (string-find-next-char-in-set string char-set:rfc822-quoted)
+  (if (string-index string char-set:rfc822-quoted)
       (let loop ((chars (string->list string)) (result (list #\")))
 	(if (null? chars)
 	    (list->string (reverse! (cons #\" result)))
@@ -85,8 +85,8 @@ USA.
 		 (let ((end (string-length string)))
 		   (let loop ((start 0))
 		     (let ((index
-			    (substring-find-next-char-in-set
-			     string start end char-set:whitespace)))
+			    (string-index
+			     string char-set:whitespace start end)))
 		       (if index
 			   (begin
 			     (string-set! string index #\space)

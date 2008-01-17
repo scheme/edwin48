@@ -387,7 +387,7 @@ Only one News reader may be open per server; if a previous News reader
     ((HOST-ONLY)
      (string-append prefix
 		    ":"
-		    (let ((dot (string-find-next-char server #\.)))
+		    (let ((dot (string-index server #\.)))
 		      (if dot
 			  (string-head server dot)
 			  server))))
@@ -1017,7 +1017,7 @@ This shows News groups that have been created since the last time that
 	ang-buffer:mark-group
 	ang-buffer:next-group
 	ang-buffer:previous-group
-	(lambda (buffer) buffer (string-capitalize prefix))
+	(lambda (buffer) buffer (string-titlecase prefix))
 	(lambda (buffer group) buffer group #t))
        (let ((msg (string-append "Building " name " buffer... ")))
 	 (message msg)
@@ -2413,8 +2413,7 @@ Otherwise, the standard pruned header is shown."
 (define (find-header-end text start-index)
   (let* ((limit (string-length text))
          (scan-line (lambda (start)
-                      (cond ((substring-find-next-char text start limit
-                                                       #\newline)
+                      (cond ((string-index text #\newline start limit)
                              => fix:1+)
                             (else #f)))))
     (let loop ((index (scan-line start-index)))
@@ -3771,7 +3770,7 @@ With prefix arg, replaces the file with the list information."
 (define (prefix-matcher prefix)
   (let ((plen (string-length prefix)))
     (lambda (x y)
-      (let ((n (string-match-forward x y)))
+      (let ((n (string-prefix-length x y)))
 	(and (fix:>= n plen)
 	     n)))))
 
@@ -4216,7 +4215,7 @@ With prefix arg, replaces the file with the list information."
                       1
                       0)))
       (let loop ((start start) (index start))
-        (cond ((substring-find-next-char text index limit #\newline)
+        (cond ((string-index text #\newline index limit)
                => (lambda (line-end)
                     (let ((next-line-start (fix:1+ line-end)))
                       (if (fix:= next-line-start limit)
@@ -4243,7 +4242,7 @@ With prefix arg, replaces the file with the list information."
                       specifiers)
                  #t)))      ; Case-insensitive
      (lambda (text start end)
-       (cond ((substring-find-next-char text start end #\:)
+       (cond ((string-index text #\: start end)
               => (lambda (colon-index)
                    (cond ((string-table-get table
                                             (substring text start colon-index))

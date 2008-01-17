@@ -291,8 +291,7 @@ is inserted."
 		 (let ((end (string-length value)))
 		   (let loop ((start 0))
 		     (let ((index
-			    (substring-find-next-char value start end
-						      #\newline)))
+			    (string-index value #\newline start end)))
 		       (if index
 			   (let ((index (fix:+ index 1)))
 			     (insert-substring value start index point)

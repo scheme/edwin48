@@ -157,17 +157,14 @@ USA.
   (let ((end (string-length line)))
     (let loop ((start start))
       (let ((nonblank
-	     (substring-find-next-char-in-set line start end
-					      char-set:nonblank)))
+	     (string-index line char-set:nonblank start end)))
 	(if nonblank
 	    (let ((blank
-		   (substring-find-next-char-in-set line nonblank end
-						    char-set:blank)))
+		   (string-index line char-set:blank nonblank end)))
 	      (if blank
 		  (cons (substring line nonblank blank) (loop blank))
 		  (list (substring line nonblank end))))
 	    '())))))
-
 (define char-set:newline (char-set #\newline))
 (define char-set:blank (char-set #\space #\tab))
 (define char-set:nonblank (char-set-invert char-set:blank))

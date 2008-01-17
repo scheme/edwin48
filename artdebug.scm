@@ -187,7 +187,7 @@ or #F meaning no limit."
 		   (start-debugger))
 	       (begin
 		 (start-debugger)
-		 (message (string-capitalize (symbol->string error-type))
+		 (message (string-titlecase (symbol->string error-type))
 			  " error")
 		 (editor-beep))))
 	 (return-to-command-loop condition))))
