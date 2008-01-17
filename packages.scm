@@ -25,6 +25,7 @@
   (open scheme
 	aliases
 	fixnum
+	define-opt
         edwin-groups
         edwin-marks
         edwin-regions

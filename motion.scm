@@ -38,20 +38,18 @@ USA.
 	((not limit?) #f)
 	(else (error "Unknown limit type:" limit?))))
 
-(define (mark1+ mark #!optional limit?)
+(define* (mark1+ mark (limit? #f))
   (let ((group (mark-group mark))
 	(index (mark-index mark)))
     (if (group-end-index? group index)
-	(limit-mark-motion (and (not (default-object? limit?)) limit?)
-			   (group-end-mark group))
+	(limit-mark-motion limit? (group-end-mark group))
 	(make-mark group (fix:+ index 1)))))
 
-(define (mark-1+ mark #!optional limit?)
+(define* (mark-1+ mark (limit? #f))
   (let ((group (mark-group mark))
 	(index (mark-index mark)))
     (if (group-start-index? group index)
-	(limit-mark-motion (and (not (default-object? limit?)) limit?)
-			   (group-start-mark group))
+	(limit-mark-motion limit? (group-start-mark group))
 	(make-mark group (fix:- index 1)))))
 
 (define (region-count-chars region)
@@ -71,17 +69,15 @@ USA.
 	(limit-mark-motion limit? (group-start-mark group))
 	(make-mark group new-index))))
 
-(define (mark+ mark+ mark n #!optional limit?)
-  (let ((limit? (and (not (default-object? limit?)) limit?)))
-    (cond ((fix:positive? n) (%mark+ mark n limit?))
-	  ((fix:negative? n) (%mark- mark (fix:- 0 n) limit?))
-	  (else mark))))
+(define* (mark+ mark n (limit? #f))
+  (cond ((fix:positive? n) (%mark+ mark n limit?))
+	((fix:negative? n) (%mark- mark (fix:- 0 n) limit?))
+	(else mark)))
 
-(define (mark- mark- mark n #!optional limit?)
-  (let ((limit? (and (not (default-object? limit?)) limit?)))
-    (cond ((fix:positive? n) (%mark- mark n limit?))
-	  ((fix:negative? n) (%mark+ mark (fix:- 0 n) limit?))
-	  (else mark))))
+(define* (mark- mark n (limit? #f))
+  (cond ((fix:positive? n) (%mark- mark n limit?))
+	((fix:negative? n) (%mark+ mark (fix:- 0 n) limit?))
+	(else mark)))
 
 
 ;;;; Motion by Lines
@@ -106,12 +102,11 @@ USA.
   (or (group-end-index? group index)
       (char=? (group-right-char group index) #\newline)))
 
-(define (line-start mark n #!optional limit?)
+(define* (line-start mark n (limit? #f))
   (let ((group (mark-group mark))
 	(lose
 	 (lambda (mark)
-	   (limit-mark-motion (and (not (default-object? limit?)) limit?)
-			      mark))))
+	   (limit-mark-motion limit? mark))))
     (if (fix:> n 0)
 	(let ((limit (group-end-index group)))
 	  (let loop ((i (mark-index mark)) (n n))
@@ -126,12 +121,11 @@ USA.
 		    ((not j) (lose (group-start-mark group)))
 		    (else (loop j (fix:+ n 1))))))))))
 
-(define (line-end mark n #!optional limit?)
+(define* (line-end mark n (limit? #f))
   (let ((group (mark-group mark))
 	(lose
 	 (lambda (mark)
-	   (limit-mark-motion (and (not (default-object? limit?)) limit?)
-			      mark))))
+	   (limit-mark-motion limit? mark))))
     (if (fix:< n 0)
 	(let ((limit (group-start-index group)))
 	  (let loop ((i (mark-index mark)) (n n))
