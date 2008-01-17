@@ -11,6 +11,7 @@
 (user)
 
 (config '(load "s48-let-opt.scm"
+	       "srfi-packages.scm"
                "s48-packages.scm"
                "interfaces.scm"
                "packages.scm"))

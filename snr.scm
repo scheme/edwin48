@@ -418,7 +418,7 @@ Only one News reader may be open per server; if a previous News reader
 		     (sort groups news-group:<)
 		     groups))))
 	  (if (ref-variable news-server-initial-refresh buffer)
-	      (for-each-vector-element groups news-group:update-ranges!))
+	      (vector-for-each news-group:update-ranges! groups))
 	  (buffer-put! buffer 'NEWS-GROUPS groups)
 	  (install-news-groups-buffer-procedures
 	   buffer
@@ -481,10 +481,11 @@ Only one News reader may be open per server; if a previous News reader
 
 (define (news-server-buffer:save-groups buffer)
   (write-groups-init-file buffer)
-  (for-each-vector-element (news-server-buffer:groups buffer)
-    (lambda (group)
-      (write-ignored-subjects-file group
-				   (find-news-group-buffer buffer group)))))
+  (vector-for-each
+   (lambda (group)
+     (write-ignored-subjects-file group
+				  (find-news-group-buffer buffer group)))
+   (news-server-buffer:groups buffer)))
 
 (define (initialize-news-groups-buffer buffer groups)
   (let ((mark (mark-left-inserting-copy (buffer-start buffer)))
@@ -494,11 +495,12 @@ Only one News reader may be open per server; if a previous News reader
     (insert-string (news-server-buffer:server server-buffer) mark)
     (insert-string ":" mark)
     (insert-newline mark)
-    (for-each-vector-element groups
-      (lambda (group)
-	(if (news-groups-buffer:show-group? buffer group)
-	    (insert-news-group-line group mark)
-	    (set-news-group:index! group #f))))
+    (vector-for-each
+     (lambda (group)
+       (if (news-groups-buffer:show-group? buffer group)
+	   (insert-news-group-line group mark)
+	   (set-news-group:index! group #f)))
+     groups)
     (mark-temporary! mark)))
 
 (define (news-server-buffer:show-group? buffer group)
@@ -806,12 +808,13 @@ With negative argument -N, show the N oldest unread articles."
   ()
   (lambda ()
     (let ((buffer (current-news-server-buffer #t)))
-      (for-each-vector-element (news-server-buffer:groups buffer)
-	(lambda (group)
-	  (if (news-group:subscribed? group)
-	      (read-news-group-headers buffer group)
-	      (refresh-news-group buffer group))
-	  (update-screens! '(IGNORE-INPUT))))
+      (vector-for-each 
+       (lambda (group)
+	 (if (news-group:subscribed? group)
+	     (read-news-group-headers buffer group)
+	     (refresh-news-group buffer group))
+	 (update-screens! '(IGNORE-INPUT)))
+       (news-server-buffer:groups buffer))
       (news-server-buffer:save-groups buffer))))
 
 (define-command news-read-group-headers
@@ -835,10 +838,11 @@ This command has no effect in the all-groups buffer."
     (let ((buffer (selected-buffer)))
       (if (news-server-buffer? buffer)
 	  (begin
-	    (for-each-vector-element (news-server-buffer:groups buffer)
-	      (lambda (group)
-		(refresh-news-group buffer group)
-		(update-screens! '(IGNORE-INPUT))))
+	    (vector-for-each
+	     (lambda (group)
+	       (refresh-news-group buffer group)
+	       (update-screens! '(IGNORE-INPUT)))
+	     (news-server-buffer:groups buffer))
 	    (news-server-buffer:save-groups buffer))))))
 
 (define-command news-refresh-group
@@ -986,10 +990,11 @@ This shows News groups that have been created since the last time that
 			 (buffer-tree:child server-buffer 'ALL-NEWS-GROUPS
 					    #f)))
 		    (if all-groups-buffer
-			(for-each-vector-element new-groups
-			  (lambda (name)
-			    (ang-buffer:insert-group-line all-groups-buffer
-							  name))))
+			(vector-for-each
+			 (lambda (name)
+			   (ang-buffer:insert-group-line all-groups-buffer
+							 name))
+			 new-groups))
 		    (select-buffer
 		     (make-ang-buffer server-buffer
 				      new-groups
@@ -1203,11 +1208,12 @@ This shows News groups that have been created since the last time that
   (let ((group (news-group-buffer:group buffer)))
     (let ((mark (mark-left-inserting-copy (buffer-end buffer)))
 	  (threads (news-group:get-threads group argument buffer)))
-      (for-each-vector-element threads
-	(let ((expanded?
-	       (not (ref-variable news-initially-collapse-threads buffer))))
-	  (lambda (thread)
-	    (set-news-thread:expanded?! thread expanded?))))
+      (vector-for-each
+       (let ((expanded?
+	      (not (ref-variable news-initially-collapse-threads buffer))))
+	 (lambda (thread)
+	   (set-news-thread:expanded?! thread expanded?)))
+       threads)
       (buffer-put! buffer 'NEWS-THREADS threads)
       (insert-string "Messages in news group " mark)
       (insert-string (news-group:name group) mark)
@@ -1215,9 +1221,9 @@ This shows News groups that have been created since the last time that
       (insert-string (news-group:server group) mark)
       (insert-string ":" mark)
       (insert-newline mark)
-      (for-each-vector-element threads
-	(lambda (thread)
-	  (insert-news-thread-lines thread mark)))
+      (vector-for-each (lambda (thread)
+			 (insert-news-thread-lines thread mark))
+		       threads)
       (mark-temporary! mark))
     (update-news-groups-buffers buffer group)
     (news-group:close-database group)))
@@ -2016,8 +2022,8 @@ Subsequent reading of the message bodies can be done offline."
       (cond ((news-group-buffer? buffer)
 	     (news-group:close-database (news-group-buffer:group buffer)))
 	    ((news-server-buffer? buffer)
-	     (for-each-vector-element (news-server-buffer:groups buffer)
-				      news-group:close-database)))
+	     (vector-for-each news-group:close-database
+			      (news-server-buffer:groups buffer))))
       (message (number->string n-read) " articles read"))))
 
 (define-command news-delete-thread
@@ -2148,9 +2154,9 @@ This unmarks the article indicated by point and any other articles in
   (lambda ()
     (let ((buffer (selected-buffer))
 	  (header (region-get (current-point) 'NEWS-HEADER #f)))
-      (for-each-vector-element (news-group-buffer:threads buffer)
-	(lambda (thread)
-	  (news-group-buffer:collapse-thread buffer thread)))
+      (vector-for-each (lambda (thread)
+			 (news-group-buffer:collapse-thread buffer thread))
+		       (news-group-buffer:threads buffer))
       (if header
 	  (if (news-group-buffer:header-mark buffer header)
 	      (news-group-buffer:move-to-header buffer header)
@@ -2164,9 +2170,9 @@ This unmarks the article indicated by point and any other articles in
   (lambda ()
     (let ((buffer (selected-buffer))
 	  (header (region-get (current-point) 'NEWS-HEADER #f)))
-      (for-each-vector-element (news-group-buffer:threads buffer)
-	(lambda (thread)
-	  (news-group-buffer:expand-thread buffer thread)))
+      (vector-for-each  (lambda (thread)
+			  (news-group-buffer:expand-thread buffer thread))
+			(news-group-buffer:threads buffer))
       (if header
 	  (news-group-buffer:move-to-header buffer header)))))
 
@@ -2250,11 +2256,12 @@ This kills the current buffer."
     (if (prompt-for-confirmation? "Delete all articles not marked as read")
 	(begin
 	  (let ((buffer (selected-buffer)))
-	    (for-each-vector-element (news-group-buffer:threads buffer)
-	      (lambda (thread)
-		(news-thread:for-each-real-header thread
-		  (lambda (header)
-		    (news-header:article-deleted! header buffer))))))
+	    (vector-for-each
+	     (lambda (thread)
+	       (news-thread:for-each-real-header
+		thread
+		(lambda (header) (news-header:article-deleted! header buffer))))
+	     (news-group-buffer:threads buffer)))
 	  ((ref-command news-kill-current-buffer))))))
 
 (define-command news-group-quit
@@ -3410,10 +3417,11 @@ With prefix arg, replaces the groups list with the .newsrc entries."
 	(let ((entries
 	       (call-with-newsrc-file-buffer connection parse-newsrc-buffer)))
 	  (if replace?
-	      (for-each-vector-element (news-server-buffer:groups buffer)
-		(lambda (group)
-		  (if (not (assoc (news-group:name group) entries))
-		      (unsubscribe-news-group buffer group)))))
+	      (vector-for-each 
+	       (lambda (group)
+		 (if (not (assoc (news-group:name group) entries))
+		     (unsubscribe-news-group buffer group)))
+	       (news-server-buffer:groups buffer)))
 	  (for-each
 	   (lambda (entry)
 	     (let ((name (car entry))
@@ -3450,9 +3458,8 @@ With prefix arg, replaces the file with the list information."
 	(call-with-newsrc-file-buffer connection
 	  (lambda (newsrc)
 	    (if replace? (delete-region (buffer-unclipped-region newsrc)))
-	    (for-each-vector-element (news-server-buffer:groups buffer)
-	      (lambda (group)
-		(update-newsrc-group newsrc group)))
+	    (vector-for-each (lambda (group) (update-newsrc-group newsrc group))
+			     (news-server-buffer:groups buffer))
 	    (save-buffer newsrc #f)))))))
 
 (define (parse-newsrc-buffer buffer)

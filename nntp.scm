@@ -127,8 +127,8 @@ USA.
 	       (add-line
 		(lambda (line)
 		  (hash-table/put! table (string-first-token line) line))))
-	  (for-each-vector-element lines add-line)
-	  (for-each-vector-element new-lines add-line)
+	  (vector-for-each add-line lines)
+	  (vector-for-each add-line new-lines)
 	  (write-init-file-atomically
 	   (nntp-connection:active-groups-pathname connection)
 	   (lambda (port)

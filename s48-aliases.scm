@@ -16,3 +16,7 @@
 
 (define (list-deletor! predicate)
   (lambda (items) (remove! predicate items)))
+
+(define (vector-grow vec k)
+  (let ((difference (- k (vector-length vec))))
+    (vector-append vec (make-vector difference #f))))

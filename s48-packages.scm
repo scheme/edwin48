@@ -51,8 +51,9 @@
     (export without-interrupts
 	    unspecific
 	    1+ -1+
-	    delq! list-deletor!)
-  (open scheme interrupts util srfi-1)
+	    delq! list-deletor!
+	    vector-grow)
+  (open scheme interrupts util srfi-1 srfi-43)
   (files s48-aliases))
 
 (define-structure literals
@@ -65,3 +66,4 @@
 	    string-head string-tail)
   (open (modify scheme (hide string-fill!)) srfi-13)
   (files s48-strings))
+
