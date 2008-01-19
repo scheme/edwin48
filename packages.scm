@@ -40,6 +40,7 @@
         aliases
         define-record-type*
         define-opt
+	(modify sorting (rename (vector-sort sort)))
         srfi-13)
   (files strtab))
 
@@ -55,5 +56,5 @@
 
 (define-structure
     edwin-doc-string edwin-doc-string-interface
-  (open scheme errors define-opt)
+  (open scheme aliases fixnum errors define-opt)
   (files docstr))
