@@ -71,7 +71,7 @@ USA.
 
 (define doc-string-buffer-length 512)
 
-(define (->doc-string name posn)
+(define (as-doc-string name posn)
   (define (out-of-range)
     (editor-error "->doc-string: Out of range argument" posn))
 
@@ -134,12 +134,11 @@ USA.
 			(fill-buffer channel result (fix:- blen 3) rlen)
 			(verify-and-extract result nlen dslen 0))))))))))
 
-(define (dump-doc-strings output #!optional permanent)
+(define* (dump-doc-strings output (permanent #f))
   (if (not *doc-strings*)
       (error "dump-doc-strings: No doc strings to dump!"))
   (set! *external-doc-strings-file*
-	(if (or (default-object? permanent)
-		(not permanent))
+	(if (not permanent)
 	    output
 	    permanent))	
   (set-string-length! *doc-strings* *doc-string-posn*)

@@ -150,3 +150,12 @@
           string-table-complete
           string-table-completions
           string-table-apropos))
+
+(define-interface edwin-doc-string-interface
+  (export *external-doc-strings?*
+          *external-doc-strings-file*
+          doc-string->posn
+          description?
+          description->string
+          description-first-line
+          description-append))

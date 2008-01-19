@@ -52,3 +52,8 @@
     edwin-ring edwin-ring-interface
   (open scheme aliases errors srfi-1)
   (files ring))
+
+(define-structure
+    edwin-doc-string edwin-doc-string-interface
+  (open scheme errors define-opt)
+  (files docstr))
