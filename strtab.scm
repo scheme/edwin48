@@ -28,27 +28,18 @@ USA.
 ;;;; String Tables
 
 
-(define-structure (string-table (constructor %make-string-table))
-  vector
-  size
-  ci?)
+(define-record-type* string-table
+  (%make-string-table (vector) (size) ci?)
+  ())
 
-(define (make-string-table #!optional initial-size ci?)
-  (%make-string-table (make-vector (if (default-object? initial-size)
-				       16
-				       initial-size))
-		      0
-		      (or (default-object? ci?) ci?)))
+(define* (make-string-table (initial-size 16) (ci? #t))
+  (%make-string-table (make-vector initial-size) 0 ci?))
 
-(define (alist->string-table alist #!optional ci?)
-  (let ((ci? (or (default-object? ci?) ci?)))
-    (let ((v
-	   (list->vector
-	    (sort alist
-		  (if ci?
-		      (lambda (x y) (string-ci<? (car x) (car y)))
-		      (lambda (x y) (string<? (car x) (car y))))))))
-      (%make-string-table v (vector-length v) ci?))))
+(define* (alist->string-table alist (ci? #t))
+  (let* ((compare   (if ci? string-ci<? string<?))
+	 (sort-func (lambda (x y) (compare (car x) (car y))))
+	 (v         (list->vector (sort alist sort-func))))
+      (%make-string-table v (vector-length v) ci?)))
 
 (define make-string-table-entry cons)
 (define string-table-entry-string car)
@@ -70,14 +61,13 @@ USA.
 	       (lambda () (loop low (-1+ index)))
 	       (lambda () (loop (1+ index) high)))))))))
 
-(define (string-table-get table string #!optional if-not-found)
+(define* (string-table-get table string
+			   (if-not-found (lambda (index) index #f)))
   (string-table-search table string
     (lambda (index entry)
       index				;ignore
       (string-table-entry-value entry))
-    (if (default-object? if-not-found)
-	(lambda (index) index #f)
-	if-not-found)))
+    if-not-found))
 
 (define (string-table-put! table string value)
   (string-table-search table string
@@ -162,8 +152,8 @@ USA.
 	    (vector-ref (string-table-vector table) index))))
 	(match-forward
 	 (if (string-table-ci? table)
-	     string-match-forward-ci
-	     string-match-forward)))
+	     string-prefix-length-ci
+	     string-prefix-length)))
     (let ((perform-search
 	   (lambda (index)
 	     (let ((close-match (entry-string index)))

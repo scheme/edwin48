@@ -140,3 +140,13 @@
 	  ring-pop!
 	  ring-ref
 	  ring-set!))
+
+(define-interface edwin-string-table-interface
+  (export make-string-table
+          alist->string-table
+          string-table-get
+          string-table-put!
+          string-table-remove!
+          string-table-complete
+          string-table-completions
+          string-table-apropos))

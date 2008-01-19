@@ -35,6 +35,14 @@
         )
   (files motion))
 
+(define-structure edwin-string-table edwin-string-table-interface
+  (open scheme
+        aliases
+        define-record-type*
+        define-opt
+        srfi-13)
+  (files strtab))
+
 (define-structure
     edwin-utilities edwin-utilities-interface
   (open scheme let-opt srfi-13 strings util)
@@ -42,5 +50,5 @@
 
 (define-structure
     edwin-ring edwin-ring-interface
-  (open scheme aliases signals srfi-1)
+  (open scheme aliases errors srfi-1)
   (files ring))
