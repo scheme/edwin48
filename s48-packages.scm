@@ -28,14 +28,14 @@
   (files s48-weak-pair))
 
 (define-structure fixnum
-    (export fix:=
-	    fix:< fix:> fix:<= fix:>=
-	    fix:zero? fix:positive? fix:negative?
-	    fix:+ fix:- fix:*
-	    fix:quotient fix:remainder
-	    fix:1+ fix:1-
-	    fix:not fix:and fix:andc
-	    fix:or fix:xor fix:lsh)
+    (export fix:= fix:fixnum?
+            fix:< fix:> fix:<= fix:>=
+            fix:zero? fix:positive? fix:negative?
+            fix:+ fix:- fix:*
+            fix:quotient fix:remainder
+            fix:1+ fix:1-
+            fix:not fix:and fix:andc
+            fix:or fix:xor fix:lsh)
   (open scheme bitwise)
   (files s48-fixnum))
 

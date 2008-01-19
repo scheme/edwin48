@@ -8,7 +8,8 @@
 (define (fix:<= a b) (<= a b))
 (define (fix:>= a b) (>= a b))
 
-(define (fix:zero? n) (zero? n))
+(define (fix:fixnum?   n) (integer?  n))
+(define (fix:zero?     n) (zero?     n))
 (define (fix:positive? n) (positive? n))
 (define (fix:negative? n) (negative? n))
 
