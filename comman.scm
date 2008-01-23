@@ -28,16 +28,12 @@ USA.
 ;;;; Commands and Variables
 
 
-(define-structure (command
-		   (constructor %make-command ())
-		   (print-procedure
-		    (unparser/standard-method 'COMMAND
-		      (lambda (state command)
-			(unparse-object state (command-name command))))))
-  name
-  %description
-  interactive-specification
-  procedure)
+(define-record-type* command
+  (%make-command)
+  (name
+   %description
+   interactive-specification
+   procedure))
 
 (define (command-description command)
   (let ((desc (command-%description command)))
@@ -73,9 +69,9 @@ USA.
 (define editor-commands
   (make-string-table 500))
 
-(define (name->command name #!optional if-undefined)
+(define* (name->command name (if-undefined 'INTERN))
   (or (string-table-get editor-commands (symbol-name name))
-      (case (if (default-object? if-undefined) 'INTERN if-undefined)
+      (case if-undefined
 	((#F) #f)
 	((ERROR) (error "Undefined command:" name))
 	((INTERN)
@@ -100,21 +96,17 @@ USA.
 		(command-interactive-specification command)
 		(command-procedure command)))
 
-(define-structure (variable
-		   (constructor %make-variable ())
-		   (print-procedure
-		    (unparser/standard-method 'VARIABLE
-		      (lambda (state variable)
-			(unparse-object state (variable-name variable))))))
-  name
-  %description
-  %value
-  buffer-local?
-  initial-value
-  %default-value
-  assignment-daemons
-  value-validity-test
-  value-normalization)
+(define-record-type* variable
+  (%make-variable)
+  (name
+   %description
+   %value
+   buffer-local?
+   initial-value
+   %default-value
+   assignment-daemons
+   value-validity-test
+   value-normalization))
 
 (define (variable-description variable)
   (let ((desc (variable-%description variable)))
@@ -131,8 +123,8 @@ USA.
 (define (variable-name-string variable)
   (editor-name/internal->external (symbol-name (variable-name variable))))
 
-(define (make-variable name description value buffer-local?
-		       #!optional test normalization)
+(define* (make-variable name description value buffer-local?
+			(test #f) (normalization #f))
   (let* ((sname (symbol-name name))
 	 (variable
 	  (or (string-table-get editor-variables sname)
@@ -148,12 +140,8 @@ USA.
     (set-variable-assignment-daemons! variable '())
     ;; Next two are written strangely because DEFAULT-OBJECT?
     ;; expansion contains (THE-ENVIRONMENT), which can't be inlined.
-    (if (default-object? test)
-	(set-variable-value-validity-test! variable #f)
-	(set-variable-value-validity-test! variable test))
-    (if (default-object? normalization)
-	(set-variable-value-normalization! variable #f)
-	(set-variable-value-normalization! variable normalization))
+    (set-variable-value-validity-test! variable test)
+    (set-variable-value-normalization! variable normalization)
     variable))
 
 (define (make-variable-buffer-local! variable)
@@ -182,9 +170,9 @@ USA.
 (define editor-variables
   (make-string-table 50))
 
-(define (name->variable name #!optional if-undefined)
+(define* (name->variable name (if-undefined 'INTERN))
   (or (string-table-get editor-variables (symbol-name name))
-      (case (if (default-object? if-undefined) 'INTERN if-undefined)
+      (case if-undefined
 	((#F) #f)
 	((ERROR) (error "Undefined variable:" name))
 	((INTERN) (make-variable name "" #f #f))
