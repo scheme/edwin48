@@ -51,7 +51,7 @@ USA.
   (change-hook #f read-only #t)
   (port #f)
   (banner #f)
-  (group-table (make-string-hash-table) read-only #t)
+  (group-table (make-hash-table string=? string-hash) read-only #t)
   (reader-hook #f)
   (current-group #f))
 
@@ -123,10 +123,10 @@ USA.
 		  (lambda (port)
 		    (nntp-newsgroups-command connection port time)))
 		(call-with-input-file pathname read-newsgroup-lines)))))
-	(let* ((table (make-string-hash-table))
+	(let* ((table (make-hash-table string=? string-hash))
 	       (add-line
 		(lambda (line)
-		  (hash-table/put! table (string-first-token line) line))))
+		  (hash-table-set! table (string-first-token line) line))))
 	  (vector-for-each add-line lines)
 	  (vector-for-each add-line new-lines)
 	  (write-init-file-atomically
@@ -137,7 +137,7 @@ USA.
 	     (for-each (lambda (line)
 			 (write-string line port)
 			 (newline port))
-		       (hash-table/datum-list table)))))
+		       (hash-table-values table)))))
 	(convert-groups-list new-lines)))))
 
 (define (nntp-connection:active-groups-vector connection re-read?)
@@ -184,18 +184,18 @@ USA.
 ;;;; Group Cache
 
 (define (find-news-group connection name)
-  (hash-table/get (nntp-connection:group-table connection) name #f))
+  (hash-table-ref/default (nntp-connection:group-table connection) name #f))
 
 (define (nntp-connection:remember-group! connection name group)
-  (hash-table/put! (nntp-connection:group-table connection) name group))
+  (hash-table-set! (nntp-connection:group-table connection) name group))
 
 (define (nntp-connection:purge-group-cache connection predicate)
   (let ((table (nntp-connection:group-table connection)))
     (if table
-	(hash-table/for-each table
+	(hash-table-walk table
 	  (lambda (name group)
 	    (if (predicate group)
-		(hash-table/remove! table name)))))))
+		(hash-table-delete! table name)))))))
 
 ;;;; NNTP Commands
 
@@ -550,10 +550,10 @@ USA.
 
 (define (news-group:header group number)
   (let ((table (news-group:header-table group)))
-    (or (hash-table/get table number #f)
+    (or (hash-table-ref/default table number #f)
 	(let ((header (parse-header group (get-header group number))))
 	  (if (news-header? header)
-	      (hash-table/put! table number header))
+	      (hash-table-set! table number header))
 	  header))))
 
 (define (news-group:id->header group id allow-server-probes?)
@@ -565,9 +565,9 @@ USA.
 	       (and (news-header? header)
 		    (let ((table (news-group:header-table group))
 			  (number (news-header:number header)))
-		      (or (hash-table/get table number #f)
+		      (or (hash-table-ref/default table number #f)
 			  (begin
-			    (hash-table/put! table number header)
+			    (hash-table-set! table number header)
 			    header)))))))))
 
 (define (news-group:id->pre-read-header group id)
@@ -579,28 +579,28 @@ USA.
 
 (define (news-group:cached-header group number)
   (and (news-group:%header-table group)
-       (hash-table/get (news-group:%header-table group) number #f)))
+       (hash-table-ref/default (news-group:%header-table group) number #f)))
 
 (define (news-group:purge-header-cache group predicate)
   (let ((table (news-group:%header-table group)))
     (if table
 	(if (eq? 'ALL predicate)
 	    (hash-table/clear! table)
-	    (hash-table/for-each table
+	    (hash-table-walk table
 	      (lambda (number header)
 		(if (and (news-header? header) (predicate header #f))
-		    (hash-table/remove! table number))))))))
+		    (hash-table-delete! table number))))))))
 
 (define (news-group:discard-cached-header! header)
   (let ((group (news-header:group header)))
     (if (news-group:%header-table group)
-	(hash-table/remove! (news-group:%header-table group)
+	(hash-table-delete! (news-group:%header-table group)
 			    (news-header:number header)))))
 
 (define (news-group:cached-headers group)
   (let ((table (news-group:%header-table group)))
     (if table
-	(hash-table/datum-list table)
+	(hash-table-values table)
 	'())))
 
 (define (news-group:headers group numbers ignore?)
@@ -619,7 +619,7 @@ USA.
 	(let loop ((numbers numbers) (headers '()) (numbers* '()))
 	  (if (null? numbers)
 	      (values headers (reverse! numbers*))
-	      (let ((header (hash-table/get table (car numbers) #f)))
+	      (let ((header (hash-table-ref/default table (car numbers) #f)))
 		(if (not header)
 		    (loop (cdr numbers)
 			  headers
@@ -627,7 +627,7 @@ USA.
 		    (loop (cdr numbers)
 			  (cons (if (ignore? header)
 				    (begin
-				      (hash-table/remove! table (car numbers))
+				      (hash-table-delete! table (car numbers))
 				      (cons 'IGNORED-ARTICLE (car numbers)))
 				    header)
 				headers)
@@ -679,7 +679,7 @@ USA.
 	  ((ignore? header)
 	   headers)
 	  (else
-	   (hash-table/put! (news-group:header-table group) number header)
+	   (hash-table-set! (news-group:header-table group) number header)
 	   (cons header headers)))))
 
 ;;;; Header Database
@@ -1318,7 +1318,7 @@ USA.
       (append! (discard-useless-dummy-headers dummy-headers) headers))))
 
 (define (map-references-to-headers headers show-context? allow-server-probes?)
-  (let ((id-table (make-string-hash-table))
+  (let ((id-table (make-hash-table string=? string-hash))
 	(queue (make-queue))
 	(dummy-headers '()))
 
@@ -1326,7 +1326,7 @@ USA.
       (set-news-header:followup-to! header (news-header:reference-list header))
       (set-news-header:followups! header '())
       (set-news-header:thread! header #f)
-      (hash-table/put! id-table (news-header:message-id header) header))
+      (hash-table-set! id-table (news-header:message-id header) header))
 
     (for-each init-header headers)
     (for-each (lambda (header) (enqueue!/unsafe queue header)) headers)
@@ -1338,14 +1338,14 @@ USA.
 	   (remove-duplicates
 	    (map
 	     (lambda (id)
-	       (or (hash-table/get id-table id #f)
+	       (or (hash-table-ref/default id-table id #f)
 		   (and show-context?
 			(let ((header
 			       (news-group:id->header
 				group id allow-server-probes?)))
 			  (and (news-header? header)
 			       (begin
-				 (if (eq? (hash-table/get id-table id #t)
+				 (if (eq? (hash-table-ref/default id-table id #t)
 					  #t)
 				     (begin
 				       (set! headers (cons header headers))
@@ -1409,9 +1409,9 @@ USA.
 ;;; redundant paths to the ancestors of a header.
 
 (define (convert-header-graphs-to-trees headers)
-  (let ((tables (cons (make-eq-hash-table) (make-eq-hash-table))))
+  (let ((tables (cons (make-hash-table eq?) (make-hash-table eq?))))
     (for-each (lambda (header)
-		(if (eq? (hash-table/get (car tables) header 'NONE) 'NONE)
+		(if (eq? (hash-table-ref/default (car tables) header 'NONE) 'NONE)
 		    (eliminate-redundant-relatives tables header)))
 	      headers)
     (let loop ()
@@ -1495,10 +1495,10 @@ USA.
 
 (define (compute-header-relatives step table header)
   (let loop ((header header))
-    (let ((cache (hash-table/get table header 'NONE)))
+    (let ((cache (hash-table-ref/default table header 'NONE)))
       (case cache
 	((NONE)
-	 (hash-table/put! table header 'PENDING)
+	 (hash-table-set! table header 'PENDING)
 	 (let ((result
 		(reduce
 		 unionq
@@ -1515,7 +1515,7 @@ USA.
 					'())
 				      result)))
 			      headers))))))
-	   (hash-table/put! table header result)
+	   (hash-table-set! table header result)
 	   result))
 	((PENDING)
 	 ;;(error "Cycle detected in header graph:" header)
@@ -1525,8 +1525,8 @@ USA.
 (define (reset-caches! tables header)
   (let ((do-header
 	 (lambda (header)
-	   (hash-table/remove! (car tables) header)
-	   (hash-table/remove! (cdr tables) header))))
+	   (hash-table-delete! (car tables) header)
+	   (hash-table-delete! (cdr tables) header))))
     (let loop ((header header))
       (do-header header)
       (for-each loop (news-header:followup-to header)))
@@ -1724,9 +1724,9 @@ USA.
 ;;; common references.
 
 (define (build-equivalence-classes threads subject-alist)
-  (let ((equivalences (make-eq-hash-table)))
+  (let ((equivalences (make-hash-table eq?)))
     (for-each (lambda (thread)
-		(hash-table/put! equivalences
+		(hash-table-set! equivalences
 				 thread
 				 (let ((t (list thread)))
 				   (set-cdr! t (list t))
@@ -1734,8 +1734,8 @@ USA.
 	      threads)
     (let ((equivalence!
 	   (lambda (x y)
-	     (let ((x (hash-table/get equivalences x #f))
-		   (y (hash-table/get equivalences y #f)))
+	     (let ((x (hash-table-ref/default equivalences x #f))
+		   (y (hash-table-ref/default equivalences y #f)))
 	       (if (not (eq? (cdr x) (cdr y)))
 		   (let ((k
 			  (lambda (x y)
@@ -1751,7 +1751,7 @@ USA.
 		subject-alist))
     (map (lambda (class) (map car class))
 	 (remove-duplicates
-	  (map cdr (hash-table/datum-list equivalences))))))
+	  (map cdr (hash-table-values equivalences))))))
 
 (define (make-threads-equivalent! threads)
   (let ((threads (sort threads news-thread:<)))
@@ -1885,7 +1885,7 @@ USA.
 		  (cons (car items) result))))))
 
 (define (hash-table/modify! table key default modifier)
-  (hash-table/put! table key (modifier (hash-table/get table key default))))
+  (hash-table-set! table key (modifier (hash-table-ref/default table key default))))
 
 (define (map! procedure items)
   (do ((items items (cdr items)))

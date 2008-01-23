@@ -30,7 +30,7 @@ USA.
 
 ;;;; Low-level data structures
 
-(define make-abbrev-table make-string-hash-table)
+(define make-abbrev-table (lambda () make-hash-table string=? string-hash))
 (define abbrev-table? hash-table?)
 
 (define-structure (abbrev-entry (type-descriptor <abbrev-entry>))
@@ -55,7 +55,7 @@ USA.
     (if hook (guarantee-symbol hook 'DEFINE-ABBREV))
     (guarantee-exact-nonnegative-integer count 'DEFINE-ABBREV)
     (set! abbrevs-changed? #t)
-    (hash-table/put! table
+    (hash-table-set! table
 		     (string-downcase abbrev)
 		     (make-abbrev-entry expansion hook count))))
 
@@ -72,7 +72,7 @@ USA.
   (guarantee-abbrev-table table 'UNDEFINE-ABBREV)
   (guarantee-string abbrev 'UNDEFINE-ABBREV)
   (set! abbrevs-changed? #t)
-  (hash-table/remove! table (string-downcase abbrev)))
+  (hash-table-delete! table (string-downcase abbrev)))
 
 (define (abbrev-entry abbrev where)
   (let ((abbrev
@@ -83,12 +83,12 @@ USA.
 		 (error:wrong-type-argument abbrev "string"
 					    'ABBREV-EXPANSION))))))
     (if (abbrev-table? where)
-	(hash-table/get where abbrev #f)
+	(hash-table-ref/default where abbrev #f)
 	(let ((buffer (if (not where) (selected-buffer) where)))
 	  (or (let ((table (ref-variable local-abbrev-table buffer)))
 		(and table
-		     (hash-table/get table abbrev #f)))
-	      (hash-table/get (ref-variable global-abbrev-table #f)
+		     (hash-table-ref/default table abbrev #f)))
+	      (hash-table-ref/default (ref-variable global-abbrev-table #f)
 			      abbrev
 			      #f))))))
 
@@ -474,7 +474,7 @@ Mark is set after the inserted text."
 	 (insert-string "(" mark)
 	 (insert-string (symbol-name name) mark)
 	 (insert-string ")\n\n" mark)
-	 (hash-table/for-each table
+	 (hash-table-walk table
 	   (lambda (abbrev entry)
 	     (if (abbrev-entry-expansion entry)
 		 (begin
@@ -601,7 +601,7 @@ The argument FILENAME is the file name to write."
 	       (write name port)
 	       (write-string " '(" port)
 	       (newline port)
-	       (hash-table/for-each table
+	       (hash-table-walk table
 		 (lambda (abbrev entry)
 		   (if (abbrev-entry-expansion entry)
 		       (begin

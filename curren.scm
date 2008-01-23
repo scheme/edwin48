@@ -557,14 +557,14 @@ The buffer is guaranteed to be selected at that time."
 
 (define (maybe-select-buffer-layout-1 window buffer)
   (let ((screen (window-screen window)))
-    (let ((l1 (hash-table/get screen-buffer-layouts screen #f))
+    (let ((l1 (hash-table-ref/default screen-buffer-layouts screen #f))
 	  (l2 (buffer-get buffer buffer-layout-key #f)))
       (and (or (not (eq? l1 l2))
 	       (and l1 (buffer-layout-visible? l1 screen)))
 	   (begin
 	     (if l1
 		 (begin
-		   (hash-table/remove! screen-buffer-layouts screen)
+		   (hash-table-delete! screen-buffer-layouts screen)
 		   (delete-other-windows window)))
 	     (and l2
 		  (if (let loop ((buffers (cdr l2)))
@@ -575,7 +575,7 @@ The buffer is guaranteed to be selected at that time."
 				 (loop (weak-cdr buffers)))))
 		      (begin
 			(delete-other-windows window)
-			(hash-table/put! screen-buffer-layouts screen l2)
+			(hash-table-set! screen-buffer-layouts screen l2)
 			l2)
 		      (begin
 			(delete-buffer-layout-1 l2)
@@ -584,9 +584,9 @@ The buffer is guaranteed to be selected at that time."
 (define (maybe-deselect-buffer-layout screen)
   (without-interrupts
    (lambda ()
-     (if (hash-table/get screen-buffer-layouts screen #f)
+     (if (hash-table-ref/default screen-buffer-layouts screen #f)
 	 (begin
-	   (hash-table/remove! screen-buffer-layouts screen)
+	   (hash-table-delete! screen-buffer-layouts screen)
 	   (delete-other-windows (screen-selected-window screen)))))))
 
 (define (delete-buffer-layout buffer)
@@ -596,10 +596,10 @@ The buffer is guaranteed to be selected at that time."
 	(delete-buffer-layout-1 layout))))
 
 (define (delete-buffer-layout-1 layout)
-  (hash-table/for-each screen-buffer-layouts
+  (hash-table-walk screen-buffer-layouts
     (lambda (screen layout*)
       (if (eq? layout layout*)
-	  (hash-table/remove! screen-buffer-layouts screen))))
+	  (hash-table-delete! screen-buffer-layouts screen))))
   (do ((buffers (cdr layout) (weak-cdr buffers)))
       ((not (weak-pair? buffers)))
     (let ((buffer (weak-car buffers)))
@@ -622,7 +622,7 @@ The buffer is guaranteed to be selected at that time."
 
 (add-event-receiver! editor-initializations
   (lambda ()
-    (set! screen-buffer-layouts (make-eq-hash-table))
+    (set! screen-buffer-layouts (make-hash-table eq?))
     unspecific))
 
 ;;;; Point

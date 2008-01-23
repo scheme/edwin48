@@ -45,7 +45,7 @@ USA.
     (set! typein-saved-windows '())
     (set! map-name/internal->external identity-procedure)
     (set! map-name/external->internal identity-procedure)
-    (set! prompt-histories (make-eq-hash-table))
+    (set! prompt-histories (make-hash-table eq?))
     unspecific))
 
 (define (make-typein-buffer-name depth)
@@ -453,9 +453,9 @@ USA.
   (if (not (or (not name) (symbol? name)))
       (error:wrong-type-argument name "symbol" 'NAME->HISTORY))
   (let ((name (or name 'MINIBUFFER-DEFAULT)))
-    (or (hash-table/get prompt-histories name #f)
+    (or (hash-table-ref/default prompt-histories name #f)
 	(let ((history (list 'PROMPT-HISTORY)))
-	  (hash-table/put! prompt-histories name history)
+	  (hash-table-set! prompt-histories name history)
 	  history))))
 
 (define (prompt-history-strings name)

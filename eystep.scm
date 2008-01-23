@@ -152,7 +152,7 @@ c	contract the step under the cursor")
   (let ((buffer (new-buffer "*Stepper*")))
     (add-kill-buffer-hook buffer kill-stepper-buffer)
     (buffer-put! buffer 'STEPPER-STATE state)
-    (hash-table/put! stepper-buffers state buffer)
+    (hash-table-set! stepper-buffers state buffer)
     (set-buffer-read-only! buffer)
     (set-buffer-major-mode! buffer (ref-mode-object stepper))
     buffer))
@@ -160,7 +160,7 @@ c	contract the step under the cursor")
 (define (kill-stepper-buffer buffer)
   (let ((state (buffer-get buffer 'STEPPER-STATE)))
     (if state
-	(hash-table/remove! stepper-buffers state)))
+	(hash-table-delete! stepper-buffers state)))
   (buffer-remove! buffer 'STEPPER-STATE))
 
 (define (buffer->stepper-state buffer)
@@ -168,11 +168,11 @@ c	contract the step under the cursor")
       (error:bad-range-argument buffer 'BUFFER->STEPPER-STATE)))
 
 (define (stepper-state->buffer state)
-  (or (hash-table/get stepper-buffers state #f)
+  (or (hash-table-ref/default stepper-buffers state #f)
       (get-stepper-buffer state)))
 
 (define stepper-buffers
-  (make-eq-hash-table))
+  (make-hash-table eq?))
 
 (define (current-stepper-state)
   (buffer->stepper-state (current-buffer)))
@@ -193,19 +193,19 @@ c	contract the step under the cursor")
 
 (define (get-buffer-ynode-regions buffer)
   (or (buffer-get buffer 'YNODE-REGIONS)
-      (let ((table (make-eq-hash-table)))
+      (let ((table (make-hash-table eq?)))
 	(buffer-put! buffer 'YNODE-REGIONS table)
 	table)))
 
 (define (clear-ynode-regions! regions)
-  (for-each mark-temporary! (hash-table/datum-list regions))
+  (for-each mark-temporary! (hash-table-values regions))
   (hash-table/clear! regions))
 
 (define (ynode-start-mark regions node)
-  (hash-table/get regions node #f))
+  (hash-table-ref/default regions node #f))
 
 (define (save-ynode-region! regions node start end)
-  (hash-table/put! regions node (mark-temporary-copy start))
+  (hash-table-set! regions node (mark-temporary-copy start))
   (add-text-property (mark-group start) (mark-index start) (mark-index end)
 		     'STEPPER-NODE node))
 

@@ -196,10 +196,10 @@ USA.
       (name->variable object)))
 
 (define (variable-permanent-local! variable)
-  (hash-table/put! permanent-local-variables variable #t))
+  (hash-table-set! permanent-local-variables variable #t))
 
 (define (variable-permanent-local? variable)
-  (hash-table/get permanent-local-variables variable #f))
+  (hash-table-ref/default permanent-local-variables variable #f))
 
 (define permanent-local-variables
-  (make-eq-hash-table))
+  (make-hash-table eq?))
