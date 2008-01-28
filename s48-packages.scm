@@ -64,3 +64,16 @@
   (open scheme srfi-1 let-opt)
   (for-syntax (open scheme let-opt (subset signals (syntax-error)) srfi-1))
   (files s48-define-opt))
+
+(define-structure mit-regexp
+    (export re-compile-pattern
+            re-string-match
+            re-substring-match
+            re-string-search-forward   ; re-substring-search-forward
+            ;; re-string-search-backward re-substring-search-backward
+            re-match-start-index
+            re-match-end-index
+            re-match-extract
+            regexp-group)
+  (open scheme posix-regexps regexps)
+  (files s48-regexp))
