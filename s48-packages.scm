@@ -78,3 +78,44 @@
             regexp-group)
   (open scheme posix-regexps regexps)
   (files s48-regexp))
+
+(define-structure pathname
+    (export ->pathname
+            parse-namestring
+            ->namestring
+            pathname-simplify
+
+            pathname-directory
+            pathname-name
+            pathname-type
+            pathname-version
+
+            pathname-new-directory
+            pathname-new-type
+            pathname-default-directory
+            pathname-default-name
+
+            pathname?
+            pathname=?
+            pathname-absolute?
+            directory-pathname?
+            pathname-wild?
+            merge-pathnames
+            file-namestring
+            directory-namestring
+            enough-namestring
+            file-pathname
+            directory-pathname
+            enough-pathname
+            directory-pathname-as-file
+            pathname-as-directory
+
+            ;; init-file-pathname
+            user-homedir-pathname
+            ;; system-library-pathname
+            ;; system-library-directory-pathname
+	    )
+  (open scheme define-record-type* ascii
+	simple-signals util methods receiving fluids cells
+	posix-process-data posix-users)
+  (files pathname pathname-unix s48-pathname))
