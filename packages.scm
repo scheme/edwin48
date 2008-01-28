@@ -39,6 +39,7 @@
         define-record-type*
         define-opt
 	(modify sorting (rename (vector-sort sort)))
+        mit-regexp
         srfi-13)
   (files strtab))
 

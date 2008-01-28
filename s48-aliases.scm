@@ -33,3 +33,8 @@
 (define (string-tail string start)
   (substring string start (string-length string)))
 
+(define (subvector-move-left! vector1 start1 end1 vector2 start2)
+  (vector-copy! vector2 start2 vector1 start1 end1))
+
+(define (subvector-move-right! vector1 start1 end1 vector2 start2)
+  (vector-copy! vector2 start2 vector1 end1 start1))
