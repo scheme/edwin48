@@ -16,7 +16,6 @@
                "interfaces.scm"
                "packages.scm"))
 
-(open 'literals)
 ;; (open 'edwin-groups)
 ;; (open 'edwin-marks)
 ;; (open 'edwin-regions)

@@ -57,11 +57,6 @@
   (open scheme interrupts util srfi-1 srfi-43)
   (files s48-aliases))
 
-(define-structure literals
-    (export) ;; no exports
-  (open scheme ascii reading srfi-13)
-  (files s48-literals))
-
 (define-structure strings
     (export substring-move-left! substring-move-right!
 	    string-head string-tail)
