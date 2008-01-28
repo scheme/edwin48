@@ -20,3 +20,16 @@
 (define (vector-grow vec k)
   (let ((difference (- k (vector-length vec))))
     (vector-append vec (make-vector difference #f))))
+
+(define (substring-move-left! string1 start1 end1 string2 start2)
+  (string-copy! string2 start2 string1 start1 end1))
+
+(define (substring-move-right! string1 start1 end1 string2 start2)
+  (string-copy! string2 start2 string1 end1 start1))
+
+(define (string-head string end)
+  (substring string 0 end))
+
+(define (string-tail string start)
+  (substring string start (string-length string)))
+

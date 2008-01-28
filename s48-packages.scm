@@ -53,15 +53,11 @@
 	    unspecific
 	    1+ -1+
 	    delq! list-deletor!
-	    vector-grow)
-  (open scheme interrupts util srfi-1 srfi-43)
+	    vector-grow
+            substring-move-left! substring-move-right!
+            string-head string-tail)
+  (open scheme interrupts util srfi-1 srfi-13 srfi-43)
   (files s48-aliases))
-
-(define-structure strings
-    (export substring-move-left! substring-move-right!
-	    string-head string-tail)
-  (open (modify scheme (hide string-fill!)) srfi-13)
-  (files s48-strings))
 
 (define-structure define-opt
     (export (define* :syntax))

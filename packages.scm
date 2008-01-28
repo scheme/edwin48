@@ -14,7 +14,6 @@
 	  srfi-1
           srfi-13
           srfi-23
-	  strings
           )
   (files struct
          grpops
@@ -31,7 +30,6 @@
         edwin-regions
         let-opt
         srfi-23
-	strings
         )
   (files motion))
 
@@ -46,7 +44,7 @@
 
 (define-structure
     edwin-utilities edwin-utilities-interface
-  (open scheme let-opt srfi-13 strings util)
+  (open scheme aliases let-opt srfi-13 util)
   (files utils))
 
 (define-structure
