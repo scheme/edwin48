@@ -55,5 +55,5 @@
 
 (define-structure
     edwin-doc-string edwin-doc-string-interface
-  (open scheme aliases fixnum errors define-opt)
+  (open scheme aliases fixnum errors define-opt pathname srfi-13)
   (files docstr))
