@@ -61,3 +61,30 @@
 (define (user-homedir-pathname)
   (let ((user (user-id->user-info (get-user-id))))
     (user-info-home-directory-pathname user)))
+
+;;; Originally from MIT Scheme
+(define (pathname-simplify pathname)
+  (define (delete-up directory p)
+    (let loop ((p* directory))
+      (if (eq? p* p)
+          (cddr p*)
+          (cons (car p*) (loop (cdr p*))))))
+  (if (pair? (pathname-directory pathname))
+      (let loop ((pathname pathname) (np 1))
+	(let ((directory (pathname-directory pathname)))
+	  (let scan ((p (list-tail directory np)) (np np))
+	    (if (pair? p)
+		(if (and (not (equal? (car p) ".."))
+			 (pair? (cdr p))
+			 (equal? (cadr p) ".."))
+		    (let ((pathname*
+			   (pathname-new-directory pathname
+						   (delete-up directory p))))
+		      (if (file-eq? (directory-pathname pathname)
+				    (directory-pathname pathname*))
+			  (loop pathname* np)
+			  (scan (cddr p) (+ np 2))))
+		    (scan (cdr p) (+ np 1)))
+		pathname))))
+      pathname))
+

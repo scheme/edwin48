@@ -123,5 +123,6 @@
 	    )
   (open scheme define-record-type* ascii
 	simple-signals util methods receiving fluids cells
+        mit-fileio
 	posix-process-data posix-users)
   (files pathname pathname-unix s48-pathname))
