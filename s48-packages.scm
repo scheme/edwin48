@@ -79,6 +79,12 @@
   (open scheme posix-regexps regexps)
   (files s48-regexp))
 
+(define-structure mit-fileio
+    (export file-eq?
+            file-exists?)
+  (open scheme posix-files)
+  (files s48-fileio))
+
 (define-structure pathname
     (export ->pathname
             parse-namestring
