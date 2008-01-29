@@ -55,5 +55,10 @@
 
 (define-structure
     edwin-doc-string edwin-doc-string-interface
-  (open scheme aliases fixnum errors define-opt pathname mit-fileio srfi-13)
+  (open scheme aliases fixnum errors define-opt pathname mit-fileio srfi-13
+        edwin-paths)
   (files docstr))
+
+(define-structure edwin-paths edwin-paths-interface
+  (open scheme aliases errors pathname mit-fileio)
+  (files paths))

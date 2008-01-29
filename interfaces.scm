@@ -159,3 +159,10 @@
           description->string
           description-first-line
           description-append))
+
+(define-interface edwin-paths-interface
+  (export edwin-binary-directory
+          edwin-info-directory
+          edwin-etc-directory
+          edwin-tutorial-pathname
+          default-homedir-pathname))

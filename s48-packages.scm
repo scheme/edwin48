@@ -56,8 +56,12 @@
 	    vector-grow
             subvector-move-left! subvector-move-right!
             substring-move-left! substring-move-right!
-            string-head string-tail)
-  (open scheme interrupts util srfi-1 srfi-13 srfi-43)
+            string-head string-tail
+            get-environment-variable)
+  (open scheme interrupts util
+        (modify posix-process-data (rename (lookup-environment-variable
+                                            get-environment-variable)))
+        srfi-1 srfi-13 srfi-43)
   (files s48-aliases))
 
 (define-structure define-opt
