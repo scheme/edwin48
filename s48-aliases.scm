@@ -41,3 +41,16 @@
 
 (define (symbol-append . symbols)
   (string->symbol (apply string-append (map symbol->string symbols))))
+
+(define (call-with-binary-input-file filename thunk)
+  (call-with-input-file filename thunk))
+
+(define (call-with-binary-output-file filename thunk)
+  (call-with-output-file filename thunk))
+
+(define (with-input-from-binary-file filename thunk)
+  (with-input-from-file filename thunk))
+
+(define (with-output-to-binary-file filename thunk)
+  (with-output-to-file filename thunk))
+
