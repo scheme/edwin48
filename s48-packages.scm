@@ -57,7 +57,8 @@
             subvector-move-left! subvector-move-right!
             substring-move-left! substring-move-right!
             string-head string-tail
-            get-environment-variable)
+            get-environment-variable
+            symbol-append)
   (open scheme interrupts util
         (modify posix-process-data (rename (lookup-environment-variable
                                             get-environment-variable)))

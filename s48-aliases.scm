@@ -38,3 +38,6 @@
 
 (define (subvector-move-right! vector1 start1 end1 vector2 start2)
   (vector-copy! vector2 start2 vector1 end1 start1))
+
+(define (symbol-append . symbols)
+  (string->symbol (apply string-append (map symbol->string symbols))))
