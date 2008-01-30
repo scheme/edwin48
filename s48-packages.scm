@@ -122,8 +122,7 @@
 
             ;; init-file-pathname
             user-homedir-pathname
-            ;; system-library-pathname
-            ;; system-library-directory-pathname
+            system-library-directory-pathname
 	    )
   (open scheme define-record-type* ascii
 	simple-signals util methods receiving fluids cells

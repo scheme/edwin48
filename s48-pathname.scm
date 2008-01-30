@@ -15,7 +15,7 @@
   (pathname-filename pathname))
 
 (define (pathname-absolute? pathname)
-  (not (null? (pathname-origin pathname))))
+  (if (pathname-origin pathname) #t #f))
 
 (define (pathname-wild? pathname)
   (let ((wild? (lambda (name) (string=? "*" name))))
@@ -61,6 +61,9 @@
 (define (user-homedir-pathname)
   (let ((user (user-id->user-info (get-user-id))))
     (user-info-home-directory-pathname user)))
+
+(define (system-library-directory-pathname pathname)
+  (->pathname "edwin"))
 
 ;;; Originally from MIT Scheme
 (define (pathname-simplify pathname)
