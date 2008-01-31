@@ -54,3 +54,6 @@
 (define (with-output-to-binary-file filename thunk)
   (with-output-to-file filename thunk))
 
+(define (symbol-name s)
+  (symbol->string s))
+

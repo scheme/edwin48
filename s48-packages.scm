@@ -58,7 +58,7 @@
             substring-move-left! substring-move-right!
             string-head string-tail
             get-environment-variable
-            symbol-append
+            symbol-append symbol-name
             call-with-binary-input-file call-with-binary-output-file)
   (open scheme interrupts util
         (modify posix-process-data (rename (lookup-environment-variable
