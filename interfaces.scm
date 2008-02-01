@@ -167,3 +167,40 @@
           edwin-etc-directory
           edwin-tutorial-pathname
           default-homedir-pathname))
+
+(define-interface edwin-command-interface
+  (export (define-command     :syntax)
+          (ref-command-object :syntax)
+          (ref-command        :syntax)
+          command-name
+          command-interactive-specification
+          command-procedure
+          command-description
+          command-name-string
+          editor-name/internal->external
+          editor-name/external->internal
+          make-command
+          name->command
+          ->command
+          copy-command))
+
+(define-interface edwin-variable-interface
+  (export (define-variable     :syntax)
+          (ref-variable-object :syntax)
+          (ref-variable        :syntax)
+          (set-variable!       :syntax)
+          (local-set-variable! :syntax)
+          variable-name
+          variable-buffer-local?
+          variable-description
+          variable-value
+          variable-default-value
+          variable-name-string
+          make-variable
+          normalize-variable-value
+          add-variable-assignment-daemon!
+          invoke-variable-assignment-daemons!
+          editor-variables
+          name->variable
+          ->variable
+          variable-permanent-local!))
