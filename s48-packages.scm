@@ -57,8 +57,9 @@
             string-head string-tail
             get-environment-variable
             symbol-append symbol-name
-            call-with-binary-input-file call-with-binary-output-file)
-  (open scheme interrupts util
+            call-with-binary-input-file call-with-binary-output-file
+            vector-8b-ref vector-8b-set!)
+  (open scheme ascii interrupts util
         (modify posix-process-data (rename (lookup-environment-variable
                                             get-environment-variable)))
         srfi-1 srfi-13 srfi-43)

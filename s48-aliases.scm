@@ -45,3 +45,8 @@
 (define (symbol-name s)
   (symbol->string s))
 
+(define (vector-8b-ref string k)
+  (char->ascii (string-ref string k)))
+
+(define (vector-8b-set! string k code)
+  (string-set! string k (ascii->char code)))
