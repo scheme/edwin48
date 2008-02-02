@@ -294,7 +294,7 @@ Initialized from the SHELL environment variable."
 
 (define (process-send-string process string)
   (let ((port (process-output-port process)))
-    (output-port/write-string port string)
+    (write-string string port)
     (output-port/flush-output port)))
 
 (define (process-send-char process char)

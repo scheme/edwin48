@@ -145,7 +145,7 @@ USA.
   (call-with-binary-output-file
    output
    (lambda (port)
-     (output-port/write-string port *doc-strings*)))
+     (write-string *doc-strings* port)))
   (set! *external-doc-strings?* #f)
   (set! *doc-string-posn* 0)
   (set! *doc-strings* #f)

@@ -390,11 +390,11 @@ USA.
 
 (define (nntp-write-command connection string . strings)
   (let ((port (nntp-connection:port connection)))
-    (output-port/write-string port string)
+    (write-string string port)
     (do ((strings strings (cdr strings)))
 	((null? strings))
       (output-port/write-char port #\space)
-      (output-port/write-string port (car strings)))
+      (write-string (car strings) port))
     (output-port/write-char port #\newline)))
 
 (define (nntp-write-line connection string)
@@ -402,7 +402,7 @@ USA.
     (if (and (not (string-null? string))
 	     (char=? (string-ref string 0) #\.))
 	(output-port/write-char port #\.))
-    (output-port/write-string port string)
+    (write-string string port)
     (output-port/write-char port #\newline)))
 
 (define (nntp-drain-output connection)

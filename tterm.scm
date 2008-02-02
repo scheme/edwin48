@@ -1044,8 +1044,8 @@ USA.
   (output-n screen command 1))
 
 (define (output-n screen command n-lines)
-  (output-port/write-string console-i/o-port
-			    (pad-string screen command n-lines)))
+  (write-string (pad-string screen command n-lines)
+                console-i/o-port))
 
 (define (maybe-output screen command)
   (if command
