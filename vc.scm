@@ -1,10 +1,10 @@
 #| -*-Scheme-*-
 
-$Id: vc.scm,v 1.99 2007/08/22 17:26:38 cph Exp $
+$Id: vc.scm,v 1.112 2008/01/30 20:02:07 cph Exp $
 
 Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994,
     1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
-    2006, 2007 Massachusetts Institute of Technology
+    2006, 2007, 2008 Massachusetts Institute of Technology
 
 This file is part of MIT/GNU Scheme.
 
@@ -174,9 +174,12 @@ Otherwise, VC will compare the file to the copy in the repository."
 (define (define-vc-type-operation name type procedure)
   (1d-table/put! (vc-type-operations type) name procedure))
 
-(define (vc-type-operation type name)
+(define (vc-type-operation type name #!optional error?)
   (or (1d-table/get (vc-type-operations type) name #f)
-      (error:bad-range-argument name 'VC-TYPE-OPERATION)))
+      (begin
+	(if error?
+	    (error:bad-range-argument name 'VC-TYPE-OPERATION))
+	#f)))
 
 (define (vc-call name master . arguments)
   (apply (vc-type-operation (vc-master-type master) name) master arguments))
@@ -324,50 +327,34 @@ Otherwise, VC will compare the file to the copy in the repository."
 	  (vc-mode-line master buffer)
 	  (if (not (ref-variable vc-make-backup-files buffer))
 	      (local-set-variable! make-backup-files #f buffer))))))
-
+
 ;;;; Mode line
 
 (define (vc-mode-line master buffer)
-  (let ((workfile-buffer (vc-workfile-buffer master #f)))
-    (let ((buffer (or buffer workfile-buffer))
-	  (revision
-	   (or (vc-backend-workfile-revision master)
-	       (vc-backend-default-revision master #f))))
-      (let ((locker (vc-backend-locking-user master revision))
-	    (user-name (current-user-name)))
-	(set-variable!
-	 vc-mode-line-status
-	 (string-append
-	  " "
-	  (vc-type-display-name (vc-master-type master))
-	  (if (ref-variable vc-display-status buffer)
-	      (if revision
-		  (string-append
-		   (cond ((not locker) "-")
-			 ((string=? locker user-name) ":")
-			 (else (string-append ":" locker ":")))
-		   revision)
-		  " @@")
-	      ""))
-	 buffer)
-	(buffer-modeline-event! buffer 'VC-MODE-LINE-STATUS)
-	(if (and (buffer-writeable? buffer)
-		 (eq? buffer workfile-buffer)
-		 ;; If the file is locked by some other user, make the
-		 ;; buffer read-only.  Like this, even root cannot modify a
-		 ;; file that someone else has locked.
-		 (or (and locker (not (string=? locker user-name)))
-		     ;; If the user is root, and the file is not
-		     ;; owner-writeable, then pretend that we can't write it
-		     ;; even though we can (because root can write
-		     ;; anything).  This way, even root cannot modify a file
-		     ;; that isn't locked.
-		     (and (user-is-root?)
-			  (fix:= 0
-				 (fix:and #o200
-					  (file-modes
-					   (vc-master-workfile master)))))))
-	    (set-buffer-read-only! buffer))))))
+  (let ((buffer (or buffer (vc-workfile-buffer master #f))))
+    (set-variable! vc-mode-line-status
+		   (vc-backend-mode-line-status master buffer)
+		   buffer)
+    (buffer-modeline-event! buffer 'VC-MODE-LINE-STATUS)))
+
+(define (%default-mode-line-status master buffer)
+  (string-append
+   " "
+   (vc-type-display-name (vc-master-type master))
+   (if (ref-variable vc-display-status buffer)
+       (let ((revision
+	      (or (vc-backend-workfile-revision master)
+		  (vc-backend-default-revision master))))
+	 (let ((locker (vc-backend-locking-user master revision))
+	       (user-name (current-user-name)))
+	   (if revision
+	       (string-append
+		(cond ((not locker) "-")
+		      ((string=? locker user-name) ":")
+		      (else (string-append ":" locker ":")))
+		revision)
+	       " @@")))
+       "")))
 
 ;;;; VC-MASTER association
 
@@ -563,6 +550,8 @@ merge in the changes into your working copy."
 			       " is up to date."))))
 	      ((MERGE)
 	       (vc-next-action-merge master from-dired?))
+	      ((PENDING-MERGE)
+	       (message (->namestring workfile) " has a pending merge."))
 	      ((RESOLVE-CONFLICT)
 	       (message (->namestring workfile)
 			" has an unresolved conflict."))
@@ -841,7 +830,7 @@ If `F.~REV~' already exists, it is used instead of being re-created."
 	   (revision
 	    (or (vc-normalize-revision revision)
 		(vc-backend-workfile-revision master)
-		(vc-backend-default-revision master #f)))
+		(vc-backend-default-revision master)))
 	   (workfile
 	    (string-append (vc-workfile-string master) ".~" revision "~")))
       (if (not (file-exists? workfile))
@@ -1183,23 +1172,21 @@ the value of vc-log-mode-hook."
 	release)))
 
 (define (vc-backend-find-master workfile)
-  (let loop ((types vc-types))
-    (and (pair? types)
-	 (or ((vc-type-operation (car types) 'FIND-MASTER) workfile)
-	     (loop (cdr types))))))
+  (let loop ((ps (vc-control-directories workfile)))
+    (and (pair? ps)
+	 (or ((vc-type-operation (caar ps) 'FIND-MASTER) workfile (cdar ps))
+	     (loop (cdr ps))))))
 
 (define (vc-backend-master-valid? master)
   ;; MASTER is a VC-MASTER object.
   ;; The return value is a boolean indicating that MASTER is valid.
   (vc-call 'VALID? master))
 
-(define (vc-backend-default-revision master error?)
+(define (vc-backend-default-revision master)
   ;; MASTER is a valid VC-MASTER object.
-  ;; ERROR? is a boolean.
   ;; The default revision (usually the head of the trunk) is returned.
-  ;; If there is no such revision, then if ERROR? is true, an error is
-  ;; signalled.  Otherwise #F is returned.
-  (vc-call 'DEFAULT-REVISION master error?))
+  ;; If there is no such revision, #F is returned.
+  (vc-call 'DEFAULT-REVISION master))
 
 (define (vc-backend-workfile-revision master)
   ;; MASTER is a valid VC-MASTER object.
@@ -1227,7 +1214,7 @@ the value of vc-log-mode-hook."
 
 (define (vc-backend-workfile-status-string master)
   (vc-call 'WORKFILE-STATUS-STRING master))
-
+
 (define (vc-backend-register workfile revision comment keep?)
   ;; WORKFILE is an absolute pathname to an existing file.
   ;; REVISION is either a revision string or #F.
@@ -1241,11 +1228,7 @@ the value of vc-log-mode-hook."
     (if (and (pair? vc-types)
 	     (null? (cdr vc-types)))
 	(car vc-types)
-	(let ((likely-types
-	       (list-transform-positive vc-types
-		 (lambda (type)
-		   ((vc-type-operation type 'LIKELY-CONTROL-TYPE?)
-		    workfile)))))
+	(let ((likely-types (map car (vc-control-directories workfile))))
 	  (if (and (pair? likely-types)
 		   (null? (cdr likely-types)))
 	      (car likely-types)
@@ -1289,7 +1272,6 @@ the value of vc-log-mode-hook."
   ;; COMMENT is a comment string.
   ;; KEEP? is a boolean specifying that the workfile should be kept
   ;;   after checking in.  If #F, the workfile is deleted.
-  ;; The workfile is checked in.
   (vc-call 'CHECKIN master revision comment keep?))
 
 (define (vc-backend-revert master)
@@ -1314,7 +1296,26 @@ the value of vc-log-mode-hook."
   ;; SIMPLE? is a boolean specifying how the comparison is performed.
   ;;   If #T, only the result of the comparison is interesting.
   ;;   If #F, the differences are to be shown to the user.
-  (vc-call 'DIFF master rev1 rev2 simple?))
+  (if (equal? "0" (vc-backend-workfile-revision master))
+      ;; This file is added but not yet committed; there is no
+      ;; master file.
+      (begin
+	(if (or rev1 rev2)
+	    (error "No revisions exist:" (vc-master-workfile master)))
+	(if simple?
+	    ;; File is added but not committed; we regard this as
+	    ;; "changed".
+	    #t
+	    ;; Diff against /dev/null.
+	    (= 1
+	       (vc-run-command master
+			       (get-vc-diff-options simple?)
+			       "diff"
+			       (gc-vc-diff-switches master)
+			       "/dev/null"
+			       (file-pathname
+				(vc-master-workfile master))))))
+      (vc-call 'DIFF master rev1 rev2 simple?)))
 
 (define (vc-backend-print-log master)
   ;; MASTER is a valid VC-MASTER object.
@@ -1335,6 +1336,51 @@ the value of vc-log-mode-hook."
   ;; appropriate revision-control header strings.  Returns #t iff the
   ;; header strings are present.
   (vc-call 'CHECK-HEADERS master buffer))
+
+(define (vc-backend-mode-line-status master buffer)
+  (let ((operation
+	 (vc-type-operation (vc-master-type master) 'MODE-LINE-STATUS #f)))
+    (if operation
+	(operation master buffer)
+	(%default-mode-line-status master buffer))))
+
+(define (vc-control-directories workfile)
+  (let ((start (merge-pathnames (directory-pathname workfile))))
+    (let loop ((path (pathname-directory start)) (possible vc-types))
+      (let ((directory (pathname-new-directory start path)))
+	(receive (good maybe) (local-control-directories directory)
+	  (or (let ((good*
+		     (filter (lambda (p) (memq (car p) possible))
+			     good)))
+		(and (pair? good*)
+		     good*))
+	      (if (and (null? good)
+		       (pair? (cdr path)))
+		  (let ((maybe (lset-intersection eqv? maybe possible)))
+		    (if (pair? maybe)
+			(loop (except-last-pair path) maybe)
+			'()))
+		  '())))))))
+
+(define (local-control-directories directory)
+  (let loop ((types vc-types) (good '()) (maybe '()))
+    (if (pair? types)
+	(let ((control-dir
+	       ((vc-type-operation (car types) 'CONTROL-DIRECTORY)
+		directory)))
+	  (cond ((not control-dir)
+		 (loop (cdr types)
+		       good
+		       maybe))
+		((eq? control-dir 'SEARCH-PARENT)
+		 (loop (cdr types)
+		       good
+		       (cons (car types) maybe)))
+		(else
+		 (loop (cdr types)
+		       (cons (cons (car types) control-dir) good)
+		       maybe))))
+	(values good maybe))))
 
 ;;;; RCS Commands
 
@@ -1378,22 +1424,21 @@ the value of vc-log-mode-hook."
 	 (extract-string (re-match-start 1) (re-match-end 1)))))
 
 (define-vc-type-operation 'FIND-MASTER vc-type:rcs
-  (lambda (workfile)
+  (lambda (workfile control-dir)
     (let ((try
 	   (lambda (transform)
 	     (let ((master-file (transform workfile)))
 	       (and (file-exists? master-file)
 		    (make-vc-master vc-type:rcs master-file workfile)))))
-	  (in-rcs-directory
+	  (in-control-dir
 	   (lambda (pathname)
-	     (merge-pathnames (file-pathname pathname)
-			      (rcs-directory pathname))))
+	     (merge-pathnames (file-pathname pathname) control-dir)))
 	  (rcs-file
 	   (lambda (pathname)
 	     (merge-pathnames (string-append (file-namestring pathname) ",v")
 			      (directory-pathname pathname)))))
-      (or (try (lambda (workfile) (rcs-file (in-rcs-directory workfile))))
-	  (try in-rcs-directory)
+      (or (try (lambda (workfile) (rcs-file (in-control-dir workfile))))
+	  (try in-control-dir)
 	  (try rcs-file)))))
 
 (define-vc-type-operation 'VALID? vc-type:rcs
@@ -1401,8 +1446,8 @@ the value of vc-log-mode-hook."
     (file-exists? (vc-master-pathname master))))
 
 (define-vc-type-operation 'DEFAULT-REVISION vc-type:rcs
-  (lambda (master error?)
-    (let ((delta (rcs-find-delta (get-rcs-admin master) #f error?)))
+  (lambda (master)
+    (let ((delta (rcs-find-delta (get-rcs-admin master) #f #f)))
       (and delta
 	   (rcs-delta/number delta)))))
 
@@ -1496,9 +1541,11 @@ the value of vc-log-mode-hook."
 			(caar locks)
 			(loop (cdr locks))))))))))
 
-(define-vc-type-operation 'LIKELY-CONTROL-TYPE? vc-type:rcs
-  (lambda (workfile)
-    (file-directory? (rcs-directory workfile))))
+(define-vc-type-operation 'CONTROL-DIRECTORY vc-type:rcs
+  (lambda (directory)
+    (let ((cd (rcs-directory directory)))
+      (and (file-directory? cd)
+	   cd))))
 
 (define-vc-type-operation 'REGISTER vc-type:rcs
   (lambda (workfile revision comment keep?)
@@ -1573,8 +1620,7 @@ the value of vc-log-mode-hook."
   (lambda (master rev1 rev2 simple?)
     (= 1
        (vc-run-command master
-		       `((STATUS 1)
-			 (BUFFER ,(get-vc-diff-buffer simple?)))
+		       (get-vc-diff-options simple?)
 		       "rcsdiff"
 		       "-q"
 		       (if (and rev1 rev2)
@@ -1587,8 +1633,7 @@ the value of vc-log-mode-hook."
 				  (string-append "-r" rev))))
 		       (if simple?
 			   (and (diff-brief-available?) "--brief")
-			   (ref-variable diff-switches
-					 (vc-workfile-buffer master #f)))
+			   (gc-vc-diff-switches master))
 		       (vc-master-workfile master)))))
 
 (define-vc-type-operation 'PRINT-LOG vc-type:rcs
@@ -1612,11 +1657,6 @@ the value of vc-log-mode-hook."
 
 (define (cvs-master? master)
   (eq? vc-type:cvs (vc-master-type master)))
-
-(define (find-cvs-master workfile)
-  (let ((entries-file (merge-pathnames "Entries" (cvs-directory workfile))))
-    (and (%find-cvs-entry entries-file workfile)
-	 (make-vc-master vc-type:cvs entries-file workfile))))
 
 (define (cvs-directory workfile)
   (subdirectory-pathname workfile "CVS"))
@@ -1756,19 +1796,18 @@ the value of vc-log-mode-hook."
 	 (extract-string (re-match-start 1) (re-match-end 1)))))
 
 (define-vc-type-operation 'FIND-MASTER vc-type:cvs
-  (lambda (workfile)
-    (find-cvs-master workfile)))
+  (lambda (workfile control-dir)
+    (let ((entries-file (merge-pathnames "Entries" control-dir)))
+      (and (%find-cvs-entry entries-file workfile)
+	   (make-vc-master vc-type:cvs entries-file workfile)))))
 
 (define-vc-type-operation 'VALID? vc-type:cvs
   (lambda (master)
     (get-cvs-workfile-revision master #f)))
 
 (define-vc-type-operation 'DEFAULT-REVISION vc-type:cvs
-  (lambda (master error?)
-    (or (cvs-default-revision master)
-	(and error?
-	     (error "Unable to determine default CVS version:"
-		    (vc-master-workfile master))))))
+  (lambda (master)
+    (cvs-default-revision master)))
 
 (define-vc-type-operation 'WORKFILE-REVISION vc-type:cvs
   (lambda (master)
@@ -1836,9 +1875,11 @@ the value of vc-log-mode-hook."
       ((UNRESOLVED-CONFLICT) "conflict")
       (else #f))))
 
-(define-vc-type-operation 'LIKELY-CONTROL-TYPE? vc-type:cvs
-  (lambda (workfile)
-    (file-directory? (cvs-directory workfile))))
+(define-vc-type-operation 'CONTROL-DIRECTORY vc-type:cvs
+  (lambda (directory)
+    (let ((cd (cvs-directory directory)))
+      (and (file-directory? cd)
+	   cd))))
 
 (define-vc-type-operation 'STEAL vc-type:cvs
   (lambda (master revision)
@@ -1921,37 +1962,17 @@ the value of vc-log-mode-hook."
 
 (define-vc-type-operation 'DIFF vc-type:cvs
   (lambda (master rev1 rev2 simple?)
-    (let ((options
-	   `((STATUS 1)
-	     (BUFFER ,(get-vc-diff-buffer simple?)))))
-      (if (equal? "0" (vc-backend-workfile-revision master))
-	  ;; This file is added but not yet committed; there is no
-	  ;; master file.
-	  (begin
-	    (if (or rev1 rev2)
-		(error "No revisions exist:" (vc-master-workfile master)))
-	    (if simple?
-		;; File is added but not committed; we regard this as
-		;; "changed".
-		#t
-		;; Diff against /dev/null.
-		(= 1
-		   (vc-run-command master options "diff"
-				   (ref-variable diff-switches
-						 (vc-workfile-buffer master
-								     #f))
-				   "/dev/null"
-				   (file-pathname
-				    (vc-master-workfile master))))))
-	  (= 1
-	     (vc-run-command master options "cvs" "diff"
-			     (if simple?
-				 (and (diff-brief-available?) "--brief")
-				 (ref-variable diff-switches
-					       (vc-workfile-buffer master #f)))
-			     (and rev1 (string-append "-r" rev1))
-			     (and rev2 (string-append "-r" rev2))
-			     (file-pathname (vc-master-workfile master))))))))
+    (= 1
+       (vc-run-command master
+		       (get-vc-diff-options simple?)
+		       "cvs"
+		       "diff"
+		       (if simple?
+			   (and (diff-brief-available?) "--brief")
+			   (gc-vc-diff-switches master))
+		       (and rev1 (string-append "-r" rev1))
+		       (and rev2 (string-append "-r" rev2))
+		       (file-pathname (vc-master-workfile master))))))
 
 (define-vc-type-operation 'PRINT-LOG vc-type:cvs
   (lambda (master)
@@ -2002,20 +2023,21 @@ the value of vc-log-mode-hook."
 			    (buffer-start (get-vc-command-buffer)))
 	 (extract-string (re-match-start 1) (re-match-end 1)))))
 
-(define-vc-type-operation 'LIKELY-CONTROL-TYPE? vc-type:svn
-  (lambda (workfile)
-    (file-directory? (svn-directory workfile))))
+(define-vc-type-operation 'CONTROL-DIRECTORY vc-type:svn
+  (lambda (directory)
+    (let ((cd (svn-directory directory)))
+      (and (file-directory? cd)
+	   cd))))
 
 (define-vc-type-operation 'FIND-MASTER vc-type:svn
-  (lambda (workfile)
-    (and (file-directory? (svn-directory workfile))
-	 (not (let ((output (%get-svn-status workfile)))
+  (lambda (workfile control-dir)
+    (and (not (let ((output (%get-svn-status workfile)))
 		(or (not output)
 		    (string-null? output)
 		    (string-prefix? "?" output)
 		    (string-prefix? "I" output))))
 	 (make-vc-master vc-type:svn
-			 (merge-pathnames "entries" (svn-directory workfile))
+			 (merge-pathnames "entries" control-dir)
 			 workfile))))
 
 (define (svn-directory workfile)
@@ -2028,9 +2050,9 @@ the value of vc-log-mode-hook."
 	   (svn-status-working-revision status)))))
 
 (define-vc-type-operation 'DEFAULT-REVISION vc-type:svn
-  (lambda (master error?)
+  (lambda (master)
     (let ((workfile (vc-master-workfile master)))
-      (let ((status (get-svn-status workfile error?)))
+      (let ((status (get-svn-status workfile #f)))
 	(and status
 	     (svn-status-working-revision status))))))
 
@@ -2131,7 +2153,7 @@ the value of vc-log-mode-hook."
 			(svn-rev-switch revision)
 			"--message" comment
 			(file-pathname (vc-master-workfile master)))))))
-
+
 (define-vc-type-operation 'REVERT vc-type:svn
   (lambda (master)
     (with-vc-command-message master "Reverting"
@@ -2143,43 +2165,24 @@ the value of vc-log-mode-hook."
   (lambda (master revision)
     master revision
     (error "There are no Subversion locks to steal.")))
-
+
 (define-vc-type-operation 'DIFF vc-type:svn
   (lambda (master rev1 rev2 simple?)
-    (let ((buffer (get-vc-diff-buffer simple?))
-	  (switches
-	   (ref-variable diff-switches (vc-workfile-buffer master #f))))
-      (let ((options `((STATUS 1) (BUFFER ,buffer))))
-	(if (equal? "0" (vc-backend-workfile-revision master))
-	    ;; This file is added but not yet committed; there is no
-	    ;; master file.
-	    (begin
-	      (if (or rev1 rev2)
-		  (error "No revisions exist:" (vc-master-workfile master)))
-	      (if simple?
-		  ;; File is added but not committed; we regard this as
-		  ;; "changed".
-		  #t
-		  ;; Diff against /dev/null.
-		  (= 1
-		     (vc-run-command master options "diff"
-				     switches
-				     "/dev/null"
-				     (file-pathname
-				      (vc-master-workfile master))))))
-	    (begin
-	      (vc-run-command master options "svn" "diff"
-			      (if simple?
-				  #f
-				  (let loop ((switches switches))
-				    (if (pair? switches)
-					(cons* "-x" (car switches)
-					       (loop (cdr switches)))
-					'())))
-			      (and rev1 (string-append "-r" rev1))
-			      (and rev2 (string-append "-r" rev2))
-			      (file-pathname (vc-master-workfile master)))
-	      (> (buffer-length buffer) 0)))))))
+    (vc-run-command master
+		    (get-vc-diff-options simple?)
+		    "svn"
+		    "diff"
+		    (if simple?
+			#f
+			(let loop ((switches (gc-vc-diff-switches master)))
+			  (if (pair? switches)
+			      (cons* "-x" (car switches)
+				     (loop (cdr switches)))
+			      '())))
+		    (and rev1 (string-append "-r" rev1))
+		    (and rev2 (string-append "-r" rev2))
+		    (file-pathname (vc-master-workfile master)))
+    (> (buffer-length (get-vc-diff-buffer simple?)) 0)))
 
 (define-vc-type-operation 'PRINT-LOG vc-type:svn
   (lambda (master)
@@ -2336,6 +2339,325 @@ the value of vc-log-mode-hook."
       "0"
       string))
 
+;;;; Bazaar Commands
+
+(define vc-type:bzr
+  (make-vc-type 'BZR "bzr" "\$Id\$"))
+
+(define-vc-type-operation 'RELEASE vc-type:bzr
+  (lambda ()
+    (and (= 0 (vc-run-command #f '() "bzr" "--version"))
+	 (let ((m (buffer-start (get-vc-command-buffer))))
+	   (re-match-forward "Bazaar (bzr) \\(.+\\)$"
+			     m
+			     (line-end m 0)))
+	 (extract-string (re-match-start 1) (re-match-end 1)))))
+
+(define-vc-type-operation 'CONTROL-DIRECTORY vc-type:bzr
+  (lambda (directory)
+    (let ((cd (subdirectory-pathname directory ".bzr")))
+      (if (file-directory? cd)
+	  cd
+	  'SEARCH-PARENT))))
+
+(define-vc-type-operation 'FIND-MASTER vc-type:bzr
+  (lambda (workfile control-dir)
+    (let ((master
+	   (make-vc-master vc-type:bzr
+			   (merge-pathnames "README" control-dir)
+			   workfile)))
+      (and (%bzr-master-valid? master)
+	   master))))
+
+(define-vc-type-operation 'VALID? vc-type:bzr
+  (lambda (master)
+    (%bzr-master-valid? master)))
+
+(define (%bzr-master-valid? master)
+  (%bzr-workfile-cache master 'WORKFILE-VERSIONED? %bzr-workfile-versioned?))
+
+(define-vc-type-operation 'DEFAULT-REVISION vc-type:bzr
+  (lambda (master)
+    master
+    #f))
+
+(define-vc-type-operation 'WORKFILE-REVISION vc-type:bzr
+  (lambda (master)
+    (bzr-workfile-revision master)))
+
+(define-vc-type-operation 'LOCKING-USER vc-type:bzr
+  (lambda (master revision)
+    revision				;ignore
+    ;; The workfile is "locked" if it is modified.
+    ;; We consider the workfile's owner to be the locker.
+    (let ((status (get-bzr-status master)))
+      (and status
+	   (bzr-status-modified? status)
+	   (unix/uid->string
+	    (file-attributes/uid
+	     (file-attributes (vc-master-workfile master))))))))
+
+(define (bzr-workfile-revision master)
+  (let ((result
+	 (%bzr-cached-command master 'WORKFILE-REVISION
+			      "log" "--limit=1" "--line"
+			      (file-namestring (vc-master-workfile master)))))
+    (and result
+	 (let ((regs (re-string-match "\\([0-9]+\\): \\([^ ]+\\) " result)))
+	   (and regs
+		(re-match-extract result regs 1))))))
+
+(define-vc-type-operation 'WORKFILE-MODIFIED? vc-type:bzr
+  (lambda (master)
+    (let ((status (get-bzr-status master)))
+      (and status
+	   (bzr-status-modified? status)))))
+
+(define-vc-type-operation 'NEXT-ACTION vc-type:bzr
+  (lambda (master)
+    (let ((status (get-bzr-status master #t)))
+      (let ((type (bzr-status-mod-type status)))
+	(case type
+	  ((UNMODIFIED)
+	   (let ((type (bzr-status-type status)))
+	     (case type
+	       ((VERSIONED)
+		(if (vc-workfile-buffer-modified? master)
+		    'CHECKIN
+		    'UNMODIFIED))
+	       ((UNVERSIONED UNKNOWN) #f)
+	       ((RENAMED) 'CHECKIN)
+	       ((CONFLICTED) 'RESOLVE-CONFLICT)
+	       ((PENDING-MERGE) 'PENDING-MERGE)
+	       (else (error "Unknown Bazaar status type:" type)))))
+	  ((CREATED DELETED KIND-CHANGED MODIFIED) 'CHECKIN)
+	  (else (error "Unknown Bazaar status type:" type)))))))
+
+(define-vc-type-operation 'KEEP-WORKFILES? vc-type:bzr
+  (lambda (master)
+    master
+    #t))
+
+(define-vc-type-operation 'WORKFILE-STATUS-STRING vc-type:bzr
+  (lambda (master)
+    (let ((status (get-bzr-status master)))
+      (and status
+	   (let ((type (bzr-status-type status)))
+	     (case type
+	       ((VERSIONED)
+		(case (bzr-status-mod-type status)
+		  ((CREATED) "created")
+		  ((DELETED) "deleted")
+		  ((KIND-CHANGED) "kind-changed")
+		  ((MODIFIED) "modified")
+		  (else #f)))
+	       ((UNVERSIONED) "unversioned")
+	       ((RENAMED) "renamed")
+	       ((UNKNOWN) "unknown")
+	       ((CONFLICTED) "conflicted")
+	       ((PENDING-MERGE) "pending-merge")
+	       (else #f)))))))
+
+(define-vc-type-operation 'REGISTER vc-type:bzr
+  (lambda (workfile revision comment keep?)
+    revision comment keep?
+    (with-vc-command-message workfile "Registering"
+      (lambda ()
+	(vc-run-command workfile '() "bzr" "add" (file-pathname workfile))))))
+
+(define-vc-type-operation 'CHECKOUT vc-type:bzr
+  (lambda (master revision lock? workfile)
+    lock?
+    (let ((workfile* (file-pathname (vc-master-workfile master))))
+      (with-vc-command-message master "Checking out"
+	(lambda ()
+	  (cond (workfile
+		 (delete-file-no-errors workfile)
+		 (vc-run-shell-command master '() "bzr" "cat"
+				       (bzr-rev-switch revision)
+				       workfile*
+				       ">"
+				       workfile))
+		(else
+		 (vc-run-command master '() "bzr" "update"
+				 (bzr-rev-switch revision)
+				 workfile*))))))))
+
+(define-vc-type-operation 'CHECKIN vc-type:bzr
+  (lambda (master revision comment keep?)
+    keep?
+    (with-vc-command-message master "Checking in"
+      (lambda ()
+	(vc-run-command master '() "bzr" "commit"
+			(bzr-rev-switch revision)
+			"--message" comment
+			(file-pathname (vc-master-workfile master)))))))
+
+(define-vc-type-operation 'REVERT vc-type:bzr
+  (lambda (master)
+    (with-vc-command-message master "Reverting"
+      (lambda ()
+	(vc-run-command master '() "bzr" "revert"
+			(file-pathname (vc-master-workfile master)))))))
+
+(define-vc-type-operation 'STEAL vc-type:bzr
+  (lambda (master revision)
+    master revision
+    (error "There are no Bazaar locks to steal.")))
+
+(define-vc-type-operation 'DIFF vc-type:bzr
+  (lambda (master rev1 rev2 simple?)
+    (vc-run-command master
+		    (get-vc-diff-options simple?)
+		    "bzr"
+		    "diff"
+		    (and (not simple?)
+			 (decorated-string-append "--diff-options="
+						  " "
+						  ""
+						  (gc-vc-diff-switches master)))
+		    (and (or rev1 rev2)
+			 (if (and rev1 rev2)
+			     (string-append "-r" rev1 ".." rev2)
+			     (string-append "-r" (or rev1 rev2) "..")))
+		    (file-pathname (vc-master-workfile master)))
+    (> (buffer-length (get-vc-diff-buffer simple?)) 0)))
+
+(define-vc-type-operation 'PRINT-LOG vc-type:bzr
+  (lambda (master)
+    (vc-run-command master '() "bzr" "log"
+		    (file-pathname (vc-master-workfile master)))))
+
+(define-vc-type-operation 'CHECK-LOG-ENTRY vc-type:bzr
+  (lambda (master log-buffer)
+    master log-buffer
+    unspecific))
+
+(define-vc-type-operation 'CHECK-HEADERS vc-type:bzr
+  (lambda (master buffer)
+    master buffer
+    #f))
+
+(define-vc-type-operation 'MODE-LINE-STATUS vc-type:bzr
+  (lambda (master buffer)
+    buffer
+    (if (vc-backend-workfile-modified? master)
+	" bzr **"
+	" bzr --")))
+
+(define (bzr-rev-switch revision)
+  (and revision
+       (list "-r" revision)))
+
+(define (bzr-directory workfile)
+  (let ((dir (merge-pathnames (directory-pathname workfile)))
+	(bzr (pathname-as-directory ".bzr")))
+    (let loop ((path (pathname-directory dir)))
+      (let ((dir* (merge-pathnames bzr (pathname-new-directory dir path))))
+	(cond ((file-directory? dir*) dir*)
+	      ((pair? (cdr path)) (loop (except-last-pair path)))
+	      (else #f))))))
+
+(define (%bzr-workfile-versioned? workfile)
+  (%bzr-ls-test workfile "--versioned"))
+
+(define (%bzr-workfile-ignored? workfile)
+  (%bzr-ls-test workfile "--ignored"))
+
+(define (%bzr-ls-test workfile option)
+  (let ((result (%bzr-run-command workfile "ls" "--non-recursive" option)))
+    (and result
+	 (re-string-search-forward (string-append "^"
+						  (re-quote-string
+						   (file-namestring workfile))
+						  "$")
+				   result))))
+
+(define (%bzr-cached-command master key command . args)
+  (%bzr-workfile-cache master key
+    (lambda (workfile)
+      (apply %bzr-run-command workfile command args))))
+
+(define (%bzr-run-command workfile command . args)
+  (let ((directory (directory-pathname workfile)))
+    (let ((program (os/find-program "bzr" directory #!default #f)))
+      (and program
+	   (let ((port (open-output-string)))
+	     (let ((status
+		    (run-synchronous-subprocess
+		     program
+		     (cons command args)
+		     'output port
+		     'working-directory directory)))
+	       (and (eqv? status 0)
+		    (get-output-string port))))))))
+
+(define (%bzr-workfile-cache master key procedure)
+  (let ((workfile (vc-master-workfile master)))
+    (read-cached-value-1 master key workfile
+      (lambda (time)
+	time
+	(procedure workfile)))))
+
+(define (get-bzr-status master #!optional required?)
+  (%bzr-workfile-cache master 'GET-STATUS
+    (lambda (workfile)
+      (or (parse-bzr-status
+	   (%bzr-run-command workfile "status" "--short"
+			     (file-namestring workfile)))
+	  (cond ((%bzr-master-valid? master)
+		 (make-bzr-status 'VERSIONED 'UNMODIFIED #f))
+		(else
+		 (if (if (default-object? required?) #f required?)
+		     (error "Unable to determine Bazaar status of file:"
+			    workfile))
+		 #f))))))
+
+(define (parse-bzr-status status)
+  (and status
+       (not (string-null? status))
+       (let ((regs (re-string-match "[ +---R?CP][ NDKM][ *] " status #f)))
+	 (and regs
+	      (make-bzr-status
+	       (decode-bzr-status-0 (string-ref status 0))
+	       (decode-bzr-status-1 (string-ref status 1))
+	       (decode-bzr-status-2 (string-ref status 2)))))))
+
+(define-record-type <bzr-status>
+    (make-bzr-status type mod-type execute-changed?)
+    bzr-status?
+  (type bzr-status-type)
+  (mod-type bzr-status-mod-type)
+  (execute-changed? bzr-status-execute-changed?))
+
+(define (bzr-status-modified? status)
+  (not (eq? (bzr-status-mod-type status) 'UNMODIFIED)))
+
+(define (decode-bzr-status-0 char)
+  (case char
+    ((#\space #\+) 'VERSIONED)
+    ((#\-) 'UNVERSIONED)
+    ((#\R) 'RENAMED)
+    ((#\?) 'UNKNOWN)
+    ((#\C) 'CONFLICTED)
+    ((#\P) 'PENDING-MERGE)
+    (else (error "Unknown status char 0:" char))))
+
+(define (decode-bzr-status-1 char)
+  (case char
+    ((#\space) 'UNMODIFIED)
+    ((#\N) 'CREATED)
+    ((#\D) 'DELETED)
+    ((#\K) 'KIND-CHANGED)
+    ((#\M) 'MODIFIED)
+    (else (error "Unknown status char 1:" char))))
+
+(define (decode-bzr-status-2 char)
+  (case char
+    ((#\space) #f)
+    ((#\*) #t)
+    (else (error "Unknown status char 2:" char))))
+
 ;;;; Command Execution
 
 (define (vc-run-command master options command . arguments)
@@ -2418,8 +2740,15 @@ the value of vc-log-mode-hook."
     (set-buffer-point! buffer (buffer-start buffer))
     (pop-up-buffer buffer select?)))
 
+(define (get-vc-diff-options simple?)
+  `((STATUS 1)
+    (BUFFER ,(get-vc-diff-buffer simple?))))
+
 (define (get-vc-diff-buffer simple?)
   (find-or-create-buffer (if simple? " *vc-diff*" "*vc-diff*")))
+
+(define (gc-vc-diff-switches master)
+  (ref-variable diff-switches (vc-workfile-buffer master #f)))
 
 (define (with-vc-command-message master operation thunk)
   (let ((msg

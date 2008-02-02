@@ -1,10 +1,10 @@
 #| -*-Scheme-*-
 
-$Id: editor.scm,v 1.264 2007/01/05 21:19:23 cph Exp $
+$Id: editor.scm,v 1.266 2008/01/30 20:02:00 cph Exp $
 
 Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994,
     1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
-    2006, 2007 Massachusetts Institute of Technology
+    2006, 2007, 2008 Massachusetts Institute of Technology
 
 This file is part of MIT/GNU Scheme.
 
@@ -601,8 +601,9 @@ TRANSCRIPT    messages appear in transcript buffer, if it is enabled;
 
 (define (inferior-thread-output!/unsafe flags)
   (set-car! flags #t)
-  (set! inferior-thread-changes? #t)
-  (signal-thread-event editor-thread #f))
+  (if (not inferior-thread-changes?)
+      (begin (set! inferior-thread-changes? #t)
+             (signal-thread-event editor-thread #f))))
 
 (define (accept-thread-output)
   (with-interrupt-mask interrupt-mask/gc-ok

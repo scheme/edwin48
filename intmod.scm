@@ -1,10 +1,10 @@
 #| -*-Scheme-*-
 
-$Id: intmod.scm,v 1.127 2007/08/17 02:34:29 cph Exp $
+$Id: intmod.scm,v 1.129 2008/01/30 20:02:02 cph Exp $
 
 Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994,
     1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
-    2006, 2007 Massachusetts Institute of Technology
+    2006, 2007, 2008 Massachusetts Institute of Technology
 
 This file is part of MIT/GNU Scheme.
 
@@ -157,17 +157,13 @@ evaluated in the specified inferior REPL buffer."
   unspecific)
 
 (define (current-repl-buffer #!optional buffer)
-  (let ((buffer
-	 (current-repl-buffer* (if (default-object? buffer) #f buffer))))
-    (if (not buffer)
+  (let ((repl-buffer (current-repl-buffer* buffer)))
+    (if (not repl-buffer)
 	(error "No REPL to evaluate in."))
-    buffer))
+    repl-buffer))
 
 (define (current-repl-buffer* #!optional buffer)
-  (let ((buffer
-	 (if (or (default-object? buffer) (not buffer))
-	     (current-buffer)
-	     buffer)))
+  (let ((buffer (->buffer buffer)))
     (if (repl-buffer? buffer)
 	buffer
 	(or (local-repl-buffer buffer)
@@ -335,7 +331,7 @@ evaluated in the specified inferior REPL buffer."
 	      (buffer-list))))
 
 (define (global-run-light-buffer)
-  (and (variable-default-value (ref-variable-object evaluate-in-inferior-repl))
+  (and (evaluate-in-inferior-repl? #f)
        (global-repl-buffer)))
 
 (define (set-global-run-light! value)
@@ -351,12 +347,13 @@ evaluated in the specified inferior REPL buffer."
 
 (add-variable-assignment-daemon!
  (ref-variable-object evaluate-in-inferior-repl)
- (lambda (buffer variable)
-   buffer variable
+ (lambda (buffer variable) buffer variable (reset-run-light!)))
+
+(define (reset-run-light!)
+  (set-global-run-light!
    (let ((buffer (global-run-light-buffer)))
-     (if buffer
-	 (set-global-run-light! (local-run-light buffer))
-	 (set-global-run-light! #f)))))
+     (and buffer
+	  (local-run-light buffer)))))
 
 (define (error-decision repl condition)
   (let ((port (cmdl/port repl)))
