@@ -75,11 +75,13 @@ USA.
   (define (out-of-range)
     (editor-error "->doc-string: Out of range argument" posn))
 
+#|
   (define (fill-buffer channel buffer posn blen)
     (let fill-loop ((posn posn))
       (if (fix:< posn blen)
 	  (let ((n (channel-read-block channel buffer posn blen)))
 	    (fill-loop (fix:+ posn n))))))
+|#
 
   (define (verify-and-extract buffer nlen dslen nposn)
     (let ((nend (fix:+ nposn nlen)))
@@ -107,6 +109,7 @@ USA.
 		 (out-of-range)
 		 (verify-and-extract *doc-strings* nlen dslen
 				     (fix:+ posn 3))))))
+#|
 	(else
 	 (guarantee-doc-string-state)
 	 (let* ((channel *doc-string-channel*)
@@ -132,7 +135,9 @@ USA.
 			     (result (make-string rlen)))
 			(string-copy! result 0 buffer 3 blen)
 			(fill-buffer channel result (fix:- blen 3) rlen)
-			(verify-and-extract result nlen dslen 0))))))))))
+			(verify-and-extract result nlen dslen 0))))))))
+|#
+))
 
 (define* (dump-doc-strings output (permanent #f))
   (if (not *doc-strings*)
@@ -150,6 +155,7 @@ USA.
   (set! *doc-strings* #f)
   unspecific)
 
+#|
 (define (guarantee-doc-string-state)
   (if (not *doc-string-buffer*)
       (set! *doc-string-buffer* (make-string doc-string-buffer-length)))
@@ -172,7 +178,7 @@ USA.
 		       (file-open-input-channel
 			(->namestring doc-strings)))
 		 unspecific))))))
-
+|#
 ;; (add-event-receiver! event:after-restart
 ;; 		     (lambda () (set! *doc-string-channel* #f)))
 
