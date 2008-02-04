@@ -173,8 +173,8 @@ USA.
 			(->namestring doc-strings)))
 		 unspecific))))))
 
-(add-event-receiver! event:after-restart
-		     (lambda () (set! *doc-string-channel* #f)))
+;; (add-event-receiver! event:after-restart
+;; 		     (lambda () (set! *doc-string-channel* #f)))
 
 ;;;; Abstraction of help descriptions
 
