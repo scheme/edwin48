@@ -71,7 +71,7 @@ USA.
 
 (define doc-string-buffer-length 512)
 
-(define (as-doc-string name posn)
+(define (->doc-string name posn)
   (define (out-of-range)
     (editor-error "->doc-string: Out of range argument" posn))
 
@@ -140,12 +140,11 @@ USA.
   (set! *external-doc-strings-file*
 	(if (not permanent)
 	    output
-	    permanent))	
-  (set-string-length! *doc-strings* *doc-string-posn*)
+	    permanent))
   (call-with-binary-output-file
    output
    (lambda (port)
-     (write-string *doc-strings* port)))
+     (write-block *doc-strings* 0 *doc-string-posn* port)))
   (set! *external-doc-strings?* #f)
   (set! *doc-string-posn* 0)
   (set! *doc-strings* #f)

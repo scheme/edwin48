@@ -154,6 +154,7 @@
 (define-interface edwin-doc-string-interface
   (export *external-doc-strings?*
           *external-doc-strings-file*
+          ->doc-string
           doc-string->posn
           description?
           description->string
