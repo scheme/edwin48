@@ -8,11 +8,17 @@ Dependencies
 ============
 
 Edwin48 is being developed on Scheme48 1.3, however, due to a couple
-of reader customizations, a modified image is required. The image can
-be found here:
+of reader customizations, a patch to the build-in reader is
+required. The patch can be found here:
 
-http://a-chinaman.com/~duncan/scheme48-with-reader-extensions.image
+    http://a-chinaman.com/~duncan/scheme/edwin48-reader-customizations.patch
 
+Prebuilt packages built on Ubuntu Gutsy (i386) are available:
+
+    http://www.a-chinaman.com/~duncan/scheme/scheme48_1.3-8ubuntu1.1.duncan_i386.deb
+    http://www.a-chinaman.com/~duncan/scheme/scheme48-doc_1.3-8ubuntu1.1.duncan_i386.deb
+    http://www.a-chinaman.com/~duncan/scheme/scheme48-scm_1.3-8ubuntu1.1.duncan_i386.deb
+    http://www.a-chinaman.com/~duncan/scheme/cmuscheme48-el_1.3-8ubuntu1.1.duncan_i386.deb
 
 
 
