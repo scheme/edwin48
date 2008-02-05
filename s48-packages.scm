@@ -130,3 +130,16 @@
         mit-fileio
 	posix-process-data posix-users)
   (files pathname pathname-unix s48-pathname))
+
+(define-structure macro-helpers
+    (export command-name->scheme-name
+            variable-name->scheme-name
+            mode-name->scheme-name
+            list-ref/default
+            expand-variable-definition
+;;;             expand-variable-assignment
+            )
+  (open scheme aliases errors)
+  (files s48-macros-helpers))
+
+
