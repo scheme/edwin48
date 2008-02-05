@@ -57,8 +57,8 @@ USA.
 	      ((if (string-table-ci? table) string-compare-ci string-compare)
 	       string1
 	       (string-table-entry-string entry)
-	       (lambda () (if-found index entry))
 	       (lambda () (loop low (-1+ index)))
+	       (lambda () (if-found index entry))
 	       (lambda () (loop (1+ index) high)))))))))
 
 (define* (string-table-get table string
