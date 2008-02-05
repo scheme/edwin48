@@ -40,12 +40,12 @@
   (files s48-fixnum))
 
 (define-structure errors
-    (export error
+    (export error syntax-error
 	    error:bad-range-argument
 	    error:datum-out-of-range
 	    error:file-operation
 	    error:wrong-type-argument)
-  (open scheme (subset signals (error)))
+  (open scheme (subset signals (error syntax-error)))
   (files s48-errors))
 
 (define-structure aliases
