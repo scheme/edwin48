@@ -59,3 +59,14 @@
 (define-structure edwin-paths edwin-paths-interface
   (open scheme aliases errors pathname mit-fileio)
   (files paths))
+
+(define-structures
+    ((edwin-command  edwin-command-interface)
+     (edwin-variable edwin-variable-interface))
+    (open scheme aliases define-record-type* define-opt errors
+          srfi-69
+          edwin-doc-string edwin-string-table
+          fixme)
+  (for-syntax (open scheme errors macro-helpers))
+  (files comman s48-macros))
+
