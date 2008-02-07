@@ -20,35 +20,33 @@
 
 (define-syntax ref-command-object
   (lambda (form rename compare)
-    (if (not (= (length form) 2))
-	(syntax-error "REF-COMMAND-OBJECT name"))
-    (let* ((name  (list-ref form 1))
-	   (sname (command-name->scheme-name name)))
-      sname)))
+    (if (not (and (= (length form) 2)
+                  (symbol? (list-ref form 1))))
+	(syntax-error "REF-COMMAND-OBJECT name")
+        (command-name->scheme-name (list-ref form 1)))))
 
 (define-syntax ref-command
   (lambda (form rename compare)
     (if (not (= (length form) 2))
-	(syntax-error "REF-COMMAND name"))
-    (let* ((%command-procedure  (rename 'command-procedure))
-	   (%ref-command-object (rename 'ref-command-object))
-	   (command-name        (list-ref form 1))
-	   (command             `(,%ref-command-object ,command-name)))
-      `(,%command-procedure ,command))))
+	(syntax-error "REF-COMMAND name")
+        (let* ((%command-procedure  (rename 'command-procedure))
+               (%ref-command-object (rename 'ref-command-object))
+               (command-name        (list-ref form 1))
+               (command             `(,%ref-command-object ,command-name)))
+          `(,%command-procedure ,command)))))
 
 (define-syntax define-variable            (expand-variable-definition #f))
 (define-syntax define-variable-per-buffer (expand-variable-definition #t))
 
 (define-syntax ref-variable-object
   (lambda (form rename compare)
-    (if (not (= (length form) 2))
-	(syntax-error "REF-VARIABLE-OBJECT name"))
-    (let* ((name  (list-ref form 1))
-	   (sname (variable-name->scheme-name name)))
-      sname)))
+    (if (not (and (= (length form) 2)
+                  (symbol? (list-ref form 1))))
+	(syntax-error "REF-VARIABLE-OBJECT name")
+        (variable-name->scheme-name (list-ref form 1)))))
 
 (define-syntax ref-variable
-  (lambda (form compare rename)
+  (lambda (form rename compare)
     (let ((%ref-variable-object
 	   (rename 'ref-variable-object)))
       (case (length form)
@@ -70,29 +68,29 @@
     (expand-variable-assignment
      form
      (lambda (name value buffer)
-       (let ((%set-variable-local-value!
-              (rename 'set-variable-local-value!))
-             (%set-variable-value!
-              (rename 'set-variable-value!))
-             (%buffer (rename 'buffer))
-             (%name   (rename 'name))
-             (%value  (rename 'value)))
+       (let* ((%ref-variable-object
+               (rename 'ref-variable-object))
+              (%set-variable-local-value!
+               (rename 'set-variable-local-value!))
+              (%set-variable-value!
+               (rename 'set-variable-value!))
+              (variable `(,%ref-variable-object ,name)))
          (if buffer
-             `(,%set-variable-local-value! ,%buffer ,%name, %value)
-             `(,%set-variable-value! ,%name ,%value)))))))
+             `(,%set-variable-local-value! ,buffer ,variable, value)
+             `(,%set-variable-value! ,variable ,value)))))))
 
 (define-syntax local-set-variable!
   (lambda (form rename compare)
     (expand-variable-assignment
      form
      (lambda (name value buffer)
-       (let ((%define-variable-local-value!
-              (rename 'define-variable-local-value!))
-             (%current-buffer
-              (rename 'current-buffer))
-             (%buffer (rename 'buffer))
-             (%name   (rename 'name))
-             (%value  (rename 'value)))
+       (let* ((%ref-variable-object
+               (rename 'ref-variable-object))
+              (%define-variable-local-value!
+               (rename 'define-variable-local-value!))
+              (%current-buffer
+               (rename 'current-buffer))
+              (variable `(,%ref-variable-object ,name)))
          `(,define-variable-local-value!
-            ,(or ,%buffer `(,%current-buffer))
-            ,%name ,%value))))))
+            (or ,buffer `(,%current-buffer))
+            ,name ,value))))))
