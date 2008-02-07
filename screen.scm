@@ -282,8 +282,8 @@ USA.
 		(vector-ref (matrix-highlight m2) y2)))
 
 (define (copy-subline-highlights! m1 y1 xl1 xu1 m2 y2 xl2)
-  (subvector-move-left! (vector-ref (matrix-highlight m1) y1) xl1 xu1
-			(vector-ref (matrix-highlight m2) y2) xl2))
+  (vector-copy! (vector-ref (matrix-highlight m2) y2) xl2
+		(vector-ref (matrix-highlight m1) y1) xl1 xu1))
 
 (define (line-highlights-cleared? matrix y)
   (vector-filled? (vector-ref (matrix-highlight matrix) y) (default-face)))
@@ -415,11 +415,10 @@ USA.
     (vector-ref (matrix-contents new-matrix) y)))
 
 (define (screen-output-substring screen x y string start end face)
-  (substring-move-left! string start end
-			(screen-get-output-line screen y x
-						(fix:+ x (fix:- end start))
-						face)
-			x))
+  (string-copy! (screen-get-output-line screen y x
+					(fix:+ x (fix:- end start))
+					face)
+		x string start end))
 
 (define (initialize-new-line-contents screen y)
   (if (line-contents-enabled? (screen-current-matrix screen) y)
@@ -516,8 +515,8 @@ USA.
     (terminal-output-substring screen x y string start end face)
     (terminal-move-cursor screen cursor-x y)
     (terminal-flush screen)
-    (substring-move-left! string start end
-			  (vector-ref (matrix-contents current-matrix) y) x)
+    (string-copy! (vector-ref (matrix-contents current-matrix) y) x
+		  string start end)
     (cond ((line-highlights-enabled? current-matrix y)
 	   (set-subline-highlights! current-matrix y x cursor-x face))
 	  ((not (default-face? face))
@@ -579,8 +578,8 @@ USA.
 		    (do ((y (fix:-1+ (fix:- yu amount)) (fix:-1+ y))
 			 (y* (fix:-1+ yu) (fix:-1+ y*)))
 			((fix:< y yl))
-		      (substring-move-left! (vector-ref contents y) xl xu
-					    (vector-ref contents y*) xl)
+		      (string-copy! (vector-ref contents y*) xl
+				    (vector-ref contents y) xl xu)
 		      (cond ((line-highlights-enabled? current-matrix y)
 			     (enable-line-highlights! current-matrix y*)
 			     (copy-subline-highlights! current-matrix y xl xu
@@ -624,8 +623,8 @@ USA.
 		    (do ((y yl (fix:1+ y))
 			 (y* (fix:+ yl amount) (fix:1+ y*)))
 			((fix:= y* yu))
-		      (substring-move-left! (vector-ref contents y*) xl xu
-					    (vector-ref contents y) xl)
+		      (string-copy! (vector-ref contents y) xl
+				    (vector-ref contents y*) xl xu)
 		      (cond ((line-highlights-enabled? current-matrix y*)
 			     (enable-line-highlights! current-matrix y)
 			     (copy-subline-highlights! current-matrix y* xl xu
@@ -888,7 +887,7 @@ USA.
        index)))
 
 (define (string-move! x y)
-  (substring-move-left! x 0 (string-length x) y 0))
+  (string-copy! y 0 x 0 (string-length x)))
 
 (define (boolean-vector-ref vector index)
   (fix:= (char->integer #\t) (vector-8b-ref vector index)))

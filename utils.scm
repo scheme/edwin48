@@ -86,8 +86,8 @@ USA.
 	       (string-set! target
 			    scan-target
 			    (string-ref source scan-source)))
-	     (substring-move-left! source start-source end-source
-				   target start-target)))
+	     (string-copy! target start-target
+			   source start-source end-source)))
 	((fix:< start-source start-target)
 	 (if (fix:< (fix:- end-source start-source) 32)
 	     (do ((scan-source end-source (fix:- scan-source 1))
@@ -98,8 +98,8 @@ USA.
 	       (string-set! source
 			    (fix:- scan-target 1)
 			    (string-ref source (fix:- scan-source 1))))
-	     (substring-move-right! source start-source end-source
-				    source start-target)))
+	     (string-copy! source start-target
+			   source start-source end-source)))
 	((fix:< start-target start-source)
 	 (if (fix:< (fix:- end-source start-source) 32)
 	     (do ((scan-source start-source (fix:+ scan-source 1))
@@ -108,8 +108,8 @@ USA.
 	       (string-set! source
 			    scan-target
 			    (string-ref source scan-source)))
-	     (substring-move-left! source start-source end-source
-				   source start-target)))))
+	     (string-copy! source start-target
+			   source start-source end-source)))))
 
 (define (string-greatest-common-prefix strings)
   (let loop

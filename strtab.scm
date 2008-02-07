@@ -84,7 +84,7 @@ USA.
 	      (let ((new-vector (vector-grow vector (* max-size 2))))
 		(set-string-table-vector! table new-vector)
 		(set! vector new-vector)))
-	  (subvector-move-right! vector index size vector (1+ index))
+	  (vector-copy! vector (1+ index) vector index size)
 	  (vector-set! vector index entry))
 	(set-string-table-size! table (1+ size))))))
 
@@ -94,7 +94,7 @@ USA.
       entry				;ignore
       (let ((vector (string-table-vector table))
 	    (size (string-table-size table)))
-	(subvector-move-left! vector (1+ index) size vector index)
+	(vector-copy! vector index vector (1+ index) size)
 	(let ((new-size (-1+ size)))
 	  (vector-set! vector new-size '())
 	  (set-string-table-size! table new-size)))

@@ -21,23 +21,11 @@
   (let ((difference (- k (vector-length vec))))
     (vector-append vec (make-vector difference #f))))
 
-(define (substring-move-left! string1 start1 end1 string2 start2)
-  (string-copy! string2 start2 string1 start1 end1))
-
-(define (substring-move-right! string1 start1 end1 string2 start2)
-  (string-copy! string2 start2 string1 end1 start1))
-
 (define (string-head string end)
   (substring string 0 end))
 
 (define (string-tail string start)
   (substring string start (string-length string)))
-
-(define (subvector-move-left! vector1 start1 end1 vector2 start2)
-  (vector-copy! vector2 start2 vector1 start1 end1))
-
-(define (subvector-move-right! vector1 start1 end1 vector2 start2)
-  (vector-copy! vector2 start2 vector1 end1 start1))
 
 (define (symbol-append . symbols)
   (string->symbol (apply string-append (map symbol->string symbols))))

@@ -52,19 +52,19 @@ USA.
 				   4096
 				   (fix:+ slen (fix:quotient slen 2)))))))
 		(if *doc-strings*
-		    (substring-move-right! *doc-strings* 0 posn new 0))
+		    (string-copy! new 0 *doc-strings* 0 posn))
 		(set! *doc-strings* new)))
 	  (let ((doc-strings *doc-strings*))
 	    (vector-8b-set! doc-strings posn (fix:remainder dslen 256))
 	    (vector-8b-set! doc-strings
 			    (fix:+ posn 1)
 			    (fix:quotient dslen 256))
-	    (string-set! doc-strings (fix:+ posn 2) #\Newline)
-	    (substring-move-right! name 0 nlen doc-strings (fix:+ posn 3))
-	    (string-set! doc-strings (fix:+ next 3) #\Newline)
-	    (substring-move-right! str 0 dslen doc-strings (fix:+ next 4))
-	    (string-set! doc-strings (fix:- end 2) #\Newline)
-	    (string-set! doc-strings (fix:- end 1) #\Newline)
+	    (string-set!  doc-strings (fix:+ posn 2) #\Newline)
+	    (string-copy! doc-strings (fix:+ posn 3) name 0 nlen)
+	    (string-set!  doc-strings (fix:+ next 3) #\Newline)
+	    (string-copy! doc-strings (fix:+ next 4) str  0 dslen)
+	    (string-set!  doc-strings (fix:- end 2)  #\Newline)
+	    (string-set!  doc-strings (fix:- end 1)  #\Newline)
 	    (set! *doc-string-posn* end)
 	    posn)))
       str))
@@ -130,7 +130,7 @@ USA.
 		     (else
 		      (let* ((rlen (fix:+ (fix:+ nlen dslen) 1))
 			     (result (make-string rlen)))
-			(substring-move-right! buffer 3 blen result 0)
+			(string-copy! result 0 buffer 3 blen)
 			(fill-buffer channel result (fix:- blen 3) rlen)
 			(verify-and-extract result nlen dslen 0))))))))))
 

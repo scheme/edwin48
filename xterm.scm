@@ -599,7 +599,7 @@ USA.
 		   (char=? #\BEL
 			   (merge-bucky-bits (string-ref string 0)
 					     (vector-ref event 3)))
-		   (string-find-next-char string #\BEL)))))
+		   (string-find-next-char string #\BEL))))
 	 (clean-event-queue x-display-events)
 	 (signal-interrupt!))
 	((and (vector? event)
@@ -932,8 +932,8 @@ USA.
 		     (make-vector (quotient bytes b/w))))
 		(move!
 		 (if (= b/w 1)
-		     substring-move-right!
-		     subvector-move-right!)))
+		     string-copy!
+		     vector-copy!)))
 	    (let loop ((offset 0) (bytes bytes))
 	      (if (<= bytes qb)
 		  (move! (read-once offset bytes bytes delete?)

@@ -272,7 +272,7 @@ USA.
 		   (set! end 0)
 		   (set! start 0))
 		  ((fix:>= start input-buffer-size)
-		   (substring-move-left! string start end string 0)
+		   (string-copy! string 0 string start end)
 		   (set! end (fix:- end start))
 		   (set! start 0)))
 	    (set! incomplete-pending #F)

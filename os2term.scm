@@ -299,7 +299,7 @@ USA.
 		     (end (fix:* x-size y-from))
 		     (start* (fix:* x-size (fix:+ yl amount))))
 		 (%substring-move! char-map start end char-map start*)
-		 (subvector-move-right! face-map start end face-map start*))
+		 (vector-copy! face-map start* face-map start end))
 	       (let ((delta (fix:* x-size amount))
 		     (end (screen-char-index screen xl (fix:- yl 1))))
 		 (do ((from (screen-char-index screen xl (fix:- y-from 1))
@@ -308,8 +308,8 @@ USA.
 		   (let ((from-end (fix:+ from width))
 			 (to (fix:+ from delta)))
 		     (%substring-move! char-map from from-end char-map to)
-		     (subvector-move-right! face-map from from-end
-					    face-map to))))))
+		     (vector-copy! face-map to
+				   face-map from from-end))))))
 	 (os2win-scroll (screen-wid screen)
 			(cxl->xl screen xl)
 			(cxh->xh screen xu)
@@ -332,7 +332,7 @@ USA.
 		     (end (fix:* x-size yu))
 		     (start* (fix:* x-size yl)))
 		 (%substring-move! char-map start end char-map start*)
-		 (subvector-move-left! face-map start end face-map start*))
+		 (vector-copy! face-map start* face-map start end))
 	       (let ((delta (fix:* x-size amount))
 		     (end (screen-char-index screen xl yu)))
 		 (do ((from (screen-char-index screen xl y-from)
@@ -341,8 +341,8 @@ USA.
 		   (let ((from-end (fix:+ from width))
 			 (to (fix:- from delta)))
 		     (%substring-move! char-map from from-end char-map to)
-		     (subvector-move-left! face-map from from-end
-					   face-map to))))))
+		     (vector-copy! face-map to
+				   face-map from from-end))))))
 	 (os2win-scroll (screen-wid screen)
 			(cxl->xl screen xl)
 			(cxh->xh screen xu)

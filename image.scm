@@ -106,12 +106,12 @@ USA.
 
 (define default-char-image-strings/ascii
   (let ((strings (vector-copy default-char-image-strings/original-emacs)))
-    (subvector-move-left!
+    (vector-copy! strings 0
      '#("[NUL]" "[SOH]" "[STX]" "[ETX]" "[EOT]" "[ENQ]" "[ACK]" "[BEL]"
 	"[BS]"  "[HT]"  "[NL]"  "[VT]" "[FF]" "[CR]"  "[SO]"  "[SI]"
 	"[DLE]" "[DC1]" "[DC2]" "[DC3]" "[DC4]" "[NAK]" "[SYN]" "[ETB]"
 	"[CAN]" "[EM]"  "[SUB]" "[ESC]" "[FS]"  "[GS]"  "[RS]"  "[US]")
-     0 #x20 strings 0)
+     0 #x20)
     strings))
 
 (define default-char-image-strings default-char-image-strings/ansi)

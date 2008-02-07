@@ -54,8 +54,6 @@
 	    1+ -1+
 	    delq! list-deletor!
 	    vector-grow
-            subvector-move-left! subvector-move-right!
-            substring-move-left! substring-move-right!
             string-head string-tail
             get-environment-variable
             symbol-append symbol-name
