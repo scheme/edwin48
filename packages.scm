@@ -61,8 +61,10 @@
   (files paths))
 
 (define-structures
-    ((edwin-command  edwin-command-interface)
-     (edwin-variable edwin-variable-interface))
+    ((edwin-command          edwin-command-interface)
+     (edwin-variable         edwin-variable-interface)
+     (edwin-variable/private (export set-variable-%default-value!
+                                     set-variable-%value!)))
     (open scheme aliases define-record-type* define-opt errors
           srfi-69
           edwin-doc-string edwin-string-table
