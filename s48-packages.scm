@@ -142,4 +142,10 @@
   (open scheme aliases errors)
   (files s48-macros-helpers))
 
+(define-structure fixme
+    (export within-editor?
+            editor-error
+            procedure-arity-valid?)
+  (open scheme errors)
+  (files s48-fixme))
 
