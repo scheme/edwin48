@@ -136,9 +136,8 @@
             variable-name->scheme-name
             mode-name->scheme-name
             list-ref/default
-            expand-variable-definition
-;;;             expand-variable-assignment
-            )
+            expand-variable-assignment
+            expand-variable-definition)
   (open scheme aliases errors)
   (files s48-macros-helpers))
 

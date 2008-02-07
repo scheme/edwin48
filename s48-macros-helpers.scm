@@ -31,4 +31,6 @@
 (define (expand-variable-assignment form generator)
   (if (not (<= (length form) 4))
       (syntax-error "ill-formed syntax" form)
-      ))
+      (generator (list-ref form 1)
+                 (list-ref/default form 2 #f)
+                 (list-ref/default form 3 #f))))
