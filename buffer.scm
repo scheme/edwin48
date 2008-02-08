@@ -28,40 +28,32 @@ USA.
 ;;;; Buffer Abstraction
 
 
-(define-structure (buffer
-		   (constructor %make-buffer (%name %default-directory)))
-  %name
-  group
-  mark-ring
-  modes
-  comtabs
-  windows
-  display-start
-  %default-directory
-  %pathname
-  %truename
-  alist
-  local-bindings
-  local-bindings-installed?
-  auto-save-pathname
-  auto-saved?
-  %save-length
-  backed-up?
-  modification-time)
+(define-record-type* buffer
+  (%make-buffer %name %default-directory)
+  (%name
+   group
+   mark-ring
+   modes
+   comtabs
+   windows
+   display-start
+   %default-directory
+   %pathname
+   %truename
+   alist
+   local-bindings
+   local-bindings-installed?
+   auto-save-pathname
+   auto-saved?
+   %save-length
+   backed-up?
+   modification-time))
 
-(define-syntax rename-buffer-accessor
-  (sc-macro-transformer
-   (lambda (form environment)
-     (let ((slot-name (cadr form)))
-       `(DEFINE-INTEGRABLE ,(symbol-append 'BUFFER- slot-name)
-	  ,(close-syntax (symbol-append 'BUFFER-% slot-name)
-			 environment))))))
-
-(rename-buffer-accessor name)
-(rename-buffer-accessor default-directory)
-(rename-buffer-accessor pathname)
-(rename-buffer-accessor truename)
-(rename-buffer-accessor save-length)
+(define (buffer-name              buffer) (buffer-%name              buffer))
+(define (buffer-default-directory buffer) (buffer-%default-directory buffer))
+(define (buffer-pathname          buffer) (buffer-%pathname          buffer))
+(define (buffer-truename          buffer) (buffer-%truename          buffer))
+(define (buffer-save-length       buffer) (buffer-%save-length       buffer))
 
 (define-variable buffer-creation-hook
   "An event distributor that is invoked when a new buffer is created.
@@ -228,11 +220,11 @@ The buffer is guaranteed to be deselected at that time."
 	(buffer-x-size buffer)
 	(screen-x-size (selected-screen)))))
 
-(define (buffer-get buffer key #!optional default)
+(define* (buffer-get buffer key (default #f))
   (let ((entry (assq key (buffer-alist buffer))))
     (if entry
 	(cdr entry)
-	(if (default-object? default) #f default))))
+	default)))
 
 (define (buffer-put! buffer key value)
   (let ((entry (assq key (buffer-alist buffer))))
@@ -245,7 +237,7 @@ The buffer is guaranteed to be deselected at that time."
   (set-buffer-alist! buffer (alist-delete! key (buffer-alist buffer) eq?)))
 
 (define (->buffer object)
-  (or (cond ((or (default-object? object) (not object)) (current-buffer))
+  (or (cond ((or (not object)) (current-buffer))
 	    ((buffer? object) object)
 	    ((mark? object) (mark-buffer object))
 	    ((group? object) (group-buffer object))
@@ -317,7 +309,7 @@ The buffer is guaranteed to be deselected at that time."
 
 (define (with-read-only-defeated object thunk)
   (let ((group (buffer-group (->buffer object)))
-	(outside)
+	(outside unspecific)
 	(inside 'FULLY))
     (dynamic-wind (lambda ()
 		    (set! outside (group-writeable? group))
@@ -479,17 +471,17 @@ The buffer is guaranteed to be deselected at that time."
        (invoke-variable-assignment-daemons! #f variable)))))
 
 (define (with-variable-value! variable new-value thunk)
-  (let ((old-value))
+  (let ((old-value unspecific))
     (dynamic-wind (lambda ()
 		    (set! old-value (variable-value variable))
 		    (set-variable-value! variable new-value)
-		    (set! new-value)
+		    (set! new-value unspecific)
 		    unspecific)
 		  thunk
 		  (lambda ()
 		    (set! new-value (variable-value variable))
 		    (set-variable-value! variable old-value)
-		    (set! old-value)
+		    (set! old-value unspecific)
 		    unspecific))))
 
 ;;;; Modes
