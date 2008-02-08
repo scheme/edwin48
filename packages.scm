@@ -1,7 +1,8 @@
 ;;; -*- mode: scheme; scheme48-package: (config) -*-
 
 (define-structures
-    ((edwin-command          edwin-command-interface)
+    ((edwin-buffer edwin-buffer-interface)
+     (edwin-command          edwin-command-interface)
      (edwin-group            edwin-group-interface)
      (edwin-mark             edwin-mark-interface)
      (edwin-region           edwin-region-interface)
@@ -14,7 +15,8 @@
           srfi-1 srfi-13 srfi-23 srfi-69
           edwin-doc-string edwin-ring edwin-string-table edwin-utilities)
   (for-syntax (open scheme errors macro-helpers))
-  (files comman
+  (files buffer
+         comman
          s48-macros
          struct
          grpops
