@@ -206,3 +206,59 @@
           ->variable
           variable-permanent-local?
           variable-permanent-local!))
+
+(define-interface edwin-buffer-interface
+  (export make-buffer
+          buffer-modeline-event!
+          without-editor-interrupts
+          buffer-reset!
+          buffer-name set-buffer-name!
+          buffer-default-directory
+          set-buffer-default-directory!
+          buffer-pathname set-buffer-pathname!
+          buffer-truename set-buffer-truename!
+          set-buffer-save-length!
+          buffer-point
+          minibuffer?
+          buffer-region
+          buffer-string
+          buffer-unclipped-region
+          buffer-widen!
+          buffer-length
+          buffer-start buffer-absolute-start
+          buffer-end   buffer-absolute-end
+          add-buffer-window!
+          remove-buffer-window!
+          buffer-visible?
+          buffer-x-size mark-x-size
+          buffer-get
+          buffer-put!
+          buffer-remove!
+          ->buffer
+          buffer-modified?
+          buffer-modified! buffer-not-modified!
+          verify-visited-file-modification-time?
+          clear-visited-file-modification-time!
+          set-buffer-auto-saved!
+          buffer-auto-save-modified?
+          buffer-read-only? buffer-writeable?
+          set-buffer-read-only! set-buffer-writeable!
+          with-read-only-defeated
+
+          define-variable-local-value!
+          undefine-variable-local-value!
+          variable-local-value
+          variable-local-value?
+          set-variable-local-value!
+          set-variable-default-value!
+          set-variable-value!
+          with-variable-value!
+
+          ;; modes
+          buffer-major-mode
+          set-buffer-major-mode!
+          buffer-minor-modes
+          buffer-minor-mode?
+          enable-buffer-minor-mode!
+          disable-buffer-minor-mode!))
+
