@@ -34,13 +34,9 @@
   (files motion))
 
 (define-structure edwin-string-table edwin-string-table-interface
-  (open scheme
-        aliases
-        define-record-type*
-        define-opt
+  (open scheme aliases define-record-type* define-opt
 	(modify sorting (rename (vector-sort sort)))
-        mit-regexp
-        srfi-13)
+        mit-regexp srfi-13 srfi-43)
   (files strtab))
 
 (define-structure
