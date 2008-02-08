@@ -128,7 +128,8 @@
           ))
 
 (define-interface edwin-utilities-interface
-  (export %substring-move!))
+  (export %substring-move!
+          split-list))
 
 (define-interface edwin-ring-interface
   (export make-ring
