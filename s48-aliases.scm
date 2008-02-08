@@ -50,3 +50,5 @@
 
 (define (vector-8b-set! string k code)
   (string-set! string k (ascii->char code)))
+
+(define (beep) unspecific)

@@ -50,7 +50,7 @@
 
 (define-structure aliases
     (export without-interrupts
-	    unspecific
+	    unspecific beep
 	    1+ -1+
 	    delq! list-deletor!
 	    vector-grow

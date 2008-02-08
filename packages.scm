@@ -41,8 +41,10 @@
 
 (define-structure
     edwin-utilities edwin-utilities-interface
-  (open scheme aliases let-opt srfi-13 util)
-  (files utils))
+ (open scheme i/o posix-files
+       aliases errors fixnum let-opt pathname util weak-pair
+       srfi-13 srfi-14)
+   (files utils))
 
 (define-structure
     edwin-ring edwin-ring-interface

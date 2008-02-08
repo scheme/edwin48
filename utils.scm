@@ -28,6 +28,7 @@ USA.
 ;;;; Editor Utilities
 
 
+#|
 (define-syntax chars-to-words-shift
   (sc-macro-transformer
    (lambda (form environment)
@@ -73,6 +74,7 @@ USA.
   (if (compiled-procedure? edwin-set-string-maximum-length!)
       edwin-set-string-maximum-length!
       (ucode-primitive set-string-maximum-length!)))
+|#
 
 (define (%substring-move! source start-source end-source
 			  target start-target)
@@ -158,8 +160,9 @@ USA.
   (char-set #\return))
 
 (define char-set:not-space
-  (char-set-invert (char-set #\space)))
+  (char-set-complement char-set:whitespace))
 
+#|
 (define (merge-bucky-bits char bits)
   (make-char (char-code char)
 	     (let ((bits (fix:or (char-bits char) bits)))
@@ -172,10 +175,13 @@ USA.
 
 (define (char-base char)
   (make-char (char-code char) 0))
+|#
 
 (define (y-or-n? . strings)
   (define (loop)
-    (let ((char (char-upcase (read-char))))
+    (let ((char (char-upcase (read-char)))
+	  (write-string (lambda (s)
+			  (write-string s (current-output-port)))))
       (cond ((or (char=? char #\Y)
 		 (char=? char #\Space))
 	     (write-string "Yes")
@@ -191,14 +197,14 @@ USA.
   (newline)
   (for-each write-string strings)
   (loop))
-
+#|
 (define (delete-directory-no-errors filename)
   (catch-file-errors (lambda (condition) condition #f)
-		     (lambda () (delete-directory filename) #t)))
-
+		     (lambda () (remove-directory filename) #t)))
+|#
 (define (string-or-false? object)
   ;; Useful as a type for option variables.
-  (or (false? object)
+  (or (not object)
       (string? object)))
 
 (define (list-of-strings? object)
@@ -227,19 +233,20 @@ USA.
 	    (loop (cdr elements) satisfied (cons (car elements) unsatisfied)))
 	(values satisfied unsatisfied))))
 
+#|
 (define make-strong-eq-hash-table
   (strong-hash-table/constructor eq-hash-mod eq? #t))
 
 (define make-weak-equal-hash-table
   (weak-hash-table/constructor equal-hash-mod equal? #t))
-
+|#
 (define (weak-assq item alist)
   (let loop ((alist alist))
     (and (not (null? alist))
 	 (if (eq? (weak-car (car alist)) item)
 	     (car alist)
 	     (loop (cdr alist))))))
-
+#|
 (define (file-time->ls-string time #!optional now)
   ;; Returns a time string like that used by unix `ls -l'.
   (let ((time (file-time->universal-time time))
@@ -269,3 +276,4 @@ USA.
 	 (lambda (condition)
 	   (continuation (if-error condition)))
        thunk))))
+|#
