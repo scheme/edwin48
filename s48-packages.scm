@@ -143,8 +143,7 @@
 (define-structure fixme
     (export within-editor?
             editor-error
-            procedure-arity-valid?
-            set-variable-value!)
-  (open scheme aliases errors edwin-variable edwin-variable/private)
+            procedure-arity-valid?)
+  (open scheme aliases errors)
   (files s48-fixme))
 
