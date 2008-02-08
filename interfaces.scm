@@ -56,12 +56,12 @@
           group-reallocation-factor
 ))
 
-(define-interface edwin-groups-interface
+(define-interface edwin-group-interface
   (compound-interface edwin-group-definition-interface
                       edwin-group-operations-interface))
 
 
-(define-interface edwin-marks-interface
+(define-interface edwin-mark-interface
   (export mark-group
           mark-index
           guarantee-mark
@@ -77,7 +77,7 @@
           make-permanent-mark
 ))
 
-(define-interface edwin-regions-definition-interface
+(define-interface edwin-region-definition-interface
   (export make-region
           region-start
           region-end
@@ -86,7 +86,7 @@
           region-end-index
 ))
 
-(define-interface edwin-regions-operations-interface
+(define-interface edwin-region-operations-interface
   (export region-insert!
           region-insert-string!
           region-insert-substring!
@@ -108,9 +108,9 @@
           group-unclipped-region
 ))
 
-(define-interface edwin-regions-interface
-  (compound-interface edwin-regions-definition-interface
-                      edwin-regions-operations-interface))
+(define-interface edwin-region-interface
+  (compound-interface edwin-region-definition-interface
+                      edwin-region-operations-interface))
 
 (define-interface edwin-motion-interface
   (export limit-mark-motion

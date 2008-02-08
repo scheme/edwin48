@@ -1,9 +1,9 @@
 ;;; -*- mode: scheme; scheme48-package: (config) -*-
 
 (define-structures
-    ((edwin-groups  edwin-groups-interface)
-     (edwin-marks   edwin-marks-interface)
-     (edwin-regions edwin-regions-interface))
+    ((edwin-group  edwin-group-interface)
+     (edwin-mark   edwin-mark-interface)
+     (edwin-region edwin-region-interface))
     (open (modify scheme (hide string-fill!))
           ;; edwin-utilities
 	  aliases
@@ -25,9 +25,9 @@
 	aliases
 	fixnum
 	define-opt
-        edwin-groups
-        edwin-marks
-        edwin-regions
+        edwin-group
+        edwin-mark
+        edwin-region
         let-opt
         srfi-23
         )
