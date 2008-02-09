@@ -203,4 +203,5 @@
           editor-variables
           name->variable
           ->variable
+          variable-permanent-local?
           variable-permanent-local!))
