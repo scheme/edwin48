@@ -133,14 +133,14 @@
 
 (define-interface edwin-ring-interface
   (export make-ring
-	  ring-list
-	  ring-size
-	  ring-clear!
-	  ring-empty?
-	  ring-push!
-	  ring-pop!
-	  ring-ref
-	  ring-set!))
+          ring-list
+          ring-size
+          ring-clear!
+          ring-empty?
+          ring-push!
+          ring-pop!
+          ring-ref
+          ring-set!))
 
 (define-interface edwin-string-table-interface
   (export make-string-table
@@ -261,4 +261,12 @@
           buffer-minor-mode?
           enable-buffer-minor-mode!
           disable-buffer-minor-mode!))
+
+(define-interface edwin-command-table-interface
+  (export comtab-entry local-comtab-entry
+          prefix-key-list?
+          define-key
+          define-prefix-key
+          comtab->alist
+          comtab-key-bindings))
 
