@@ -1,21 +1,22 @@
 ;;; -*- mode: scheme; scheme48-package: (config) -*-
 
 (define-structures
-    ((edwin-group  edwin-group-interface)
-     (edwin-mark   edwin-mark-interface)
-     (edwin-region edwin-region-interface))
+    ((edwin-command          edwin-command-interface)
+     (edwin-group            edwin-group-interface)
+     (edwin-mark             edwin-mark-interface)
+     (edwin-region           edwin-region-interface)
+     (edwin-variable         edwin-variable-interface)
+     (edwin-variable/private (export set-variable-%default-value!
+                                     set-variable-%value!)))
     (open (modify scheme (hide string-fill!))
-          ;; edwin-utilities
-	  aliases
-	  errors
-          define-record-type*
-	  fixnum
-          weak-pair
-	  srfi-1
-          srfi-13
-          srfi-23
-          )
-  (files struct
+          aliases define-opt define-record-type* errors fixme fixnum
+          pathname weak-pair
+          srfi-1 srfi-13 srfi-23 srfi-69
+          edwin-doc-string edwin-ring edwin-string-table edwin-utilities)
+  (for-syntax (open scheme errors macro-helpers))
+  (files comman
+         s48-macros
+         struct
          grpops
          regops))
 
@@ -61,16 +62,3 @@
 (define-structure edwin-paths edwin-paths-interface
   (open scheme aliases errors pathname mit-fileio)
   (files paths))
-
-(define-structures
-    ((edwin-command          edwin-command-interface)
-     (edwin-variable         edwin-variable-interface)
-     (edwin-variable/private (export set-variable-%default-value!
-                                     set-variable-%value!)))
-    (open scheme aliases define-record-type* define-opt errors
-          srfi-69
-          edwin-doc-string edwin-string-table
-          fixme)
-  (for-syntax (open scheme errors macro-helpers))
-  (files comman s48-macros))
-
