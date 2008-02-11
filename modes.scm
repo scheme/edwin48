@@ -28,23 +28,10 @@ USA.
 ;;;; Modes
 
 
-(define-structure (mode
-		   (constructor %make-mode
-				(name major? display-name super-mode
-				      %description initialization comtabs))
-		   (print-procedure
-		    (unparser/standard-method 'MODE
-		      (lambda (state mode)
-			(unparse-object state (mode-name mode))
-			(if (not (mode-major? mode))
-			    (unparse-string state " (minor)"))))))
-  (name #f read-only #t)
-  major?
-  display-name
-  super-mode
-  %description
-  initialization
-  (comtabs #f read-only #t))
+(define-record-type* mode
+  (%make-mode name (major?) (display-name) (super-mode)
+              (%description) (initialization) comtabs)
+  ())
 
 (define (make-mode name major? display-name super-mode description
 		   initialization)
@@ -79,10 +66,10 @@ USA.
 (define editor-modes
   (make-string-table))
 
-(define (name->mode name #!optional if-undefined)
+(define* (name->mode name (if-undefined 'INTERN))
   (let ((sname (symbol-name name)))
     (or (string-table-get editor-modes sname)
-	(case (if (default-object? if-undefined) 'INTERN if-undefined)
+	(case if-undefined
 	  ((#F) #f)
 	  ((ERROR) (error "Undefined mode:" name))
 	  ((INTERN)
