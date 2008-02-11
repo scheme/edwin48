@@ -204,9 +204,8 @@ Otherwise, one argument `-i' is passed to the shell."
 		  (message "Directory stack not that deep")
 		  (let ((dirstack
 			 (let ((dirstack (cons default-directory dirstack)))
-			   (append (list-tail dirstack num)
-				   (list-head dirstack
-					      (- (length dirstack) num))))))
+			   (append (drop dirstack num)
+				   (take dirstack (- (length dirstack) num))))))
 		    (set-variable! shell-dirstack (cdr dirstack))
 		    (shell-process-cd (car dirstack))))
 	      (begin
@@ -230,7 +229,7 @@ Otherwise, one argument `-i' is passed to the shell."
 	  (else
 	   (if (= num 1)
 	       (set-variable! shell-dirstack (cdr dirstack))
-	       (let ((pair (list-tail dirstack (- num 1))))
+	       (let ((pair (drop dirstack (- num 1))))
 		 (set-cdr! pair (cddr pair))))
 	   (shell-dirstack-message)))))
 

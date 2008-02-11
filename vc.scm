@@ -1358,7 +1358,7 @@ the value of vc-log-mode-hook."
 		       (pair? (cdr path)))
 		  (let ((maybe (lset-intersection eqv? maybe possible)))
 		    (if (pair? maybe)
-			(loop (except-last-pair path) maybe)
+			(loop (drop-right path 1) maybe)
 			'()))
 		  '())))))))
 
@@ -2555,7 +2555,7 @@ the value of vc-log-mode-hook."
     (let loop ((path (pathname-directory dir)))
       (let ((dir* (merge-pathnames bzr (pathname-new-directory dir path))))
 	(cond ((file-directory? dir*) dir*)
-	      ((pair? (cdr path)) (loop (except-last-pair path)))
+	      ((pair? (cdr path)) (loop (drop-right path 1)))
 	      (else #f))))))
 
 (define (%bzr-workfile-versioned? workfile)

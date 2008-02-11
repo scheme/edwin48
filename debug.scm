@@ -1545,7 +1545,7 @@ once it has been renamed, it will not be deleted automatically.")
 				(write-string " bindings (first " port)
 				(write limit port)
 				(write-string " shown):" port)
-				(finish (list-head names limit))
+				(finish (take names limit))
 				#t)))))))
 	  (else
 	   (write-string "  BINDINGS:" port)

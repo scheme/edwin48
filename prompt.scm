@@ -951,7 +951,7 @@ With argument, skips forward that many items in the history."
 		  (cond ((< index 0) 0)
 			((>= index hl) (- hl 1))
 			(else index)))))
-	  (set-car! (list-tail *history-items* *history-index*)
+	  (set-car! (drop *history-items* *history-index*)
 		    (typein-string))
 	  (set! *history-index* index)
 	  (set-typein-string! (list-ref *history-items* *history-index*) #t)

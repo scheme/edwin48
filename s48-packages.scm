@@ -127,8 +127,7 @@
 	    )
   (open scheme define-record-type* ascii
 	simple-signals util methods receiving fluids cells
-        mit-fileio
-	posix-process-data posix-users)
+        mit-fileio posix-process-data posix-users srfi-1)
   (files pathname pathname-unix s48-pathname))
 
 (define-structure macro-helpers

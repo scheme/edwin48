@@ -141,7 +141,7 @@ The frame is guaranteed to be deselected at that time."
 (define (screen-1+ screen)
   (let ((screens (screen-list)))
     (if (eq? screen (car screens))
-	(car (last-pair screens))
+	(car (take-right screens 1))
 	(let loop ((previous screens) (screens (cdr screens)))
 	  (if (null? screens)
 	      (error "not a member of screen-list" screen))
@@ -449,7 +449,7 @@ The frame is guaranteed to be deselected at that time."
     (cond ((null? hooks)
 	   (buffer-put! buffer key (list hook)))
 	  ((not (memq hook hooks))
-	   (set-cdr! (last-pair hooks) (list hook))))))
+	   (set-cdr! (take-right hooks 1) (list hook))))))
 
 (define (remove-buffer-hook buffer key hook)
   (buffer-put! buffer key (delete! hook (buffer-get buffer key '()) eq?)))

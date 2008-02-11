@@ -224,7 +224,7 @@ or #F meaning no limit."
 	   (let ((previous-subproblems (dstate/previous-subproblems dstate)))
 	     (if (null? previous-subproblems)
 		 (dstate/subproblem dstate)
-		 (car (last-pair previous-subproblems)))))
+		 (car (take-right previous-subproblems 1)))))
 	  (max-subproblems (ref-variable debugger-max-subproblems buffer))
 	  (hide-system-code? (ref-variable debugger-hide-system-code? buffer)))
       (with-group-undo-disabled (buffer-group buffer)
@@ -1237,8 +1237,8 @@ Prefix argument means do not kill the debugger buffer."
 	(delta (- subproblem-number (dstate/subproblem-number dstate))))
     (if (negative? delta)
 	(let ((subproblems
-	       (list-tail (dstate/previous-subproblems dstate)
-			  (-1+ (- delta)))))
+	       (drop (dstate/previous-subproblems dstate)
+		     (-1+ (- delta)))))
 	  (set-current-subproblem! dstate (car subproblems) (cdr subproblems))
 	  (finish-move-to-subproblem! dstate))
 	(let loop
@@ -1271,7 +1271,7 @@ Prefix argument means do not kill the debugger buffer."
 	  (let ((previous-subproblems (dstate/previous-subproblems dstate)))
 	    (if (null? previous-subproblems)
 		(dstate/subproblem dstate)
-		(car (last-pair previous-subproblems))))
+		(car (take-right previous-subproblems 1))))
 	  (or (stack-frame/next-subproblem frame)
 	      (editor-error "No such subproblem" n)))
 	 (level 0 (+ level 1)))

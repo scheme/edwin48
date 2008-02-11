@@ -127,7 +127,7 @@ Previous contents of that buffer are killed first."
 		  (loop (cddr elements)))))))))
 
 (define (reorder-list items)
-  (let ((tail (list-tail items (integer-ceiling (length items) 2))))
+  (let ((tail (drop items (integer-ceiling (length items) 2))))
     (let loop ((items items) (items* tail))
       (cond ((eq? items tail) '())
 	    ((null? items*) (list (car items)))

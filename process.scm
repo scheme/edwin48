@@ -435,7 +435,7 @@ Initialized from the SHELL environment variable."
 (define (add-filter-to-dispatcher dispatcher filter)
   (let ((filters (entity-extra dispatcher)))
     (if (pair? filters)
-	(set-cdr! (last-pair filters) (list filter))
+	(set-cdr! (take-right filters 1) (list filter))
 	(set-entity-extra! dispatcher (list filter)))))
 
 (define (remove-filter-from-dispatcher dispatcher filter)

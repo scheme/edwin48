@@ -1003,7 +1003,7 @@ USA.
 		      (message msg "done")
 		      (reverse! replies))
 		    (let* ((rxd (min rxn n-chunk))
-			   (rxlist* (list-tail rxlist rxd))
+			   (rxlist* (drop rxlist rxd))
 			   (replies (receive-replies rxlist rxlist* replies))
 			   (txd (min txn n-chunk)))
 		      (loop (- txn txd)
@@ -1740,7 +1740,7 @@ USA.
 		   (let ((k
 			  (lambda (x y)
 			    (for-each (lambda (y) (set-cdr! y x)) y)
-			    (set-cdr! (last-pair x) y))))
+			    (set-cdr! (take-right x 1) y))))
 		     (if (news-thread:< (car x) (car y))
 			 (k (cdr x) (cdr y))
 			 (k (cdr y) (cdr x)))))))))

@@ -75,7 +75,7 @@
   (if (pair? (pathname-directory pathname))
       (let loop ((pathname pathname) (np 1))
 	(let ((directory (pathname-directory pathname)))
-	  (let scan ((p (list-tail directory np)) (np np))
+	  (let scan ((p (drop directory np)) (np np))
 	    (if (pair? p)
 		(if (and (not (equal? (car p) ".."))
 			 (pair? (cdr p))

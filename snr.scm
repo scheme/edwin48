@@ -4187,8 +4187,8 @@ With prefix arg, replaces the file with the list information."
          (if limit
              (let ((lns (length ns)))
                (cond ((<= lns (abs limit)) ns)
-                     ((< limit 0) (list-head ns (- limit)))
-                     (else (list-tail ns (- (length ns) limit)))))
+                     ((< limit 0) (take ns (- limit)))
+                     (else (drop ns (- (length ns) limit)))))
              ns)))
    (let ((ignore-header?
           (let ((filter (ref-variable news-header-filter context)))
@@ -4654,7 +4654,7 @@ With prefix arg, replaces the file with the list information."
 		      (let ((children (news-header:followups header)))
 			(if (null? children)
 			    header
-			    (dive-down (car (last-pair children)))))))
+			    (dive-down (car (take-right children 1)))))))
 		   (else parent)))))))
 
 ;;;; News-Thread Extensions

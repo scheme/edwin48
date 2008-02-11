@@ -171,7 +171,7 @@ USA.
 (define (last-command-key)
   (if (key? *command-key*)
       *command-key*
-      (car (last-pair *command-key*))))
+      (car (take-right *command-key* 1))))
 
 (define (set-current-command! command)
   (set! *command* command)
