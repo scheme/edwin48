@@ -321,7 +321,7 @@ USA.
        (xterm-screen/flush! screen)))))
 
 (define (xterm-screen/discard! screen)
-  (set! screen-list (delq! screen screen-list))
+  (set! screen-list (delete! screen screen-list eq?))
   (x-close-window (screen-xterm screen)))
 
 (define (xterm-screen/modeline-event! screen window type)

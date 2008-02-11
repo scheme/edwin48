@@ -84,8 +84,9 @@ The frame is guaranteed to be deselected at that time."
 		     (select-screen (or (other-screen screen) other)))
 		 (screen-discard! screen)
 		 (set-editor-screens! current-editor
-				      (delq! screen
-					     (editor-screens current-editor)))
+				      (delete! screen
+					       (editor-screens current-editor)
+					       eq?))
 		 #t)
 	       (if (or (default-object? allow-kill-scheme?) allow-kill-scheme?)
 		   ((ref-command save-buffers-kill-scheme) #t)
@@ -451,7 +452,7 @@ The frame is guaranteed to be deselected at that time."
 	   (set-cdr! (last-pair hooks) (list hook))))))
 
 (define (remove-buffer-hook buffer key hook)
-  (buffer-put! buffer key (delq! hook (buffer-get buffer key '()))))
+  (buffer-put! buffer key (delete! hook (buffer-get buffer key '()) eq?)))
 
 (define (run-buffer-hooks key buffer . arguments)
   (for-each (lambda (hook) (apply hook buffer arguments))

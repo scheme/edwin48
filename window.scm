@@ -177,8 +177,8 @@ USA.
 (define (delete-inferior! window window*)
   (set-window-inferiors! window
 			 (let ((inferiors (window-inferiors window)))
-			   (delq! (find-inferior inferiors window*)
-				  inferiors))))
+			   (delete! (find-inferior inferiors window*)
+				    inferiors eq?))))
 
 (define (replace-inferior! window old new)
   (set-inferior-window! (find-inferior (window-inferiors window) old) new)

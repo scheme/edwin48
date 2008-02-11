@@ -368,4 +368,4 @@ If #F, the normal method is used."
     (set-variable-local-value!
      buffer
      minor-mode-alist
-     (del-assq predicate (variable-local-value buffer minor-mode-alist)))))
+     (alist-delete predicate (variable-local-value buffer minor-mode-alist) eq?))))

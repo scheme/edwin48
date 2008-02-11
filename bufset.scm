@@ -44,14 +44,14 @@ USA.
   (if (memq buffer (bufferset-buffer-list bufferset))
       (set-bufferset-buffer-list!
        bufferset
-       (cons buffer (delq! buffer (bufferset-buffer-list bufferset)))))
+       (cons buffer (delete! buffer (bufferset-buffer-list bufferset) eq?))))
   unspecific)
 
 (define (bufferset-bury-buffer! bufferset buffer)
   (if (memq buffer (bufferset-buffer-list bufferset))
       (set-bufferset-buffer-list!
        bufferset
-       (append! (delq! buffer (bufferset-buffer-list bufferset))
+       (append! (delete! buffer (bufferset-buffer-list bufferset) eq?)
 		(list buffer))))
   unspecific)
 
@@ -92,7 +92,7 @@ USA.
   (if (not (memq buffer (bufferset-buffer-list bufferset)))
       (error "Attempt to kill unknown buffer" buffer))
   (set-bufferset-buffer-list! bufferset
-			      (delq! buffer (bufferset-buffer-list bufferset)))
+			      (delete! buffer (bufferset-buffer-list bufferset) eq?))
   (string-table-remove! (bufferset-names bufferset) (buffer-name buffer)))
 
 (define (bufferset-rename-buffer bufferset buffer new-name)

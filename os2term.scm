@@ -223,7 +223,7 @@ USA.
 	       0 (screen-pel-height screen)))
 
 (define (os2-screen/discard! screen)
-  (set! screen-list (delq! screen screen-list))
+  (set! screen-list (delete! screen screen-list eq?))
   (os2win-close (screen-wid screen)))
 
 (define (os2-screen/enter! screen)

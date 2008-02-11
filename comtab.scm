@@ -99,12 +99,12 @@ USA.
 	      (let ((entry (assq key alist)))
 		(if entry
 		    (let ((vector (- vector 1))
-			  (alist (delq entry alist)))
+			  (alist (delete entry alist eq?)))
 		      (without-interrupts
 		       (lambda ()
 			 (set-comtab-vector! comtab vector)
 			 (set-comtab-alist! comtab alist)))))))))
-      (set-comtab-alist! comtab (del-assq key (comtab-alist comtab)))))
+      (set-comtab-alist! comtab (alist-delete key (comtab-alist comtab) eq?))))
 
 (define (valid-comtabs? object)
   (or (mode? object)

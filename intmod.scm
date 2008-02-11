@@ -314,7 +314,7 @@ evaluated in the specified inferior REPL buffer."
 	     (deregister-inferior-thread! (port/output-registration port))
 	     (if (eq? buffer (global-run-light-buffer))
 		 (set-global-run-light! #f))
-	     (set! repl-buffers (delq! buffer repl-buffers))
+	     (set! repl-buffers (delete! buffer repl-buffers eq?))
 	     (let ((buffer (global-run-light-buffer)))
 	       (if buffer
 		   (set-global-run-light! (local-run-light buffer))))

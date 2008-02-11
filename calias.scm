@@ -38,7 +38,7 @@ USA.
   unspecific)
 
 (define (undefine-alias-key key)
-  (set! alias-keys (del-assq! key alias-keys))
+  (set! alias-keys (alist-delete! key alias-keys eq?))
   unspecific)
 
 (define (remap-alias-key key)

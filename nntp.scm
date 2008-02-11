@@ -1535,8 +1535,8 @@ USA.
       (for-each loop (news-header:followups header)))))
 
 (define (unlink-headers! p c)
-  (set-news-header:followups! p (delq! c (news-header:followups p)))
-  (set-news-header:followup-to! c (delq! p (news-header:followup-to c))))
+  (set-news-header:followups!   p (delete! c (news-header:followups p)   eq?))
+  (set-news-header:followup-to! c (delete! p (news-header:followup-to c) eq?)))
 
 (define (link-headers! p c)
   (if (not (memq c (news-header:followups p)))
@@ -1635,7 +1635,7 @@ USA.
 
 (define (disassociate-header-from-parent header parent)
   (set-news-header:followups! parent
-			      (delq! header (news-header:followups parent)))
+			      (delete! header (news-header:followups parent) eq?))
   (set-news-header:followup-to! header #f))
 
 ;;; Create a thread to represent each header tree, and mark the

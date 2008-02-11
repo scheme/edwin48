@@ -29,7 +29,7 @@ USA.
 
 
 (define (vector-delq! vector index item)
-  (vector-set! vector index (delq! item (vector-ref vector index))))
+  (vector-set! vector index (delete! item (vector-ref vector index) eq?)))
 
 (define (vector-push! vector index item)
   (vector-set! vector index (cons item (vector-ref vector index))))

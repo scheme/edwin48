@@ -71,7 +71,7 @@ USA.
 (define (delete-keyparser-pattern keyword description)
   (set-description/patterns!
    description
-   (del-assoc! keyword (description/patterns description))))
+   (alist-delete! keyword (description/patterns description) equals?)))
 
 (define (define-keyparser-statement-leader name description regexp parser)
   (let ((leaders (description/statement-leaders description))
@@ -89,7 +89,7 @@ USA.
 (define (delete-keyparser-statement-leader name description)
   (set-description/statement-leaders!
    description
-   (del-assoc! name (description/statement-leaders description))))
+   (alist-delete! name (description/statement-leaders description) equal?)))
 
 (define keyparser-patterns description/patterns)
 (define keyparser-statement-leaders description/statement-leaders)

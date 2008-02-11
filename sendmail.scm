@@ -1277,8 +1277,9 @@ the user from the mailer."
 
 (define (delete-buffer-mime-attachment! buffer attachment)
   (set-buffer-mime-attachments! buffer
-				(delq! attachment
-				       (buffer-mime-attachments buffer))))
+				(delete! attachment
+					 (buffer-mime-attachments buffer)
+					 eq?)))
 
 (define (buffer-mime-attachments buffer)
   (buffer-get buffer 'MAIL-MIME-ATTACHMENTS '()))

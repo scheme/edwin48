@@ -211,7 +211,7 @@ The buffer is guaranteed to be deselected at that time."
   (set-buffer-windows! buffer (cons window (buffer-windows buffer))))
 
 (define (remove-buffer-window! buffer window)
-  (set-buffer-windows! buffer (delq! window (buffer-windows buffer))))
+  (set-buffer-windows! buffer (delete! window (buffer-windows buffer) eq?)))
 
 (define (buffer-visible? buffer)
   (any window-visible? (buffer-windows buffer)))
@@ -242,7 +242,7 @@ The buffer is guaranteed to be deselected at that time."
 			   (cons (cons key value) (buffer-alist buffer))))))
 
 (define (buffer-remove! buffer key)
-  (set-buffer-alist! buffer (del-assq! key (buffer-alist buffer))))
+  (set-buffer-alist! buffer (alist-delete! key (buffer-alist buffer) eq?)))
 
 (define (->buffer object)
   (or (cond ((or (default-object? object) (not object)) (current-buffer))
@@ -354,7 +354,7 @@ The buffer is guaranteed to be deselected at that time."
 	     (begin
 	       (set-buffer-local-bindings!
 		buffer
-		(delq! binding (buffer-local-bindings buffer)))
+		(delete! binding (buffer-local-bindings buffer) eq?))
 	       (if (buffer-local-bindings-installed? buffer)
 		   (set-variable-%value! variable
 					 (variable-default-value variable)))
@@ -554,9 +554,10 @@ The buffer is guaranteed to be deselected at that time."
      (let ((modes (buffer-modes buffer)))
        (if (memq mode (cdr modes))
 	   (begin
-	     (set-cdr! modes (delq! mode (cdr modes)))
+	     (set-cdr! modes (delete! mode (cdr modes) eq?))
 	     (set-buffer-comtabs! buffer
-				  (delq! (minor-mode-comtab mode)
-					 (buffer-comtabs buffer)))
+				  (delete! (minor-mode-comtab mode)
+					   (buffer-comtabs buffer)
+					   eq?))
 	     (remove-minor-mode-line-entry! buffer mode)
 	     (buffer-modeline-event! buffer 'BUFFER-MODES)))))))

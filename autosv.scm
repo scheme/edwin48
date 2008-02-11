@@ -127,7 +127,7 @@ This file is not the file you visited; that changes only when you save."
 	  (let ((vector (get-fixed-objects-vector)))
 	    (vector-set! vector
 			 index
-			 (del-assq! group (vector-ref vector index)))))))
+			 (alist-delete! group (vector-ref vector index) eq?))))))
 
 (define (delete-auto-save-file! buffer)
   (and (ref-variable delete-auto-save-files)

@@ -250,7 +250,7 @@ USA.
   (set-group-clip-daemons! group (cons daemon (group-clip-daemons group))))
 
 (define (remove-group-clip-daemon! group daemon)
-  (set-group-clip-daemons! group (delq! daemon (group-clip-daemons group))))
+  (set-group-clip-daemons! group (delete! daemon (group-clip-daemons group) eq?)))
 
 (define (group-local-ref group variable)
   (variable-local-value (let ((buffer (group-buffer group)))

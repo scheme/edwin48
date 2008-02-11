@@ -1813,8 +1813,9 @@ Completion is performed over known labels when reading."
   (if (memq attribute (msg-memo/attributes memo))
       (begin
 	(set-msg-memo/attributes! memo
-				  (delq! attribute
-					 (msg-memo/attributes memo)))
+				  (delete! attribute
+					   (msg-memo/attributes memo)
+					   eq?))
 	(let ((start (msg-memo/start memo)))
 	  (with-group-open (mark-group start)
 	    (lambda ()

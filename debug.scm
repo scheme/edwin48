@@ -160,14 +160,14 @@ USA.
 	 (lambda (buffer name)
 	   name
 	   (set-browser/buffers! browser
-				 (delq! buffer (browser/buffers browser)))
+				 (delete! buffer (browser/buffers browser) eq?))
 	   (remove-rename-buffer-hook buffer hook))))
      hook))
   (add-kill-buffer-hook
    buffer
    (lambda (buffer)
      (set-browser/buffers! browser
-			   (delq! buffer (browser/buffers browser)))))
+			   (delete! buffer (browser/buffers browser) eq?))))
   (set-browser/buffers! browser (cons buffer (browser/buffers browser)))
   (buffer-put! buffer 'ASSOCIATED-WITH-BROWSER browser))
 

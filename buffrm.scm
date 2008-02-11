@@ -91,7 +91,7 @@ USA.
 	(begin
 	  (set! modeline-inferior (make-inferior frame modeline-window))
 	  (set! inferiors
-		(append! (delq! modeline-inferior inferiors)
+		(append! (delete! modeline-inferior inferiors eq?)
 			 (list modeline-inferior))))
 	(set! modeline-inferior #f))))
 

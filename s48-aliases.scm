@@ -11,9 +11,6 @@
 (define  (1+ z) (+ z 1))
 (define (-1+ z) (- z 1))
 
-(define (delq! element items)
-  (remove! (lambda (x) (eq? element x)) items))
-
 (define (list-deletor! predicate)
   (lambda (items) (remove! predicate items)))
 

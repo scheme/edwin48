@@ -179,7 +179,7 @@ Initialized from the SHELL environment variable."
   (let ((subprocess (process-subprocess process)))
     (without-interrupts
      (lambda ()
-       (set! edwin-processes (delq! process edwin-processes))
+       (set! edwin-processes (delete! process edwin-processes eq?))
        (subprocess-remove! subprocess 'EDWIN-PROCESS)
        (if (process-runnable? process)
 	   (begin
@@ -439,7 +439,7 @@ Initialized from the SHELL environment variable."
 	(set-entity-extra! dispatcher (list filter)))))
 
 (define (remove-filter-from-dispatcher dispatcher filter)
-  (let ((filters (delq! filter (entity-extra dispatcher))))
+  (let ((filters (delete! filter (entity-extra dispatcher) eq?)))
     (set-entity-extra! dispatcher filters)
     (and (not (null? filters))
 	 dispatcher)))

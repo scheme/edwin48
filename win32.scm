@@ -161,7 +161,7 @@ USA.
 (define (win32-screen/discard! screen)
   ;;(debug 'DISCARD screen)
   (destroy-window (screen->handle screen))
-  (set! win32-screens (delq screen win32-screens)))
+  (set! win32-screens (delete screen win32-screens eq?)))
 
 (define (win32-screen/enter! screen)
   (set-screen-cursor-position! screen -1 -1)

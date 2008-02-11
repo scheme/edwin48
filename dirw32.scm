@@ -94,8 +94,8 @@ The files are compressed or uncompressed using gzip."
 	      ((#\+ #\-)
 	       (loop index char))
 	      ((#\a #\c #\h #\r #\s)
-	       (set! plus (delv! char plus))
-	       (set! minus (delv! char minus))
+	       (set! plus  (delete! char plus  eqv?))
+	       (set! minus (delete! char minus eqv?))
 	       (case state
 		 ((#\+)
 		  (set! plus (cons char plus))

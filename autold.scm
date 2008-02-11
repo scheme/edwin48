@@ -144,7 +144,7 @@ USA.
   (let ((entry (assq name library-load-hooks)))
     (define (loop)
       (if (null? (cdr entry))
-	  (set! library-load-hooks (delq! entry library-load-hooks))
+	  (set! library-load-hooks (delete! entry library-load-hooks eq?))
 	  (let ((hook (cadr entry)))
 	    (set-cdr! entry (cddr entry))
 	    (hook)

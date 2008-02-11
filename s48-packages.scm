@@ -52,7 +52,7 @@
     (export without-interrupts
 	    unspecific beep
 	    1+ -1+
-	    delq! list-deletor!
+	    list-deletor!
 	    vector-grow
             string-head string-tail
             get-environment-variable
