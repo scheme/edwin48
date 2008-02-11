@@ -28,9 +28,10 @@ USA.
 ;;;; Command Tables
 
 
-(define-structure (comtab (constructor make-comtab ()))
-  (vector 0)
-  (alist '()))
+(define-record-type* comtab
+  (make-comtab)
+  (vector
+   alist))
 
 (define (comtab-get comtab key)
   (let ((vector (comtab-vector comtab)))
@@ -131,7 +132,7 @@ USA.
 (define (list-of-comtabs? object)
   (and (not (null? object))
        (list? object)
-       (every comtabs? object)))
+       (every comtab? object)))
 
 (define (comtab-key? object)
   (or (key? object)
@@ -270,7 +271,7 @@ USA.
 	       (if (valid-datum? datum) datum (->command datum))
 	       'DEFINE-KEY))
 
-(define (define-prefix-key mode key #!optional command)
+(define* (define-prefix-key mode key (command #f))
   (%define-key (guarantee-comtabs mode 'DEFINE-PREFIX-KEY)
 	       (begin
 		 (if (button? key)
@@ -279,7 +280,7 @@ USA.
 						'DEFINE-PREFIX-KEY))
 		 key)
 	       (let ((comtab (make-comtab)))
-		 (if (default-object? command)
+		 (if (not command)
 		     comtab
 		     (let ((command (->command command)))
 		       (if (eq? command (ref-command-object prefix-key))
@@ -295,7 +296,7 @@ USA.
     (cond ((or (key? key) (button? key))
 	   (put! key))
 	  ((char-set? key)
-	   (for-each put! (char-set-members key)))
+	   (for-each put! (char-set->list key)))
 	  ((prefixed-key? key)
 	   (let ((prefix (drop-right key 1)))
 	     (comtab-put! (if (null? prefix)
