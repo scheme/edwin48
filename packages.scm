@@ -59,3 +59,9 @@
 (define-structure edwin-paths edwin-paths-interface
   (open scheme aliases errors pathname mit-fileio)
   (files paths))
+
+(define-structure edwin-command-table edwin-command-table-interface
+  (open scheme (modify sorting (rename (vector-sort sort)))
+        aliases define-record-type* define-opt errors fixnum
+        srfi-1 srfi-14 edwin-string-table edwin-utilities)
+  (files comtab))
