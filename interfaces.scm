@@ -271,3 +271,17 @@
           comtab->alist
           comtab-key-bindings))
 
+(define-interface edwin-mode-interface
+  (export make-mode
+          mode-name
+          mode-major?
+          mode-display-name
+          mode-initialization
+          mode-comtabs
+          editor-modes
+          name->mode
+          ->mode
+          major-mode?
+          minor-mode?
+          minor-mode-comtab
+          mode-description))
