@@ -35,18 +35,18 @@ USA.
   (set-group-undo-data! group #t))
 
 (define (with-group-undo-disabled group thunk)
-  (let ((outside-data)
+  (let ((outside-data unspecific)
 	(inside-data #t))
     (dynamic-wind (lambda ()
 		    (set! outside-data (group-undo-data group))
 		    (set-group-undo-data! group inside-data)
-		    (set! inside-data)
+		    (set! inside-data unspecific)
 		    unspecific)
 		  thunk
 		  (lambda ()
 		    (set! inside-data (group-undo-data group))
 		    (set-group-undo-data! group outside-data)
-		    (set! outside-data)
+		    (set! outside-data unspecific)
 		    unspecific))))
 
 (define (undo-done! point)
@@ -231,9 +231,9 @@ which includes both the saved text and other data."
 	       (cond ((eq? 'REINSERT-PROPERTIES a)
 		      (reinsert-properties-size b))
 		     ((eq? 'REPLACEMENT a)
-		      (fix:+ 2 (system-vector-length (car b))))
+		      (fix:+ 2 (vector-length (car b))))
 		     ((string? a)
-		      (fix:+ 1 (system-vector-length a)))
+		      (fix:+ 1 (vector-length a)))
 		     (else 0))))
       2))
 
