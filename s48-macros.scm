@@ -92,3 +92,10 @@
          `(,define-variable-local-value!
             (or ,buffer `(,%current-buffer))
             ,name ,value))))))
+
+(define-syntax ref-mode-object
+  (lambda (form rename compare)
+    (if (not (and (= (length form) 2)
+                  (symbol? (list-ref form 1))))
+	(syntax-error "REF-MODE-OBJECT name")
+        (mode-name->scheme-name (list-ref form 1)))))

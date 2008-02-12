@@ -130,7 +130,8 @@
 (define-interface edwin-utilities-interface
   (export %substring-move!
           split-list
-          list-of-type?))
+          list-of-type?
+          string-or-false?))
 
 (define-interface edwin-ring-interface
   (export make-ring
@@ -187,11 +188,12 @@
           copy-command))
 
 (define-interface edwin-variable-interface
-  (export (define-variable     :syntax)
-          (ref-variable-object :syntax)
-          (ref-variable        :syntax)
-          (set-variable!       :syntax)
-          (local-set-variable! :syntax)
+  (export (define-variable            :syntax)
+          (define-variable-per-buffer :syntax)
+          (ref-variable-object        :syntax)
+          (ref-variable               :syntax)
+          (set-variable!              :syntax)
+          (local-set-variable!        :syntax)
           variable-name
           variable-buffer-local?
           variable-description
@@ -272,7 +274,8 @@
           comtab-key-bindings))
 
 (define-interface edwin-mode-interface
-  (export make-mode
+  (export (ref-mode-object :syntax)
+          make-mode
           mode-name
           mode-major?
           mode-display-name
