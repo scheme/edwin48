@@ -51,7 +51,7 @@
 (define-structure aliases
     (export without-interrupts
 	    unspecific beep
-	    1+ -1+
+	    1+ -1+ char->digit
 	    list-deletor!
 	    vector-grow
             string-head string-tail
@@ -60,10 +60,10 @@
             call-with-binary-input-file call-with-binary-output-file
             exact-integer? exact-nonnegative-integer?
             vector-8b-ref vector-8b-set!)
-  (open scheme ascii interrupts util
+  (open scheme ascii errors interrupts util
         (modify posix-process-data (rename (lookup-environment-variable
                                             get-environment-variable)))
-        srfi-1 srfi-13 srfi-43)
+        srfi-1 srfi-13 srfi-14 srfi-43)
   (files s48-aliases))
 
 (define-structure define-opt

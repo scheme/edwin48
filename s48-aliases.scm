@@ -59,3 +59,9 @@
 
 (define (exact-integer? obj)
   (and (integer? obj) (exact? obj)))
+
+(define (char->digit c)
+  (if (char-set-contains? char-set:digit c)
+      (- (char->integer c) (char->integer #\0))
+      (error "this is not a digit" c)))
+
