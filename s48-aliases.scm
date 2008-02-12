@@ -27,6 +27,10 @@
 (define (symbol-append . symbols)
   (string->symbol (apply string-append (map symbol->string symbols))))
 
+(define (symbol<? symbol1 symbol2)
+  (string<? (symbol->string symbol1)
+            (symbol->string symbol2)))
+
 (define (call-with-binary-input-file filename thunk)
   (call-with-input-file filename thunk))
 
@@ -49,3 +53,9 @@
   (string-set! string k (ascii->char code)))
 
 (define (beep) unspecific)
+
+(define (exact-nonnegative-integer? obj)
+  (and (integer? obj) (> obj 0) (exact? obj)))
+
+(define (exact-integer? obj)
+  (and (integer? obj) (exact? obj)))

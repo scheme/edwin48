@@ -56,8 +56,9 @@
 	    vector-grow
             string-head string-tail
             get-environment-variable
-            symbol-append symbol-name
+            symbol-append symbol-name symbol<?
             call-with-binary-input-file call-with-binary-output-file
+            exact-integer? exact-nonnegative-integer?
             vector-8b-ref vector-8b-set!)
   (open scheme ascii interrupts util
         (modify posix-process-data (rename (lookup-environment-variable
