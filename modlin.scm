@@ -345,10 +345,9 @@ If #F, the normal method is used."
 (define (window-symbol-value window symbol)
   (variable-local-value (window-buffer window) (name->variable symbol)))
 
-(define (add-minor-mode-line-entry! buffer predicate #!optional consequent)
+(define* (add-minor-mode-line-entry! buffer predicate (consequent #f))
   (let ((consequent
-	 (if (or (default-object? consequent)
-		 (not consequent))
+	 (if (not consequent)
 	     (cond ((minor-mode? predicate)
 		    (string-append " " (mode-display-name predicate)))
 		   ((or (symbol? predicate) (variable? predicate))
