@@ -28,9 +28,9 @@ USA.
 ;;;; Buffer Set Abstraction
 
 
-(define-structure (bufferset (constructor %make-bufferset))
-  buffer-list
-  (names #f read-only #t))
+(define-record-type* bufferset
+  (%make-bufferset (buffer-list) names)
+  ())
 
 (define (make-bufferset initial-buffer)
   (%make-bufferset (list initial-buffer)
