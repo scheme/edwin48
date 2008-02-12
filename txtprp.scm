@@ -29,11 +29,11 @@ USA.
 ;;;  An improved version of a mechanism from GNU Emacs 19
 
 
-(define (add-text-property group start end key datum #!optional no-overwrite?)
+(define* (add-text-property group start end key datum (no-overwrite? #f))
   (validate-region-arguments group start end 'ADD-TEXT-PROPERTY)
   (validate-key-argument key 'ADD-TEXT-PROPERTY)
   (modify-text-properties group start end
-    (if (not (if (default-object? no-overwrite?) #f no-overwrite?))
+    (if (not no-overwrite?)
 	(lambda (properties)
 	  (not (eq? (properties/lookup properties key no-datum) datum)))
 	(lambda (properties)
@@ -482,14 +482,15 @@ USA.
 ;;; See Cormen, Leiserson, and Rivest, "Introduction to Algorithms",
 ;;; Chapter 14, "Red-Black Trees".
 
-(define-structure interval
-  up
-  left
-  right
-  color
-  total-length
-  start
-  properties)
+(define-record-type* interval
+  (make-interval)
+  (up
+   left
+   right
+   color
+   total-length
+   start
+   properties))
 
 (define (make-initial-interval group)
   (let ((interval
