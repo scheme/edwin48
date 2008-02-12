@@ -158,3 +158,10 @@
   (open scheme search-trees)
   (files s48-rbtree))
 
+(define-structure event-distributor
+    (export make-event-distributor
+            event-distributor/invoke!
+            add-event-receiver!
+            remove-event-receiver!)
+  (open scheme aliases errors define-record-type* queues srfi-1)
+  (files s48-event-distributor))
