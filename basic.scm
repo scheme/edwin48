@@ -367,12 +367,10 @@ With prefix arg, silently save all file-visiting buffers, then kill."
   (lambda (no-confirmation?)
     (save-buffers-and-exit no-confirmation? "Scheme" exit-scheme)))
 
-(define (save-buffers-kill-edwin #!optional no-confirmation?)
-  (let ((no-confirmation?
-	 (and (not (default-object? no-confirmation?)) no-confirmation?)))
-    (if editor-can-exit?
-	(save-buffers-and-exit no-confirmation? "Edwin" exit-editor)
-	(save-buffers-and-exit no-confirmation? "Scheme" exit-scheme))))
+(define* (save-buffers-kill-edwin (no-confirmation? #f))
+  (if editor-can-exit?
+      (save-buffers-and-exit no-confirmation? "Edwin" exit-editor)
+      (save-buffers-and-exit no-confirmation? "Scheme" exit-scheme)))
 
 (define-command save-buffers-kill-edwin
   "Offer to save each buffer, then kill Edwin, returning to Scheme.
