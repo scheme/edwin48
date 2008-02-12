@@ -50,10 +50,10 @@
 
 (define-structure aliases
     (export without-interrupts
-	    unspecific beep
-	    1+ -1+ char->digit
-	    list-deletor!
-	    vector-grow
+            unspecific beep
+            1+ -1+ char->digit
+            list-deletor! alist?
+            vector-grow
             string-head string-tail
             get-environment-variable
             symbol-append symbol-name symbol<?

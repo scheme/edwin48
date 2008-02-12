@@ -65,3 +65,7 @@
       (- (char->integer c) (char->integer #\0))
       (error "this is not a digit" c)))
 
+(define (alist? object)
+  (and (list? object)
+       (every pair? object)))
+
