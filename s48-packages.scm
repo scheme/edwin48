@@ -147,3 +147,13 @@
   (open scheme aliases errors)
   (files s48-fixme))
 
+(define-structure rb-tree
+    (export make-rb-tree
+            rb-tree?        rb-tree/equal?
+            rb-tree/empty?  rb-tree/lookup
+            rb-tree/delete! rb-tree/insert!
+            rb-tree->alist  alist->rb-tree
+            rb-tree/copy)
+  (open scheme search-trees)
+  (files s48-rbtree))
+
