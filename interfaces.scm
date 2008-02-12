@@ -285,3 +285,88 @@
           minor-mode?
           minor-mode-comtab
           mode-description))
+
+(define-interface edwin-modeline-interface
+  (export add-minor-mode-line-entry!
+          remove-minor-mode-line-entry!))
+
+(define-interface edwin-text-property-interface
+  (export add-text-property
+          remove-text-property
+          get-text-properties get-text-property
+          next-proper-change
+          previous-property-change
+          next-specific-property-change
+          previous-specific-property-change
+          region-writeable region-read-only
+          text-not-insertable?
+          text-not-deleteable?
+          text-not-replaceable?
+          highlight-subgroup
+          highlight-region
+          highlight-region-excluding-indentation
+          local-comtabs
+          set-subgroup-local-comtabs!
+          set-region-local-comtabs!
+          update-intervals-for-insertion!
+          update-intervals-for-deletion!
+          update-intervals-for-replacement!
+          group-extract-properties
+          group-reinsert-properties!
+          reinsert-properties-size))
+
+(define-interface edwin-simple-editing-interface
+  (export delete-left-char  delete-right-char
+          delete-string     extract-and-delete-string
+          extract-left-char extract-right-char
+          extract-string
+          find-next-property-change
+          find-next-specific-property-change
+          find-previous-property-change
+          find-previous-specific-property-change
+          guarantee-newline         guarantee-newlines
+          insert                    insert-char
+          insert-chars              insert-newline
+          insert-newlines           insert-region
+          insert-string             insert-substring
+          insert-string-pad-left    insert-string-pad-right
+          insert-substring-pad-left insert-substring-pad-right
+          mark-flash                narrow-to-region
+          region-get                region-put!
+          region-remove!            reposition-window-top
+          sit-for                   sleep-for
+          specific-property-region  widen))
+
+(define-interface edwin-undo-interface
+  (export enable-group-undo!          disable-group-undo!
+          group-undo-boundary!
+          record-first-change!        record-item!
+          record-point!               record-properties!
+          truncate-buffer-undo-lists! truncate-undo-data!
+          undo-boundary!              undo-done!
+          undo-enabled?               undo-item-size
+          undo-leave-window!          undo-more
+          undo-one-step               undo-record-deletion!
+          undo-record-insertion!      undo-record-property-changes!
+          undo-record-replacement!    undo-start
+          with-group-undo-disabled))
+
+(define-interface edwin-basic-command-interface
+  (export barf-if-read-only      check-first-group-modification
+          editor-beep            editor-failure
+          execute-extended-keys?
+          extension-commands     indent-new-comment-line
+          read-quoted-char
+          save-buffers-and-exit  save-buffers-kill-edwin
+          scheme-can-quit?       self-insert
+          set-command-prompt-prefix!))
+
+(define-interface edwin-bufferset-interface
+  (export bufferset-buffer-list
+          bufferset-names
+          make-bufferset
+          set-bufferset-buffer-list!  bufferset-buffer-list
+          bufferset-bury-buffer!      bufferset-create-buffer
+          bufferset-find-buffer       bufferset-find-or-create-buffer
+          bufferset-guarantee-buffer! bufferset-kill-buffer!
+          bufferset-rename-buffer     bufferset-select-buffer!))
