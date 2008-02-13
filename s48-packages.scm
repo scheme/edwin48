@@ -50,7 +50,7 @@
 
 (define-structure aliases
     (export without-interrupts
-            unspecific beep
+            unspecific beep write-to-string
             1+ -1+ char->digit
             list-deletor! alist?
             vector-grow
@@ -63,7 +63,7 @@
   (open scheme ascii errors interrupts util
         (modify posix-process-data (rename (lookup-environment-variable
                                             get-environment-variable)))
-        srfi-1 srfi-13 srfi-14 srfi-43)
+        srfi-1 srfi-6 srfi-13 srfi-14 srfi-43)
   (files s48-aliases))
 
 (define-structure define-opt

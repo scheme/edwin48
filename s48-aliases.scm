@@ -69,3 +69,7 @@
   (and (list? object)
        (every pair? object)))
 
+(define (write-to-string obj)
+  (let ((port (open-output-string)))
+    (write obj port)
+    (get-output-string port)))
