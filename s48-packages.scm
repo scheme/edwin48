@@ -51,7 +51,8 @@
 (define-structure aliases
     (export without-interrupts
             unspecific beep write-to-string
-            1+ -1+ char->digit
+            1+ -1+
+            char->digit char-ascii?
             list-deletor! alist?
             vector-grow
             string-head string-tail
