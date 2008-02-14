@@ -47,19 +47,17 @@
 
 (define-syntax ref-variable
   (lambda (form rename compare)
-    (let ((%ref-variable-object
-	   (rename 'ref-variable-object)))
+    (let* ((%ref-variable-object
+            (rename 'ref-variable-object))
+           (name     (list-ref form 1))
+           (variable `(,%ref-variable-object ,name)))
       (case (length form)
 	((2)
-	 (let* ((%value   (rename 'variable-value))
-		(name     (list-ref form 1))
-		(variable `(,%ref-variable-object ,name)))
+	 (let* ((%value   (rename 'variable-value)))
 	   `(,%value ,variable)))
 	((3)
 	 (let* ((%value   (rename 'variable-local-value))
-		(buffer   (list-ref form 1))
-		(name     (list-ref form 2))
-		(variable `(,%ref-variable-object ,name)))
+		(buffer   (list-ref form 2)))
 	   `(,%value ,buffer ,variable)))
 	(else (syntax-error "REF-VARIABLE [buffer] variable "))))))
 
