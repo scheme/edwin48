@@ -73,7 +73,7 @@ The frame is guaranteed to be deselected at that time."
   (make-event-distributor))
 (define edwin-variable$screen-creation-hook edwin-variable$frame-creation-hook)
 
-(define (delete-screen! screen #!optional allow-kill-scheme?)
+(define* (delete-screen! screen (allow-kill-scheme? #t))
   (without-interrupts
    (lambda ()
      (if (not (screen-deleted? screen))
@@ -88,7 +88,7 @@ The frame is guaranteed to be deselected at that time."
 					       (editor-screens current-editor)
 					       eq?))
 		 #t)
-	       (if (or (default-object? allow-kill-scheme?) allow-kill-scheme?)
+	       (if allow-kill-scheme?
 		   ((ref-command save-buffers-kill-scheme) #t)
 		   #f)))))))
 
@@ -163,19 +163,17 @@ The frame is guaranteed to be deselected at that time."
 	(else
 	 screen)))
 
-(define (other-screen screen #!optional n invisible-ok?)
-  (let ((n (if (default-object? n) 1 n))
-	(invisible-ok? (if (default-object? invisible-ok?) #f invisible-ok?)))
-    (let ((next-screen (if (> n 0) screen1+ screen-1+)))
-      (let loop ((screen* screen) (n (abs n)))
-	(if (= n 0)
-	    screen*
-	    (let ((screen* (next-screen screen*)))
-	      (and (not (eq? screen* screen))
-		   (loop screen*
-			 (if (or invisible-ok? (screen-visible? screen*))
-			     (- n 1)
-			     n)))))))))
+(define* (other-screen screen (n 1) (invisible-ok? #f))
+  (let ((next-screen (if (> n 0) screen1+ screen-1+)))
+    (let loop ((screen* screen) (n (abs n)))
+      (if (= n 0)
+          screen*
+          (let ((screen* (next-screen screen*)))
+            (and (not (eq? screen* screen))
+                 (loop screen*
+                       (if (or invisible-ok? (screen-visible? screen*))
+                           (- n 1)
+                           n)))))))  )
 
 ;;;; Windows
 
@@ -228,11 +226,11 @@ The frame is guaranteed to be deselected at that time."
 		(and (not (eq? window* window0))
 		     (loop (window1+ window*)))))))))
 
-(define (global-window-modeline-event! #!optional predicate)
+(define* (global-window-modeline-event! (predicate #f))
   (let ((predicate
-	 (if (or (default-object? predicate) (not predicate))
-	     (lambda (window) window 'GLOBAL-MODELINE)
-	     predicate)))
+	 (if (not predicate)
+             (lambda (window) window 'GLOBAL-MODELINE)
+             predicate)))
     (for-each
      (lambda (screen)
        (let ((window0 (screen-window0 screen)))
@@ -244,10 +242,8 @@ The frame is guaranteed to be deselected at that time."
 	       (loop (window1+ window))))))
      (screen-list))))
 
-(define (other-window #!optional n other-screens?)
-  (let ((n (if (or (default-object? n) (not n)) 1 n))
-	(other-screens?
-	 (if (default-object? other-screens?) #f other-screens?))
+(define* (other-window (n #f) (other-screens? #f))
+  (let ((n (if (not n) 1 n))
 	(selected-window (selected-window))
 	(typein-ok? (within-typein-edit?)))
     (cond ((positive? n)
@@ -275,10 +271,8 @@ The frame is guaranteed to be deselected at that time."
 	  (else
 	   selected-window))))
 
-(define (next-visible-window first-window typein-ok? #!optional other-screens?)
-  (let ((other-screens?
-	 (if (default-object? other-screens?) #f other-screens?))
-	(first-screen (window-screen first-window)))
+(define* (next-visible-window first-window typein-ok? (other-screens? #f))
+  (let ((first-screen (window-screen first-window)))
     (letrec
 	((next-screen
 	  (lambda (screen)
@@ -299,11 +293,9 @@ The frame is guaranteed to be deselected at that time."
 		    (next-screen first-screen))
 		window))))))
 
-(define (previous-visible-window first-window typein-ok?
-				 #!optional other-screens?)
-  (let ((other-screens?
-	 (if (default-object? other-screens?) #f other-screens?))
-	(first-screen (window-screen first-window)))
+(define* (previous-visible-window first-window typein-ok?
+				 (other-screens? #f))
+  (let ((first-screen (window-screen first-window)))
     (letrec
 	((previous-screen
 	  (lambda (screen)
@@ -390,11 +382,9 @@ The frame is guaranteed to be deselected at that time."
 (define (bury-buffer buffer)
   (bufferset-bury-buffer! (current-bufferset) buffer))
 
-(define (find-buffer name #!optional error?)
+(define* (find-buffer name (error? #f))
   (let ((buffer (bufferset-find-buffer (current-bufferset) name)))
-    (if (and (not buffer)
-	     (not (default-object? error?))
-	     error?)
+    (if (and (not buffer) error?)
 	(editor-error "No buffer named " name))
     buffer))
 
@@ -458,19 +448,19 @@ The frame is guaranteed to be deselected at that time."
   (for-each (lambda (hook) (apply hook buffer arguments))
 	    (list-copy (buffer-get buffer key '()))))
 
-(define (select-buffer buffer #!optional window)
+(define* (select-buffer buffer (window #f))
   (select-buffer-in-window buffer
-			   (if (or (default-object? window) (not window))
+			   (if (not window)
 			       (selected-window)
 			       window)
 			   #t))
 
-(define (select-buffer-no-record buffer #!optional window)
+(define* (select-buffer-no-record buffer (window #f))
   (select-buffer-in-window buffer
-			   (if (or (default-object? window) (not window))
-			       (selected-window)
-			       window)
-			   #f))
+                           (if (not window)
+                               (selected-window)
+                               window)
+                           #f))
 
 (define (select-buffer-in-window buffer window record?)
   (if (without-interrupts
@@ -509,13 +499,13 @@ The buffer is guaranteed to be selected at that time."
   (make-event-distributor))
 
 (define (with-selected-buffer buffer thunk)
-  (let ((old-buffer))
+  (let ((old-buffer unspecific))
     (dynamic-wind (lambda ()
 		    (let ((window (selected-window)))
 		      (set! old-buffer (window-buffer window))
 		      (if (buffer-alive? buffer)
 			  (select-buffer buffer window)))
-		    (set! buffer)
+		    (set! buffer unspecific)
 		    unspecific)
 		  thunk
 		  (lambda ()
@@ -523,7 +513,7 @@ The buffer is guaranteed to be selected at that time."
 		      (set! buffer (window-buffer window))
 		      (if (buffer-alive? old-buffer)
 			  (select-buffer old-buffer window)))
-		    (set! old-buffer)
+		    (set! old-buffer unspecific)
 		    unspecific))))
 
 (define (current-process)
@@ -644,19 +634,19 @@ The buffer is guaranteed to be selected at that time."
 	      (%set-buffer-point! buffer mark))))))
 
 (define (with-current-point point thunk)
-  (let ((old-point))
+  (let ((old-point unspecific))
     (dynamic-wind (lambda ()
 		    (let ((window (selected-window)))
 		      (set! old-point (window-point window))
 		      (set-window-point! window point))
-		    (set! point)
+		    (set! point unspecific)
 		    unspecific)
 		  thunk
 		  (lambda ()
 		    (let ((window (selected-window)))
 		      (set! point (window-point window))
 		      (set-window-point! window old-point))
-		    (set! old-point)
+		    (set! old-point unspecific)
 		    unspecific))))
 
 (define (current-column)

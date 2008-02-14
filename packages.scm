@@ -6,6 +6,7 @@
      (edwin-basic-command    edwin-basic-command-interface)
      (edwin-command          edwin-command-interface)
      (edwin-command-table    edwin-command-table-interface)
+     (edwin-current-state    edwin-current-state-interface)
      (edwin-group            edwin-group-interface)
      (edwin-mark             edwin-mark-interface)
      (edwin-mode             edwin-mode-interface)
@@ -20,7 +21,7 @@
                                      set-variable-%value!)))
     (open (modify scheme (hide string-fill!))
           (modify sorting (rename (vector-sort sort)))
-          aliases define-opt define-record-type* errors event-distributor fixme fixnum
+          ascii aliases define-opt define-record-type* errors event-distributor fixme fixnum
           pathname rb-tree weak-pair
           srfi-1 srfi-13 srfi-14 srfi-23 srfi-69
           edwin-doc-string edwin-ring edwin-string-table edwin-utilities)
@@ -30,6 +31,7 @@
          bufset
          comman
          comtab
+         curren
          grpops
          modes
          motion
