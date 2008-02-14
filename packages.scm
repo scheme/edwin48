@@ -34,6 +34,7 @@
          curren
          grpops
          modes
+         modlin
          motion
          regops
          s48-macros
