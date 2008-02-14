@@ -7,16 +7,16 @@
 (define-syntax define-command
   (lambda (form rename compare)
     (if (not (= (length form) 5))
-        (syntax-error "DEFINE-COMMAND name description interactive procedure"))
-    (let* ((name          (list-ref form 1))
-           (description   (list-ref form 2))
-           (interactive   (list-ref form 3))
-           (procedure     (list-ref form 4))
-           (scheme-name   (command-name->scheme-name name))
-           (%define       (rename 'define))
-           (%make-command (rename 'make-command)))
-      `(,%define ,scheme-name
-            (,%make-command ',name ,description ,interactive ,procedure)))))
+        (syntax-error "DEFINE-COMMAND name description interactive procedure")
+        (let* ((name          (list-ref form 1))
+               (description   (list-ref form 2))
+               (interactive   (list-ref form 3))
+               (procedure     (list-ref form 4))
+               (scheme-name   (command-name->scheme-name name))
+               (%define       (rename 'define))
+               (%make-command (rename 'make-command)))
+          `(,%define ,scheme-name
+                     (,%make-command ',name ,description ,interactive ,procedure))))))
 
 (define-syntax ref-command-object
   (lambda (form rename compare)
