@@ -16,7 +16,7 @@
                (%define       (rename 'define))
                (%make-command (rename 'make-command)))
           `(,%define ,scheme-name
-                     (,%make-command ',name ,description ,interactive ,procedure))))))
+                     (,%make-command ',name ,description ',interactive ,procedure))))))
 
 (define-syntax ref-command-object
   (lambda (form rename compare)
