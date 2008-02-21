@@ -109,7 +109,7 @@ Type q immediately to make the buffer menu go away."
 		   (write-string " " port)
 		   (write-string (string-pad-right buffer wn) port)
 		   (write-string "  " port)
-		   (write-string (string-pad-left size ws) port)
+		   (write-string (string-pad size ws) port)
 		   (write-string " " port)
 		   (write-string (string-pad-right mode wm) port)
 		   (write-string "  " port)

@@ -202,7 +202,7 @@ is set to t.  At Athena it is nil."
 	  (begin
 	    (insert-string
 	     (string-append
-	      "  " (string-pad-left (number->string the-index) 5) " "
+	      "  " (string-pad (number->string the-index) 5) " "
 	      (techinfo-line/title
 	       (techinfo-parse-line (techinfo-find-line this-child)))
 	      "\n"))

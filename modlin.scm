@@ -292,7 +292,7 @@ If #F, the normal method is used."
 		    (if (window-mark-visible? window start)
 			"Top"
 			(string-append
-			 (string-pad-left
+			 (string-pad
 			  (number->string
 			   (min
 			    (let ((start (group-display-start-index group)))

@@ -197,7 +197,7 @@ Switches may be concatenated, e.g. `-lt' is equivalent to `-l -t'."
   (string-append
    (file-attributes/mode-string attr)
    " "
-   (string-pad-left (number->string (file-attributes/length attr)) 10 #\space)
+   (string-pad (number->string (file-attributes/length attr)) 10 #\space)
    " "
    (file-time->ls-string (file-attributes/modification-time attr) now)
    " "
@@ -279,8 +279,8 @@ Switches may be concatenated, e.g. `-lt' is equivalent to `-l -t'."
 					(string? type)
 					(not (string-null? type)))
 				   (string-append (substring type 0 1)
-						  (string-pad-left vs 2 #\0))
-				   (string-pad-left vs 3 #\0)))
+						  (string-pad vs 2 #\0))
+				   (string-pad vs 3 #\0)))
 			     "bak"))))
 
 (define (os/default-backup-filename)

@@ -302,7 +302,7 @@ or #F meaning no limit."
 	  (write-string "Restart options:" port)
 	  (write-restarts restarts port
 	    (lambda (index port)
-	      (write-string (string-pad-left (number->string index) 3) port)
+	      (write-string (string-pad (number->string index) 3) port)
 	      (write-string ":" port)))
 	  (write-string
 	   (substitute-command-keys
@@ -824,7 +824,7 @@ Prefix argument means do not kill the debugger buffer."
 		    (pad-len (max 5 mlen))
 		    (padded
 		     (lambda (s)
-		       (string-pad-left s pad-len #\Space)))
+		       (string-pad s pad-len #\Space)))
 		    (blanks (make-string pad-len #\Space)))
 
 	       (write-string ";; " port)
@@ -839,7 +839,7 @@ Prefix argument means do not kill the debugger buffer."
 				     (blanks (make-string right #\Space)))
 				(lambda (s)
 				  (string-append
-				   (string-pad-left s rest #\Space)
+				   (string-pad s rest #\Space)
 				   blanks))))))
 
 		 (do ((elements (reverse! (vector->list vec))

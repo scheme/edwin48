@@ -288,7 +288,7 @@ USA.
 
 (define (nntp-newsgroups-time time)
   (let ((dt (decode-universal-time time))
-	(d2 (lambda (n) (string-pad-left (number->string n) 2 #\0))))
+	(d2 (lambda (n) (string-pad (number->string n) 2 #\0))))
     (list (string-append (d2 (decoded-time/year dt))
 			 (d2 (decoded-time/month dt))
 			 (d2 (decoded-time/day dt)))

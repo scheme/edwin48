@@ -202,7 +202,7 @@ If prefix argument REVERSE is non-nil, sort them in reverse order."
 				(re-match-start-index 3 r)
 				(re-match-end-index 3 r)))))
 	       (let ((y1 (modulo year 100)))
-		 (string-pad-left (number->string y1) 2)))
+		 (string-pad (number->string y1) 2)))
 	     ;; Month
 	     (cdr
 	      (assoc
@@ -217,9 +217,9 @@ If prefix argument REVERSE is non-nil, sort them in reverse order."
 		    (substring date
 			       (re-match-start-index 1 r)
 			       (re-match-end-index 1 r))))
-	       (string-pad-left day 2 #\0))
+	       (string-pad day 2 #\0))
 	     ;; Time
-	     (string-pad-left
+	     (string-pad
 	      (substring date
 			 (re-match-start-index 4 r)
 			 (re-match-end-index 4 r))

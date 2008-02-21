@@ -288,7 +288,7 @@ RECIPIENTS is a string of names separated by commas."
 				       (ref-variable rmail-summary-buffer))
 			 (-1+ num)
 			 (string-append
-			  (string-pad-left (number->string num) 4)
+			  (string-pad (number->string num) 4)
 			  "  "
 			  (string-head line pos)
 			  labels
@@ -310,13 +310,13 @@ RECIPIENTS is a string of names separated by commas."
 		     (extract-string (re-match-start 2) (re-match-end 2))))
 		(if (char=? #\0 (string-ref date-string 0))
 		    (string-set! date-string 0 #\space))
-		(string-pad-left date-string 2))
+		(string-pad date-string 2))
 	      "-"
 	      (extract-string (re-match-start 4) (re-match-end 4))))
 	    ((re-search-forward "\\([^a-z]\\)\\([adfjmnos][acepou][bcglnprtvy]\\)\\([-a-z \t_]*\\)\\([0-9][0-9]?\\)"
 				the-mark the-end-of-line)
 	     (string-append
-	      (string-pad-left (extract-string (re-match-start 4)
+	      (string-pad (extract-string (re-match-start 4)
 					       (re-match-end 4))
 			       2)
 	      "-"
