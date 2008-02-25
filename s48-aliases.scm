@@ -75,3 +75,10 @@
   (let ((port (open-output-string)))
     (write obj port)
     (get-output-string port)))
+
+(define-syntax fluid-let
+  (syntax-rules ()
+    ((fluid-let ((variable init)) expression ...)
+     (let-fluid variable init (lambda () expression ...)))))
+
+(define (integer-round number) (round number))
