@@ -3,7 +3,6 @@
 (define-structures
     ((edwin-buffer           edwin-buffer-interface)
      (edwin-bufferset        edwin-bufferset-interface)
-     (edwin-basic-command    edwin-basic-command-interface)
      (edwin-command          edwin-command-interface)
      (edwin-command-table    edwin-command-table-interface)
      (edwin-current-state    edwin-current-state-interface)
@@ -26,8 +25,7 @@
           srfi-1 srfi-13 srfi-14 srfi-23 srfi-69
           edwin-doc-string edwin-ring edwin-string-table edwin-utilities)
   (for-syntax (open scheme errors macro-helpers))
-  (files basic
-         buffer
+  (files buffer
          bufset
          comman
          comtab
@@ -42,6 +40,10 @@
          struct
          txtprp
          undo))
+
+(define-structure edwin-basic-command edwin-basic-command-interface
+  (open scheme aliases errors define-opt edwin-command)
+  (files basic))
 
 (define-structure edwin-string-table edwin-string-table-interface
   (open scheme aliases define-record-type* define-opt
