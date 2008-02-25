@@ -23,8 +23,10 @@
             weak-pair/car?
             weak-car weak-set-car!
             weak-cdr weak-set-cdr!
-            weak-memq)
-  (open scheme define-record-type* weak)
+            weak-memq
+            weak-list->list
+            list->weak-list)
+  (open scheme define-record-type* errors srfi-1 weak)
   (files s48-weak-pair))
 
 (define-structure fixnum
@@ -41,10 +43,12 @@
 
 (define-structure errors
     (export error syntax-error
-	    error:bad-range-argument
-	    error:datum-out-of-range
-	    error:file-operation
-	    error:wrong-type-argument)
+            error:bad-range-argument
+            error:datum-out-of-range
+            error:file-operation
+            error:wrong-type-argument
+            error:not-list
+            error:not-weak-list)
   (open scheme (subset signals (error syntax-error)))
   (files s48-errors))
 
@@ -61,7 +65,7 @@
             call-with-binary-input-file call-with-binary-output-file
             exact-integer? exact-nonnegative-integer?
             vector-8b-ref vector-8b-set!)
-  (open scheme ascii errors interrupts util
+  (open scheme ascii errors fluids interrupts util
         (modify posix-process-data (rename (lookup-environment-variable
                                             get-environment-variable)))
         srfi-1 srfi-6 srfi-13 srfi-14 srfi-43)

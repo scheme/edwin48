@@ -31,3 +31,28 @@
 	  weaks
 	  (weak-memq x (weak-cdr weaks)))))
 
+(define weak-pair/false "weak-pair/false")
+
+(define (weak-list->list items)
+  (let loop ((items* items) (result '()))
+    (if (weak-pair? items*)
+        (loop (cdr items*)
+              (let ((item (car items*)))
+                (if (not item)
+                    result
+                    (cons (if (eq? item weak-pair/false) #f item)
+                          result))))
+        (begin
+          (if (not (null? items*))
+              (error:not-weak-list items 'WEAK-LIST->LIST))
+          (reverse! result)))))
+
+(define (list->weak-list items)
+  (let loop ((items* (reverse items)) (result '()))
+    (if (pair? items*)
+        (loop (cdr items*)
+              (weak-cons (car items*) result))
+        (begin
+          (if (not (null? items*))
+              (error:not-list items 'LIST->WEAK-LIST))
+          result))))

@@ -18,3 +18,13 @@
 	 `(,operator)
 	 `(expects ,datum)
 	 `(to be type ,type)))
+
+(define (error:not-list datum operator)
+  (error "not a list"
+         `(,datum)
+         `(,operator)))
+
+(define (error:not-weak-list datum operator)
+  (error "not a weak list"
+         `(,datum)
+         `(,operator)))
