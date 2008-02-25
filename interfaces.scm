@@ -1,6 +1,6 @@
 ;;; -*- mode: scheme; scheme48-package: (config) -*-
 
-(define-interface edwin-group-definition-interface
+(define-interface edwin:group-definition/interface
   (export make-group
           group-start-mark
           group-end-mark
@@ -25,7 +25,7 @@
           group-absolute-end
 ))
 
-(define-interface edwin-group-operations-interface
+(define-interface edwin:group-operations/interface
   (export group-extract-string
           group-copy-substring!
           group-left-char
@@ -56,12 +56,12 @@
           group-reallocation-factor
 ))
 
-(define-interface edwin-group-interface
-  (compound-interface edwin-group-definition-interface
-                      edwin-group-operations-interface))
+(define-interface edwin:group/interface
+  (compound-interface edwin:group-definition/interface
+                      edwin:group-operations/interface))
 
 
-(define-interface edwin-mark-interface
+(define-interface edwin:mark/interface
   (export mark-group
           mark-index
           guarantee-mark
@@ -77,7 +77,7 @@
           make-permanent-mark
 ))
 
-(define-interface edwin-region-definition-interface
+(define-interface edwin:region-definition/interface
   (export make-region
           region-start
           region-end
@@ -86,7 +86,7 @@
           region-end-index
 ))
 
-(define-interface edwin-region-operations-interface
+(define-interface edwin:region-operations/interface
   (export region-insert!
           region-insert-string!
           region-insert-substring!
@@ -108,11 +108,11 @@
           group-unclipped-region
 ))
 
-(define-interface edwin-region-interface
-  (compound-interface edwin-region-definition-interface
-                      edwin-region-operations-interface))
+(define-interface edwin:region/interface
+  (compound-interface edwin:region-definition/interface
+                      edwin:region-operations/interface))
 
-(define-interface edwin-motion-interface
+(define-interface edwin:motion/interface
   (export limit-mark-motion
           mark1+
           mark-1+
@@ -127,13 +127,13 @@
           line-end
           ))
 
-(define-interface edwin-utilities-interface
+(define-interface edwin:utilities/interface
   (export %substring-move!
           split-list
           list-of-type?
           string-or-false?))
 
-(define-interface edwin-ring-interface
+(define-interface edwin:ring/interface
   (export make-ring
           ring-list
           ring-size
@@ -144,7 +144,7 @@
           ring-ref
           ring-set!))
 
-(define-interface edwin-string-table-interface
+(define-interface edwin:string-table/interface
   (export make-string-table
           alist->string-table
           string-table-get
@@ -154,7 +154,7 @@
           string-table-completions
           string-table-apropos))
 
-(define-interface edwin-doc-string-interface
+(define-interface edwin:doc-string/interface
   (export *external-doc-strings?*
           *external-doc-strings-file*
           ->doc-string
@@ -164,14 +164,14 @@
           description-first-line
           description-append))
 
-(define-interface edwin-paths-interface
+(define-interface edwin:paths/interface
   (export edwin-binary-directory
           edwin-info-directory
           edwin-etc-directory
           edwin-tutorial-pathname
           default-homedir-pathname))
 
-(define-interface edwin-command-interface
+(define-interface edwin:command/interface
   (export (define-command     :syntax)
           (ref-command-object :syntax)
           (ref-command        :syntax)
@@ -187,7 +187,7 @@
           ->command
           copy-command))
 
-(define-interface edwin-variable-interface
+(define-interface edwin:variable/interface
   (export (define-variable            :syntax)
           (define-variable-per-buffer :syntax)
           (ref-variable-object        :syntax)
@@ -210,7 +210,7 @@
           variable-permanent-local?
           variable-permanent-local!))
 
-(define-interface edwin-buffer-interface
+(define-interface edwin:buffer/interface
   (export make-buffer
           buffer-modeline-event!
           without-editor-interrupts
@@ -265,7 +265,7 @@
           enable-buffer-minor-mode!
           disable-buffer-minor-mode!))
 
-(define-interface edwin-command-table-interface
+(define-interface edwin:command-table/interface
   (export comtab-entry local-comtab-entry
           prefix-key-list?
           define-key
@@ -273,7 +273,7 @@
           comtab->alist
           comtab-key-bindings))
 
-(define-interface edwin-mode-interface
+(define-interface edwin:mode/interface
   (export (ref-mode-object :syntax)
           make-mode
           mode-name
@@ -289,11 +289,11 @@
           minor-mode-comtab
           mode-description))
 
-(define-interface edwin-modeline-interface
+(define-interface edwin:modeline/interface
   (export add-minor-mode-line-entry!
           remove-minor-mode-line-entry!))
 
-(define-interface edwin-text-property-interface
+(define-interface edwin:text-property/interface
   (export add-text-property
           remove-text-property
           get-text-properties get-text-property
@@ -318,7 +318,7 @@
           group-reinsert-properties!
           reinsert-properties-size))
 
-(define-interface edwin-simple-editing-interface
+(define-interface edwin:simple-editing/interface
   (export delete-left-char  delete-right-char
           delete-string     extract-and-delete-string
           extract-left-char extract-right-char
@@ -340,7 +340,7 @@
           sit-for                   sleep-for
           specific-property-region  widen))
 
-(define-interface edwin-undo-interface
+(define-interface edwin:undo/interface
   (export enable-group-undo!          disable-group-undo!
           group-undo-boundary!
           record-first-change!        record-item!
@@ -354,7 +354,7 @@
           undo-record-replacement!    undo-start
           with-group-undo-disabled))
 
-(define-interface edwin-basic-command-interface
+(define-interface edwin:basic-command/interface
   (export barf-if-read-only      check-first-group-modification
           editor-beep            editor-failure
           execute-extended-keys?
@@ -364,7 +364,7 @@
           scheme-can-quit?       self-insert
           set-command-prompt-prefix!))
 
-(define-interface edwin-bufferset-interface
+(define-interface edwin:bufferset/interface
   (export bufferset-buffer-list
           bufferset-names
           make-bufferset
@@ -374,7 +374,7 @@
           bufferset-guarantee-buffer! bufferset-kill-buffer!
           bufferset-rename-buffer     bufferset-select-buffer!))
 
-(define-interface edwin-current-state-interface
+(define-interface edwin:current-state/interface
   (export add-kill-buffer-hook
           add-rename-buffer-hook
           add-select-buffer-hook
