@@ -48,8 +48,9 @@
             error:file-operation
             error:wrong-type-argument
             error:not-list
-            error:not-weak-list)
-  (open scheme (subset signals (error syntax-error)))
+            error:not-weak-list
+            warn)
+  (open scheme (subset signals (error syntax-error warn)))
   (files s48-errors))
 
 (define-structure aliases
