@@ -28,19 +28,21 @@ USA.
 ;;;; Editor Data Abstraction
 
 
-(define-structure (editor (constructor %make-editor))
-  (name #f read-only #t)
-  (display-type #f read-only #t)
-  (screens '())
-  (selected-screen #f)
-  (bufferset #f read-only #t)
-  (char-history #f read-only #t)
-  (halt-update? #f read-only #t)
-  (peek-no-hang #f read-only #t)
-  (peek #f read-only #t)
-  (read #f read-only #t)
-  (button-event #f)
-  (select-time 1))
+(define-record-type* editor
+  (%make-editor name
+                display-type
+                (screens)
+                (selected-screen)
+                bufferset
+                char-history
+                halt-update?
+                peek-no-hang
+                peek
+                read
+                (button-event)
+                (select-time))
+  ())
+
 
 (define (make-editor name display-type make-screen-args)
   (let ((initial-buffer
@@ -50,7 +52,7 @@ USA.
     (let ((bufferset (make-bufferset initial-buffer))
 	  (screen (display-type/make-screen display-type make-screen-args)))
       (initialize-screen-root-window! screen bufferset initial-buffer)
-      (with-values
+      (call-with-values
 	  (lambda () (display-type/get-input-operations display-type screen))
 	(lambda (halt-update? peek-no-hang peek read)
 	  (%make-editor name
@@ -88,35 +90,34 @@ USA.
 
 ;;;; Buttons
 
-(define-record-type <button>
-    (%%make-button number bits down? symbol)
-    button?
+(define-record-type <button> :button
+  (%%make-button number bits down? symbol)
+  button?
   (number button-number)
   (bits button-bits)
   (down? button-down?)
   (symbol button-symbol))
 
-(define (make-down-button number #!optional bits)
+(define* (make-down-button number (bits 0))
   (%make-button number bits #t 'MAKE-DOWN-BUTTON))
 
-(define (make-up-button number #!optional bits)
+(define* (make-up-button number (bits 0))
   (%make-button number bits #f 'MAKE-UP-BUTTON))
 
 (define (%make-button number bits down? caller)
-  (let ((bits (if (default-object? bits) 0 bits)))
-    (guarantee-limited-index-fixnum number #x100 caller)
-    (guarantee-limited-index-fixnum bits #x10 caller)
-    (let ((name
-	   (symbol (bucky-bits->prefix bits)
-		   'BUTTON-
-		   number
-		   (if down? '-DOWN '-UP))))
-      (hash-table/intern! buttons-table name
-	(lambda ()
-	  (%%make-button number bits down? name))))))
+  (guarantee-limited-index-fixnum number #x100 caller)
+  (guarantee-limited-index-fixnum bits #x10 caller)
+  (let ((name
+         (symbol (bucky-bits->prefix bits)
+                 'BUTTON-
+                 number
+                 (if down? '-DOWN '-UP))))
+    (hash-table/intern! buttons-table name
+                        (lambda ()
+                          (%%make-button number bits down? name)))))
 
 (define buttons-table
-  (make-strong-eq-hash-table))
+  (make-hash-table eq?))
 
 (define (down-button? object)
   (and (button? object)
@@ -129,15 +130,16 @@ USA.
 (define (button-name button)
   (symbol-name (button-symbol button)))
 
-(set-record-type-unparser-method! <button>
-  (simple-unparser-method (record-type-name <button>)
-    (lambda (button)
-      (list (button-symbol button)))))
+(define-record-discloser :button
+  (lambda (button)
+    (list (button-symbol button))))
 
-(define-structure (button-event (conc-name button-event/))
-  (window #f read-only #t)
-  (x #f read-only #t)
-  (y #f read-only #t))
+(define-record-type button-event :button-event
+  (make-button-event window x y)
+  button-event?
+  (window button-event/window)
+  (x      button-event/x)
+  (y      button-event/y))
 
 (define (current-button-event)
   (or (editor-button-event current-editor)
@@ -149,7 +151,7 @@ USA.
 			     (cdr coordinates))))))
 
 (define (with-current-button-event button-event thunk)
-  (let ((old-button-event))
+  (let ((old-button-event unspecific))
     (dynamic-wind
      (lambda ()
        (set! old-button-event (editor-button-event current-editor))

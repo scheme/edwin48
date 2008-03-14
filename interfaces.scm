@@ -453,3 +453,26 @@
           with-current-point
           with-messages-suppressed
           with-selected-buffer))
+
+(define-interface edwin:editor-definition/interface
+  (export make-editor
+          editor-screens         set-editor-screens!
+          editor-selected-screen set-editor-selected-screen!
+          editor-bufferset
+          editor-halt-update?
+          editor-peek-no-hang
+          editor-peek
+          editor-read))
+
+(define-interface edwin:display-type/interface
+  (export make-display-type
+          display-type/name
+          display-type/multiple-screens?
+          display-type/available?
+          display-type/make-screen
+          display-type/get-input-operations
+          display-type/with-display-grabbed
+          display-type/with-interrupts-enabled
+          display-type/with-interrupts-disabled
+          editor-display-types
+          name->display-type))

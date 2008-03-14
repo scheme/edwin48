@@ -51,20 +51,17 @@
         mit-regexp srfi-13 srfi-43)
   (files strtab))
 
-(define-structure
-    edwin:utilities edwin:utilities/interface
+(define-structure edwin:utilities edwin:utilities/interface
  (open scheme i/o posix-files
        aliases errors fixnum pathname util weak-pair
        srfi-13 srfi-14)
    (files utils))
 
-(define-structure
-    edwin:ring edwin:ring/interface
+(define-structure edwin:ring edwin:ring/interface
   (open scheme aliases errors srfi-1)
   (files ring))
 
-(define-structure
-    edwin:doc-string edwin:doc-string/interface
+(define-structure edwin:doc-string edwin:doc-string/interface
   (open scheme aliases fixnum errors define-opt i/o pathname mit-fileio srfi-13
         fixme
         edwin:paths)
@@ -79,3 +76,12 @@
         aliases define-record-type* define-opt errors fixnum
         srfi-1 srfi-14 edwin:string-table edwin:utilities)
   (files comtab))
+
+(define-structure edwin:editor-definition edwin:editor-definition/interface
+  (open scheme aliases define-opt define-record-type*
+        edwin:display-type edwin:ring srfi-69)
+  (files edtstr))
+
+(define-structure edwin:display-type edwin:display-type/interface
+  (open scheme define-record-type* srfi-1)
+  (files display))

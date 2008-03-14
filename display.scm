@@ -29,22 +29,22 @@ USA.
 ;;; package: (edwin display-type)
 
 
-(define-structure (display-type
-		   (conc-name display-type/)
-		   (constructor %make-display-type)
-		   (print-procedure
-		    (unparser/standard-method 'DISPLAY-TYPE
-		      (lambda (state display-type)
-			(unparse-object state
-					(display-type/name display-type))))))
-  (name #f read-only #t)
-  (multiple-screens? #f read-only #t)
-  (operation/available? #f read-only #t)
-  (operation/make-screen #f read-only #t)
-  (operation/get-input-operations #f read-only #t)
-  (operation/with-display-grabbed #f read-only #t)
-  (operation/with-interrupts-enabled #f read-only #t)
-  (operation/with-interrupts-disabled #f read-only #t))
+(define-record-type* display-type
+  (%make-display-type
+   name
+   multiple-screens?
+   operation/available?
+   operation/make-screen
+   operation/get-input-operations
+   operation/with-display-grabbed
+   operation/with-interrupts-enabled
+   operation/with-interrupts-disabled)
+  ())
+
+(define (display-type/name display-type)
+  (display-type-name display-type))
+(define (display-type/multiple-screens? display-type)
+  (display-type-multiple-screens? display-type))
 
 (define (make-display-type name
 			   multiple-screens?
@@ -69,22 +69,22 @@ USA.
 (define display-types '())
 
 (define (display-type/available? display-type)
-  ((display-type/operation/available? display-type)))
+  ((display-type-operation/available? display-type)))
 
 (define (display-type/make-screen display-type args)
-  (apply (display-type/operation/make-screen display-type) args))
+  (apply (display-type-operation/make-screen display-type) args))
 
 (define (display-type/get-input-operations display-type screen)
-  ((display-type/operation/get-input-operations display-type) screen))
+  ((display-type-operation/get-input-operations display-type) screen))
 
 (define (display-type/with-display-grabbed display-type thunk)
-  ((display-type/operation/with-display-grabbed display-type) thunk))
+  ((display-type-operation/with-display-grabbed display-type) thunk))
 
 (define (display-type/with-interrupts-enabled display-type thunk)
-  ((display-type/operation/with-interrupts-enabled display-type) thunk))
+  ((display-type-operation/with-interrupts-enabled display-type) thunk))
 
 (define (display-type/with-interrupts-disabled display-type thunk)
-  ((display-type/operation/with-interrupts-disabled display-type) thunk))
+  ((display-type-operation/with-interrupts-disabled display-type) thunk))
 
 (define (editor-display-types)
   (filter display-type/available? display-types))
