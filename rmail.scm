@@ -825,7 +825,7 @@ and reverse search is specified by a negative numeric arg."
 			  regexp
 			  "...")))
       (message msg)
-      (with-values
+      (call-with-values
 	  (lambda ()
 	    (without-clipping buffer
 	      (lambda ()
@@ -1045,7 +1045,7 @@ original message into it."
       (make-mail-buffer
        (without-clipping buffer
 	 (lambda ()
-	   (with-values (lambda () (original-header-limits memo))
+	   (call-with-values (lambda () (original-header-limits memo))
 	     (lambda (start end)
 	       `(("To" "")
 		 ("Subject"
@@ -1604,7 +1604,7 @@ Leaves original message, deleted, before the undigestified messages."
 
 (define (memoize-messages buffer start end)
   (let ((memo (buffer-msg-memo buffer)))
-    (with-values
+    (call-with-values
 	(lambda ()
 	  (memoize-messages* start
 			     end
@@ -1621,7 +1621,7 @@ Leaves original message, deleted, before the undigestified messages."
   (let ((next (msg-memo/next memo)))
     (if (not next)
 	(memoize-messages buffer start end)
-	(with-values (lambda () (memoize-messages* start end memo))
+	(call-with-values (lambda () (memoize-messages* start end memo))
 	  (lambda (start tail)
 	    (mark-temporary! start)
 	    (set-msg-memo/next! tail next)

@@ -45,7 +45,7 @@ USA.
     (let ((baud-rate (output-port/baud-rate console-i/o-port))
 	  (x-size (output-port/x-size console-i/o-port))
 	  (y-size (output-port/y-size console-i/o-port)))
-      (make-screen (with-values
+      (make-screen (call-with-values
 		       (lambda ()
 			 (compute-scrolling-costs description
 						  baud-rate
@@ -1059,7 +1059,7 @@ USA.
       (output-n screen command n-lines)))
 
 (define (compute-scrolling-costs description baud-rate x-size y-size)
-  (with-values
+  (call-with-values
       (lambda ()
 	(i/d-line-cost-vectors description
 			       baud-rate
@@ -1068,7 +1068,7 @@ USA.
 			       (or (ts-insert-line description)
 				   (ts-reverse-scroll description))))
     (lambda (insert-line-cost insert-line-next-cost)
-      (with-values
+      (call-with-values
 	  (lambda ()
 	    (i/d-line-cost-vectors description
 				   baud-rate

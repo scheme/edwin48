@@ -57,13 +57,13 @@ USA.
 	       (%window-line-end-index? window index))))
 
 (define (buffer-window/index->y window index)
-  (with-values (lambda () (start-point-for-index window index))
+  (call-with-values (lambda () (start-point-for-index window index))
     (lambda (start-index start-y line-start-index)
       line-start-index
       (predict-y window start-index start-y index))))
 
 (define (buffer-window/index->coordinates window index)
-  (with-values (lambda () (start-point-for-index window index))
+  (call-with-values (lambda () (start-point-for-index window index))
     (lambda (start-index start-y line-start-index)
       (let ((group (%window-group window))
 	    (char-image-strings (%window-char-image-strings window))
@@ -88,7 +88,7 @@ USA.
 	 (make-mark (%window-group window) index))))
 
 (define (buffer-window/coordinates->index window x y)
-  (with-values (lambda () (start-point-for-y window y))
+  (call-with-values (lambda () (start-point-for-y window y))
     (lambda (start-index start-y)
       (predict-index window start-index start-y x y))))
 
@@ -97,7 +97,7 @@ USA.
   (let ((index (mark-index mark)))
     (and (fix:<= (%window-group-start-index window) index)
 	 (fix:<= index (%window-group-end-index window))
-	 (with-values (lambda () (start-point-for-index window index))
+	 (call-with-values (lambda () (start-point-for-index window index))
 	   (lambda (start-index start-y line-start-index)
 	     line-start-index
 	     (predict-index-visible? window start-index start-y index))))))

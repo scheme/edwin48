@@ -164,7 +164,7 @@ USA.
     (window-cursor-enable! cursor-window)))
 
 (define-method editor-frame (:button-event! editor-frame button x y)
-  (with-values
+  (call-with-values
       (lambda ()
 	(inferior-containing-coordinates editor-frame x y buffer-frame?))
     (lambda (frame relative-x relative-y)

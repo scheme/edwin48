@@ -195,7 +195,7 @@ USA.
 		      buffer
 		      (ref-variable-object tab-width))))
 	      tab-width)))
-    (with-values
+    (call-with-values
 	(lambda ()
 	  (compute-horizontal-space target-column
 				    (mark-column point)
