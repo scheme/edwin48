@@ -28,63 +28,42 @@ USA.
 ;;;; Screen Abstraction
 
 
-(define-structure (screen
-		   (constructor make-screen
-				(state
-				 operation/beep
-				 operation/clear-line!
-				 operation/clear-rectangle!
-				 operation/clear-screen!
-				 operation/discard!
-				 operation/enter!
-				 operation/exit!
-				 operation/flush!
-				 operation/modeline-event!
-				 operation/discretionary-flush
-				 operation/scroll-lines-down!
-				 operation/scroll-lines-up!
-				 operation/wrap-update!
-				 operation/write-char!
-				 operation/write-cursor!
-				 operation/write-substring!
-				 preemption-modulus
-				 x-size
-				 y-size)))
-  (state #f read-only #t)
-  (operation/beep #f read-only #t)
-  (operation/clear-line! #f read-only #t)
-  (operation/clear-rectangle! #f read-only #t)
-  (operation/clear-screen! #f read-only #t)
-  (operation/discard! #f read-only #t)
-  (operation/enter! #f read-only #t)
-  (operation/exit! #f read-only #t)
-  (operation/flush! #f read-only #t)
-  (operation/modeline-event! #f read-only #t)
-  (operation/discretionary-flush #f read-only #t)
-  (operation/scroll-lines-down! #f read-only #t)
-  (operation/scroll-lines-up! #f read-only #t)
-  (operation/wrap-update! #f read-only #t)
-  (operation/write-char! #f read-only #t)
-  (operation/write-cursor! #f read-only #t)
-  (operation/write-substring! #f read-only #t)
-  (preemption-modulus #f read-only #t)
-  (root-window #f)
-  ;; Visibility is one of the following:
-  ;; VISIBLE PARTIALLY-OBSCURED OBSCURED UNMAPPED DELETED
-  (visibility 'VISIBLE)
-  (needs-update? #f)
-  (in-update? #f)
-  (x-size #f)
-  (y-size #f)
+(define-record-type* screen
+  (make-screen state
+               operation/beep
+               operation/clear-line!
+               operation/clear-rectangle!
+               operation/clear-screen!
+               operation/discard!
+               operation/enter!
+               operation/exit!
+               operation/flush!
+               operation/modeline-event!
+               operation/discretionary-flush
+               operation/scroll-lines-down!
+               operation/scroll-lines-up!
+               operation/wrap-update!
+               operation/write-char!
+               operation/write-cursor!
+               operation/write-substring!
+               preemption-modulus
+               (x-size)
+               (y-size))
+  ((root-window #f)
+   ;; Visibility is one of the following:
+   ;; VISIBLE PARTIALLY-OBSCURED OBSCURED UNMAPPED DELETED
+   (visibility 'VISIBLE)
+   (needs-update? #f)
+   (in-update? #f)
 
-  ;; Description of actual screen contents.
-  current-matrix
+   ;; Description of actual screen contents.
+   current-matrix
 
-  ;; Description of desired screen contents.
-  new-matrix
+   ;; Description of desired screen contents.
+   new-matrix
 
-  ;; Set this variable in the debugger to trace interesting events.
-  (debug-trace #f))
+   ;; Set this variable in the debugger to trace interesting events.
+   (debug-trace #f)))
 
 (define (guarantee-screen object procedure)
   (if (not (screen? object))
@@ -217,28 +196,29 @@ USA.
 
 ;;;; Update Optimization
 
-(define-structure (matrix (constructor %make-matrix ()))
+(define-record-type* matrix
+  (%make-matrix)
   ;; Vector of line contents.
   ;; (string-ref (vector-ref (matrix-contents m) y) x) is the
   ;; character at position X, Y.
-  contents
+  (contents
 
-  ;; Vector of line highlights.
-  ;; (vector-ref (vector-ref (matrix-highlight m) y) x) is the
-  ;; highlight at position X, Y.
-  highlight
+   ;; Vector of line highlights.
+   ;; (vector-ref (vector-ref (matrix-highlight m) y) x) is the
+   ;; highlight at position X, Y.
+   highlight
 
-  ;; Boolean-vector indicating, for each line, whether its contents
-  ;; mean anything.
-  enable
+   ;; Boolean-vector indicating, for each line, whether its contents
+   ;; mean anything.
+   enable
 
-  ;; Boolean-vector indicating, for each line, whether there is any
-  ;; highlighting on the line.
-  highlight-enable
+   ;; Boolean-vector indicating, for each line, whether there is any
+   ;; highlighting on the line.
+   highlight-enable
 
-  ;; Cursor position.
-  (cursor-x #f)
-  (cursor-y #f))
+   ;; Cursor position.
+   (cursor-x #f)
+   (cursor-y #f)))
 
 (define (make-matrix screen)
   (let ((matrix (%make-matrix))
