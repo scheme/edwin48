@@ -105,8 +105,6 @@ USA.
   (%make-button number bits #f 'MAKE-UP-BUTTON))
 
 (define (%make-button number bits down? caller)
-  (guarantee-limited-index-fixnum number #x100 caller)
-  (guarantee-limited-index-fixnum bits #x10 caller)
   (let ((name
          (symbol (bucky-bits->prefix bits)
                  'BUTTON-
