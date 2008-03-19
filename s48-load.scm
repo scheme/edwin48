@@ -10,11 +10,11 @@
 
 (user)
 
-(config '(load "s48-let-opt.scm"
-	       "srfi-packages.scm"
-               "s48-packages.scm"
-               "interfaces.scm"
-               "packages.scm"))
+(config '(load "edwin48/s48-let-opt.scm"
+               "edwin48/srfi-packages.scm"
+               "edwin48/s48-packages.scm"
+               "edwin48/interfaces.scm"
+               "edwin48/packages.scm"))
 
 ;; (open 'edwin-groups)
 ;; (open 'edwin-marks)
