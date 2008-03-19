@@ -274,7 +274,9 @@
           comtab-key-bindings))
 
 (define-interface edwin:mode/interface
-  (export (ref-mode-object :syntax)
+  (export (ref-mode-object   :syntax)
+          (define-major-mode :syntax)
+          (define-minor-mode :syntax)
           make-mode
           mode-name
           mode-major?

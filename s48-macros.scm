@@ -93,6 +93,65 @@
             (or ,buffer `(,%current-buffer))
             ,name ,value))))))
 
+(define-syntax define-major-mode
+  (lambda (form rename compare)
+    (if (< (length form) 5)
+	(syntax-error
+	 "DEFINE-MAJOR-MODE name super-mode-name name-string description [initialization]"
+         (let* ((name		      (list-ref form 1))
+                (super-mode-name      (list-ref form 2))
+                (name-string	      (list-ref form 3))
+                (description	      (list-ref form 4))
+                (scheme-name	      (mode-name->scheme-name name))
+                (%define	      (rename 'define))
+                (%lambda	      (rename 'lambda))
+                (%make-mode	      (rename 'make-mode))
+                (%mode-initialization (rename 'mode-initialization))
+                (%unspecific          (rename 'unspecific)))
+           `(,%define ,scheme-name
+                      (,%make-mode ',name
+                                   #t
+                                   ',(or name-string
+                                         (symbol->string name))
+                                   ,(if super-mode-name
+                                        `(->mode ',super-mode-name)
+                                        `#f)
+                                   ,description
+                                   ,(let ((initialization
+                                           (list-ref/default form 5 #f)))
+                                      (if super-mode-name
+                                          `(,%lambda (buffer)
+                                                     ((,%mode-initialization
+                                                       (%mode-super-mode ,scheme
+                                                                         buffer)
+                                                       ,@(if initialization
+                                                             `((,initialization buffer))
+                                                             `()))))
+                                          (or initialization
+                                              `(,%lambda (buffer) ,%unspecific)))))))))))
+
+(define-syntax define-minor-mode
+  (lambda (form rename compare)
+    (if (< (length form) 4)
+        (syntax-error
+         "DEFINE-MINOR-MODE name super-mode-name description [initialization]")
+        (let* ((name            (list-ref form 1))
+               (super-mode-name (list-ref form 2))
+               (description     (list-ref form 3))
+               (scheme-name     (mode-name->scheme-name name))
+               (%define         (rename 'define))
+               (%lambda         (rename 'lambda))
+               (%make-node      (rename 'make-node))
+               (%unspecific     (rename 'unspecific)))
+          `(,%define ,scheme-name
+                     (,%make-node ',name
+                                  #f
+                                  ',(or super-mode-name
+                                        (symbol->string name))
+                                  #f
+                                  ,description
+                                  ,(list-ref/default form 5 (,%lambda (buffer) ,%unspecific))))))))
+
 (define-syntax ref-mode-object
   (lambda (form rename compare)
     (if (not (and (= (length form) 2)

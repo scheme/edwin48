@@ -79,7 +79,7 @@
 
 (define-structure edwin:editor-definition edwin:editor-definition/interface
   (open scheme aliases define-opt define-record-type*
-        edwin:display-type edwin:ring srfi-69)
+        edwin:display-type edwin:mode edwin:ring srfi-69)
   (files edtstr))
 
 (define-structure edwin:display-type edwin:display-type/interface
