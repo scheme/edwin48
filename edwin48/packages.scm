@@ -85,3 +85,13 @@
 (define-structure edwin:display-type edwin:display-type/interface
   (open scheme define-record-type* srfi-1)
   (files display))
+
+(define-structure edwin:screen edwin:screen/interface
+  (open (modify scheme (hide string-fill!))
+        aliases
+        errors
+        fixnum
+        define-record-type*
+        srfi-13
+        srfi-43)
+  (files screen))

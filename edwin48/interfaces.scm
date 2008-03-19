@@ -478,3 +478,44 @@
           display-type/with-interrupts-disabled
           editor-display-types
           name->display-type))
+
+(define-interface edwin:screen/interface
+  (export make-screen
+          screen-state 
+          screen-x-size
+          screen-y-size
+          screen-root-window
+          screen-visibility set-screen-visibility!
+          screen-needs-update?
+          guarantee-screen
+          initialize-screen-root-window!
+
+          screen-beep
+          screen-enter!
+          screen-exit!
+          screen-discard!
+          screen-modeline-event!
+          screen-selected-window
+          screen-select-window!
+          screen-select-cursor!
+          screen-window-list
+          screen-window0
+          screen-typein-window
+          window-screen
+          screen-visible?
+          screen-deleted?
+          update-screen!
+          set-screen-size!
+          screen-move-cursor
+          screen-direct-output-move-cursor
+          screen-output-char
+          screen-direct-output-char
+          screen-get-output-line
+          screen-clear-rectangle
+          screen-output-substring
+          screen-direct-output-substring
+          screen-force-update
+          screen-scroll-lines-down
+          screen-scroll-lines-up
+          with-screen-in-update
+          screen-line-draw-cost))
