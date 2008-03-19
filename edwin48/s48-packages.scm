@@ -66,7 +66,7 @@
             symbol-append symbol-name symbol<?
             call-with-binary-input-file call-with-binary-output-file
             exact-integer? exact-nonnegative-integer?
-            vector-8b-ref vector-8b-set!
+            vector-8b-ref vector-8b-set! vector-8b-fill! vector-8b-find-next-char
             round
             (fluid-let :syntax))
   (open scheme ascii errors fluids interrupts util

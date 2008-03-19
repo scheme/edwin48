@@ -52,6 +52,12 @@
 (define (vector-8b-set! string k code)
   (string-set! string k (ascii->char code)))
 
+(define (vector-8b-fill! string start end ascii)
+  (string-fill! string ascii start end))
+
+(define (vector-8b-find-next-char string start end ascii)
+  (string-index string ascii start end))
+
 (define (beep) unspecific)
 
 (define (exact-nonnegative-integer? obj)
