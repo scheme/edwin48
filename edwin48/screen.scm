@@ -249,7 +249,7 @@ USA.
   (vector-fill! (vector-ref (matrix-highlight matrix) y) face))
 
 (define (set-subline-highlights! matrix y xl xu face)
-  (subvector-fill! (vector-ref (matrix-highlight matrix) y) xl xu face))
+  (vector-fill! (vector-ref (matrix-highlight matrix) y) face xl xu))
 
 (define (clear-line-highlights! matrix y)
   (set-line-highlights! matrix y (default-face)))
@@ -258,15 +258,17 @@ USA.
   (set-subline-highlights! matrix y xl xu (default-face)))
 
 (define (copy-line-highlights! m1 y1 m2 y2)
-  (vector-move! (vector-ref (matrix-highlight m1) y1)
-		(vector-ref (matrix-highlight m2) y2)))
+  (let ((v1 (vector-ref (matrix-highlight m1) y1))
+        (v2 (vector-ref (matrix-highlight m2) y2)))
+    (vector-copy! v2 0 v1 0 (vector-length v1))))
 
 (define (copy-subline-highlights! m1 y1 xl1 xu1 m2 y2 xl2)
   (vector-copy! (vector-ref (matrix-highlight m2) y2) xl2
 		(vector-ref (matrix-highlight m1) y1) xl1 xu1))
 
 (define (line-highlights-cleared? matrix y)
-  (vector-filled? (vector-ref (matrix-highlight matrix) y) (default-face)))
+  (vector-every (lambda (element) (eqv? element (default-face)))
+                (vector-ref (matrix-highlight matrix) y)))
 
 (define (swap-line-highlights! m1 y1 m2 y2)
   (let ((h (vector-ref (matrix-highlight m1) y1)))
@@ -275,11 +277,15 @@ USA.
     (vector-set! (matrix-highlight m2) y2 h)))
 
 (define (subline-highlights-uniform? matrix y xl xu)
-  (subvector-uniform? (vector-ref (matrix-highlight matrix) y) xl xu))
+  (let* ((vec    (vector-ref (matrix-highlight matrix) y))
+         (target (vector-ref vec xl)))
+    (vector-every (lambda (element) (eqv? element target))
+                     (vector-copy vec xl xu))))
 
 (define (find-subline-highlight-change matrix y xl xu face)
-  (subvector-find-next-element-not (vector-ref (matrix-highlight matrix) y)
-				   xl xu face))
+  (let* ((vec (vector-ref (matrix-highlight matrix) y)))
+    (vector-skip (lambda (element) (eqv? element face))
+                 (vector-copy vec xl xu))))
 
 (define (default-face? face)
   (not face))
@@ -898,8 +904,6 @@ USA.
 (define make-boolean-vector make-string)
 (define boolean-vector-length string-length)
 (define boolean-vector=? string=?)
-(define boolean-subvector-move-right! substring-move-right!)
-(define boolean-subvector-move-left! substring-move-left!)
 (define boolean-vector-move! string-move!)
 (define boolean-vector-copy string-copy)
 
