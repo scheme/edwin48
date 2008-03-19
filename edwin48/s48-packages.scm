@@ -35,8 +35,8 @@
             fix:< fix:> fix:<= fix:>=
             fix:zero? fix:positive? fix:negative?
             fix:+ fix:- fix:*
-            fix:quotient fix:remainder
-            fix:1+ fix:1-
+            fix:quotient fix:remainder fix:min
+            fix:1+ fix:-1+
             fix:not fix:and fix:andc
             fix:or fix:xor fix:lsh)
   (open scheme bitwise)

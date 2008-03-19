@@ -16,10 +16,12 @@
 (define (fix:+ a b) (+ a b))
 (define (fix:- a b) (- a b))
 (define (fix:* a b) (* a b))
-(define (fix:quotient  a b) (quotient a b))
+(define (fix:min       a b) (min       a b))
+(define (fix:quotient  a b) (quotient  a b))
 (define (fix:remainder a b) (remainder a b))
-(define (fix:1+ n) (+ n 1))
-(define (fix:1- n) (- n 1))
+(define (fix:1+  n) (+ n 1))
+(define (fix:-1+ n) (- n 1))
+
 
 (define (fix:not  n)   (bitwise-not n))
 (define (fix:and  a b) (bitwise-and a b))
