@@ -1,0 +1,3 @@
+[submodule "terminfo"]
+	path = terminfo
+	url = git://git.a-chinaman.com/terminfo
