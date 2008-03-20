@@ -87,7 +87,7 @@
   (files display))
 
 (define-structure edwin:screen edwin:screen/interface
-  (open (modify scheme (hide string-fill!))
+  (open (modify scheme (hide string-fill! vector-fill!))
         aliases
         errors
         fixnum

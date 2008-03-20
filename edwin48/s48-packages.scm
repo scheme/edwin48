@@ -69,7 +69,8 @@
             vector-8b-ref vector-8b-set! vector-8b-fill! vector-8b-find-next-char
             round
             (fluid-let :syntax))
-  (open scheme ascii errors fluids interrupts util
+  (open (modify scheme (hide string-fill!))
+        ascii errors fluids interrupts util
         (modify posix-process-data (rename (lookup-environment-variable
                                             get-environment-variable)))
         srfi-1 srfi-6 srfi-13 srfi-14 srfi-43)
