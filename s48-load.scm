@@ -16,6 +16,9 @@
                "edwin48/interfaces.scm"
                "edwin48/packages.scm"))
 
+(config '(load "terminfo/interfaces.scm"
+               "terminfo/s48-packages.scm"))
+
 ;; (open 'edwin-groups)
 ;; (open 'edwin-marks)
 ;; (open 'edwin-regions)
