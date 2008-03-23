@@ -7,6 +7,11 @@ goal is to make it run on Scheme48.
 Dependencies
 ============
 
+Edwin48 depends on the terminfo library available at
+git://git.a-chinaman.com/terminfo.  It's been imported to this module as a
+git submodule. After the initial checkout, please run "git submodule update"
+to check out the terminfo submodule.
+
 Edwin48 is being developed on Scheme48 1.3, however, due to a couple
 of reader customizations, a patch to the build-in reader is
 required. The patch can be found here:
@@ -19,7 +24,4 @@ Prebuilt packages built on Ubuntu Gutsy (i386) are available:
     http://www.a-chinaman.com/~duncan/scheme/scheme48-doc_1.3-8ubuntu1.1.duncan_i386.deb
     http://www.a-chinaman.com/~duncan/scheme/scheme48-scm_1.3-8ubuntu1.1.duncan_i386.deb
     http://www.a-chinaman.com/~duncan/scheme/cmuscheme48-el_1.3-8ubuntu1.1.duncan_i386.deb
-
-
-
 
