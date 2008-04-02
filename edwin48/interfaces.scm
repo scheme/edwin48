@@ -519,3 +519,6 @@
           screen-scroll-lines-up
           with-screen-in-update
           screen-line-draw-cost))
+
+(define-interface edwin:console-screen/interface
+  (export make-console-screen))

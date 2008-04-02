@@ -95,3 +95,18 @@
         srfi-13
         srfi-43)
   (files screen))
+
+(define-structure edwin:terminfo-screen edwin:console-screen/interface
+  (open aliases
+        define-record-type*
+        edwin:display-type
+        edwin:screen
+        event-distributor
+        errors
+        fixnum
+        scheme
+        srfi-1
+        srfi-6
+        srfi-13
+        terminfo)
+  (files terminal))
