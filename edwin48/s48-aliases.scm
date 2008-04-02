@@ -82,6 +82,9 @@
     (write obj port)
     (get-output-string port)))
 
+(define* (write-string s (port (current-output-port)))
+  (string-for-each (lambda (c) (write-char s port)) s))
+
 (define-syntax fluid-let
   (syntax-rules ()
     ((fluid-let ((variable init)) expression ...)

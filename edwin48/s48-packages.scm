@@ -56,7 +56,7 @@
 
 (define-structure aliases
     (export without-interrupts
-            unspecific beep write-to-string
+            unspecific beep write-to-string write-string
             1+ -1+
             char->digit char-ascii?
             list-deletor! alist?
@@ -70,7 +70,7 @@
             round
             (fluid-let :syntax))
   (open (modify scheme (hide string-fill!))
-        ascii errors fluids interrupts util
+        ascii errors define-opt fluids interrupts util
         (modify posix-process-data (rename (lookup-environment-variable
                                             get-environment-variable)))
         srfi-1 srfi-6 srfi-13 srfi-14 srfi-43)
