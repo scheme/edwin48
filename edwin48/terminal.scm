@@ -175,15 +175,15 @@ USA.
                          (let* ((key-seq  (caar key-pairs))
                                 (n-seq    (string-length key-seq)))
                            (cond ((and (fix:<= n-seq n-chars)
-                                       (substring=? string start
-                                                    (fix:+ start n-seq)
-                                                    key-seq 0 n-seq))
+                                       (string= string key-seq
+                                                start (fix:+ start n-seq)
+                                                0 n-seq))
                                   (set! len n-seq)
                                   (cdar key-pairs))
                                  ((and (fix:> n-seq n-chars)
-                                       (substring=? string start
-                                                    (fix:+ start n-chars)
-                                                    key-seq 0 n-chars))
+                                       (string= string key-seq
+                                                start (fix:+ start n-chars)
+                                                0 n-chars))
                                   (if (not incomplete-pending)
                                       (set! incomplete-pending
                                             (+ (real-time-clock)
