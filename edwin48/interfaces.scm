@@ -522,3 +522,16 @@
 
 (define-interface edwin:console-screen/interface
   (export make-console-screen))
+
+(define-interface edwin:keys/interface
+  (export ;; define-alias-key
+          ;; undefine-alias-key
+          ;; unmap-alias-key
+          remap-alias-key
+          key-name
+          xkey->name
+          emacs-key-name
+          key?
+          xkey<?
+          make-special-key
+          special-key?))
