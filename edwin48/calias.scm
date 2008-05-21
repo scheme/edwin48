@@ -50,11 +50,6 @@ USA.
      (bucky-bits->prefix bits)
      (let ((base-char (if (fix:= 0 bits) char (integer->char code))))
        (cond ((->name named-codes code))
-	     ((and (if (default-object? slashify?) #f slashify?)
-		   (not (fix:= 0 bits))
-		   (or (char=? base-char #\\)
-		       (char-set-member? char-set/atom-delimiters base-char)))
-	      (string-append "\\" (string base-char)))
 	     ((char-graphic? base-char)
 	      (string base-char))
 	     (else
