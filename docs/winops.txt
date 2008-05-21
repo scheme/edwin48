@@ -262,3 +262,164 @@ screen. The operation is invoked on the INFERIOR's superior.
 
 
 
+Blinkers
+
+A blinker in an ornament on a window. The posiiton of the mouse is
+traditional indicated with a blinker. Also, a blinker is used to
+indicate the position at which input or output is being inserted in a
+stream. On the Lisp machine, blinkers are used for sch things as the
+point in the editor, flashing the open paren that matches the close
+paren that point is after. boxes around menu items that the mouse is
+pointing at, spaceships and torpedoes in spacewar. In this window
+system, not all of these things will be blinkers, but some of them
+must be.
+
+Blinkers do not have to blink; they can be on solidly. What all
+blinkers have in common is that they are "in addition to" the rest of
+the display of some window, and the "rest" of the display can be
+updated independently of the blinkers even though they occupy the same
+space. This works because the blinkers are always drawn and erased by
+xor'ing. To update a blinker (change its position or the way it looks
+on screen), it can be erased and redrawn. To update the "rest" of the
+display, if suffices to erase all blinkers, do the output, and then
+redraw the blinkers.
+
+On the Lisp machine, a blinker is a special type of object. In
+Window-win, a blinker is a kind of window. The usual kind of blinker
+actually has an inferior, called its contents, which provides the
+shape of the blinker. The blinker itself implements the proper
+interface for being used as a blinker.
+
+A blinker is an inferior of another window, and its image on the
+screen is always within the superior. It is possible for the blinker
+to be positioned entirely or partially outside the rectangle of its
+superior, making it invisible or partially visible. This sort of
+clipping is done like any other scrolling.
+
+A blinker has to have these instance variables:
+
+VISIBILITY
+        Non-NIL if this blinker SHOULD be drawn on the
+        screen. (Blinking complements this flag periodically.)
+
+NEXT-VISIBILITY-TIME
+        Either NIL or a time at which VISIBILITY should be set to
+        T. This setting will be done by the first display updating
+        after that time. This flag is used to provide the feature that
+        if a blinker is taken off the screen to update other windows,
+        the blinker will not reappear for at least 1/3 second. This
+        feature is observed to reduce extraneous screen flashing.
+
+PREVIOUS-CONTENTS-DATA-POINTER
+        the cell whose car is the PREVIOUS-CONTENTS-DATA for this
+        blinker.
+
+CONTENTS
+        the window (an inferior of the blinker) which is used to draw
+        the blinker's appearance.
+        The blinker need not record its size; it can ask the contents.
+        It is possible to implement well behaved blinkers that do
+        their own displaying rather than using a contents window, but
+        the gain in efficiency may not be important though.
+SUPERIOR
+        This may not actually be needed.
+BLINK-LIST-ELEMENT
+        If this blinker is blinking. the BLINK-LIST element for this blinker.
+        Otherwise, NIL. Having this facilitates updating the
+        BLINK-LIST element quickly when the blinker is moved while it
+        is blinking. Displaying updating of the blinker checks this
+        automatically if the blinker has moved.
+
+Blinkers normally have small images that are quick to draw. So for the
+sake of simplicity there is no incremental updating for blinkers. The
+blinker is either on or off. It the blinker's shape or position is
+supposed to change, it is done by un-drawing the blinker in the old
+location and re-drawing it in the new one. This is usually going to be
+easier and faster than computing the differences.
+
+The blinker is drawn by invoking the :UPDATE-DISPLAY operation in its
+contents with :JUST-DRAW for the value of the argument DISPLAY-STYLE,
+the global flag XOR-FLAG bound to T. It is un-drawn the way! This
+calling convention will cause some types of window to display in a
+suitable fashion, including text string windows. Most blinkers'
+contents will be text string windows displaying a single character
+in a funny font containing arrows, etc.
+
+[[ Unless :JUST-DRAW turns out to have some other application aside
+from blinker updating there may be no need to have both :JUST-DRAW and
+XOR-FLAG. One of them may serve for both purposes if that is
+cleaner.]]
+
+The blinker's PREVIOUS-CONTENTS-DATA records whether the blinker is
+currently drawn, and if so, its position, regions of visibility and
+contents when last drawn. Display updating of the blinker compares
+these saved values against the current values in the blinker. If they
+do not match, the blinker erased the old contents from its old
+position and displayed regions (if it has been turned on), then draws
+the new one (if it is supposed to be turned on).
+
+The appearance of the contents window of a blinker should never be
+changed. Substitute a different contents window instead. The blinker
+just compares the contents with EQ to see if it must redisplay for
+some reason. This restriction is because the blinker needs to be able
+to un-draw the contents in its old shape. If parameters in the
+contents have changed, the old blinker image would be un-drawn with
+its new shape, leaving a difference pattern on the screen forever.
+
+The reason why the blinker must point to its PREVIOUS-CONTENTS-DATA is
+so that direct output to blink the blinker can alter the
+PREVIOUS-CONTENTS-DATA to reflect the fact that the screen has been
+changed.
+
+Superiors of Blinkers
+
+Several kinds of windows will need to have blinkers as inferiors. The
+screen needs to have a blinker, the mouse blinker, under it. Stream
+display windows will usually want to have a cursor blinker. These
+types of windows need to have (either optionally or always) an
+instance variable BLINKERS which is a list of the blinkers inferior to
+the window. It may be best to for all such windows to have this
+variable and the ability to have inferior blinkers even if they don't
+actually have any.
+
+Or the ability to have blinkers as inferiors may be implemented by a
+mix-in.
+
+Blinkers and Display of Other Windows
+
+Because the blinker shares screen area with other windows (other
+inferiors of the same superior), it must be erased before those other
+windows are updated. The superior's :UPDATE-DISPLAY method must erase
+all relevant blinkers before preforming :UPDATE-DISPLAY on the other
+inferiors. It can put the blinkers back when done, if it is not
+preempted.
+
+If direct output is done on any of those other inferiors, it should
+also remove the blinkers. Direct output has special hooks to allow
+this to be done. The blinkers should NOT be redrawn when the direct
+output is finished. Instead, redrawing the blinkers should be left for
+the next regular redisplay (that is, the blinkers should be marked as
+needing redisplay). This is becasue usually many direct outputs will
+be done in a row and only the first should have to mess with the
+blinkers.
+
+Blinkers are made to blink by putting them on the BLINK-LIST. The
+value of BLINK-LIST is a list of elements of this form:
+      (BLINKER NEXT-BLINK-TIME HALF-PERIOD
+       SCREEN-POSITION BLINKER-REGION BLINKER-REGION ...)
+SCREEN-POSITION gives the position of the upper left corner of the
+blinker, and BLINKER-REGION is the position of the blinker that should
+actually be blinked (usually all of it, but less if the blinker is
+only partially visible). If the blinker is overlapped by a corner of
+another window, it may be necessary to describe the visible portion by
+more than one rectangular region. Blinking is done as direct output by
+a special process that wakes up as often as necessary. However, the
+usual precaution of removing other blinkers from the screen before
+direct output is not needed since all the blinkers are xor'd and do
+not interfere with each other. Thus, blinker blinking can be done
+directly from the information in the BLINK-LIST without any reference
+to the blinkers' superiors.
+
+
+
+
