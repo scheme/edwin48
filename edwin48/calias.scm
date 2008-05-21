@@ -25,9 +25,52 @@ USA.
 
 |#
 
-;;;; Alias Keys
+;;; MIT Scheme-like chars (with bucky bits)
+;;;
+;;; The bucky-bits field
+(define keystroke-bit:meta    1)
+(define keystroke-bit:control 2)
+(define keystroke-bit:super   4)
+(define keystroke-bit:hyper   8)
+
+(define-record-type* keystroke
+  (make-keystroke code bits)
+  ())
+
+(define (keystroke-bits-set? bits key)
+  (fix:= bits (fix:and (keystroke-bits key) bits)))
+
+(define (keystroke-bits-clear? bits key)
+  (fix:= 0 (fix:and (keystroke-bits key) bits)))
+
+(define (keystroke->name key)
+  (let ((code (keystroke-code char))
+	(bits (keystroke-bits char)))
+    (string-append
+     (bucky-bits->prefix bits)
+     (let ((base-char (if (fix:= 0 bits) char (integer->char code))))
+       (cond ((->name named-codes code))
+	     ((and (if (default-object? slashify?) #f slashify?)
+		   (not (fix:= 0 bits))
+		   (or (char=? base-char #\\)
+		       (char-set-member? char-set/atom-delimiters base-char)))
+	      (string-append "\\" (string base-char)))
+	     ((char-graphic? base-char)
+	      (string base-char))
+	     (else
+	      (string-append "U+"
+			     (let ((s (number->string code 16)))
+			       (string-pad-left s
+						(let ((l (string-length s)))
+						  (let loop ((n 2))
+						    (if (fix:<= l n)
+							n
+							(loop (fix:* 2 n)))))
+						#\0)))))))))
 
 
+
+;;;; Alias Keys
 (define alias-keys '())
 
 (define (define-alias-key key alias)
@@ -45,33 +88,36 @@ USA.
   (let ((entry (assq key alias-keys)))
     (cond (entry
 	   (remap-alias-key (cdr entry)))
-	  ((and (char? key)
-		(char-bits-set? char-bit:control key))
-	   (let ((code (char-code key))
+	  ((and (keystroke? key)
+		(keystroke-bits-set? keystroke-bit:control key))
+	   (let ((code (keystroke-code key))
 		 (remap
 		  (lambda (code)
-		    (make-char code
-			       (fix:andc (char-bits key) char-bit:control)))))
+		    (make-keystroke code
+                                    (fix:andc (keystroke-bits key)
+                                              keystroke-bit:control)))))
 	     (cond ((<= #x40 code #x5F) (remap (- code #x40)))
 		   ((<= #x61 code #x7A) (remap (- code #x60)))
 		   (else key))))
 	  (else key))))
 
 (define (unmap-alias-key key)
-  (if (and (char? key)
+  (define (ascii-controlified? char)
+    (fix:< (keystroke-code char) #x20))
+  (if (and (keystroke? key)
 	   (ascii-controlified? key)
-	   (let ((code (char-code key)))
+	   (let ((code (keystroke-code key)))
 	     (not (or (= code #x09)	;tab
 		      (= code #x0A)	;linefeed
 		      (= code #x0C)	;page
 		      (= code #x0D)	;return
 		      (= code #x1B)	;altmode
 		      )))
-	   (char-bits-clear? char-bit:control key))
+	   (keystroke-bits-clear? keystroke-bit:control key))
       (unmap-alias-key
-       (make-char (let ((code (char-code key)))
-		    (+ code (if (<= #x01 code #x1A) #x60 #x40)))
-		  (fix:or (char-bits key) char-bit:control)))
+       (make-keystroke (let ((code (keystroke-code key)))
+                         (+ code (if (<= #x01 code #x1A) #x60 #x40)))
+                       (fix:or (keystroke-bits key) keystroke-bit:control)))
       (let ((entry
 	     (find (lambda (entry) (eqv? (cdr entry) key))
 		   alias-keys)))
@@ -86,7 +132,7 @@ USA.
 
 (define (key-name key)
   (cond ((ref-variable enable-emacs-key-names) (emacs-key-name key #t))
-	((char? key) (char->name (unmap-alias-key key)))
+	((keystroke? key) (keystroke->name (unmap-alias-key key)))
 	((special-key? key) (special-key/name key))
 	((button? key) (button-name key))
         (else (error:wrong-type-argument key "key" 'KEY-NAME))))
@@ -108,9 +154,9 @@ USA.
 	     ""))))))
 
 (define (emacs-key-name key handle-prefixes?)
-  (cond ((char? key)
-         (let ((code (char-code key))
-               (bits (char-bits key)))
+  (cond ((keystroke? key)
+         (let ((code (keystroke-code key))
+               (bits (keystroke-bits key)))
 	   (define (prefix bits suffix)
 	     (if (zero? bits)
 		 suffix
@@ -134,29 +180,29 @@ USA.
 			     (vector-ref (ref-variable char-image-strings #f)
 					 code)))))
 	   (cond ((or (fix:= bits 0)
-		      (fix:= bits char-bit:meta))
+		      (fix:= bits keystroke-bit:meta))
 		  (process-code bits))
 		 ((and handle-prefixes?
 		       (not (fix:= 0 (fix:and bits
-					      (fix:or char-bit:control
-						      char-bit:meta)))))
-		  (string-append (if (fix:= bits char-bit:control)
+					      (fix:or keystroke-bit:control
+						      keystroke-bit:meta)))))
+		  (string-append (if (fix:= bits keystroke-bit:control)
 				     "C-^ "
 				     "C-z ")
 				 (process-code 0)))
 		 (else
-		  (char->name (unmap-alias-key key))))))
+		  (keystroke->name (unmap-alias-key key))))))
 	((special-key? key) (special-key/name key))
 	((button? key) (button-name key))
         (else (error:wrong-type-argument key "key" 'EMACS-KEY-NAME))))
 
 (define (key? object)
-  (or (char? object)
+  (or (keystroke? object)
       (special-key? object)
       (button? object)))
 
 (define (key-bucky-bits key)
-  (cond ((char? key) (char-bits key))
+  (cond ((keystroke? key) (keystroke-bits key))
 	((special-key? key) (special-key/bucky-bits key))
 	((button? key) (button-bits key))
         (else (error:wrong-type-argument key "key" 'KEY-BUCKY-BITS))))
@@ -164,9 +210,9 @@ USA.
 (define (key<? key1 key2)
   (or (< (key-bucky-bits key1) (key-bucky-bits key2))
       (and (= (key-bucky-bits key1) (key-bucky-bits key2))
-	   (cond ((char? key1)
-		  (or (not (char? key2))
-		      (char<? key1 key2)))
+	   (cond ((keystroke? key1)
+		  (or (not (keystroke? key2))
+		      (char<? (keystroke-code key1) (keystroke-code key2))))
 		 ((special-key? key1)
 		  (if (special-key? key2)
 		      (string<? (special-key/name key1)
@@ -180,9 +226,9 @@ USA.
 
 (define (key=? key1 key2)
   (and (= (key-bucky-bits key1) (key-bucky-bits key2))
-       (cond ((char? key1)
-	      (and (char? key2)
-		   (char=? key1 key2)))
+       (cond ((keystroke? key1)
+	      (and (keystroke? key2)
+		   (char=? (keystroke-code key1) (keystroke-code key2))))
 	     ((special-key? key1)
 	      (and (special-key? key2)
 		   (string=? (special-key/name key1) (special-key/name key2))))
@@ -213,16 +259,12 @@ USA.
 
 ;;;; Special Keys (system-dependent)
 
-(define-structure (special-key (constructor %make-special-key)
-			       (conc-name special-key/)
-			       (print-procedure
-				(standard-unparser-method 'SPECIAL-KEY
-				  (lambda (key port)
-				    (write-char #\space port)
-				    (write-string (special-key/name key)
-						  port)))))
-  (symbol #f read-only #t)
-  (bucky-bits #f read-only #t))
+(define-record-type* special-key
+  (%make-special-key symbol bucky-bits)
+  ())
+
+(define (special-key/symbol     s) (special-key-symbol     s))
+(define (special-key/bucky-bits s) (special-key-bucky-bits s))
 
 (define (intern-special-key name bucky-bits)
   (let ((name-entry (assq name (cdr hashed-keys))))
@@ -242,6 +284,20 @@ USA.
 	  new-key))))
 
 (define (special-key/name special-key)
+  (define named-bits
+    '((#x01 "M" "meta")
+      (#x02 "C" "control" "ctrl")
+      (#x04 "S" "super")
+      (#x08 "H" "hyper")))
+
+  (define (bucky-bits->prefix bits)
+    (let loop ((entries named-bits))
+      (if (pair? entries)
+          (if (fix:= 0 (fix:and (caar entries) bits))
+              (loop (cdr entries))
+              (string-append (cadar entries) "-" (loop (cdr entries))))
+          "")))
+
   (string-append (bucky-bits->prefix (special-key/bucky-bits special-key))
 		 (symbol-name (special-key/symbol special-key))))
 
@@ -253,11 +309,9 @@ USA.
 
 ;; Predefined special keys
 (define-syntax define-special-key
-  (sc-macro-transformer
-   (lambda (form environment)
-     environment
-     `(DEFINE ,(cadr form)
-	(INTERN-SPECIAL-KEY ',(cadr form) 0)))))
+  (syntax-rules ()
+    ((define-special-key key)
+     (define key (intern-special-key 'key 0)))))
 
 (define-special-key backspace)
 (define-special-key stop)
