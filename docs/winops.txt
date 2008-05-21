@@ -422,4 +422,82 @@ to the blinkers' superiors.
 
 
 
+Mouse Tracking
+
+Mouse tracking is done ont he basis of the window hierarchy. When the
+mouse moves into a window, that window's :TRACK-MOUSE method is
+invoked to track the mouse while it remains in the window. Whhen the
+mouse moves out of the winodw that methods returns. When the mouse
+moves into the one of the inferiors of that window, the inferior's
+:TRACK-MOUSE method will be called.
+
+Not all windows are asked to handle the mouse. Each superior knows
+that certain of its sub-windows should be offered handling of the mouse
+and others should not, just as it knows that certain sub-windows
+should be invoked for display updating and others not. (A particular
+type of superior might know that all of its inferiors or none of its
+inferiors, want to handle the mouse or it might keep a flag for each
+inferior, or might ask the inferior on each occasion.)
+
+:TRACK-MOUSE screen screen-position window-region
+
+Track the mouse on SCREEN while it remains in the part of the window
+specified by WINDOW-REGION, whose upper left corner corresponds to
+SCREEN-POSITION on the screen.
+
+Some windows will choose to do different things in tracking the mouse
+depending on whether the entire window is available for tracking the
+mouse through (that is, the window is entirely visible).
+
+Mouse tracking is done in a special-purpose process called the mouse
+process. The main loop of this process simply calls the screen's
+:TRACK-MOUSE handler repeatedly inside a catch of the
+MOUSE-RECONSIDER. The low level wait primitive that waits for the
+mouse to move also waits for the variable MOUSE-WAKEUP to be
+non-NIL. If that happens, the primitive throws to MOUSE-RECONSIDER. Any
+change in window configuration should set MOUSE-WAKEUP to T unless it
+can be determined that the change cannot affect the window that the
+mouse is in (such as if the windows that are changing fit within a
+part of the screen that the mouse is not in).
+
+Often a window will highlight on the screen while its :TRACK-MOUSE
+handler is in progress, if the window is fully visible, or possibly it
+will highlight whichever part is visible. To interlock this with
+redisplay, such :TRACK-MOUSE hadnlers place the expression to evaluate
+to undo the highlighting in the variable TRACK-MOUSE-UNHIGHLIGHT. An
+unwind protect is used to eval the value of that variable provided it
+is non-NIL. Anyone wanting to do redisplay may eval the value himself
+and set it to NIL, to make sure that there is no highlighting on the
+screen.
+
+Mouse clicks do not necessarily go to the window that is tracking the
+mouse, though that window can get them if it wants to. The destination
+of the mouse clicks is controlled by two variables, MOUSE-CLICK-WINDOW
+and MOUSE-CLICK-OVERRIDE. A mouse click is reported by
+
+    (SEND (OR MOUSE-CLICK-OVERRIDE MOUSE-CLICK-WINDOW) ':MOUSE-CLICK args)
+
+If a window wants to handle mouse clicks when the mouse is inside it,
+its :TRACK-MOUSE handler will set MOUSE-CLICK-WINDOW on entry using
+LET-GLOBALLY, which automatically restores the old value on exist from
+the window's :TRACK-MOUSE handler. The args given to :MOUSE-CLICK are
+as follows:
+
+   CLICK-DESCRIPTION WINDOW POSITION-IN-WINDOW SCREEN-POSITION
+
+the first says which button, how many clicks, etc.
+
+WINDOW is the window that was tracking the mouse at the time.
+
+POSITION-IN-WINDOW is the mouse position within that window at the
+time of the click, and SCREEN-POSITION is the position on the screen.
+
+Documentation on the meanings of the available mouse clicks is
+provided through the variable MOUSE-DOCUMENTATION. Its value should be
+a string of a function which returns a string when called with some
+standard set of useful arguments (such as screen, screen-position,
+window-region and window). This variable will be bound by :TRACK-MOUSE
+methods like MOUSE-CLICK-WINDOW.
+
+
 
