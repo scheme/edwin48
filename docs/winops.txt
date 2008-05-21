@@ -1,0 +1,264 @@
+Window-Win
+
+Window-win is a new design for a window system which is intended to
+have all the power of the Lisp machine window system, and more
+flexibility, with less complexity. Display output, keyboard input and
+mouse tracking all work through the window system. Window-win allows
+the user to run different programs in different parts of the screen by
+giving each program a window. It also allows a program to create
+automatically-updating displays out of hierarchies of windows. For
+example, a menu will be made out of hierachies of windows. For
+example, a menu will be made out of a stream display window with a
+simple text-string subwindow for each menu item. If you want a label
+under the menu, you would put the menu and a text-string window for
+the label into another window called a frame. An individual window is
+not a very large object and therefore it is reasonable to create large
+numbers of them.
+
+Window-win is intended to run in a Lisp system that allows multiple
+processes sharing the same address space and data heap but with their
+own control stacks and dynamic binding stacks. Programs written in
+other languages can be used with window-win if they can be loaded into
+the Lisp environment and share Lisp data. If you are using window-win
+under unix, other unix processes cannot talk to window-win directly
+btu they can communicate with the Lisp through ptys and the Lisp can
+display their output in windows.
+
+Screen updating in window-win is preemptable, which means that it has
+frequent stopping points at whic the rest of the updating can be
+postponed to execute the users commands. Programs modify the ideal
+current window configuration which is te goal for redisplay. The
+redisplay mechanism records what is actually on the screen. When there
+is no other work to be done, the redisplay mechanism alters the screen
+image in the direction of the goal set up by the program. If the user
+types a command before the activity is finished, the command is
+executed, and then the redisplay mechanism starts up again heading
+toward the new current goal from wherever it has stopped.
+
+The top level of the window hierachy is the "screen", a window which
+represents the whole screen and has the whole screen as its visible
+area all the time. (Actually, it is ok to have more than one such
+window on a machine with multiple physical screens.) Underneath this
+window will be windows belonging to individual programs. They are
+"inferiors" of the screen, and the screen is their "superior". The
+individual program windows have inferiors also which they use to
+costruct their screen images.
+
+Note: below, where "positions" and "regions" are referred to, I was
+thinking of having objects to represent points or rectangles, as in
+Interlisp-D. However, I am now thinking taht it would be better to
+pass four numbers as four separate arguments rather than as an object
+containing four slots because this avoids the need to cons structures
+at run time.
+
+
+
+Window redisplay
+
+Most display updating is done in a special process called the
+redisplay process. It loops doing a tree walk of the window hierachy,
+updating display at all levels. Applications requiring high efficiency
+can take a short cut called "direct updating", described in a later
+section.
+
+Display updating of one window is normally done by the :UPDATE-DIAPLAY
+operation.
+
+:UPDATE-DISPLAY screen screen-position previous-contents-data
+                display-style window-region display-style window-region ...
+
+updates the contents of parts of this window, specified by the
+rectangles called WINDOW-REGION, on SCREEN with upper left corner of
+the window at point SCREEN-POSITION. (The corner of teh window need no
+be part of any of the displayed regions, but the regions are
+positioned AS IF that corner of the window were at that point on the
+screen).
+PREVIOUS-CONTENTS-DATA tells the window what it has displayed on the
+screen before so it can tell how to use what exists on the screen
+already in order to update incrementally if it wishes.
+
+The DISPLAY-STYLE argument preceding each WINDOW-REGION argument tells
+what assumptions can be made about the state of the screen bits of
+that area of the screen. If it is NIL, you can assume that the screen
+bits contain data corresponding to what PREVIOUS-CONTENTS-DATA
+says. If it is T, you may not assume anything about the screen bits;
+in fact you must erase all such rectangles immediately before doing
+anything else and must update PREVIOUS-CONTENTS-DATA to say that they
+are clear. If DISPLAY-STYLE is :JUST-DRAW, you must update
+PREVIOUS-CONTENTS-DATA in that same fashion but NOT erase the
+rectangle. (This is used for blinker drawing and un-drawing.)
+
+The operation should return the updated PREVIOUS-CONTENTS-DATA, which
+may or may not be the same Lisp object as the argument. The value
+returned by this operation will be saved and will be passed back as
+the PREVIOUS-CONTENTS-DATA on the next display update.
+
+The PREVIOUS-CONTENTS-DATA applies to the whole of the
+window. Sometimes only part of the window is being
+displayed. :UPDATE-DISPLAY is called only once, and describes all the
+currently-displayed parts of the window. The window should update the
+PREVIOUS-CONTENTS-DATA in parallel with the specified parts of the
+screen. It may or may not update PREVIOUS-CONTENTS-DATA for changes
+that do not appear in the displayed parts of the window -- it makes
+no difference whether such updating is done.
+
+
+
+Redisplay-needed Flags
+
+The intention is that each window with inferiors will pass the
+:UPDATE-DISPLAY operation on recursively to the inferiors.
+
+This would require a lot of work to go into walking parts of the
+window tree where nothing has changed. To avoid that work, there is a
+flag stored for each window by the window's superior which says
+whether that window (including any of its inferiors) requires
+attention for redisplay. The flag is set by anything which changes the
+data base that the window uses for its display. Often this is also a
+frequent operation which should not have to take the time to invoke a
+flavor operation. So we allow the window to get and save a list of
+pointers to the flags it will need to set.
+
+:REDISPLAY-FLAG-LIST inferior-window
+
+Returns the redisplay flag list for INFERIOR-WINDOW, an inferior of
+this window. The redisplay flag list of a window is a list of pointers
+whose cars are the flags of that window, its superiors, and so on up
+to the top level window (the screen). Thus:
+(MY-FLAG-POINTER MY-SUPERIORS-FLAG-POINTER
+ MY-SUPERIORS-SUPERIORS-FLAG-POINTER ...
+SCREEN-FLAG-POINTER)
+When a window is created, it can ask its superior for its redisplay
+flag list, and save the list around.
+When a window's data base is changed so that it requires redisplay,
+what the program does is look down the redisplay flag list, setting
+each flag to T until it comes to a flag that is already T.
+
+Window whose display changes infrequently and for which simplicity is
+more important than efficiency when the display does change can use
+this convenient operation (on the window's superior) instead.
+
+:REDISPLAY-NEEDED inferior-window
+
+Inform this window that INFERIOR-WINDOW needs redisplay. All flags are
+set as described above, without consing up a list of the pointers to
+the flags. This is for use with kinds of windows whose contents
+rarely change.
+
+
+
+Why Separate Objects for PREVIOUS-CONTENTS-DATA?
+
+Why not just have each window remember its previous display
+information internally rather than pass it as an argument from the
+superior?
+
+My original idea was that a window could appear in different places in
+the window hierarchy. It would redisplay properly in each place since
+different records of screen contents would be kept.
+
+Unfortunately, it seems that a window does need to know its superior
+to report when it has changed, and the redisplay flags are probably
+important for efficiency. This rules out appearing in multiple places,
+though perhaps windows could know about any number of independent
+superiors and inform each one independently when the window needs
+redisplay. A text string window whose contents do not
+change can still be used as an inferior to more than one other window
+since this window will not need to actually look at its superior.
+
+Also, it is possible to save a screen snapshot or a snapshot of a
+single window and save the PREVIOUS-CONTENTS-DATA at the same
+time. Restoring them both might be useful in conjunction with
+returning the data bases being displayed to their previous state or a
+similar state.
+
+If these features are not deemed worth having, it is easy to make each
+window remember its PREVIOUS-CONTENTS-DATA internally.
+
+
+
+Why Specify All the Regions in a Single :UPDATE-DISPLAY?
+
+Originally I had :UPDATE-DISPLAY being called once for each
+region. That was simpler conceptually. But it had an implementation
+problem. If one part of a window was invalidated while another was
+correct on the screen it would be hard to alter the
+PREVIOUS-CONTENTS-DATA to indicate this if there were lines, items or
+whatever which fell partly into each region. For example, suppose in a
+picture window a line runs from the invalid region to the valid
+region. The PREVIOUS-CONTENTS-DATA says either that the line is
+present on the screen or that it is not.
+
+The solution of making the PREVIOUS-CONTENTS-DATA say which parts of
+the window were valid, or other such information, seemed
+complicated. To avoid it, I changed the design so that a single
+:UPDATE-DISPLAY describes all the visible parts of the window. The
+window can then make PREVIOUS-CONTENTS-DATA consistent with the
+existing screen image by erasing the parts of the critical items which
+fall in the still-valid parts of the window. After this, such items
+are completely absent from the display and PREVIOUS-CONTENTS-DATA can
+simply say they are absent.
+
+On the other hand, the alternative of recording the invalidated
+regions explicitly in the PREVIOUS-CONTENTS-DATA and using that
+information in display updating until the regions become valid may be
+simpler than I thought.
+
+If :UPDATE-DISPLAY is changed back to do a single window region,
+direct updating windows will no longer be able to tell from that
+operation when part of the window has ceased to be visible. However,
+they can still tell this by watching the :WINDOW-AREA-INVISIBLE
+operations.
+
+
+
+Size and Position of Windows
+
+A window normally knows it own size but not, in any sense, its
+position. Only the superior knows that (relative to the superior).
+In fact, a window need not always HAVE a position in its superior, if
+it is not currently being displayed (such as, if it has been scrolled
+off the screen). The window's position is "on the screen" makes sense
+only when the window is visible.
+
+:SIZE
+
+This operation returns te height and width of teh window.
+
+Sometimes a superior such as a frame will change an inferior's
+size. Then it will use the :SET-SIZE operation.
+
+:SET-SIZE width height
+
+Some scrolling windows will allow each inferior to decide its own
+size. The superior will use the chosen sizes to decide where the
+inferiors appear. Sometime  the superior will specify the width and
+the inferior will determine the height from that.
+
+:DESIRED-SIZE keyword-args
+
+The keyword arguments specify things about the window shape or
+size. Two values are returned base o the specified constraints (and
+also based on what the window wants to display now). These are the
+window's desired with and height.
+
+Two standard constraint arguments all windows accept are :WIDTH and
+:HEIGHT, which specify one dimension of the size. Also there are
+:MAXIMUM-WIDTH and MAXIMUM-HEIGHT.
+
+The operation will be invoked by the superior's redisplay handler. The
+superior may or may not choose to change the inferior's size based on
+the inferior's request. If it does so, it informs the inferior with a
+:SET-SIZE. Invoking :UPDATE-DISPLAY on the inferiors comes last of
+all. :DESIRED-SIZE should have no side effects on the window that
+performs it.
+
+One can find out a window's position by asking its superior:
+
+:INFERIOR-POSITION inferior
+
+returns the position of upper left corner of INFERIOR on its
+screen. The operation is invoked on the INFERIOR's superior.
+
+
+
