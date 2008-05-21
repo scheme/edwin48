@@ -529,6 +529,10 @@
           ;; undefine-alias-key
           ;; unmap-alias-key
           remap-alias-key
+          make-keystroke
+          keystroke?
+          keystroke-code
+          keystroke-bits
           key-name
           xkey->name
           emacs-key-name

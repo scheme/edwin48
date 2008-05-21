@@ -110,3 +110,16 @@
         srfi-13
         terminfo)
   (files terminal))
+
+(define-structure edwin:keys edwin:keys/interface
+  (open aliases
+        (modify ascii (rename (ascii->char integer->char)))
+        define-record-type*
+        edwin:variables
+        edwin:utilities
+        errors
+        fixnum
+        (modify scheme (hide integer->char))
+        srfi-1
+        srfi-13)
+  (files calias))
