@@ -131,7 +131,8 @@
   (export %substring-move!
           split-list
           list-of-type?
-          string-or-false?))
+          string-or-false?
+          string-append-separated))
 
 (define-interface edwin:ring/interface
   (export make-ring
