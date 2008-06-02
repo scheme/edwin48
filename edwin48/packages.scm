@@ -115,7 +115,7 @@
   (open aliases
         (modify ascii (rename (ascii->char integer->char)))
         define-record-type*
-        edwin:variables
+        edwin:variable
         edwin:utilities
         errors
         fixnum
