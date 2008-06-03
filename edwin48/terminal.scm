@@ -125,10 +125,10 @@ USA.
       )))
 
 (define (get-console-input-operations terminal-state)
-  (let ((channel (port/input-channel console-input-port))
-        (string  (make-string (* 3 input-buffer-size)))
-        (start   0)
-        (end     0)
+  (let ((port   (console-input-port))
+        (string (make-string (* 3 input-buffer-size)))
+        (start  0)
+        (end    0)
         (incomplete-pending #F)
         (timeout-interval 1000)         ; 1s. Should be f(baud rate) etc
         (len     0))                    ; length of event in input characters
@@ -188,9 +188,9 @@ USA.
          (read-more?                    ; -> #F or #T is some chars were read
           (lambda (block?)
             (if block?
-                (channel-blocking channel)
-                (channel-nonblocking channel))
-            (let ((n (channel-read channel string end input-buffer-size)))
+                (port-blocking port)
+                (port-nonblocking port))
+            (let ((n (read-string!/partial string port end input-buffer-size)))
               (cond ((not n)  #F)
                     ((fix:> n 0)
                      (set! end (fix:+ end n))
@@ -316,9 +316,9 @@ USA.
   (bind-console-state #f
     (lambda (get-outside-state)
       (terminal-operation terminal-raw-input
-                          (port/input-channel console-input-port))
+                          (console-input-port))
       (terminal-operation terminal-raw-output
-                          (port/output-channel console-input-port))
+                          (console-input-port))
       (tty-set-interrupt-enables 2)
       (receiver
        (lambda (thunk)
@@ -341,37 +341,37 @@ USA.
                     (set-console-state! outside-state)))))
 
 (define (console-state)
-  (vector (channel-state (port/input-channel console-input-port))
-          (channel-state (port/output-channel console-output-port))
+  (vector (port-state (console-input-port))
+          (port-state (console-output-port))
           (tty-get-interrupt-enables)))
 
 (define (set-console-state! state)
-  (set-channel-state! (port/input-channel console-input-port)
+  (set-port-state! (console-input-port)
                       (vector-ref state 0))
-  (set-channel-state! (port/output-channel console-output-port)
+  (set-port-state! (console-output-port)
                       (vector-ref state 1))
   (tty-set-interrupt-enables (vector-ref state 2)))
 
-(define (channel-state channel)
-  (and channel
-       (channel-type=terminal? channel)
-       (cons (channel-blocking? channel)
-             (terminal-get-state channel))))
+(define (port-state port)
+  (and port
+       (tty? port)
+       (cons (port-blocking? port)
+             (tty-info port))))
 
-(define (set-channel-state! channel state)
-  (if (and channel
-           (channel-type=terminal? channel)
+(define (set-port-state! port state)
+  (if (and port
+           (tty? port)
            state)
       (begin
         (if (car state)
-            (channel-blocking channel)
-            (channel-nonblocking channel))
-        (terminal-set-state channel (cdr state)))))
+            (port-blocking port)
+            (port-nonblocking port))
+        (set-tty-info/flush port (cdr state)))))
 
-(define (terminal-operation operation channel)
-  (if (and channel
-           (channel-type=terminal? channel))
-      (operation channel)))
+(define (terminal-operation operation port)
+  (if (and port
+           (tty? port))
+      (operation port)))
 
 ;;;; Terminal State
 
