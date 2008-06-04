@@ -52,7 +52,7 @@
   (files strtab))
 
 (define-structure edwin:utilities edwin:utilities/interface
- (open scheme i/o posix-files
+ (open scheme i/o
        aliases errors fixnum pathname util weak-pair
        srfi-13 srfi-14)
    (files utils))
