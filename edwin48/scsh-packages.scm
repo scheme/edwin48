@@ -5,7 +5,6 @@
 
 (define-structure define-record-type*
     (export (define-record-type* :syntax)
-            (define-record-type  :syntax)
             define-record-discloser)
   (open scheme define-record-types)
   (for-syntax (open scheme define-record-type*-expander))
@@ -98,7 +97,7 @@
     (export file-eq?
             file-exists?)
   (open scheme-with-scsh)
-  (files s48-fileio))
+  (files scsh-fileio))
 
 (define-structure pathname
     (export ->pathname
@@ -138,7 +137,7 @@
   (open scheme define-record-type* ascii
 	signals util methods receiving fluids cells
         mit-fileio scsh-level-0 srfi-1)
-  (files pathname pathname-unix s48-pathname))
+  (files pathname pathname-unix scsh-pathname))
 
 (define-structure macro-helpers
     (export command-name->scheme-name
