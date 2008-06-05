@@ -39,7 +39,7 @@
                                               other-fields
                                               type-name))
                      ,@(if needs-conser-layer?
-                           `((,(rename 'DEFINE) (,conser-name ,@vars)
+                           `((,(rename 'define) (,conser-name ,@vars)
                               (,real-conser ,@inits)))
                            '()))))))))))))
 
@@ -114,7 +114,7 @@
   (symbol-append type-name '- tag))
 
 (define (make-field-setter type-name tag)
-  (symbol-append 'SET- type-name '- tag '!))
+  (symbol-append 'set- type-name '- tag '!))
 
 (define (symbol-append . symbols)
   (string->symbol (apply string-append (map symbol->string symbols))))
