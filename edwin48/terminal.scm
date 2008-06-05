@@ -321,7 +321,7 @@ USA.
       (terminal-operation terminal-raw-input
                           (console-input-port))
       (terminal-operation terminal-raw-output
-                          (console-input-port))
+                          (console-output-port))
       (tty-set-interrupt-enables 2)
       (receiver
        (lambda (thunk)
