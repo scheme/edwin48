@@ -29,8 +29,8 @@
                         (if needs-conser-layer?
                             (rename (symbol-append '% conser-name))
                             conser-name)))
-                   `(,(rename 'BEGIN)
-                     (,(rename 'DEFINE-RECORD-TYPE) ,type-name
+                   `(,(rename 'begin)
+                     (,(rename 'define-record-type) ,type-name
                       ;; Scheme48 convention
                       ,(symbol-append ': type-name)
                       (,real-conser ,@arg-tags)

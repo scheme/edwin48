@@ -10,7 +10,7 @@
   (for-syntax (open scheme define-record-type*-expander))
   (begin (define-syntax define-record-type*
            expand-define-record-type*
-           (BEGIN DEFINE DEFINE-RECORD-TYPE))))
+           (begin define define-record-type))))
 
 (define-structure define-record-type*-expander
     (export expand-define-record-type*)
