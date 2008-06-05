@@ -186,10 +186,7 @@ USA.
                                   (find (cdr key-pairs)
                                         possible-pending?))))))))))
          (read-more?                    ; -> #F or #T is some chars were read
-          (lambda (block?)
-            (if block?
-                (port-blocking port)
-                (port-nonblocking port))
+          (lambda ()
             (let ((n (read-string!/partial string port end input-buffer-size)))
               (cond ((not n)  #F)
                     ((fix:> n 0)
@@ -201,13 +198,13 @@ USA.
                     (else
                      (error "Illegal return value:" n))))))
          (read-char
-          (lambda (block?)
-            (if (read-more? block?)
+          (lambda ()
+            (if (read-more?)
                 (parse-key)
                 #F)))
          (read-event
           (lambda (block?)
-            (or (read-char #f)
+            (or (read-char)
                 (let loop ()
                   (cond (inferior-thread-changes? event:interrupt)
                         ((process-output-available?) event:process-output)
@@ -245,7 +242,7 @@ USA.
       (values
        (lambda ()                       ;halt-update?
          (or (fix:< start end)
-             (read-char #f)))
+             (read-char)))
        (lambda ()                       ;peek-no-hang
          (or (parse-key)
              (let ((event (read-event #f)))
@@ -366,18 +363,13 @@ USA.
 (define (port-state port)
   (and port
        (tty? port)
-       (cons (port-blocking? port)
-             (tty-info port))))
+       (tty-info port)))
 
 (define (set-port-state! port state)
   (if (and port
            (tty? port)
            state)
-      (begin
-        (if (car state)
-            (port-blocking port)
-            (port-nonblocking port))
-        (set-tty-info/flush port (cdr state)))))
+      (set-tty-info/flush port state)))
 
 (define (terminal-operation operation port)
   (if (and port
