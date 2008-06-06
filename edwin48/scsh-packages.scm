@@ -90,7 +90,7 @@
             re-match-end-index
             re-match-extract
             regexp-group)
-  (open scheme)
+  (open scheme error-package)
   (files scsh-regexp))
 
 (define-structure mit-fileio
