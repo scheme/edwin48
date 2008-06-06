@@ -1,6 +1,6 @@
 (define (re-compile-pattern       . arg) (error "Not implemented" re-compile-pattern))
 (define (re-string-match          . arg) (error "Not implemented" re-string-match))
-(define (re-substring-matchx      . arg) (error "Not implemented" re-substring-matchx))
+(define (re-substring-match      . arg) (error "Not implemented" re-substring-match))
 (define (re-string-search-forward . arg) (error "Not implemented" re-string-search-forward))
 (define (re-match-start-index     . arg) (error "Not implemented" re-match-start-index))
 (define (re-match-end-index       . arg) (error "Not implemented" re-match-end-index))
