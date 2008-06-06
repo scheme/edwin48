@@ -310,7 +310,7 @@ USA.
 
 
 ;;;
-;;; This procedure first sets the console to raw mode, and setups a
+;;; This procedure first sets the console to raw mode, and sets up a
 ;;; DYNAMIC-WIND wrapper around 'receiver' so that its argument,
 ;;; 'thunk', is always executed in the original console state (before
 ;;; setting it to raw mode).
@@ -333,7 +333,7 @@ USA.
 
 ;;;
 ;;; This sets up a barrier using DYNAMIC-WIND to ensure that the state
-;;; of the console will be properly restored if an continuation
+;;; of the console will be properly restored if a continuation
 ;;; escapes out.
 ;;;
 (define (bind-console-state inside-state receiver)

@@ -15,7 +15,7 @@
 (define-structure define-record-type*-expander
     (export expand-define-record-type*)
   (open scheme destructuring fluids signals receiving)
-  (files s48-records))
+  (files (scsh records)))
 
 (define-structure weak-pair
     (export weak-pair?
@@ -27,7 +27,7 @@
             weak-list->list
             list->weak-list)
   (open scheme define-record-type* errors srfi-1 weak)
-  (files s48-weak-pair))
+  (files (scsh weak-pair)))
 
 (define-structure fixnum
     (export fix:= fix:fixnum?
@@ -39,7 +39,7 @@
             fix:not fix:and fix:andc
             fix:or fix:xor fix:lsh)
   (open scheme bitwise)
-  (files s48-fixnum))
+  (files (scsh fixnum)))
 
 (define-structure errors
     (export error syntax-error
@@ -51,7 +51,7 @@
             error:not-weak-list
             warn)
   (open scheme (subset signals (error syntax-error warn)))
-  (files s48-errors))
+  (files (scsh errors)))
 
 (define-structure aliases
     (export without-interrupts
@@ -72,13 +72,13 @@
         ascii errors define-opt fluids interrupts util
         (modify scsh-level-0 (rename (getenv get-environment-variable)))
         srfi-1 srfi-6 srfi-13 srfi-14 srfi-43)
-  (files s48-aliases))
+  (files (scsh aliases)))
 
 (define-structure define-opt
     (export (define* :syntax))
   (open scheme srfi-1 let-opt)
   (for-syntax (open scheme let-opt (subset signals (syntax-error)) srfi-1))
-  (files s48-define-opt))
+  (files (scsh define-opt)))
 
 (define-structure mit-regexp
     (export re-compile-pattern
@@ -91,13 +91,13 @@
             re-match-extract
             regexp-group)
   (open scheme error-package)
-  (files scsh-regexp))
+  (files (scsh regexp)))
 
 (define-structure mit-fileio
     (export file-eq?
             file-exists?)
   (open scheme-with-scsh)
-  (files scsh-fileio))
+  (files (scsh fileio)))
 
 (define-structure pathname
     (export ->pathname
@@ -133,9 +133,9 @@
             ;; init-file-pathname
             user-homedir-pathname
             system-library-directory-pathname
-	    )
+            )
   (open scheme define-record-type* ascii
-	signals util methods receiving fluids cells
+        signals util methods receiving fluids cells
         mit-fileio
         (modify scsh-level-0
                 (rename (getenv         lookup-environment-variable)
@@ -145,7 +145,7 @@
   (begin
     (define (name->user-info name)  (user-info name))
     (define (user-id->user-info id) (user-info id)))
-  (files pathname pathname-unix s48-pathname))
+  (files pathname pathname-unix (scsh pathname)))
 
 (define-structure macro-helpers
     (export command-name->scheme-name
@@ -155,14 +155,14 @@
             expand-variable-assignment
             expand-variable-definition)
   (open scheme aliases errors)
-  (files s48-macros-helpers))
+  (files (scsh macros-helpers)))
 
 (define-structure fixme
     (export within-editor?
             editor-error
             procedure-arity-valid?)
   (open scheme aliases errors)
-  (files s48-fixme))
+  (files (scsh fixme)))
 
 (define-structure rb-tree
     (export make-rb-tree
@@ -172,7 +172,7 @@
             rb-tree->alist  alist->rb-tree
             rb-tree/copy)
   (open scheme search-trees)
-  (files s48-rbtree))
+  (files (scsh rbtree)))
 
 (define-structure event-distributor
     (export make-event-distributor
@@ -180,4 +180,4 @@
             add-event-receiver!
             remove-event-receiver!)
   (open scheme aliases errors define-record-type* queues srfi-1)
-  (files s48-event-distributor))
+  (files (scsh event-distributor)))
