@@ -136,8 +136,16 @@
 	    )
   (open scheme define-record-type* ascii
 	signals util methods receiving fluids cells
-        mit-fileio scsh-level-0 srfi-1)
-  (files pathname pathname-unix scsh-pathname))
+        mit-fileio
+        (modify scsh-level-0
+                (rename (getenv         lookup-environment-variable)
+                        (home-directory user-info-home-directory)
+                        (user-uid       get-user-id)))
+        srfi-1)
+  (begin
+    (define (name->user-info name)  (user-info name))
+    (define (user-id->user-info id) (user-info id)))
+  (files pathname pathname-unix s48-pathname))
 
 (define-structure macro-helpers
     (export command-name->scheme-name
