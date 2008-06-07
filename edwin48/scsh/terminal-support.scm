@@ -55,3 +55,17 @@
 
     ;; tcsetattr (fd, TCSANOW, &info);
     (set-tty-info/now port info)))
+
+
+(define (terminal-raw-output port)
+  (let* ((info              (tty-info port))
+         (output-flags      (tty-info:output-flags info))
+         (set-output-flags! (lambda (f) (set-tty-info:output-flags info f))))
+
+    ;; oflag &= ~OPOST
+    (set-output-flags!
+     (bitwise-and (output-flags)
+                  (bitwise-not ttyout/enable)))
+
+    ;; tcsetattr (fd, TCSANOW, &info);
+    (set-tty-info/now port info)))

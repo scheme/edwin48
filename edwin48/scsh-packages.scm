@@ -207,7 +207,7 @@
     (compound-interface
      scsh-tty/interface
      (export terminal-raw-input
-             ;; terminal-raw-output
+             terminal-raw-output
              ))
   (open scheme bitwise scsh-tty)
   (files (scsh terminal-support)))
