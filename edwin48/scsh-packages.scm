@@ -189,12 +189,15 @@
             tty-info:control-chars set-tty-info:control-chars
             tty-info:control-flags set-tty-info:control-flags
             tty-info:input-flags   set-tty-info:input-flags
+            tty-info:output-flags  set-tty-info:output-flags
             tty-info:local-flags   set-tty-info:local-flags
 
             ttyl/canonical ttyl/echo ttyl/enable-signals ttyl/extended
 
             ttyin/ignore-break    ttyin/cr->nl
             ttyin/output-flow-ctl ttyin/7bits
+
+            ttyout/enable
 
             ttyc/char-size8       ttyc/enable-parity
 
