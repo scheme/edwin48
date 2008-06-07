@@ -193,6 +193,8 @@
             tty-info:output-flags  set-tty-info:output-flags
             tty-info:local-flags   set-tty-info:local-flags
 
+            flush-tty/output
+
             ttyl/canonical ttyl/echo ttyl/enable-signals ttyl/extended
 
             ttyin/ignore-break    ttyin/cr->nl

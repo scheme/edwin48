@@ -457,7 +457,7 @@ USA.
     (do-exit-standout-mode screen)
     (do-exit-insert-mode screen)
     (maybe-output screen (exit-ca-mode description)))
-  (output-port/flush-output console-output-port))
+  (flush-tty/output (console-output-port)))
 
 (define (console-modeline-event! screen window type)
   screen window type
@@ -466,14 +466,14 @@ USA.
 (define (console-wrap-update! screen thunk)
   screen
   (let ((finished? (thunk)))
-    (output-port/flush-output console-output-port)
+    (flush-tty/output (console-output-port))
     finished?))
 
 (define (console-discretionary-flush screen)
-  (let ((n (output-port/buffered-bytes console-output-port)))
+  (let ((n (output-port/buffered-bytes (console-output-port))))
     (if (fix:< 20 n)
         (begin
-          (output-port/flush-output console-output-port)
+          (flush-tty/output (console-output-port))
           (let ((baud-rate (screen-baud-rate screen)))
             (if (fix:< baud-rate 2400)
                 (let ((msec (quotient (* n 10000) baud-rate)))
@@ -488,7 +488,7 @@ USA.
 
 (define (console-flush! screen)
   screen
-  (output-port/flush-output console-output-port))
+  (flush-tty/output (console-output-port)))
 
 (define (console-write-cursor! screen x y)
   (move-cursor screen x y))
@@ -502,7 +502,7 @@ USA.
         (do-exit-insert-mode screen)
         (move-cursor screen x y)
         (highlight-if-desired screen highlight)
-        (write-char char console-output-port)
+        (write-char char (console-output-port))
         (record-cursor-after-output screen (fix:1+ x)))))
 
 (define (console-write-substring! screen x y string start end highlight)
@@ -519,7 +519,7 @@ USA.
                                  (screen-x-size screen))))
                    (fix:-1+ end)
                    end)))
-          (write-string (substring string start end) console-output-port)
+          (write-string (substring string start end) (console-output-port))
           (record-cursor-after-output screen (fix:+ x (fix:- end start)))))))
 
 (define (console-clear-line! screen x y first-unused-x)
@@ -676,7 +676,7 @@ USA.
                            x-end))))
                 (do ((x cursor-x (fix:1+ x)))
                     ((fix:= x x-end))
-                  (write-char #\space console-output-port))
+                  (write-char #\space (console-output-port)))
                 (record-cursor-after-output screen x-end))))))))
 
 (define (insert-lines screen yl yu n)
@@ -1092,7 +1092,7 @@ Note that the multiply factors are in tenths of characters.  |#
          (state (screen-state screen)))
     (if (not (terminal-state? state))
         (editor-error "Not a terminal screen")
-        (let ((port console-output-port)
+        (let ((port (console-output-port))
               (desc (terminal-state-description state)))
           (let ((x-size (terminal:x-size desc))
                 (y-size (terminal:y-size desc)))
