@@ -96,7 +96,7 @@
         srfi-43)
   (files screen))
 
-(define-structure edwin:terminfo-screen edwin:console-screen/interface
+(define-structure edwin:console-screen edwin:console-screen/interface
   (open aliases
         define-record-type*
         edwin:display-type
@@ -108,6 +108,7 @@
         srfi-1
         srfi-6
         srfi-13
+        terminal-support
         terminfo)
   (files terminal))
 

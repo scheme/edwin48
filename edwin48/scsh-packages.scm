@@ -181,3 +181,33 @@
             remove-event-receiver!)
   (open scheme aliases errors define-record-type* queues srfi-1)
   (files (scsh event-distributor)))
+
+(define-interface scsh-tty/interface
+    (export tty?                   tty-info
+            set-tty-info/now       set-tty-info/flush
+            set-tty-info:min       set-tty-info:time
+            tty-info:control-chars set-tty-info:control-chars
+            tty-info:control-flags set-tty-info:control-flags
+            tty-info:input-flags   set-tty-info:input-flags
+            tty-info:local-flags   set-tty-info:local-flags
+
+            ttyl/canonical ttyl/echo ttyl/enable-signals ttyl/extended
+
+            ttyin/ignore-break    ttyin/cr->nl
+            ttyin/output-flow-ctl ttyin/7bits
+
+            ttyc/char-size8       ttyc/enable-parity
+
+            ttychar/start  ttychar/stop disable-tty-char))
+
+(define-structure scsh-tty scsh-tty/interface
+  (open scheme scsh-level-0))
+
+(define-structure terminal-support
+    (compound-interface
+     scsh-tty/interface
+     (export terminal-raw-input
+             ;; terminal-raw-output
+             ))
+  (open scheme bitwise scsh-tty)
+  (files (scsh terminal-support)))
