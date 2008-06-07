@@ -62,13 +62,13 @@
   (files ring))
 
 (define-structure edwin:doc-string edwin:doc-string/interface
-  (open scheme aliases fixnum errors define-opt i/o pathname mit-fileio srfi-13
+  (open scheme aliases fixnum errors define-opt i/o pathname io-support srfi-13
         fixme
         edwin:paths)
   (files docstr))
 
 (define-structure edwin:paths edwin:paths/interface
-  (open scheme aliases errors pathname mit-fileio)
+  (open scheme aliases errors pathname io-support)
   (files paths))
 
 (define-structure edwin:command-table edwin:command-table/interface
@@ -104,6 +104,7 @@
         event-distributor
         errors
         fixnum
+        io-support
         scheme
         srfi-1
         srfi-6

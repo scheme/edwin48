@@ -93,9 +93,10 @@
   (open scheme error-package)
   (files (scsh regexp)))
 
-(define-structure mit-fileio
+(define-structure io-support
     (export file-eq?
-            file-exists?)
+            file-exists?
+            read-string!/partial)
   (open scheme-with-scsh)
   (files (scsh fileio)))
 
@@ -136,7 +137,7 @@
             )
   (open scheme define-record-type* ascii
         signals util methods receiving fluids cells
-        mit-fileio
+        io-support
         (modify scsh-level-0
                 (rename (getenv         lookup-environment-variable)
                         (home-directory user-info-home-directory)
