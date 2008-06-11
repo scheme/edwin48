@@ -67,11 +67,12 @@
             exact-integer? exact-nonnegative-integer?
             vector-8b-ref vector-8b-set! vector-8b-fill! vector-8b-find-next-char
             round
+            real-time-clock
             (fluid-let :syntax))
   (open (modify scheme (hide string-fill!))
         ascii errors define-opt fluids interrupts util
         (modify scsh-level-0 (rename (getenv get-environment-variable)))
-        srfi-1 srfi-6 srfi-13 srfi-14 srfi-43)
+        srfi-1 srfi-6 srfi-8 srfi-13 srfi-14 srfi-43)
   (files (scsh aliases)))
 
 (define-structure define-opt
