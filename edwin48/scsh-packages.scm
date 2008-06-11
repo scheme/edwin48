@@ -91,7 +91,7 @@
             re-match-end-index
             re-match-extract
             regexp-group)
-  (open scheme error-package)
+  (open scheme srfi-23)
   (files (scsh regexp)))
 
 (define-structure io-support
@@ -205,9 +205,13 @@
 
             ttyc/char-size8       ttyc/enable-parity
 
-            ttychar/start  ttychar/stop disable-tty-char))
+            ttychar/start  ttychar/stop ttychar/interrupt
+            disable-tty-char))
 
-(define-structure scsh-tty scsh-tty/interface
+(define-structure scsh-subset
+    (compound-interface scsh-tty/interface
+                        (export interrupt/winch
+                                set-interrupt-handler))
   (open scheme scsh-level-0))
 
 (define-structure terminal-support
@@ -215,6 +219,10 @@
      scsh-tty/interface
      (export terminal-raw-input
              terminal-raw-output
+             terminal-get-interrupt-char
+             terminal-set-interrupt-char!
+             set-terminal-x-size! set-terminal-y-size!
+             event:console-resize
              ))
-  (open scheme bitwise scsh-tty)
+  (open scheme ascii bitwise event-distributor scsh-subset srfi-23)
   (files (scsh terminal-support)))

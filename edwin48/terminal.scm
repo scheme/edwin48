@@ -270,20 +270,20 @@ USA.
       (^G-signal))))
 
 (define (with-console-interrupts-enabled thunk)
-  (with-console-interrupt-state 2 thunk))
+  (with-console-interrupt-state #t thunk))
 
 (define (with-console-interrupts-disabled thunk)
-  (with-console-interrupt-state 0 thunk))
+  (with-console-interrupt-state #f thunk))
 
 (define (with-console-interrupt-state inside thunk)
   (let ((outside unspecific))
     (dynamic-wind (lambda ()
-                    (set! outside (tty-get-interrupt-enables))
-                    (tty-set-interrupt-enables inside))
+                    (set! outside (terminal-get-interrupt-char))
+                    (terminal-set-interrupt-char! inside))
                   thunk
                   (lambda ()
-                    (set! inside (tty-get-interrupt-enables))
-                    (tty-set-interrupt-enables outside)))))
+                    (set! inside (terminal-get-interrupt-char))
+                    (terminal-set-interrupt-char! outside)))))
 
 (define console-display-type
   (make-display-type 'CONSOLE
@@ -313,7 +313,7 @@ USA.
                           (console-input-port))
       (terminal-operation terminal-raw-output
                           (console-output-port))
-      (tty-set-interrupt-enables 2)
+      (terminal-set-interrupt-char! #t)
       (receiver
        (lambda (thunk)
          (bind-console-state (get-outside-state)
@@ -342,14 +342,14 @@ USA.
 (define (console-state)
   (vector (port-state (console-input-port))
           (port-state (console-output-port))
-          (tty-get-interrupt-enables)))
+          (terminal-get-interrupt-char)))
 
 (define (set-console-state! state)
   (set-port-state! (console-input-port)
                       (vector-ref state 0))
   (set-port-state! (console-output-port)
                       (vector-ref state 1))
-  (tty-set-interrupt-enables (vector-ref state 2)))
+  (terminal-set-interrupt-char! (vector-ref state 2)))
 
 (define (port-state port)
   (and port
@@ -1076,7 +1076,7 @@ Note that the multiply factors are in tenths of characters.  |#
                 (begin
                   (without-interrupts
                    (lambda ()
-                     (terminal:set-x-size! desc x-size)
-                     (terminal:set-y-size! desc y-size)
+                     (set-terminal-x-size! desc x-size)
+                     (set-terminal-y-size! desc y-size)
                      (set-screen-size! screen x-size y-size)))
                   (update-screen! screen #t))))))))

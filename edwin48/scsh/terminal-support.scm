@@ -13,7 +13,7 @@
                                  (set-tty-info:control-chars info cc)))))
 
     ;; echo off, canonical off, extended input processing off
-    ;; lflags &= ~(ICANON | ECHO | IEXTEN)
+    ;; lflags &= ~(ICANON | ECHO | ISIG | IEXTEN)
     (set-local-flags!
      (bitwise-and (local-flags)
                   (bitwise-not (bitwise-ior ttyl/canonical
@@ -69,3 +69,32 @@
 
     ;; tcsetattr (fd, TCSANOW, &info);
     (set-tty-info/now port info)))
+
+(define default-sigint-char (ascii->char #x07)) ;; ^G
+
+(define (terminal-get-interrupt-char)
+  (let* ((port  (current-input-port))
+         (info  (tty-info port))
+         (chars (tty-info:control-chars info)))
+    (string-ref ttychar/interrupt chars)))
+
+(define (terminal-set-interrupt-char! value)
+  (let* ((port  (current-input-port))
+         (info  (tty-info port))
+         (char  (cond
+                 ((boolean? value)
+                  (if value default-sigint-char disable-tty-char))
+                 ((char? value) value)
+                 (else (error "invalid input" value))))
+         (chars (tty-info:control-chars info)))
+    (string-set! chars ttychar/interrupt char)
+    (set-tty-info:control-chars info chars)))
+
+(define (set-terminal-x-size! terminal x-size) 'not-implemented)
+
+(define (set-terminal-y-size! terminal y-size) 'not-implemented)
+
+(define event:console-resize (make-event-distributor))
+;;; care about console-thread
+(define (console-resize-handler int) (event-distributor/invoke! event:console-resize))
+(set-interrupt-handler interrupt/winch console-resize-handler)
