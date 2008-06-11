@@ -39,7 +39,6 @@ USA.
                operation/exit!
                operation/flush!
                operation/modeline-event!
-               operation/discretionary-flush
                operation/scroll-lines-down!
                operation/scroll-lines-up!
                operation/wrap-update!
@@ -679,7 +678,6 @@ USA.
   (let ((new-matrix (screen-new-matrix screen))
 	(y-size (screen-y-size screen))
 	(preemption-modulus (screen-preemption-modulus screen))
-	(discretionary-flush (screen-operation/discretionary-flush screen))
 	(halt-update? (editor-halt-update? current-editor)))
     (let loop ((y 0) (m 0))
       (cond ((fix:= y y-size)
@@ -689,9 +687,7 @@ USA.
 	    ((not (fix:= 0 m))
 	     (update-line screen y)
 	     (loop (fix:+ y 1) (fix:- m 1)))
-	    ((begin
-	       (if discretionary-flush (discretionary-flush screen))
-	       (and (not force?) (halt-update?)))
+	    ((and (not force?) (halt-update?))
 	     (if (screen-debug-trace screen)
 		 ((screen-debug-trace screen) 'screen screen
 					      'update-preemption y))

@@ -68,7 +68,6 @@ USA.
                    console-exit!
                    console-flush!
                    console-modeline-event!
-                   console-discretionary-flush
                    console-scroll-lines-down!
                    console-scroll-lines-up!
                    console-wrap-update!
@@ -79,13 +78,6 @@ USA.
                    x-size
                    y-size))))
 
-
-
-(define (output-port/buffered-bytes port)
-  (let ((operation (port/operation port 'BUFFERED-OUTPUT-BYTES)))
-    (if operation
-        (operation port)
-        0)))
 
 (define (console-available?)
   (let ((description (setup-terminal)))
@@ -468,20 +460,6 @@ USA.
   (let ((finished? (thunk)))
     (flush-tty/output (console-output-port))
     finished?))
-
-(define (console-discretionary-flush screen)
-  (let ((n (output-port/buffered-bytes (console-output-port))))
-    (if (fix:< 20 n)
-        (begin
-          (flush-tty/output (console-output-port))
-          (let ((baud-rate (screen-baud-rate screen)))
-            (if (fix:< baud-rate 2400)
-                (let ((msec (quotient (* n 10000) baud-rate)))
-                  (if (>= msec 1000)
-                      (let ((t (+ (real-time-clock) msec)))
-                        (let loop ()
-                          (if (< (real-time-clock) t)
-                              (loop))))))))))))
 
 (define (console-beep screen)
   (output-1 screen (bell (screen-description screen))))
