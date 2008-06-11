@@ -51,7 +51,6 @@ USA.
                               delete-line-next-cost
                               scroll-region-cost)
                        (make-terminal-state description
-                                            (baud-rate->index baud-rate)
                                             baud-rate
                                             insert-line-cost
                                             insert-line-next-cost
@@ -372,7 +371,6 @@ USA.
 
 (define-record-type* terminal-state
   (make-terminal-state description
-                       baud-rate-index
                        baud-rate
                        insert-line-cost
                        insert-line-next-cost
@@ -392,7 +390,6 @@ USA.
     (procedure (screen-state screen))))
 
 (define screen-description            (accessor terminal-state-description))
-(define screen-baud-rate-index        (accessor terminal-state-baud-rate-index))
 (define screen-baud-rate              (accessor terminal-state-baud-rate))
 (define screen-insert-line-cost       (accessor terminal-state-insert-line-cost))
 (define screen-insert-line-next-cost) (accessor terminal-state-insert-line-next-cost)
