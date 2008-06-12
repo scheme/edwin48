@@ -99,17 +99,17 @@ USA.
   (symbol button-symbol))
 
 (define* (make-down-button number (bits 0))
-  (%make-button number bits #t 'MAKE-DOWN-BUTTON))
+  (%make-button number bits #t 'make-down-button))
 
 (define* (make-up-button number (bits 0))
-  (%make-button number bits #f 'MAKE-UP-BUTTON))
+  (%make-button number bits #f 'make-up-button))
 
 (define (%make-button number bits down? caller)
   (let ((name
          (symbol (bucky-bits->prefix bits)
-                 'BUTTON-
+                 'button-
                  number
-                 (if down? '-DOWN '-UP))))
+                 (if down? '-down '-up))))
     (hash-table/intern! buttons-table name
                         (lambda ()
                           (%%make-button number bits down? name)))))
