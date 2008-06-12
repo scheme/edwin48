@@ -10,6 +10,9 @@
 
 (user)
 
+;;; EDWIN-EXPORT
+(config '(load "config-macros.scm"))
+
 (config '(load "terminfo/interfaces.scm"
                "terminfo/scsh-packages.scm"))
 
