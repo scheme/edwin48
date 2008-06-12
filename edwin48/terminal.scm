@@ -199,8 +199,6 @@ USA.
                 (let loop ()
                   (cond (inferior-thread-changes? event:interrupt)
                         ((process-output-available?) event:process-output)
-                        ((not have-select?)
-                         (and block? (read-event block?)))
                         (else
                          (case (test-for-io-on-channel channel 'READ block?)
                            ((#F) #f)
