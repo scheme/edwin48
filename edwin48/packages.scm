@@ -35,7 +35,7 @@
          modlin
          motion
          regops
-         s48-macros
+         (scsh macros)
          simple
          struct
          txtprp
@@ -100,6 +100,7 @@
   (open aliases
         define-record-type*
         edwin:display-type
+        edwin:keys
         edwin:screen
         event-distributor
         errors
