@@ -6,35 +6,44 @@
      (edwin:command          edwin:command/interface)
      (edwin:command-table    edwin:command-table/interface)
      (edwin:current-state    edwin:current-state/interface)
+     (edwin:display-type     edwin:display-type/interface)
+     (edwin:editor           edwin:editor-definition/interface)
      (edwin:group            edwin:group/interface)
+     (edwin:keys             edwin:keys/interface)
      (edwin:mark             edwin:mark/interface)
      (edwin:mode             edwin:mode/interface)
      (edwin:modeline         edwin:modeline/interface)
      (edwin:motion           edwin:motion/interface)
      (edwin:region           edwin:region/interface)
+     (edwin:screen           edwin:screen/interface)
      (edwin:simple-editing   edwin:simple-editing/interface)
      (edwin:text-property    edwin:text-property/interface)
      (edwin:undo             edwin:undo/interface)
      (edwin:variable         edwin:variable/interface)
      (edwin:variable/private (export set-variable-%default-value!
                                      set-variable-%value!)))
-    (open (modify scheme (hide string-fill!))
+    (open (modify scheme  (hide integer->char string-fill! vector-fill!))
           (modify sorting (rename (vector-sort sort)))
-          ascii aliases define-opt define-record-type* errors event-distributor fixme fixnum
+          (modify ascii   (rename (ascii->char integer->char)))
+          aliases define-opt define-record-type* errors event-distributor fixme fixnum
           pathname rb-tree weak-pair
           srfi-1 srfi-9 srfi-13 srfi-14 srfi-23 srfi-43 srfi-69
           edwin:doc-string edwin:ring edwin:string-table edwin:utilities)
   (for-syntax (open scheme errors macro-helpers))
   (files buffer
          bufset
+         calias
          comman
          comtab
          curren
+         display
+         edtstr
          grpops
          modes
          modlin
          motion
          regops
+         screen
          (scsh macros)
          simple
          struct
@@ -77,25 +86,6 @@
         srfi-1 srfi-14 edwin:string-table edwin:utilities)
   (files comtab))
 
-(define-structure edwin:editor-definition edwin:editor-definition/interface
-  (open scheme aliases define-opt define-record-type*
-        edwin:display-type edwin:mode edwin:ring srfi-69)
-  (files edtstr))
-
-(define-structure edwin:display-type edwin:display-type/interface
-  (open scheme define-record-type* srfi-1)
-  (files display))
-
-(define-structure edwin:screen edwin:screen/interface
-  (open (modify scheme (hide string-fill! vector-fill!))
-        aliases
-        errors
-        fixnum
-        define-record-type*
-        srfi-13
-        srfi-43)
-  (files screen))
-
 (define-structure edwin:console-screen edwin:console-screen/interface
   (open aliases
         define-record-type*
@@ -114,15 +104,3 @@
         terminfo)
   (files terminal))
 
-(define-structure edwin:keys edwin:keys/interface
-  (open aliases
-        (modify ascii (rename (ascii->char integer->char)))
-        define-record-type*
-        edwin:variable
-        edwin:utilities
-        errors
-        fixnum
-        (modify scheme (hide integer->char))
-        srfi-1
-        srfi-13)
-  (files calias))
