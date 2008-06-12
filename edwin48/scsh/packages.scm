@@ -15,7 +15,7 @@
 (define-structure define-record-type*-expander
     (export expand-define-record-type*)
   (open scheme destructuring fluids signals receiving)
-  (files (scsh records)))
+  (files records))
 
 (define-structure weak-pair
     (export weak-pair?
@@ -27,7 +27,7 @@
             weak-list->list
             list->weak-list)
   (open scheme define-record-type* errors srfi-1 weak)
-  (files (scsh weak-pair)))
+  (files weak-pair))
 
 (define-structure fixnum
     (export fix:= fix:fixnum?
@@ -39,7 +39,7 @@
             fix:not fix:and fix:andc
             fix:or fix:xor fix:lsh)
   (open scheme bitwise)
-  (files (scsh fixnum)))
+  (files fixnum))
 
 (define-structure errors
     (export error syntax-error
@@ -51,7 +51,7 @@
             error:not-weak-list
             warn)
   (open scheme (subset signals (error syntax-error warn)))
-  (files (scsh errors)))
+  (files errors))
 
 (define-structure aliases
     (export without-interrupts
@@ -73,13 +73,13 @@
         ascii errors define-opt fluids interrupts util
         (modify scsh-level-0 (rename (getenv get-environment-variable)))
         srfi-1 srfi-6 srfi-8 srfi-13 srfi-14 srfi-43)
-  (files (scsh aliases)))
+  (files aliases))
 
 (define-structure define-opt
     (export (define* :syntax))
   (open scheme srfi-1 let-opt)
   (for-syntax (open scheme let-opt (subset signals (syntax-error)) srfi-1))
-  (files (scsh define-opt)))
+  (files define-opt))
 
 (define-structure mit-regexp
     (export re-compile-pattern
@@ -92,14 +92,14 @@
             re-match-extract
             regexp-group)
   (open scheme srfi-23)
-  (files (scsh regexp)))
+  (files regexp))
 
 (define-structure io-support
     (export file-eq?
             file-exists?
             read-string!/partial)
   (open scheme-with-scsh)
-  (files (scsh fileio)))
+  (files fileio))
 
 (define-structure pathname
     (export ->pathname
@@ -147,7 +147,7 @@
   (begin
     (define (name->user-info name)  (user-info name))
     (define (user-id->user-info id) (user-info id)))
-  (files pathname pathname-unix (scsh pathname)))
+  (files pathnames pathname-unix pathname-scsh))
 
 (define-structure macro-helpers
     (export command-name->scheme-name
@@ -157,14 +157,14 @@
             expand-variable-assignment
             expand-variable-definition)
   (open scheme aliases errors)
-  (files (scsh macros-helpers)))
+  (files macros-helpers))
 
 (define-structure fixme
     (export within-editor?
             editor-error
             procedure-arity-valid?)
   (open scheme aliases errors)
-  (files (scsh fixme)))
+  (files fixme))
 
 (define-structure rb-tree
     (export make-rb-tree
@@ -174,7 +174,7 @@
             rb-tree->alist  alist->rb-tree
             rb-tree/copy)
   (open scheme search-trees)
-  (files (scsh rbtree)))
+  (files rbtree))
 
 (define-structure event-distributor
     (export make-event-distributor
@@ -182,7 +182,7 @@
             add-event-receiver!
             remove-event-receiver!)
   (open scheme aliases errors define-record-type* queues srfi-1)
-  (files (scsh event-distributor)))
+  (files event-distributor))
 
 (define-interface scsh-tty/interface
     (export tty?                   tty-info
@@ -225,4 +225,4 @@
              event:console-resize
              ))
   (open scheme ascii bitwise event-distributor scsh-subset srfi-23)
-  (files (scsh terminal-support)))
+  (files terminal-support))

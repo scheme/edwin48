@@ -14,7 +14,7 @@
                "terminfo/scsh-packages.scm"))
 
 (config '(load "edwin48/srfi-packages.scm"
-               "edwin48/scsh-packages.scm"
+               "edwin48/scsh/packages.scm"
                "edwin48/interfaces.scm"
                "edwin48/packages.scm"))
 
