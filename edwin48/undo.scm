@@ -157,18 +157,18 @@ USA.
 (define-variable undo-limit
   "Keep no more undo information once it exceeds this size.
 This limit is applied when garbage collection happens.
-The size is counted as the number of bytes occupied,
+The size is counted as the number of words occupied,
 which includes both the saved text and other data."
-  20000
+  160000
   exact-nonnegative-integer?)
 
 (define-variable undo-strong-limit
   "Don't keep more than this much size of undo information.
 A command that pushes past this size is itself forgotten.
 This limit is applied when garbage collection happens.
-The size is counted as the number of bytes occupied,
+The size is counted as the number of words occupied,
 which includes both the saved text and other data."
-  30000
+  240000
   exact-nonnegative-integer?)
 
 (define (truncate-buffer-undo-lists!)
@@ -176,22 +176,19 @@ which includes both the saved text and other data."
   ;; structures because it is a GC daemon and can be run at times when
   ;; the editor does not exist or is not running.  It would actually
   ;; prefer to be run *before* the GC, but that's not possible now.
+  ;; Taylor says this is bogus
   (if edwin-editor
-      (let ((bytes/word (vector-ref (gc-space-status) 0)))
-	(let ((words->bytes
-	       (lambda (words)
-		 (round (/ words bytes/word)))))
-	(do ((buffers (bufferset-buffer-list (editor-bufferset edwin-editor))
-		      (cdr buffers)))
-	    ((not (pair? buffers)))
-	  (let ((buffer (car buffers)))
-	    (truncate-undo-data!
-	     (group-undo-data (buffer-group buffer))
-	     (words->bytes (ref-variable undo-limit buffer))
-	     (words->bytes (ref-variable undo-strong-limit buffer)))))))))
+      (do ((buffers (bufferset-buffer-list (editor-bufferset edwin-editor))
+                    (cdr buffers)))
+          ((not (pair? buffers)))
+        (let ((buffer (car buffers)))
+          (truncate-undo-data!
+           (group-undo-data (buffer-group buffer))
+           (ref-variable undo-limit buffer)
+           (ref-variable undo-strong-limit buffer))))))
 
-(add-gc-daemon!/no-restore truncate-buffer-undo-lists!)
-(add-event-receiver! event:after-restore truncate-buffer-undo-lists!)
+(call-after-gc! truncate-buffer-undo-lists!)
+;; (add-event-receiver! event:after-restore truncate-buffer-undo-lists!)
 
 (define (truncate-undo-data! items min-size max-size)
   (if (pair? items)

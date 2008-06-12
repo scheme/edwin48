@@ -26,6 +26,7 @@
           (modify sorting (rename (vector-sort sort)))
           (modify ascii   (rename (ascii->char integer->char)))
           aliases define-opt define-record-type* errors event-distributor fixme fixnum
+          (modify interrupts (expose call-after-gc!))
           io-support pathname rb-tree weak-pair
           srfi-1 srfi-9 srfi-13 srfi-14 srfi-23 srfi-43 srfi-69
           edwin:doc-string edwin:ring edwin:string-table edwin:utilities)
