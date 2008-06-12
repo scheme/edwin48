@@ -75,8 +75,13 @@
 
 (define-syntax fluid-let
   (syntax-rules ()
-    ((fluid-let ((variable init)) expression ...)
-     (let-fluid variable init (lambda () expression ...)))))
+    ((fluid-let ((variable init) ...) body0 body1 ...)
+     (*fluid-let ((variable init) ...) body0 body1 ...))))
+
+(define-syntax *fluid-let
+  (syntax-rules ()
+    ((*fluid-let ((bindings ...) ...) . body)
+     (let-fluids bindings ... ... . body))))
 
 (define (integer-round n1 n2) (round (/ n1 n2)))
 
