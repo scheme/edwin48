@@ -211,7 +211,11 @@
           variable-permanent-local?
           variable-permanent-local!))
 
-(define-interface edwin:buffer/interface
+(define-interface edwin:buffer/interface+edwin
+  (edwin:export (variable buffer-creation-hook
+                          tab-width)))
+
+(define-interface edwin:buffer/interface+scheme
   (export make-buffer
           buffer-modeline-event!
           without-editor-interrupts
@@ -266,6 +270,10 @@
           enable-buffer-minor-mode!
           disable-buffer-minor-mode!))
 
+(define-interface edwin:buffer/interface
+  (compound-interface edwin:buffer/interface+edwin
+                      edwin:buffer/interface+scheme))
+
 (define-interface edwin:command-table/interface
   (export comtab-entry local-comtab-entry
           prefix-key-list?
@@ -292,9 +300,22 @@
           minor-mode-comtab
           mode-description))
 
-(define-interface edwin:modeline/interface
+(define-interface edwin:modeline/interface+edwin
+  (edwin:export
+   (variable mode-name
+             minor-mode-alist
+             mode-line-format
+             mode-line-modified
+             mode-line-procedure
+             mode-line-process)))
+
+(define-interface edwin:modeline/interface+scheme
   (export add-minor-mode-line-entry!
           remove-minor-mode-line-entry!))
+
+(define-interface edwin:modeline/interface
+  (compound-interface edwin:modeline/interface+edwin
+                      edwin:modeline/interface+scheme))
 
 (define-interface edwin:text-property/interface
   (export add-text-property
@@ -357,7 +378,34 @@
           undo-record-replacement!    undo-start
           with-group-undo-disabled))
 
-(define-interface edwin:basic-command/interface
+(define-interface edwin:basic-command/interface+edwin
+  (edwin:export (variable buffer-reallocation-factor)
+                (commmand abort-recursive-edit
+                          control-meta-prefix
+                          control-prefix
+                          define-command
+                          execute-extended-command
+                          exit-recursive-edit
+                          indent-for-comment
+                          indent-new-comment-line
+                          keyboard-quit
+                          kill-comment
+                          meta-prefix
+                          narrow-to-region
+                          open-line
+                          prefix-key
+                          quoted-insert
+                          save-buffers-kill-edwin
+                          save-buffers-kill-scheme
+                          self-insert-command
+                          set-comment-column
+                          set-key
+                          suspend-edwin
+                          suspend-scheme
+                          undefined
+                          widen)))
+
+(define-interface edwin:basic-command/interface+scheme
   (export barf-if-read-only      check-first-group-modification
           editor-beep            editor-failure
           execute-extended-keys?
@@ -366,6 +414,10 @@
           save-buffers-and-exit  save-buffers-kill-edwin
           scheme-can-quit?       self-insert
           set-command-prompt-prefix!))
+
+(define-interface edwin:basic-command/interface
+  (compound-interface edwin:basic-command/interface+edwin
+                      edwin:basic-command/interface+scheme))
 
 (define-interface edwin:bufferset/interface
   (export bufferset-buffer-list
@@ -377,7 +429,11 @@
           bufferset-guarantee-buffer! bufferset-kill-buffer!
           bufferset-rename-buffer     bufferset-select-buffer!))
 
-(define-interface edwin:current-state/interface
+(define-interface edwin:current-state/interface+edwin
+  (edwin:export (variable frame-creation-hook
+                          select-buffer-hook)))
+
+(define-interface edwin:current-state/interface+scheme
   (export add-kill-buffer-hook
           add-rename-buffer-hook
           add-select-buffer-hook
@@ -456,6 +512,10 @@
           with-current-point
           with-messages-suppressed
           with-selected-buffer))
+
+(define-interface edwin:current-state/interface
+  (compound-interface edwin:current-state/interface+edwin
+                      edwin:current-state/interface+scheme))
 
 (define-interface edwin:editor-definition/interface
   (export make-editor
@@ -540,3 +600,26 @@
           xkey<?
           make-special-key
           special-key?))
+
+(define-interface edwin:kill-command/interface
+  (edwin:export (command delete-region
+                         delete-backward-char
+                         delete-char
+                         kill-line
+                         backward-delete-char-untabify
+                         kill-region
+                         copy-region-as-kill
+                         append-next-kill
+                         yank
+                         yank-pop
+                         rotate-yank-pointer
+                         set-mark-command
+                         mark-beginning-of-buffer
+                         mark-end-of-buffer
+                         mark-whole-buffer
+                         exchange-point-and-mark
+                         transpose-chars)
+                (variable kill-ring-max
+                          kill-ring
+                          kill-ring-yank-pointer
+                          mark-ring-maximum)))
