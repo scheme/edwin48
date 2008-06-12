@@ -24,7 +24,7 @@
                                      set-variable-%value!)))
     (open (modify scheme  (hide integer->char string-fill! vector-fill!))
           (modify sorting (rename (vector-sort sort)))
-          (modify ascii   (rename (ascii->char integer->char)))
+          (modify ascii   (alias  (ascii->char integer->char)))
           aliases define-opt define-record-type* errors event-distributor fixme fixnum
           (modify interrupts (expose call-after-gc!))
           io-support pathname rb-tree weak-pair
