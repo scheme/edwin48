@@ -515,7 +515,7 @@ Set by Scheme evaluation code to update the mode line."
        ";Value"
        (if (and hash-number?
 		(object-pointer? value)
-		(not (interned-symbol? value))
+		(not (symbol? value))
 		(not (number? value)))
 	   (string-append
 	    " "

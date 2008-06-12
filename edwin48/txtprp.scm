@@ -222,7 +222,7 @@ USA.
       (error:wrong-type-argument group "group" procedure)))
 
 (define (validate-key-argument key procedure)
-  (if (not (or (interned-symbol? key) (variable? key)))
+  (if (not (or (symbol? key) (variable? key)))
       (error:wrong-type-argument key "key" procedure)))
 
 (define no-datum
