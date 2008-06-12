@@ -90,7 +90,7 @@ USA.
 
 ;;;; Buttons
 
-(define-record-type <button> :button
+(define-record-type button
   (%%make-button number bits down? symbol)
   button?
   (number button-number)
@@ -128,11 +128,7 @@ USA.
 (define (button-name button)
   (symbol-name (button-symbol button)))
 
-(define-record-discloser :button
-  (lambda (button)
-    (list (button-symbol button))))
-
-(define-record-type button-event :button-event
+(define-record-type button-event
   (make-button-event window x y)
   button-event?
   (window button-event/window)
