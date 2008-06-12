@@ -63,14 +63,14 @@
             string-head string-tail
             get-environment-variable
             symbol-append symbol-name symbol<?
-            call-with-binary-input-file call-with-binary-output-file
+            
             exact-integer? exact-nonnegative-integer?
             vector-8b-ref vector-8b-set! vector-8b-fill! vector-8b-find-next-char
             round
             real-time-clock
             (fluid-let :syntax))
   (open (modify scheme (hide string-fill!))
-        ascii errors define-opt fluids interrupts util
+        ascii errors define-opt fluids interrupts scsh-subset util
         (modify scsh-level-0 (rename (getenv get-environment-variable)))
         srfi-1 srfi-6 srfi-8 srfi-13 srfi-14 srfi-43)
   (files aliases))
@@ -95,10 +95,13 @@
   (files regexp))
 
 (define-structure io-support
-    (export file-eq?
+    (export call-with-binary-input-file
+            call-with-binary-output-file
+            file-eq?
             file-exists?
+            file-modification-time
             read-string!/partial)
-  (open scheme-with-scsh)
+  (open scheme scsh-subset)
   (files fileio))
 
 (define-structure pathname
@@ -208,8 +211,16 @@
             ttychar/start  ttychar/stop ttychar/interrupt
             disable-tty-char))
 
+(define-interface scsh-io/interface
+  (export file-exists?
+          file-info
+          file-info:inode
+          file-info:mtime
+          read-string!/partial))
+
 (define-structure scsh-subset
     (compound-interface scsh-tty/interface
+                        scsh-io/interface
                         (export interrupt/winch
                                 set-interrupt-handler))
   (open scheme scsh-level-0))
