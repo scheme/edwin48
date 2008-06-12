@@ -1,11 +1,11 @@
 (define (command-name->scheme-name name)
-  (symbol-append 'EDWIN-COMMAND$ name))
+  (symbol-append 'edwin-command$ name))
 
 (define (variable-name->scheme-name name)
-  (symbol-append 'EDWIN-VARIABLE$ name))
+  (symbol-append 'edwin-variable$ name))
 
 (define (mode-name->scheme-name name)
-  (symbol-append 'EDWIN-MODE$ name))
+  (symbol-append 'edwin-mode$ name))
 
 (define (list-ref/default list index default-value)
   (if (> (length list) index)
