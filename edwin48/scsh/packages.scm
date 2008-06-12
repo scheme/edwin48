@@ -63,8 +63,7 @@
             string-head string-tail
             get-environment-variable
             symbol-append symbol-name symbol<?
-            
-            exact-integer? exact-nonnegative-integer?
+            exact-integer? exact-nonnegative-integer? integer-round
             vector-8b-ref vector-8b-set! vector-8b-fill! vector-8b-find-next-char
             round
             real-time-clock

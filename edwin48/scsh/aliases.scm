@@ -78,7 +78,7 @@
     ((fluid-let ((variable init)) expression ...)
      (let-fluid variable init (lambda () expression ...)))))
 
-(define (integer-round number) (round number))
+(define (integer-round n1 n2) (round (/ n1 n2)))
 
 (define (real-time-clock)
   (receive (secs ticks)
