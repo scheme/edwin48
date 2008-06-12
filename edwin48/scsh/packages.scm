@@ -234,5 +234,6 @@
              set-terminal-x-size! set-terminal-y-size!
              event:console-resize
              ))
-  (open scheme ascii bitwise event-distributor scsh-subset srfi-23)
+  (open scheme ascii bitwise event-distributor scsh-subset srfi-23
+        threads-internal)
   (files terminal-support))

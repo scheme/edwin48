@@ -96,5 +96,8 @@
 
 (define event:console-resize (make-event-distributor))
 ;;; care about console-thread
-(define (console-resize-handler int) (event-distributor/invoke! event:console-resize))
+(define (console-resize-handler int)
+  (spawn-on-root
+   (lambda () (event-distributor/invoke! event:console-resize))))
+
 (set-interrupt-handler interrupt/winch console-resize-handler)
