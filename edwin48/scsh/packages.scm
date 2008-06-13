@@ -101,7 +101,7 @@
             file-modification-time
             read-string!/partial)
   (open scheme scsh-subset)
-  (files fileio))
+  (files io-support))
 
 (define-structure pathname
     (export ->pathname

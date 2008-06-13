@@ -1,4 +1,4 @@
-;;; -*- mode: scheme; scheme48-package: mit-fileio -*-
+;;; -*- mode: scheme; scheme48-package: io-support -*-
 
 (define (file-eq? filename1 filename2)
   (let ((info1 (file-info filename1))
