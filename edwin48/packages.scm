@@ -87,7 +87,7 @@
         srfi-1 srfi-14 edwin:string-table edwin:utilities)
   (files comtab))
 
-(define-structure edwin:console-screen edwin:console-screen/interface
+(define-structure edwin:terminal-screen edwin:terminal-screen/interface
   (open aliases
         define-record-type*
         edwin:display-type

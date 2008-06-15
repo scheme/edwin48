@@ -581,7 +581,7 @@
           with-screen-in-update
           screen-line-draw-cost))
 
-(define-interface edwin:console-screen/interface
+(define-interface edwin:terminal-screen/interface
   (export make-console-screen))
 
 (define-interface edwin:keys/interface
