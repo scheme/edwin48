@@ -623,3 +623,13 @@
                           kill-ring
                           kill-ring-yank-pointer
                           mark-ring-maximum)))
+
+(define-interface edwin:display-imaging/interface
+  (export default-char-image-strings
+          group-column->index
+          group-columns
+          group-line-columns
+          string-columns
+          group-image!
+          partial-image!
+          substring-image!))

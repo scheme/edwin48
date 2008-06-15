@@ -6,6 +6,7 @@
      (edwin:command          edwin:command/interface)
      (edwin:command-table    edwin:command-table/interface)
      (edwin:current-state    edwin:current-state/interface)
+     (edwin:display-imaging  edwin:display-imaging/interface)
      (edwin:display-type     edwin:display-type/interface)
      (edwin:editor           edwin:editor-definition/interface)
      (edwin:group            edwin:group/interface)
@@ -40,6 +41,7 @@
          display
          edtstr
          grpops
+         image
          modes
          modlin
          motion
@@ -104,4 +106,3 @@
         terminal-support
         terminfo)
   (files terminal))
-
