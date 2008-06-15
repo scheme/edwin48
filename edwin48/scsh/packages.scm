@@ -227,7 +227,9 @@
 (define-structure terminal-support
     (compound-interface
      scsh-tty/interface
-     (export terminal-raw-input
+     (export console-input-port
+             console-output-port
+             terminal-raw-input
              terminal-raw-output
              terminal-get-interrupt-char
              terminal-set-interrupt-char!

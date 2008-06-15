@@ -116,7 +116,7 @@ USA.
       )))
 
 (define (get-console-input-operations terminal-state)
-  (let ((port   (console-input-port))
+  (let ((port   console-input-port)
         (string (make-string (* 3 input-buffer-size)))
         (start  0)
         (end    0)
@@ -308,9 +308,9 @@ USA.
   (bind-console-state #f
     (lambda (get-outside-state)
       (terminal-operation terminal-raw-input
-                          (console-input-port))
+                          console-input-port)
       (terminal-operation terminal-raw-output
-                          (console-output-port))
+                          console-output-port)
       (terminal-set-interrupt-char! #t)
       (receiver
        (lambda (thunk)
@@ -338,15 +338,15 @@ USA.
                     (set-console-state! outside-state)))))
 
 (define (console-state)
-  (vector (port-state (console-input-port))
-          (port-state (console-output-port))
+  (vector (port-state console-input-port)
+          (port-state console-output-port)
           (terminal-get-interrupt-char)))
 
 (define (set-console-state! state)
-  (set-port-state! (console-input-port)
-                      (vector-ref state 0))
-  (set-port-state! (console-output-port)
-                      (vector-ref state 1))
+  (set-port-state! console-input-port
+                   (vector-ref state 0))
+  (set-port-state! console-output-port
+                   (vector-ref state 1))
   (terminal-set-interrupt-char! (vector-ref state 2)))
 
 (define (port-state port)
@@ -444,7 +444,7 @@ USA.
     (do-exit-standout-mode screen)
     (do-exit-insert-mode screen)
     (maybe-output screen (exit-ca-mode description)))
-  (flush-tty/output (console-output-port)))
+  (flush-tty/output console-output-port))
 
 (define (console-modeline-event! screen window type)
   screen window type
@@ -453,7 +453,7 @@ USA.
 (define (console-wrap-update! screen thunk)
   screen
   (let ((finished? (thunk)))
-    (flush-tty/output (console-output-port))
+    (flush-tty/output console-output-port)
     finished?))
 
 (define (console-beep screen)
@@ -461,7 +461,7 @@ USA.
 
 (define (console-flush! screen)
   screen
-  (flush-tty/output (console-output-port)))
+  (flush-tty/output console-output-port))
 
 (define (console-write-cursor! screen x y)
   (move-cursor screen x y))
@@ -475,7 +475,7 @@ USA.
         (do-exit-insert-mode screen)
         (move-cursor screen x y)
         (highlight-if-desired screen highlight)
-        (write-char char (console-output-port))
+        (write-char char console-output-port)
         (record-cursor-after-output screen (fix:1+ x)))))
 
 (define (console-write-substring! screen x y string start end highlight)
@@ -492,7 +492,7 @@ USA.
                                  (screen-x-size screen))))
                    (fix:-1+ end)
                    end)))
-          (write-string (substring string start end) (console-output-port))
+          (write-string (substring string start end) console-output-port)
           (record-cursor-after-output screen (fix:+ x (fix:- end start)))))))
 
 (define (console-clear-line! screen x y first-unused-x)
@@ -649,7 +649,7 @@ USA.
                            x-end))))
                 (do ((x cursor-x (fix:1+ x)))
                     ((fix:= x x-end))
-                  (write-char #\space (console-output-port)))
+                  (write-char #\space console-output-port))
                 (record-cursor-after-output screen x-end))))))))
 
 (define (insert-lines screen yl yu n)
@@ -1065,7 +1065,7 @@ Note that the multiply factors are in tenths of characters.  |#
          (state (screen-state screen)))
     (if (not (terminal-state? state))
         (editor-error "Not a terminal screen")
-        (let ((port (console-output-port))
+        (let ((port console-output-port)
               (desc (terminal-state-description state)))
           (let ((x-size (terminal:x-size desc))
                 (y-size (terminal:y-size desc)))

@@ -1,3 +1,6 @@
+(define console-input-port  (current-input-port))
+(define console-output-port (current-output-port))
+
 (define (terminal-raw-input port)
   (let* ((info               (tty-info port))
          (local-flags        (lambda ()  (tty-info:local-flags       info)))
