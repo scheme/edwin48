@@ -3,8 +3,9 @@
 (define (input-available-on-port? port block?)
   (receive (rvec wvec evec)
       (select (vector port)
-	      (vector)
-	      (vector))
+              (vector)
+              (vector)
+              (if block? #f 0))
     (> 0 (vector-length rvec))))
 
 (define (file-eq? filename1 filename2)

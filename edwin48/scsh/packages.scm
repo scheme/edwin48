@@ -100,7 +100,7 @@
             file-exists?
             file-modification-time
             read-string!/partial)
-  (open scheme scsh-subset)
+  (open scheme receiving scsh-subset)
   (files io-support))
 
 (define-structure pathname
@@ -215,6 +215,7 @@
           file-info
           file-info:inode
           file-info:mtime
+          select
           read-string!/partial))
 
 (define-structure scsh-subset
