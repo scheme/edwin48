@@ -32,25 +32,27 @@
           srfi-1 srfi-9 srfi-13 srfi-14 srfi-23 srfi-43 srfi-69
           edwin:doc-string edwin:ring edwin:string-table edwin:utilities)
   (for-syntax (open scheme errors macro-helpers))
-  (files buffer
-         bufset
-         calias
+  (files (scsh macros) ;; macros need to be looked at first
+         struct
+         grpops
+         txtprp
+         regops
+         motion
+         ;; search
+         image
          comman
          comtab
-         curren
-         display
-         edtstr
-         grpops
-         image
          modes
-         modlin
-         motion
-         regops
+         buffer
+         bufset
+         display
          screen
-         (scsh macros)
+         calias
+         edtstr
+         ;; editor
+         curren
+         modlin
          simple
-         struct
-         txtprp
          undo))
 
 (define-structure edwin:basic-command edwin:basic-command/interface
