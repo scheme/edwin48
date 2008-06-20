@@ -197,14 +197,13 @@ USA.
           (lambda (block?)
             (or (read-char)
                 (let loop ()
-                  (cond (inferior-thread-changes? event:interrupt)
-                        ((process-output-available?) event:process-output)
-                        (else
-                         (case (input-available-on-port? port block?)
-                           ((#F) #f)
-                           ((PROCESS-STATUS-CHANGE) event:process-status)
-                           ((INTERRUPT) (loop))
-                           (else (read-event block?)))))))))
+                  (cond ;; REPL-related
+                        ;; (inferior-thread-changes? event:interrupt)
+                        ;; TODO, see process.scm
+                        ;; ((process-output-available?) event:process-output) 
+                        ((input-available-on-port? port block?)
+                         (read-event block?))
+                        (else #f))))))
          (guarantee-result
           (lambda ()
             (let ((event (read-event #t)))
