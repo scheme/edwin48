@@ -1,5 +1,12 @@
 ;;; -*- mode: scheme; scheme48-package: io-support -*-
 
+(define (input-available-on-port? port block?)
+  (receive (rvec wvec evec)
+      (select (vector port)
+	      (vector)
+	      (vector))
+    (> 0 (vector-length rvec))))
+
 (define (file-eq? filename1 filename2)
   (let ((info1 (file-info filename1))
         (info2 (file-info filename2)))

@@ -200,7 +200,7 @@ USA.
                   (cond (inferior-thread-changes? event:interrupt)
                         ((process-output-available?) event:process-output)
                         (else
-                         (case (test-for-io-on-channel channel 'READ block?)
+                         (case (input-available-on-port? port block?)
                            ((#F) #f)
                            ((PROCESS-STATUS-CHANGE) event:process-status)
                            ((INTERRUPT) (loop))
