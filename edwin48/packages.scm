@@ -1,7 +1,8 @@
 ;;; -*- mode: scheme; scheme48-package: (config) -*-
 
 (define-structures
-    ((edwin:buffer           edwin:buffer/interface)
+    ((edwin:basic-command    edwin:basic-command/interface)
+     (edwin:buffer           edwin:buffer/interface)
      (edwin:bufferset        edwin:bufferset/interface)
      (edwin:command          edwin:command/interface)
      (edwin:command-table    edwin:command-table/interface)
@@ -55,11 +56,8 @@
          modlin
          simple
          undo
+         basic
          kilcom))
-
-(define-structure edwin:basic-command edwin:basic-command/interface
-  (open scheme aliases errors define-opt edwin:command)
-  (files basic))
 
 (define-structure edwin:string-table edwin:string-table/interface
   (open scheme aliases define-record-type* define-opt
