@@ -3,8 +3,8 @@
 $Id: things.scm,v 1.94 2008/01/30 20:02:06 cph Exp $
 
 Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994,
-    1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
-    2006, 2007, 2008 Massachusetts Institute of Technology
+1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
+2006, 2007, 2008 Massachusetts Institute of Technology
 
 This file is part of MIT/GNU Scheme.
 
@@ -48,17 +48,15 @@ USA.
 ;;; simpler primitives to move forward or backward once.
 
 (define (make-motion-pair forward-one-thing backward-one-thing receiver)
-  (define (forward-thing mark n #!optional limit?)
-    (let ((limit? (and (not (default-object? limit?)) limit?)))
-      (cond ((positive? n) (%forward-thing mark n limit?))
-	    ((negative? n) (%backward-thing mark (- n) limit?))
-	    (else mark))))
+  (define* (forward-thing mark n (limit? #f))
+    (cond ((positive? n) (%forward-thing mark n limit?))
+          ((negative? n) (%backward-thing mark (- n) limit?))
+          (else mark)))
 
-  (define (backward-thing mark n #!optional limit?)
-    (let ((limit? (and (not (default-object? limit?)) limit?)))
-      (cond ((positive? n) (%backward-thing mark n limit?))
-	    ((negative? n) (%forward-thing mark (- n) limit?))
-	    (else mark))))
+  (define* (backward-thing mark n (limit? #f))
+    (cond ((positive? n) (%backward-thing mark n limit?))
+          ((negative? n) (%forward-thing mark (- n) limit?))
+          (else mark)))
 
   (define (%forward-thing mark n limit?)
     (let loop ((mark mark) (n n))
@@ -180,12 +178,10 @@ USA.
 		       (integer-divide-remainder qr2)))))
       (values 0 (- c1 c2))))
 
-(define (insert-horizontal-space target-column #!optional point tab-width)
-  (let* ((point
-	  (mark-left-inserting-copy
-	   (if (default-object? point) (current-point) point)))
+(define* (insert-horizontal-space target-column (point (current-point)) (tab-width #f))
+  (let* ((point (mark-left-inserting-copy point))
 	 (tab-width
-	  (if (default-object? tab-width)
+	  (if (not tab-width)
 	      (let ((buffer (mark-buffer point)))
 		(and buffer
 		     (variable-local-value
@@ -205,17 +201,14 @@ USA.
 	(insert-chars #\space n-spaces point)))
     (mark-temporary! point)))
 
-(define (delete-horizontal-space #!optional point)
-  (let ((point (if (default-object? point) (current-point) point)))
-    (delete-string (horizontal-space-start point)
-		   (horizontal-space-end point))))
+(define* (delete-horizontal-space (point (current-point)))
+  (delete-string (horizontal-space-start point)
+                 (horizontal-space-end   point)))
 
-(define (indent-to target-column #!optional minimum point)
-  (let ((minimum (if (default-object? minimum) 0 minimum))
-	(point (if (default-object? point) (current-point) point)))
-    (insert-horizontal-space (max target-column
-				  (+ (mark-column point) minimum))
-			     point)))
+(define* (indent-to target-column (minimum 0) (point current-point))
+  (insert-horizontal-space (max target-column
+                                (+ (mark-column point) minimum))
+                           point))
 
 (define (region-blank? region)
   (not (skip-chars-forward " \t"
@@ -263,16 +256,15 @@ USA.
 
 ;;;; Indentation
 
-(define (maybe-change-indentation indentation #!optional point)
-  (let ((point (if (default-object? point) (current-point) point)))
-    (if (not (= indentation (mark-indentation point)))
-	(change-indentation indentation point))))
+(define* (maybe-change-indentation indentation (point (current-point)))
+  (if (not (= indentation (mark-indentation point)))
+      (change-indentation indentation point)))
 
 (define (change-indentation indentation point)
   (change-column indentation (line-start point 0)))
 
-(define (current-indentation #!optional point)
-  (mark-indentation (if (default-object? point) (current-point) point)))
+(define* (current-indentation (point (current-point)))
+  (mark-indentation point))
 
 (define (mark-indentation mark)
   (mark-column (indentation-end mark)))
@@ -283,10 +275,9 @@ USA.
 (define (within-indentation? mark)
   (line-start? (horizontal-space-start mark)))
 
-(define (maybe-change-column column #!optional point)
-  (let ((point (if (default-object? point) (current-point) point)))
-    (if (not (= column (mark-column point)))
-	(change-column column point))))
+(define* (maybe-change-column column (point (current-point)))
+  (if (not (= column (mark-column point)))
+      (change-column column point)))
 
 (define (change-column column mark)
   (let ((mark (mark-left-inserting-copy mark)))
@@ -296,23 +287,17 @@ USA.
 
 ;;;; Lines
 
-(define forward-line)
-(define backward-line)
-(let ((%backward-line
-       (lambda (mark n limit?)
-	 (line-start mark
-		     (if (line-start? mark) (- n) (- 1 n))
-		     limit?))))
-  (set! forward-line
-	(lambda (mark n #!optional limit?)
-	  (let ((limit? (and (not (default-object? limit?)) limit?)))
-	    (cond ((positive? n) (line-start mark n limit?))
-		  ((negative? n) (%backward-line mark (- n) limit?))
-		  (else mark)))))
-  (set! backward-line
-	(lambda (mark n #!optional limit?)
-	  (let ((limit? (and (not (default-object? limit?)) limit?)))
-	    (cond ((positive? n) (%backward-line mark n limit?))
-		  ((negative? n) (line-start mark (- n) limit?))
-		  (else mark)))))
-  unspecific)
+(define (%backward-line mark n limit?)
+  (line-start mark
+              (if (line-start? mark) (- n) (- 1 n))
+              limit?))
+
+(define* (forward-line mark n (limit? #f))
+  (cond ((positive? n) (line-start mark n limit?))
+        ((negative? n) (%backward-line mark (- n) limit?))
+        (else mark)))
+
+(define* (backward-line mark n (limit? #f))
+  (cond ((positive? n) (%backward-line mark n limit?))
+        ((negative? n) (line-start mark (- n) limit?))
+        (else mark)))
