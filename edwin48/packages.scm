@@ -11,6 +11,7 @@
      (edwin:editor           edwin:editor-definition/interface)
      (edwin:group            edwin:group/interface)
      (edwin:keys             edwin:keys/interface)
+     (edwin:kill-command     edwin:kill-command/interface)
      (edwin:mark             edwin:mark/interface)
      (edwin:mode             edwin:mode/interface)
      (edwin:modeline         edwin:modeline/interface)
@@ -53,7 +54,8 @@
          curren
          modlin
          simple
-         undo))
+         undo
+         kilcom))
 
 (define-structure edwin:basic-command edwin:basic-command/interface
   (open scheme aliases errors define-opt edwin:command)

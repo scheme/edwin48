@@ -184,14 +184,12 @@ The command \\[yank] can retrieve it from there.
   (lambda ()
     (set-command-message! append-next-kill-tag)))
 
-(define (kill-string mark #!optional point)
-  (let ((point (if (default-object? point) (current-point) point)))
-    (kill-ring-save (extract-string mark point) (mark<= point mark) point)
-    (delete-string mark point)))
+(define* (kill-string mark (point (current-point)))
+  (kill-ring-save (extract-string mark point) (mark<= point mark) point)
+  (delete-string mark point))
 
-(define (copy-string mark #!optional point)
-  (let ((point (if (default-object? point) (current-point) point)))
-    (kill-ring-save (extract-string mark point) (mark<= point mark) point)))
+(define* (copy-string mark (point (current-point)))
+  (kill-ring-save (extract-string mark point) (mark<= point mark) point))
 
 (define (kill-ring-save string forward? context)
   (command-message-receive append-next-kill-tag
