@@ -633,3 +633,6 @@
           group-image!
           partial-image!
           substring-image!))
+
+(define-interface edwin:window/interface
+  (export vanilla-window))

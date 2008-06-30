@@ -24,13 +24,14 @@
      (edwin:undo             edwin:undo/interface)
      (edwin:variable         edwin:variable/interface)
      (edwin:variable/private (export set-variable-%default-value!
-                                     set-variable-%value!)))
+                                     set-variable-%value!))
+     (edwin:window           edwin:window/interface))
     (open (modify scheme  (hide integer->char string-fill! vector-fill!))
           (modify sorting (rename (vector-sort sort)))
           (modify ascii   (alias  (ascii->char integer->char)))
           aliases define-opt define-record-type* errors event-distributor fixme fixnum
           (modify interrupts (expose call-after-gc!))
-          io-support pathname rb-tree weak-pair
+          io-support pathname rb-tree soosy weak-pair
           srfi-1 srfi-9 srfi-13 srfi-14 srfi-23 srfi-43 srfi-69
           edwin:doc-string edwin:ring edwin:string-table edwin:utilities)
   (for-syntax (open scheme errors macro-helpers))
@@ -49,6 +50,18 @@
          bufset
          display
          screen
+
+         ;; window system begins here
+         window
+         utlwin
+         ;; bufwin
+         ;; bufwfs
+         ;; bufwiu
+         ;; comwin
+         ;; modwin
+         ;; buffrm
+         ;; edtfrm
+
          calias
          edtstr
          ;; editor

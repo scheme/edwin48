@@ -51,7 +51,8 @@ USA.
 
 ;;;; Vanilla Window
 
-(define-class vanilla-window ()
+
+(define-class vanilla-window #f
   (superior x-size y-size redisplay-flags inferiors))
 
 (define (window-initialize! window window*)
@@ -65,36 +66,36 @@ USA.
   (for-each-inferior-window window (lambda (window) (==> window :kill!))))
 
 (define (window-superior window)
-  (with-instance-variables vanilla-window window () superior))
+  (with-instance-variables vanilla-window window (superior) superior))
 
 (define (%set-window-superior! window window*)
-  (with-instance-variables vanilla-window window (window*)
+  (with-instance-variables vanilla-window window (superior)
     (set! superior window*)))
 
 (define (window-x-size window)
-  (with-instance-variables vanilla-window window () x-size))
+  (with-instance-variables vanilla-window window (x-size) x-size))
 
 (define (%set-window-x-size! window x)
-  (with-instance-variables vanilla-window window (x) (set! x-size x)))
+  (with-instance-variables vanilla-window window (x-size) (set! x-size x)))
 
 (define (window-y-size window)
-  (with-instance-variables vanilla-window window () y-size))
+  (with-instance-variables vanilla-window window (y-size) y-size))
 
 (define (%set-window-y-size! window y)
-  (with-instance-variables vanilla-window window (y) (set! y-size y)))
+  (with-instance-variables vanilla-window window (y-size) (set! y-size y)))
 
 (define (window-redisplay-flags window)
-  (with-instance-variables vanilla-window window () redisplay-flags))
+  (with-instance-variables vanilla-window window (redisplay-flags) redisplay-flags))
 
 (define (%set-window-redisplay-flags! window flags)
-  (with-instance-variables vanilla-window window (flags)
+  (with-instance-variables vanilla-window window (redisplay-flags)
     (set! redisplay-flags flags)))
 
 (define (window-inferiors window)
-  (with-instance-variables vanilla-window window () inferiors))
+  (with-instance-variables vanilla-window window (inferiors) inferiors))
 
 (define (set-window-inferiors! window inferiors*)
-  (with-instance-variables vanilla-window window (inferiors*)
+  (with-instance-variables vanilla-window window (inferiors)
     (set! inferiors inferiors*)))
 
 (define (window-root-window window)
@@ -203,7 +204,7 @@ USA.
 			   display-style updater)
   (let loop ((inferiors inferiors))
     (if (null? inferiors)
-	true
+	#t
 	(and (update-inferior! (car inferiors) screen x-start y-start
 			       xl xu yl yu display-style updater)
 	     (loop (cdr inferiors))))))
@@ -288,46 +289,60 @@ USA.
 ;;;; Operations on Inferiors
 
 (define-method vanilla-window (:inferior-redisplay-flags window window*)
-  (inferior-redisplay-flags (find-inferior inferiors window*)))
+  (let ((inferiors (window-inferiors window)))
+    (inferior-redisplay-flags (find-inferior inferiors window*))))
 
 (define-method vanilla-window (:inferior-needs-redisplay! window window*)
-  (inferior-needs-redisplay! (find-inferior inferiors window*)))
+  (let ((inferiors (window-inferiors window)))
+    (inferior-needs-redisplay! (find-inferior inferiors window*))))
 
 (define-method vanilla-window (:inferior-position window window*)
-  (inferior-position (find-inferior inferiors window*)))
+  (let ((inferiors (window-inferiors window)))
+    (inferior-position (find-inferior inferiors window*))))
 
 (define-method vanilla-window (:set-inferior-position! window window* position)
-  (set-inferior-position! (find-inferior inferiors window*) position))
+  (let ((inferiors (window-inferiors window)))
+    (set-inferior-position! (find-inferior inferiors window*) position)))
 
 (define-method vanilla-window (:inferior-x-start window window*)
-  (inferior-x-start (find-inferior inferiors window*)))
+  (let ((inferiors (window-inferiors window)))
+    (inferior-x-start (find-inferior inferiors window*))))
 
 (define-method vanilla-window (:set-inferior-x-start! window window* x-start)
-  (set-inferior-x-start! (find-inferior inferiors window*) x-start))
+  (let ((inferiors (window-inferiors window)))
+    (set-inferior-x-start! (find-inferior inferiors window*) x-start)))
 
 (define-method vanilla-window (:inferior-x-end window window*)
-  (inferior-x-end (find-inferior inferiors window*)))
+  (let ((inferiors (window-inferiors window)))
+    (inferior-x-end (find-inferior inferiors window*))))
 
 (define-method vanilla-window (:set-inferior-x-end! window window* x-end)
-  (set-inferior-x-end! (find-inferior inferiors window*) x-end))
+  (let ((inferiors (window-inferiors window)))
+    (set-inferior-x-end! (find-inferior inferiors window*) x-end)))
 
 (define-method vanilla-window (:inferior-y-start window window*)
-  (inferior-y-start (find-inferior inferiors window*)))
+  (let ((inferiors (window-inferiors window)))
+    (inferior-y-start (find-inferior inferiors window*))))
 
 (define-method vanilla-window (:set-inferior-y-start! window window* y-start)
-  (set-inferior-y-start! (find-inferior inferiors window*) y-start))
+  (let ((inferiors (window-inferiors window)))
+    (set-inferior-y-start! (find-inferior inferiors window*) y-start)))
 
 (define-method vanilla-window (:inferior-y-end window window*)
-  (inferior-y-end (find-inferior inferiors window*)))
+  (let ((inferiors (window-inferiors window)))
+    (inferior-y-end (find-inferior inferiors window*))))
 
 (define-method vanilla-window (:set-inferior-y-end! window window* y-end)
-  (set-inferior-y-end! (find-inferior inferiors window*) y-end))
+  (let ((inferiors (window-inferiors window)))
+    (set-inferior-y-end! (find-inferior inferiors window*) y-end)))
 
 (define-method vanilla-window (:inferior-start window window* receiver)
-  (inferior-start (find-inferior inferiors window*) receiver))
+  (let ((inferiors (window-inferiors window)))
+    (inferior-start (find-inferior inferiors window*) receiver)))
 
 (define-method vanilla-window (:set-inferior-start! window window* x y)
-  (set-inferior-start! (find-inferior inferiors window*) x y))
+  (let ((inferiors (window-inferiors window)))
+    (set-inferior-start! (find-inferior inferiors window*) x y)))
 
 ;;;; Inferiors
 
@@ -361,17 +376,17 @@ USA.
 (define (set-inferior-redisplay-flags! inferior redisplay-flags)
   (vector-set! inferior 4 redisplay-flags))
 
-(unparser/set-tagged-vector-method! %inferior-tag
-  (unparser/standard-method 'INFERIOR
-    (lambda (state inferior)
-      (unparse-object state (inferior-window inferior))
-      (unparse-string state " x,y=(")
-      (unparse-object state (inferior-x-start inferior))
-      (unparse-string state ",")
-      (unparse-object state (inferior-y-start inferior))
-      (unparse-string state ")")
-      (if (inferior-needs-redisplay? inferior)
-	  (unparse-string state " needs-redisplay")))))
+;; (unparser/set-tagged-vector-method! %inferior-tag
+;;   (unparser/standard-method 'INFERIOR
+;;     (lambda (state inferior)
+;;       (unparse-object state (inferior-window inferior))
+;;       (unparse-string state " x,y=(")
+;;       (unparse-object state (inferior-x-start inferior))
+;;       (unparse-string state ",")
+;;       (unparse-object state (inferior-y-start inferior))
+;;       (unparse-string state ")")
+;;       (if (inferior-needs-redisplay? inferior)
+;; 	  (unparse-string state " needs-redisplay")))))
 
 (define (inferior-copy inferior)
   (%make-inferior (inferior-window inferior)
