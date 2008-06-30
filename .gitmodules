@@ -1,3 +1,6 @@
 [submodule "terminfo"]
 	path = terminfo
-	url = git://git.a-chinaman.com/terminfo
+	url = git://a-chinaman.com/terminfo
+[submodule "soosy"]
+	path = soosy
+	url = git://a-chinaman.com/soosy
