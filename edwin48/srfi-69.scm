@@ -17,7 +17,7 @@
 (define (hash-table-ref table key . thunk)
   (let ((value (table-ref table key)))
     (if (eq? value #f)
-        (if (null? thunk) (error "key not found") (thunk))
+        (if (null? thunk) (error "key not found") ((car thunk)))
         value)))
 
 (define (hash-table-ref/default table key default)
@@ -62,3 +62,10 @@
      (lambda (k v) (set! alist (cons (list k v) alist)))
      table)
     alist))
+
+(define (hash-table-copy table)
+  (let ((copy (make-hash-table)))
+    (table-walk
+     (lambda (k v) (hash-table-set! copy k v))
+     table)
+    copy))

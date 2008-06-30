@@ -56,7 +56,7 @@
           ;; hash-table-update! hash-table-update!/default
           hash-table-size hash-table-keys hash-table-values
           hash-table-walk ;; hash-table-fold
-          hash-table->alist ;; hash-table-copy hash-table-merge!
+          hash-table->alist hash-table-copy ;; hash-table-merge!
           hash string-hash ;; string-ci-hash hash-by-identity
           ))
 
