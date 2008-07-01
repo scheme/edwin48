@@ -688,3 +688,9 @@ USA.
 
 (define-method combination-leaf-window (:leaf-containing-coordinates leaf x y)
   (values leaf x y))
+
+;;
+;; Local Variables:
+;; eval: (put 'with-instance-variables 'scheme-indent-function 3)
+;; End:
+;;

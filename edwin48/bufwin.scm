@@ -1251,3 +1251,9 @@ If this is zero, point is always centered after it moves off screen."
 
 (define point-not-visible-error?
   #f)
+
+;;
+;; Local Variables:
+;; eval: (put 'with-instance-variables 'scheme-indent-function 3)
+;; End:
+;;

@@ -527,3 +527,9 @@ Automatically becomes local when set in any fashion."
   unspecific)
 
 (define restore-saved-continuation?)
+
+;;
+;; Local Variables:
+;; eval: (put 'with-instance-variables 'scheme-indent-function 3)
+;; End:
+;;

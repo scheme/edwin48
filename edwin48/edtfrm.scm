@@ -188,3 +188,9 @@ USA.
 			(lambda () (execute-command command)))))
 		((button-down? button)
 		 (editor-beep)))))))
+
+;;
+;; Local Variables:
+;; eval: (put 'with-instance-variables 'scheme-indent-function 3)
+;; End:
+;;

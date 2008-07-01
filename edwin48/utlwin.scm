@@ -126,3 +126,8 @@ USA.
   (set! enabled? #f)
   (set-car! redisplay-flags #f))
 
+;;
+;; Local Variables:
+;; eval: (put 'with-instance-variables 'scheme-indent-function 3)
+;; End:
+;;

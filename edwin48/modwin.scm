@@ -80,3 +80,9 @@ USA.
 		       (window-buffer (window-superior window)))
 		      (modeline-window/shows-buffer-modified? window)))
       (window-needs-redisplay! window)))
+
+;;
+;; Local Variables:
+;; eval: (put 'with-instance-variables 'scheme-indent-function 3)
+;; End:
+;;

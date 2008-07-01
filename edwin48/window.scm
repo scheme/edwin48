@@ -517,3 +517,9 @@ USA.
 			    (search (inferior-window inferior) x y)
 			    (loop (cdr inferiors))))
 		      (loop (cdr inferiors))))))))))
+
+;;
+;; Local Variables:
+;; eval: (put 'with-instance-variables 'scheme-indent-function 3)
+;; End:
+;;
