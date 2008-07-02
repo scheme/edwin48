@@ -51,8 +51,9 @@ USA.
   ())
 
 (define-method vertical-border-window (:initialize! window window*)
-  (usual==> window :initialize! window*)
-  (set! x-size 1))
+  (with-instance-variables vertical-border-window window (x-size)
+    (usual==> window :initialize! window*)
+    (set! x-size 1)))
 
 (define-method vertical-border-window (:set-x-size! window x)
   window				;ignore
@@ -61,9 +62,10 @@ USA.
 (define-method vertical-border-window (:set-size! window x y)
   (if (not (fix:= x 1))
       (error "Can't change the x-size of a vertical border window" x))
-  (set! x-size x)
-  (set! y-size y)
-  (setup-redisplay-flags! redisplay-flags))
+  (with-instance-variables vertical-border-window window (x-size y-size)
+    (set! x-size x)
+    (set! y-size y)
+    (setup-redisplay-flags! redisplay-flags)))
 
 (define (vertical-border-window:update-display! window screen x-start y-start
 						xl xu yl yu display-style)
@@ -89,10 +91,11 @@ USA.
   (enabled?))
 
 (define-method cursor-window (:initialize! window window*)
-  (usual==> window :initialize! window*)
-  (set! x-size 1)
-  (set! y-size 1)
-  (set! enabled? #f))
+  (with-instance-variables cursor-window window (x-size y-size enabled?)
+    (usual==> window :initialize! window*)
+    (set! x-size 1)
+    (set! y-size 1)
+    (set! enabled? #f)))
 
 (define-method cursor-window (:set-x-size! window x)
   window				;ignore
@@ -109,7 +112,7 @@ USA.
 (define (cursor-window:update-display! window screen x-start y-start
 				       xl xu yl yu display-style)
   display-style				;ignore
-  (if (and (with-instance-variables cursor-window window () enabled?)
+  (if (and (with-instance-variables cursor-window window (enabled?) enabled?)
 	   (fix:< xl xu)
 	   (fix:< yl yu))
       (screen-move-cursor screen x-start y-start))
@@ -119,12 +122,14 @@ USA.
   cursor-window:update-display!)
 
 (define-method cursor-window (:enable! window)
-  (set! enabled? #t)
-  (setup-redisplay-flags! redisplay-flags))
+  (with-instance-variables cursor window (enabled?)
+    (set! enabled? #t)
+    (setup-redisplay-flags! redisplay-flags)))
 
 (define-method cursor-window (:disable! window)
-  (set! enabled? #f)
-  (set-car! redisplay-flags #f))
+  (with-instance-variables cursor-window window (enabled?)
+    (set! enabled? #f)
+    (set-car! redisplay-flags #f)))
 
 ;;
 ;; Local Variables:

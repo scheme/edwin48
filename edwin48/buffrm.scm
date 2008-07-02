@@ -86,7 +86,7 @@ USA.
   ;; **** Kludge: The text-inferior will generate modeline events, so
   ;; if the modeline gets redisplayed first it will be left with its
   ;; redisplay-flag set but its superior's redisplay-flag cleared.
-  (with-instance-variables buffer-frame frame (modeline?)
+  (with-instance-variables buffer-frame frame (inferiors modeline-inferior)
     (if modeline?
 	(begin
 	  (set! modeline-inferior (make-inferior frame modeline-window))
@@ -96,11 +96,11 @@ USA.
 	(set! modeline-inferior #f))))
 
 (define (frame-text-inferior frame)
-  (with-instance-variables buffer-frame frame ()
+  (with-instance-variables buffer-frame frame (text-inferior)
     (inferior-window text-inferior)))
 
 (define (frame-modeline-inferior frame)
-  (with-instance-variables buffer-frame frame ()
+  (with-instance-variables buffer-frame frame (modeline-inferior)
     (and modeline-inferior
 	 (inferior-window modeline-inferior))))
 
@@ -114,7 +114,8 @@ USA.
   (set-buffer-frame-size! window x-size y))
 
 (define (set-buffer-frame-size! window x y)
-  (with-instance-variables buffer-frame window (x y)
+  (with-instance-variables buffer-frame window
+                           (border-inferior modeline-inferior text-inferior)
     (usual==> window :set-size! x y)
     (if modeline-inferior
 	(begin
@@ -131,16 +132,18 @@ USA.
     (set-inferior-size! text-inferior x y)))
 
 (define-method buffer-frame (:minimum-x-size window)
-  (if (window-has-right-neighbor? window)
-      (+ (ref-variable window-min-width)
-	 (inferior-x-size border-inferior))
-      (ref-variable window-min-width)))
+  (with-instance-variables buffer-frame window (border-inferior)
+    (if (window-has-right-neighbor? window)
+        (+ (ref-variable window-min-width)
+           (inferior-x-size border-inferior))
+        (ref-variable window-min-width))))
 
 (define-method buffer-frame (:minimum-y-size window)
-  (if modeline-inferior
-      (+ (ref-variable window-min-height)
-	 (inferior-y-size modeline-inferior))
-      (ref-variable window-min-height)))
+  (with-instance-variables buffer-frame window (modeline-inferior)
+    (if modeline-inferior
+        (+ (ref-variable window-min-height)
+           (inferior-y-size modeline-inferior))
+        (ref-variable window-min-height))))
 
 ;;;; External Entries
 
@@ -169,11 +172,11 @@ USA.
   (buffer-window/cursor-disable! (frame-text-inferior frame)))
 
 (define (window-select-time frame)
-  (with-instance-variables buffer-frame frame ()
+  (with-instance-variables buffer-frame frame (last-select-time)
     last-select-time))
 
 (define (set-window-select-time! frame time)
-  (with-instance-variables buffer-frame frame (time)
+  (with-instance-variables buffer-frame frame (last-select-time)
     (set! last-select-time time)))
 
 (define (window-buffer frame)

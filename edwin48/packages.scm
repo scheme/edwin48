@@ -54,11 +54,11 @@
          ;; window system begins here
          window
          utlwin
-         ;; bufwin
-         ;; bufwfs
-         ;; bufwiu
+         bufwin
+         bufwfs
+         bufwiu
          ;; comwin
-         ;; modwin
+         modwin
          ;; buffrm
          ;; edtfrm
 
@@ -121,3 +121,11 @@
         terminal-support
         terminfo)
   (files terminal))
+
+(define-structure edwin:window edwin:window/interface
+  (open scheme fixnum soosy)
+  (files window))
+
+(define-structure edwin:utility-window (export blank-window)
+  (open scheme soosy edwin:window)
+  (files utlwin))

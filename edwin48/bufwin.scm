@@ -185,34 +185,35 @@ USA.
 ;;;; Instance Variable Accessors
 
 (define (%window-buffer window)
-  (with-instance-variables buffer-window window () buffer))
+  (with-instance-variables buffer-window window (buffer) buffer))
 
 (define (%window-group window)
   (buffer-group (%window-buffer window)))
 
 (define (%set-window-buffer! window buffer*)
-  (with-instance-variables buffer-window window (buffer*)
+  (with-instance-variables buffer-window window (buffer)
     (set! buffer buffer*)))
 
 (define (%window-truncate-lines? window)
-  (with-instance-variables buffer-window window () truncate-lines?))
+  (with-instance-variables buffer-window window (truncate-lines?) truncate-lines?))
 
 (define (%set-window-truncate-lines?! window truncate-lines?*)
-  (with-instance-variables buffer-window window (truncate-lines?*)
+  (with-instance-variables buffer-window window (truncate-lines?)
     (set! truncate-lines? truncate-lines?*)))
 
 (define (%window-tab-width window)
-  (with-instance-variables buffer-window window () tab-width))
+  (with-instance-variables buffer-window window (tab-width) tab-width))
 
 (define (%set-window-tab-width! window tab-width*)
-  (with-instance-variables buffer-window window (tab-width*)
+  (with-instance-variables buffer-window window (tab-width)
     (set! tab-width tab-width*)))
 
 (define (%window-char-image-strings window)
-  (with-instance-variables buffer-window window () char-image-strings))
+  (with-instance-variables buffer-window window (char-image-strings)
+    char-image-strings))
 
 (define (%set-window-char-image-strings! window char-image-strings*)
-  (with-instance-variables buffer-window window (char-image-strings*)
+  (with-instance-variables buffer-window window (char-image-strings)
     (set! char-image-strings char-image-strings*)))
 
 (define (%window-char->image window char)
@@ -220,13 +221,13 @@ USA.
 	      (char->ascii char)))
 
 (define (%window-point window)
-  (with-instance-variables buffer-window window () point))
+  (with-instance-variables buffer-window window (point) point))
 
 (define (%window-point-index window)
   (mark-index (%window-point window)))
 
 (define (%set-window-point! window point*)
-  (with-instance-variables buffer-window window (point*)
+  (with-instance-variables buffer-window window (point)
     (set! point point*)))
 
 (define (%set-window-point-index! window index)
@@ -249,52 +250,52 @@ USA.
   (%set-buffer-point-index! (%window-buffer window) index))
 
 (define (%window-cursor-inferior window)
-  (with-instance-variables buffer-window window () cursor-inferior))
+  (with-instance-variables buffer-window window (cursor-inferior) cursor-inferior))
 
 (define (%set-window-cursor-inferior! window inferior)
-  (with-instance-variables buffer-window window (inferior)
+  (with-instance-variables buffer-window window (cursor-inferior)
     (set! cursor-inferior inferior)))
 
 (define (%window-blank-inferior window)
-  (with-instance-variables buffer-window window () blank-inferior))
+  (with-instance-variables buffer-window window (blank-inferior) blank-inferior))
 
 (define (%set-window-blank-inferior! window inferior)
-  (with-instance-variables buffer-window window (inferior)
+  (with-instance-variables buffer-window window (blank-inferior)
     (set! blank-inferior inferior)))
 
 (define (%window-start-outline window)
-  (with-instance-variables buffer-window window () start-outline))
+  (with-instance-variables buffer-window window (start-outline) start-outline))
 
 (define (%set-window-start-outline! window outline)
-  (with-instance-variables buffer-window window (outline)
+  (with-instance-variables buffer-window window (start-outline)
     (set! start-outline outline)))
 
 (define (%window-end-outline window)
-  (with-instance-variables buffer-window window () end-outline))
+  (with-instance-variables buffer-window window (end-outline) end-outline))
 
 (define (%set-window-end-outline! window outline)
-  (with-instance-variables buffer-window window (outline)
+  (with-instance-variables buffer-window window (end-outline)
     (set! end-outline outline)))
 
 (define (%window-free-outline window)
-  (with-instance-variables buffer-window window () free-outline))
+  (with-instance-variables buffer-window window (free-outline) free-outline))
 
 (define (%set-window-free-outline! window outline)
-  (with-instance-variables buffer-window window (outline)
+  (with-instance-variables buffer-window window (free-outline)
     (set! free-outline outline)))
 
 (define (%window-current-start-mark window)
-  (with-instance-variables buffer-window window () current-start-mark))
+  (with-instance-variables buffer-window window (current-start-mark) current-start-mark))
 
 (define (%window-current-start-index window)
   (mark-index (%window-current-start-mark window)))
 
 (define (%set-window-current-start-mark! window mark)
-  (with-instance-variables buffer-window window (mark)
+  (with-instance-variables buffer-window window (current-start-mark)
     (set! current-start-mark mark)))
 
 (define (%window-current-end-mark window)
-  (with-instance-variables buffer-window window () current-end-mark))
+  (with-instance-variables buffer-window window (current-start-mark) current-end-mark))
 
 (define (%window-current-end-index window)
   (mark-index (%window-current-end-mark window)))
@@ -304,93 +305,93 @@ USA.
     (set! current-end-mark mark)))
 
 (define (%window-current-start-delta window)
-  (with-instance-variables buffer-window window () current-start-delta))
+  (with-instance-variables buffer-window window (current-start-delta) current-start-delta))
 
 (define (%set-window-current-start-delta! window delta)
-  (with-instance-variables buffer-window window (delta)
+  (with-instance-variables buffer-window window (current-start-delta)
     (set! current-start-delta delta)))
 
 (define (%window-current-start-partial window)
-  (with-instance-variables buffer-window window () current-start-partial))
+  (with-instance-variables buffer-window window (current-start-delta) current-start-partial))
 
 (define (%set-window-current-start-partial! window partial)
-  (with-instance-variables buffer-window window (partial)
+  (with-instance-variables buffer-window window (current-start-partial)
     (set! current-start-partial partial)))
 
 (define (%window-current-start-y window)
-  (with-instance-variables buffer-window window () current-start-y))
+  (with-instance-variables buffer-window window (current-start-y) current-start-y))
 
 (define (%set-window-current-start-y! window y)
-  (with-instance-variables buffer-window window (y)
+  (with-instance-variables buffer-window window (current-start-y)
     (set! current-start-y y)))
 
 (define (%window-current-end-y window)
-  (with-instance-variables buffer-window window () current-end-y))
+  (with-instance-variables buffer-window window (current-end-y) current-end-y))
 
 (define (%set-window-current-end-y! window y)
-  (with-instance-variables buffer-window window (y)
+  (with-instance-variables buffer-window window (current-end-y)
     (set! current-end-y y)))
 
 (define (%window-free-o3 window)
-  (with-instance-variables buffer-window window () free-o3))
+  (with-instance-variables buffer-window window (free-o3) free-o3))
 
 (define (%set-window-free-o3! window o3)
-  (with-instance-variables buffer-window window (o3)
+  (with-instance-variables buffer-window window (free-o3)
     (set! free-o3 o3)))
 
 (define (%window-override-string window)
-  (with-instance-variables buffer-window window () override-string))
+  (with-instance-variables buffer-window window (override-string) override-string))
 
 (define (%set-window-override-string! window string)
-  (with-instance-variables buffer-window window (string)
+  (with-instance-variables buffer-window window (override-string)
     (set! override-string string)))
 
 (define (%window-start-mark window)
-  (with-instance-variables buffer-window window () start-mark))
+  (with-instance-variables buffer-window window (start-mark) start-mark))
 
 (define (%window-start-index window)
   (mark-index (%window-start-mark window)))
 
 (define (%set-window-start-mark! window mark)
-  (with-instance-variables buffer-window window (mark)
+  (with-instance-variables buffer-window window (start-mark)
     (set! start-mark mark)))
 
 (define (%window-start-line-mark window)
-  (with-instance-variables buffer-window window () start-line-mark))
+  (with-instance-variables buffer-window window (start-line-mark) start-line-mark))
 
 (define (%window-start-line-index window)
   (mark-index (%window-start-line-mark window)))
 
 (define (%set-window-start-line-mark! window mark)
-  (with-instance-variables buffer-window window (mark)
+  (with-instance-variables buffer-window window (start-line-mark)
     (set! start-line-mark mark)))
 
 (define (%window-start-line-y window)
-  (with-instance-variables buffer-window window () start-line-y))
+  (with-instance-variables buffer-window window (start-line-y) start-line-y))
 
 (define (%set-window-start-line-y! window y)
-  (with-instance-variables buffer-window window (y)
+  (with-instance-variables buffer-window window (start-line-y)
     (set! start-line-y y)))
 
 (define (%window-start-column window)
-  (with-instance-variables buffer-window window () start-column))
+  (with-instance-variables buffer-window window (start-column) start-column))
 
 (define (%set-window-start-column! window column)
-  (with-instance-variables buffer-window window (column)
+  (with-instance-variables buffer-window window (start-column)
     (set! start-column column)))
 
 (define (%window-start-partial window)
-  (with-instance-variables buffer-window window () start-partial))
+  (with-instance-variables buffer-window window (start-partial) start-partial))
 
 (define (%set-window-start-partial! window partial)
-  (with-instance-variables buffer-window window (partial)
+  (with-instance-variables buffer-window window (start-partial)
     (set! start-partial partial)))
 
 (define (%window-modified-tick window)
-  (with-instance-variables buffer-window window () modified-tick))
+  (with-instance-variables buffer-window window (modified-tick) modified-tick))
 
 (define (%set-window-modified-tick! window tick)
-  (with-instance-variables buffer-window window (tick)
+  (with-instance-variables buffer-window window (modified-tick)
     (set! modified-tick tick)))
 
 (define (%window-start-changes-index window)
@@ -400,100 +401,100 @@ USA.
   (group-end-changes-index (%window-group window)))
 
 (define (%window-clip-daemon window)
-  (with-instance-variables buffer-window window () clip-daemon))
+  (with-instance-variables buffer-window window (clip-daemon) clip-daemon))
 
 (define (%set-window-clip-daemon! window daemon)
-  (with-instance-variables buffer-window window (daemon)
+  (with-instance-variables buffer-window window (clip-daemon)
     (set! clip-daemon daemon)))
 
 (define (%window-start-clip-mark window)
-  (with-instance-variables buffer-window window () start-clip-mark))
+  (with-instance-variables buffer-window window (start-clip-mark) start-clip-mark))
 
 (define (%window-start-clip-index window)
   (mark-index (%window-start-clip-mark window)))
 
 (define (%set-window-start-clip-mark! window mark)
-  (with-instance-variables buffer-window window (mark)
+  (with-instance-variables buffer-window window (start-clip-mark)
     (set! start-clip-mark mark)))
 
 (define (%window-end-clip-mark window)
-  (with-instance-variables buffer-window window () end-clip-mark))
+  (with-instance-variables buffer-window window (end-clip-mark) end-clip-mark))
 
 (define (%window-end-clip-index window)
   (mark-index (%window-end-clip-mark window)))
 
 (define (%set-window-end-clip-mark! window mark)
-  (with-instance-variables buffer-window window (mark)
+  (with-instance-variables buffer-window window (end-clip-mark)
     (set! end-clip-mark mark)))
 
 (define (%window-point-moved? window)
-  (with-instance-variables buffer-window window () point-moved?))
+  (with-instance-variables buffer-window window (point-moved?) point-moved?))
 
 (define (%set-window-point-moved?! window point-moved?*)
-  (with-instance-variables buffer-window window (point-moved?*)
+  (with-instance-variables buffer-window window (point-moved?)
     (set! point-moved? point-moved?*)))
 
 (define (%window-force-redraw? window)
-  (with-instance-variables buffer-window window () force-redraw?))
+  (with-instance-variables buffer-window window (force-redraw?) force-redraw?))
 
 (define (%set-window-force-redraw?! window force-redraw?*)
-  (with-instance-variables buffer-window window (force-redraw?*)
+  (with-instance-variables buffer-window window (force-redraw?)
     (set! force-redraw? force-redraw?*)))
 
 (define (%window-saved-screen window)
-  (with-instance-variables buffer-window window () saved-screen))
+  (with-instance-variables buffer-window window (saved-screen) saved-screen))
 
 (define (%set-window-saved-screen! window screen)
-  (with-instance-variables buffer-window window (screen)
+  (with-instance-variables buffer-window window (saved-screen)
     (set! saved-screen screen)))
 
 (define (%window-saved-x-start window)
-  (with-instance-variables buffer-window window () saved-x-start))
+  (with-instance-variables buffer-window window (saved-x-start) saved-x-start))
 
 (define (%set-window-saved-x-start! window x-start)
-  (with-instance-variables buffer-window window (x-start)
+  (with-instance-variables buffer-window window (saved-x-start)
     (set! saved-x-start x-start)))
 
 (define (%window-saved-y-start window)
-  (with-instance-variables buffer-window window () saved-y-start))
+  (with-instance-variables buffer-window window (saved-y-start) saved-y-start))
 
 (define (%set-window-saved-y-start! window y-start)
-  (with-instance-variables buffer-window window (y-start)
+  (with-instance-variables buffer-window window (saved-y-start)
     (set! saved-y-start y-start)))
 
 (define (%window-saved-xl window)
-  (with-instance-variables buffer-window window () saved-xl))
+  (with-instance-variables buffer-window window (saved-x1) saved-xl))
 
 (define (%set-window-saved-xl! window xl)
-  (with-instance-variables buffer-window window (xl)
+  (with-instance-variables buffer-window window (saved-xl)
     (set! saved-xl xl)))
 
 (define (%window-saved-xu window)
-  (with-instance-variables buffer-window window () saved-xu))
+  (with-instance-variables buffer-window window (saved-xu) saved-xu))
 
 (define (%set-window-saved-xu! window xu)
-  (with-instance-variables buffer-window window (xu)
+  (with-instance-variables buffer-window window (saved-xu)
     (set! saved-xu xu)))
 
 (define (%window-saved-yl window)
-  (with-instance-variables buffer-window window () saved-yl))
+  (with-instance-variables buffer-window window (saved-y1) saved-yl))
 
 (define (%set-window-saved-yl! window yl)
-  (with-instance-variables buffer-window window (yl)
+  (with-instance-variables buffer-window window (saved-yl)
     (set! saved-yl yl)))
 
 (define (%window-saved-yu window)
-  (with-instance-variables buffer-window window () saved-yu))
+  (with-instance-variables buffer-window window (saved-you) saved-yu))
 
 (define (%set-window-saved-yu! window yu)
-  (with-instance-variables buffer-window window (yu)
+  (with-instance-variables buffer-window window (saved-yu)
     (set! saved-yu yu)))
 
 (define (%window-debug-trace window)
-  (with-instance-variables buffer-window window () debug-trace))
+  (with-instance-variables buffer-window window (debug-trace) debug-trace))
 
 (define (%set-window-debug-trace! window procedure)
-  (with-instance-variables buffer-window window (procedure)
+  (with-instance-variables buffer-window window (debug-trace)
     (set! debug-trace procedure)))
 
 ;;;; Outlines

@@ -108,31 +108,31 @@ USA.
   unspecific)
 
 (define (editor-frame-window0 window)
-  (with-instance-variables editor-frame window ()
+  (with-instance-variables editor-frame window (root-inferior)
     (window0 (inferior-window root-inferior))))
 
 (define (editor-frame-typein-window window)
-  (with-instance-variables editor-frame window ()
+  (with-instance-variables editor-frame window (typein-inferior)
     (inferior-window typein-inferior)))
 
 (define (editor-frame-selected-window window)
-  (with-instance-variables editor-frame window ()
+  (with-instance-variables editor-frame window (selected-window)
     selected-window))
 
 (define (editor-frame-cursor-window window)
-  (with-instance-variables editor-frame window ()
+  (with-instance-variables editor-frame window (cursor-window)
     cursor-window))
 
 (define (editor-frame-root-window window)
-  (with-instance-variables editor-frame window ()
+  (with-instance-variables editor-frame window (root-inferior)
     (inferior-window root-inferior)))
 
 (define (editor-frame-screen window)
-  (with-instance-variables editor-frame window ()
+  (with-instance-variables editor-frame window (screen)
     screen))
 
 (define (editor-frame-properties window)
-  (with-instance-variables editor-frame window ()
+  (with-instance-variables editor-frame window (properties)
     properties))
 
 (define (editor-frame-windows window)
@@ -146,7 +146,7 @@ USA.
 			(loop window))))))))
 
 (define (editor-frame-select-window! window window*)
-  (with-instance-variables editor-frame window (window*)
+  (with-instance-variables editor-frame window (cursor-window)
     (if (not (buffer-frame? window*))
 	(error "Attempt to select non-window" window*))
     (window-cursor-disable! cursor-window)
@@ -156,7 +156,7 @@ USA.
     (window-cursor-enable! window*)))
 
 (define (editor-frame-select-cursor! window window*)
-  (with-instance-variables editor-frame window (window*)
+  (with-instance-variables editor-frame window (cursor-window)
     (if (not (buffer-frame? window*))
 	(error "Attempt to select non-window" window*))
     (window-cursor-disable! cursor-window)

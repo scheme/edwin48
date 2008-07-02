@@ -81,19 +81,19 @@ USA.
   (next-window previous-window))
 
 (define (window-next window)
-  (with-instance-variables combination-leaf-window window ()
+  (with-instance-variables combination-leaf-window window (next-window)
     next-window))
 
 (define (set-window-next! window window*)
-  (with-instance-variables combination-leaf-window window (window*)
+  (with-instance-variables combination-leaf-window window (next-window)
     (set! next-window window*)))
 
 (define (window-previous window)
-  (with-instance-variables combination-leaf-window window ()
+  (with-instance-variables combination-leaf-window window (previous-window)
     previous-window))
 
 (define (set-window-previous! window window*)
-  (with-instance-variables combination-leaf-window window (window*)
+  (with-instance-variables combination-leaf-window window (previous-window)
     (set! previous-window window*)))
 
 (define (link-windows! previous next)
@@ -104,19 +104,19 @@ USA.
   (vertical? child))
 
 (define (combination-vertical? window)
-  (with-instance-variables combination-window window ()
+  (with-instance-variables combination-window window (vertical?)
     vertical?))
 
 (define (set-combination-vertical! window v)
-  (with-instance-variables combination-window window (v)
+  (with-instance-variables combination-window window (vertical?)
     (set! vertical? v)))
 
 (define (combination-child window)
-  (with-instance-variables combination-window window ()
+  (with-instance-variables combination-window window (child)
     child))
 
 (define (set-combination-child! window window*)
-  (with-instance-variables combination-window window (window*)
+  (with-instance-variables combination-window window (child)
     (set! child window*)
     (set-window-previous! window* #f)))
 
@@ -450,7 +450,8 @@ USA.
 	  (window-replace! combination child)))))
 
 (define (window-replace! old new)
-  (with-instance-variables combination-leaf-window old (new)
+  (with-instance-variables combination-leaf-window old
+      (next-window previous-window superior)
     (cond ((not (combination? superior))
 	   (==> superior :new-root-window! new))
 	  ((and (combination? new)

@@ -32,17 +32,18 @@ USA.
   (shows-buffer-modified?))
 
 (define (modeline-window/shows-buffer-modified? window)
-  (with-instance-variables modeline-window window ()
+  (with-instance-variables modeline-window window (shows-buffer-modified?)
     shows-buffer-modified?))
 
 (define (set-modeline-window/shows-buffer-modified?! window value)
-  (with-instance-variables modeline-window window (value)
+  (with-instance-variables modeline-window window (shows-buffer-modified?)
     (set! shows-buffer-modified? value)))
 
 (define-method modeline-window (:initialize! window window*)
-  (usual==> window :initialize! window*)
-  (set! y-size 1)
-  (set! shows-buffer-modified? #f))
+  (with-instance-variables modeline-window window (y-size shows-buffer-modified?)
+      (usual==> window :initialize! window*)
+      (set! y-size 1)
+      (set! shows-buffer-modified? #f)))
 
 (define (modeline-window:update-display! window screen x-start y-start
 					 xl xu yl yu display-style)
