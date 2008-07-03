@@ -332,7 +332,7 @@ Automatically becomes local when set in any fashion."
 	       (and (string? (vector-ref object i))
 		    (<= 1 (string-length (vector-ref object i)) 255)
 		    (loop (+ i 1))))))))
-	 
+
 (let ((setup-truncate-lines!
        (lambda (buffer variable)
 	 variable			;ignore
@@ -355,25 +355,38 @@ Automatically becomes local when set in any fashion."
 
 ;;;; Window Configurations
 
-(define-structure (window-configuration (conc-name window-configuration/))
-  (screen-x-size #f read-only #t)
-  (screen-y-size #f read-only #t)
-  (root-window #f read-only #t)
-  (root-x-size #f read-only #t)
-  (root-y-size #f read-only #t)
-  (selected-window #f read-only #t)
-  (cursor-window #f read-only #t)
-  (minibuffer-scroll-window #f read-only #t))
+(define-record-type window-configuration
+  (make-window-configuration screen-x-size
+                             screen-y-size
+                             root-window
+                             root-x-size
+                             root-y-size
+                             selected-window
+                             cursor-window
+                             minibuffer-scroll-window)
+  window-configuration?
+  (screen-x-size            window-configuration/screen-x-size)
+  (screen-y-size            window-configuration/screen-y-size)
+  (root-window              window-configuration/root-window)
+  (root-x-size              window-configuration/root-x-size)
+  (root-y-size              window-configuration/root-y-size)
+  (selected-window          window-configuration/selected-window)
+  (cursor-window            window-configuration/cursor-window)
+  (minibuffer-scroll-window window-configuration/minibuffer-scroll-window))
 
-(define-structure (saved-combination (conc-name saved-combination/))
-  (vertical? #f read-only #t)
-  (children #f read-only #t))
+(define-record-type saved-combination
+  (make-saved-combination vertical? children)
+  saved-combination?
+  (vertical? saved-combination/vertical?)
+  (children  saved-combination/children))
 
-(define-structure (saved-window (conc-name saved-window/))
-  (buffer #f read-only #t)
-  (point #f read-only #t)
-  (mark #f read-only #t)
-  (start-mark #f read-only #t))
+(define-record-type saved-window
+  (make-saved-window buffer point mark start-mark)
+  saved-window?
+  (buffer     saved-window/buffer)
+  (point      saved-window/point)
+  (mark       saved-window/mark)
+  (start-mark saved-window/start-mark))
 
 (define (guarantee-window-configuration object procedure)
   (if (not (window-configuration? object))
@@ -529,7 +542,7 @@ Automatically becomes local when set in any fashion."
       (set! restore-saved-continuation? #f))
   unspecific)
 
-(define restore-saved-continuation?)
+(define restore-saved-continuation? unspecific)
 
 ;;
 ;; Local Variables:

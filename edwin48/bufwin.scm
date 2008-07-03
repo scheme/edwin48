@@ -499,29 +499,24 @@ USA.
 
 ;;;; Outlines
 
-(define-structure (outline
-		   (constructor %make-outline)
-		   (print-procedure
-		    (unparser/standard-method 'OUTLINE
-		      (lambda (state outline)
-			(unparse-string state "index: ")
-			(unparse-object state (outline-index-length outline))
-			(unparse-string state " y: ")
-			(unparse-object state (outline-y-size outline))))))
+(define-record-type* outline
+  (%make-outline
+
   ;; The number of characters in the text line.  This is exclusive of
   ;; the newlines at the line's beginning and end, if any.
-  index-length
+   (index-length)
 
   ;; The number of screen lines that are occupied by this text line.
-  y-size
+   (y-size)
 
   ;; A pointer to the previous outline structure, the one representing
   ;; the text line that appears directly above this line.
-  previous
+   (previous)
 
   ;; A pointer to the next outline structure, the one representing the
   ;; text line that appears directly below this line.
-  next)
+   (next))
+  ())
 
 (define (make-outline window index-length y-size previous next)
   (let ((outline
@@ -567,22 +562,12 @@ USA.
        (y end-y (fix:- y (outline-y-size outline))))
       ((not outline) y)))
 
-(define-structure (o3
-		   (constructor %make-o3)
-		   (print-procedure
-		    (unparser/standard-method 'O3
-		      (lambda (state o3)
-			(unparse-string state "index: ")
-			(unparse-object state (o3-index o3))
-			(unparse-string state " y: ")
-			(unparse-object state (o3-y o3))
-			(if (outline? (o3-outline o3))
-			    (begin
-			      (unparse-string state " ")
-			      (unparse-object state (o3-outline o3))))))))
-  outline
-  index
-  y)
+(define-record-type* o3
+  (%make-o3
+   (outline)
+   (index)
+   (y))
+  ())
 
 (define (make-o3 window outline index y)
   (let ((o3 (%window-free-o3 window)))
