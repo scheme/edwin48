@@ -29,7 +29,7 @@
     (open (modify scheme  (hide integer->char string-fill! vector-fill!))
           (modify sorting (rename (vector-sort sort)))
           (modify ascii   (alias  (ascii->char integer->char)))
-          aliases define-opt define-record-type* errors event-distributor fixme fixnum
+          aliases define-opt define-record-type* errors event-distributor fixnum
           (modify interrupts (expose call-after-gc!))
           io-support pathname rb-tree soosy weak-pair
           srfi-1 srfi-9 srfi-13 srfi-14 srfi-23 srfi-43 srfi-69
@@ -54,13 +54,13 @@
          ;; window system begins here
          window
          utlwin
-         bufwin
-         bufwfs
-         bufwiu
-         ;; comwin
-         modwin
-         ;; buffrm
-         ;; edtfrm
+;;          bufwin
+;;          bufwfs
+;;          bufwiu
+         comwin
+;;          modwin
+;;          buffrm
+;;          edtfrm
 
          calias
          edtstr
@@ -69,7 +69,6 @@
          modlin
          simple
          undo
-         basic
          kilcom))
 
 (define-structure edwin:string-table edwin:string-table/interface
@@ -122,10 +121,3 @@
         terminfo)
   (files terminal))
 
-(define-structure edwin:window edwin:window/interface
-  (open scheme fixnum soosy)
-  (files window))
-
-(define-structure edwin:utility-window (export blank-window)
-  (open scheme soosy edwin:window)
-  (files utlwin))
