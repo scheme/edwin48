@@ -295,13 +295,13 @@ USA.
     (set! current-start-mark mark)))
 
 (define (%window-current-end-mark window)
-  (with-instance-variables buffer-window window (current-start-mark) current-end-mark))
+  (with-instance-variables buffer-window window (current-end-mark) current-end-mark))
 
 (define (%window-current-end-index window)
   (mark-index (%window-current-end-mark window)))
 
 (define (%set-window-current-end-mark! window mark)
-  (with-instance-variables buffer-window window (mark)
+  (with-instance-variables buffer-window window (current-end-mark)
     (set! current-end-mark mark)))
 
 (define (%window-current-start-delta window)
@@ -312,7 +312,7 @@ USA.
     (set! current-start-delta delta)))
 
 (define (%window-current-start-partial window)
-  (with-instance-variables buffer-window window (current-start-delta) current-start-partial))
+  (with-instance-variables buffer-window window (current-start-partial) current-start-partial))
 
 (define (%set-window-current-start-partial! window partial)
   (with-instance-variables buffer-window window (current-start-partial)
@@ -463,7 +463,7 @@ USA.
     (set! saved-y-start y-start)))
 
 (define (%window-saved-xl window)
-  (with-instance-variables buffer-window window (saved-x1) saved-xl))
+  (with-instance-variables buffer-window window (saved-xl) saved-xl))
 
 (define (%set-window-saved-xl! window xl)
   (with-instance-variables buffer-window window (saved-xl)
@@ -477,14 +477,14 @@ USA.
     (set! saved-xu xu)))
 
 (define (%window-saved-yl window)
-  (with-instance-variables buffer-window window (saved-y1) saved-yl))
+  (with-instance-variables buffer-window window (saved-yl) saved-yl))
 
 (define (%set-window-saved-yl! window yl)
   (with-instance-variables buffer-window window (saved-yl)
     (set! saved-yl yl)))
 
 (define (%window-saved-yu window)
-  (with-instance-variables buffer-window window (saved-you) saved-yu))
+  (with-instance-variables buffer-window window (saved-yu) saved-yu))
 
 (define (%set-window-saved-yu! window yu)
   (with-instance-variables buffer-window window (saved-yu)
