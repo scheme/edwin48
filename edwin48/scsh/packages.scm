@@ -34,7 +34,7 @@
             fix:< fix:> fix:<= fix:>=
             fix:zero? fix:positive? fix:negative?
             fix:+ fix:- fix:*
-            fix:quotient fix:remainder fix:min
+            fix:quotient fix:remainder fix:min fix:max
             fix:1+ fix:-1+
             fix:not fix:and fix:andc
             fix:or fix:xor fix:lsh)
@@ -64,6 +64,7 @@
             get-environment-variable
             symbol-append symbol-name symbol<?
             exact-integer? exact-nonnegative-integer? integer-round
+            round->exact
             vector-8b-ref vector-8b-set! vector-8b-fill! vector-8b-find-next-char
             round
             real-time-clock

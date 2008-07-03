@@ -85,6 +85,8 @@
 
 (define (integer-round n1 n2) (round (/ n1 n2)))
 
+(define (round->exact x) (inexact->exact (round x)))
+
 (define (real-time-clock)
   (receive (secs ticks)
       (time+ticks)

@@ -17,6 +17,7 @@
 (define (fix:- a b) (- a b))
 (define (fix:* a b) (* a b))
 (define (fix:min       a b) (min       a b))
+(define (fix:max       a b) (max       a b))
 (define (fix:quotient  a b) (quotient  a b))
 (define (fix:remainder a b) (remainder a b))
 (define (fix:1+  n) (+ n 1))
