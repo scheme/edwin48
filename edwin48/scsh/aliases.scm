@@ -89,3 +89,7 @@
   (receive (secs ticks)
       (time+ticks)
     ticks))
+
+(define (boolean=? x y)
+  (or (and (eq? x #t) (eq? y #t))
+      (and (eq? x #f) (eq? y #f))))
