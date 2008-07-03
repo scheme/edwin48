@@ -287,12 +287,12 @@ USA.
 
 ;;;; Creation
 
-(define (window-split-horizontally! leaf #!optional n)
+(define* (window-split-horizontally! leaf (n #f))
   (check-leaf-window leaf 'WINDOW-SPLIT-HORIZONTALLY!)
   (without-interrupts
    (lambda ()
      (let ((n
-	    (if (or (default-object? n) (not n))
+	    (if (not n)
 		(quotient (window-x-size leaf) 2)
 		n))
 	   (x (window-x-size leaf))
@@ -315,12 +315,12 @@ USA.
 	       (==> new :set-size! n* y)
 	       new)))))))
 
-(define (window-split-vertically! leaf #!optional n)
+(define* (window-split-vertically! leaf (n #f))
   (check-leaf-window leaf 'WINDOW-SPLIT-VERTICALLY!)
   (without-interrupts
    (lambda ()
      (let ((n
-	    (if (or (default-object? n) (not n))
+	    (if n
 		(quotient (window-y-size leaf) 2)
 		n))
 	   (x (window-x-size leaf))
@@ -372,7 +372,7 @@ USA.
 
 ;;;; Deletion
 
-(define (window-delete! leaf #!optional merge-into)
+(define* (window-delete! leaf (merge-into #t))
   (check-leaf-window leaf 'WINDOW-DELETE!)
   (if (window-live? leaf)
       (let ((screen (window-screen leaf)))
@@ -413,7 +413,7 @@ USA.
 		     (do-previous
 		      (lambda ()
 			(adjust-size! previous))))
-		 (cond ((and (not (default-object? merge-into))
+		 (cond ((and (not merge-into)
 			     merge-into
 			     (or (eq? merge-into next)
 				 (eq? merge-into previous)))
