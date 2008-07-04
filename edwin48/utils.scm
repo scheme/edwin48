@@ -240,12 +240,7 @@ USA.
 (define make-weak-equal-hash-table
   (weak-hash-table/constructor equal-hash-mod equal? #t))
 |#
-(define (weak-assq item alist)
-  (let loop ((alist alist))
-    (and (not (null? alist))
-	 (if (eq? (weak-car (car alist)) item)
-	     (car alist)
-	     (loop (cdr alist))))))
+
 #|
 (define (file-time->ls-string time #!optional now)
   ;; Returns a time string like that used by unix `ls -l'.

@@ -31,6 +31,13 @@
 	  weaks
 	  (weak-memq x (weak-cdr weaks)))))
 
+(define (weak-assq item alist)
+  (let loop ((alist alist))
+    (and (not (null? alist))
+	 (if (eq? (weak-car (car alist)) item)
+	     (car alist)
+	     (loop (cdr alist))))))
+
 (define weak-pair/false "weak-pair/false")
 
 (define (weak-list->list items)

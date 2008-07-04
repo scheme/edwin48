@@ -23,7 +23,7 @@
             weak-pair/car?
             weak-car weak-set-car!
             weak-cdr weak-set-cdr!
-            weak-memq
+            weak-memq weak-assq
             weak-list->list
             list->weak-list)
   (open scheme define-record-type* errors srfi-1 weak)
