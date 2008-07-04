@@ -62,7 +62,7 @@ USA.
 (define-method vertical-border-window (:set-size! window x y)
   (if (not (fix:= x 1))
       (error "Can't change the x-size of a vertical border window" x))
-  (with-instance-variables vertical-border-window window (x-size y-size)
+  (with-instance-variables vertical-border-window window (x-size y-size redisplay-flags)
     (set! x-size x)
     (set! y-size y)
     (setup-redisplay-flags! redisplay-flags)))
@@ -122,12 +122,12 @@ USA.
   cursor-window:update-display!)
 
 (define-method cursor-window (:enable! window)
-  (with-instance-variables cursor window (enabled?)
+  (with-instance-variables cursor window (enabled? redisplay-flags)
     (set! enabled? #t)
     (setup-redisplay-flags! redisplay-flags)))
 
 (define-method cursor-window (:disable! window)
-  (with-instance-variables cursor-window window (enabled?)
+  (with-instance-variables cursor-window window (enabled? redisplay-flags)
     (set! enabled? #f)
     (set-car! redisplay-flags #f)))
 

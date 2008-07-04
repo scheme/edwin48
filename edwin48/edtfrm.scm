@@ -40,9 +40,12 @@ USA.
 
 (define (make-editor-frame root-screen main-buffer typein-buffer)
   (let ((window (make-object editor-frame)))
-    (with-instance-variables editor-frame
-			     window
-			     (root-screen main-buffer typein-buffer)
+    (with-instance-variables editor-frame window
+                             (superior
+                              x-size y-size redisplay-flags
+                              inferiors properties
+                              screen root-inferior typein-inferior
+                              selected-window cursor-window)
       (set! superior #f)
       (set! x-size (screen-x-size root-screen))
       (set! y-size (screen-y-size root-screen))
@@ -69,7 +72,8 @@ USA.
     (do ((window (window1+ start) (window1+ window)))
 	((eq? window start))
       (notice-window-changes! window)))
-  (with-instance-variables editor-frame window (display-style)
+  (with-instance-variables editor-frame window
+                           (display-style redisplay-flags screen x-size y-size)
     (or (not (or (display-style/ignore-redisplay-flags? display-style)
 		 (car redisplay-flags)))
 	(let ((finished?
@@ -80,7 +84,8 @@ USA.
 	  finished?))))
 
 (define (set-editor-frame-size! window x y)
-  (with-instance-variables editor-frame window (x y)
+  (with-instance-variables editor-frame window
+                           (x y root-inferior typein-inferior x-size screen)
     (usual==> window :set-size! x y)
     (set-inferior-start! root-inferior 0 0)
     (let ((y* (- y typein-y-size)))
@@ -104,8 +109,9 @@ USA.
 (define typein-y-size 1)
 
 (define-method editor-frame (:new-root-window! window window*)
-  (set! root-inferior (find-inferior inferiors window*))
-  unspecific)
+  (with-instance-variables editor-frame window (root-inferior inferiors)
+    (set! root-inferior (find-inferior inferiors window*))
+    unspecific))
 
 (define (editor-frame-window0 window)
   (with-instance-variables editor-frame window (root-inferior)

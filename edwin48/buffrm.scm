@@ -51,17 +51,20 @@ USA.
    ))
 
 (define-method buffer-frame (:make-leaf frame)
-  (let ((frame* (==> superior :make-inferior buffer-frame)))
-    (set-buffer-frame-size! frame* (window-x-size frame) (window-y-size frame))
-    (set-window-buffer! frame* (window-buffer frame))
-    (initial-modeline! frame* modeline-inferior)
-    frame*))
+  (with-instance-variables buffer-frame frame (superior modeline-inferior)
+    (let ((frame* (==> superior :make-inferior buffer-frame)))
+      (set-buffer-frame-size! frame* (window-x-size frame) (window-y-size frame))
+      (set-window-buffer! frame* (window-buffer frame))
+      (initial-modeline! frame* modeline-inferior)
+      frame*)))
 
 (define-method buffer-frame (:initialize! frame window*)
-  (usual==> frame :initialize! window*)
-  (set! text-inferior (make-inferior frame buffer-window))
-  (set! border-inferior (make-inferior frame vertical-border-window))
-  (set! last-select-time 0))
+  (with-instance-variables buffer-frame frame
+                           (text-inferior border-inferior last-select-time)
+    (usual==> frame :initialize! window*)
+    (set! text-inferior (make-inferior frame buffer-window))
+    (set! border-inferior (make-inferior frame vertical-border-window))
+    (set! last-select-time 0)))
 
 (define-method buffer-frame (:kill! window)
   (remove-buffer-window! (window-buffer window) window)
@@ -69,24 +72,26 @@ USA.
 
 (define-method buffer-frame (:update-display! window screen x-start y-start
 					      xl xu yl yu display-style)
-  ;; Assumes that interrupts are disabled.
-  (update-inferior! text-inferior screen x-start y-start
-		    xl xu yl yu display-style
-		    buffer-window:update-display!)
-  (if modeline-inferior
-      (update-inferior! modeline-inferior screen x-start y-start
-			xl xu yl yu display-style
-			modeline-window:update-display!))
-  (update-inferior! border-inferior screen x-start y-start
-		    xl xu yl yu display-style
-		    vertical-border-window:update-display!)
-  #t)
+  (with-instance-variables buffer-frame window
+                           (text-inferior modeline-inferior border-inferior)
+    ;; Assumes that interrupts are disabled.
+   (update-inferior! text-inferior screen x-start y-start
+                     xl xu yl yu display-style
+                     buffer-window:update-display!)
+   (if modeline-inferior
+       (update-inferior! modeline-inferior screen x-start y-start
+                         xl xu yl yu display-style
+                         modeline-window:update-display!))
+   (update-inferior! border-inferior screen x-start y-start
+                     xl xu yl yu display-style
+                     vertical-border-window:update-display!)
+   #t))
 
 (define (initial-modeline! frame modeline?)
   ;; **** Kludge: The text-inferior will generate modeline events, so
   ;; if the modeline gets redisplayed first it will be left with its
   ;; redisplay-flag set but its superior's redisplay-flag cleared.
-  (with-instance-variables buffer-frame frame (inferiors modeline-inferior)
+  (with-instance-variables buffer-frame frame (modeline-inferior inferiors)
     (if modeline?
 	(begin
 	  (set! modeline-inferior (make-inferior frame modeline-window))
@@ -108,14 +113,16 @@ USA.
   (set-buffer-frame-size! window x y))
 
 (define-method buffer-frame (:set-x-size! window x)
-  (set-buffer-frame-size! window x y-size))
+  (with-instance-variables buffer-frame window (y-size)
+    (set-buffer-frame-size! window x y-size)))
 
 (define-method buffer-frame (:set-y-size! window y)
-  (set-buffer-frame-size! window x-size y))
+  (with-instance-variables buffer-frame window (x-size)
+    (set-buffer-frame-size! window x-size y)))
 
 (define (set-buffer-frame-size! window x y)
   (with-instance-variables buffer-frame window
-                           (border-inferior modeline-inferior text-inferior)
+                           (modeline-inferior border-inferior text-inferior)
     (usual==> window :set-size! x y)
     (if modeline-inferior
 	(begin

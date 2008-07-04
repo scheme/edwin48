@@ -54,13 +54,14 @@
          ;; window system begins here
          window
          utlwin
-;;          bufwin
-;;          bufwfs
-;;          bufwiu
+         bufwin
+         bufwfs
+         bufwiu
+         bufwmc
          comwin
-;;          modwin
-;;          buffrm
-;;          edtfrm
+         modwin
+         buffrm
+         edtfrm
 
          calias
          edtstr
