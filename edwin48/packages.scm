@@ -67,8 +67,9 @@
          edtstr
          ;; editor
          curren
+         things
          modlin
-         simple 
+         simple
          undo
          kilcom
          wincom))
