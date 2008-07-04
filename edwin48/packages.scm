@@ -68,9 +68,10 @@
          ;; editor
          curren
          modlin
-         simple
+         simple 
          undo
-         kilcom))
+         kilcom
+         wincom))
 
 (define-structure edwin:string-table edwin:string-table/interface
   (open scheme aliases define-record-type* define-opt

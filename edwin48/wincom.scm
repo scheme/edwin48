@@ -203,11 +203,11 @@ means scroll one screenful down."
       (scroll-window window
 		     (multi-scroll-window-argument window argument 1)))))
 
-(define (scroll-window window n #!optional limit)
+(define* (scroll-window window n (limit editor-error))
   (if (window-mark-visible?
        window
        ((if (negative? n) buffer-start buffer-end) (window-buffer window)))
-      ((if (default-object? limit) editor-error limit))
+      (limit)
       (window-scroll-y-relative! window n)))
 
 (define (standard-scroll-window-argument window argument factor)
@@ -390,10 +390,10 @@ or if the window is the only window of its frame."
 	    (else
 	     (loop (cdr windows)))))))
 
-(define (select-buffer-other-screen buffer #!optional screen)
+(define* (select-buffer-other-screen buffer (screen #f))
   (if (multiple-screens?)
       (let ((screen
-	     (other-screen (if (or (default-object? screen) (not screen))
+	     (other-screen (if (not screen)
 			       (selected-screen)
 			       screen))))
 	(if screen
@@ -505,12 +505,10 @@ Also kills any pop up window it may have created."
 (define *minibuffer-scroll-window* (weak-cons #f #f))
 (define *pop-up-buffer-window-alist* '())
 
-(define (pop-up-buffer buffer select? #!optional options)
+(define* (pop-up-buffer buffer (select? #f) (options '()))
   ;; If some new window is created by this procedure, it is returned
   ;; as the value.  Otherwise the value is false.
-  (let* ((select? (if (default-object? select?) #f select?))
-	 (options (if (default-object? options) '() options))
-	 (screen (pop-up-buffer-option options 'SCREEN (selected-screen)))
+  (let* ((screen (pop-up-buffer-option options 'SCREEN (selected-screen)))
 	 (selected (screen-selected-window screen)))
 
     (define (pop-up-window window)
