@@ -57,13 +57,15 @@
     (export without-interrupts
             unspecific beep write-to-string write-string
             1+ -1+ boolean=?
+            integer-round integer-divide
+            integer-divide-quotient integer-divide-remainder
             char->digit char-ascii?
             list-deletor! alist?
             vector-grow
             string-head string-tail
             get-environment-variable
             symbol-append symbol-name symbol<?
-            exact-integer? exact-nonnegative-integer? integer-round
+            exact-integer? exact-nonnegative-integer?
             round->exact
             vector-8b-ref vector-8b-set! vector-8b-fill! vector-8b-find-next-char
             round

@@ -11,6 +11,18 @@
 (define  (1+ z) (+ z 1))
 (define (-1+ z) (- z 1))
 
+(define (integer-divide n d)
+  (cons (quotient  n d)
+        (remainder n d)))
+
+(define (integer-divide-quotient qr)
+  (if (and (pair? qr) (= 2 (length qr)))
+      (car qr)))
+
+(define (integer-divide-remainder qr)
+  (if (and (pair? qr) (= 2 (length qr)))
+      (cdr qr)))
+
 (define (list-deletor! predicate)
   (lambda (items) (remove! predicate items)))
 
