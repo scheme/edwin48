@@ -153,9 +153,9 @@ USA.
                                  ;; meta bit.
                                  (let ((code (vector-8b-ref string start)))
                                    (if (fix:< code #x80)
-                                       (make-char code 0)
-                                       (make-char (fix:and code #x7F)
-                                                  char-bit:meta))))))
+                                       (make-keystroke code 0)
+                                       (make-keystroke (fix:and code #x7F)
+                                                       keystroke-bit:meta))))))
                          (let* ((key-seq  (caar key-pairs))
                                 (n-seq    (string-length key-seq)))
                            (cond ((and (fix:<= n-seq n-chars)

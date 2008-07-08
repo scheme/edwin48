@@ -162,20 +162,6 @@ USA.
 (define char-set:not-space
   (char-set-complement char-set:whitespace))
 
-#|
-(define (merge-bucky-bits char bits)
-  (make-char (char-code char)
-	     (let ((bits (fix:or (char-bits char) bits)))
-	       (if (ascii-controlified? char)
-		   (fix:andc bits char-bit:control)
-		   bits))))
-
-(define (ascii-controlified? char)
-  (fix:< (char-code char) #x20))
-
-(define (char-base char)
-  (make-char (char-code char) 0))
-|#
 
 (define (y-or-n? . strings)
   (define (loop)

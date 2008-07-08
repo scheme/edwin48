@@ -71,6 +71,7 @@
          modlin
          simple
          undo
+         basic
          kilcom
          wincom))
 
