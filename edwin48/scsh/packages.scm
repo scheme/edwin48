@@ -102,7 +102,8 @@
             file-eq?
             file-exists?
             file-modification-time
-            read-string!/partial)
+            read-string!/partial
+            working-directory-pathname)
   (open scheme receiving scsh-subset)
   (files io-support))
 
@@ -216,7 +217,8 @@
             disable-tty-char))
 
 (define-interface scsh-io/interface
-  (export file-exists?
+  (export cwd
+          file-exists?
           file-info
           file-info:inode
           file-info:mtime
