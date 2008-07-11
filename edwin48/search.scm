@@ -29,90 +29,90 @@ USA.
 
 
 (define-syntax define-next-char-search
-  (sc-macro-transformer
-   (lambda (form environment)
-     (let ((name (cadr form))
-	   (find-next (close-syntax (caddr form) environment)))
-       `(DEFINE (,name GROUP START END CHAR)
-	  ;; Assume (FIX:<= START END)
-	  (AND (NOT (FIX:= START END))
-	       (COND ((FIX:<= END (GROUP-GAP-START GROUP))
-		      (,find-next (GROUP-TEXT GROUP) START END CHAR))
-		     ((FIX:<= (GROUP-GAP-START GROUP) START)
-		      (LET ((POSITION
-			     (,find-next
-			      (GROUP-TEXT GROUP)
-			      (FIX:+ START (GROUP-GAP-LENGTH GROUP))
-			      (FIX:+ END (GROUP-GAP-LENGTH GROUP))
-			      CHAR)))
-			(AND POSITION
-			     (FIX:- POSITION (GROUP-GAP-LENGTH GROUP)))))
-		     ((,find-next (GROUP-TEXT GROUP)
-				  START
-				  (GROUP-GAP-START GROUP)
-				  CHAR))
-		     (ELSE
-		      (LET ((POSITION
-			     (,find-next (GROUP-TEXT GROUP)
-					 (GROUP-GAP-END GROUP)
-					 (FIX:+ END
-						(GROUP-GAP-LENGTH GROUP))
-					 CHAR)))
-			(AND POSITION
-			     (FIX:- POSITION
-				    (GROUP-GAP-LENGTH GROUP))))))))))))
+  (syntax-rules ()
+    ((_ name find-next)
+     (define name (make-find-next find-next)))))
+
+(define (make-find-next find-next)
+  (lambda (group start end char)
+    (and (not (fix:= start end))
+         (cond ((fix:<= end (group-gap-start group))
+                (find-next (group-text group) start end char))
+               ((fix:<= (group-gap-start group) start)
+                (let ((position
+                       (find-next
+                        (group-text group)
+                        (fix:+ start (group-gap-length group))
+                        (fix:+ end (group-gap-length group))
+                        char)))
+                  (and position
+                       (fix:- position (group-gap-length group)))))
+               ((find-next (group-text group)
+                           start
+                           (group-gap-start group)
+                           char))
+               (else
+                (let ((position
+                       (find-next (group-text group)
+                                  (group-gap-end group)
+                                  (fix:+ end
+                                         (group-gap-length group))
+                                  char)))
+                  (and position
+                       (fix:- position
+                              (group-gap-length group)))))))))
 
 (define-next-char-search group-find-next-char
-  substring-find-next-char)
+  string-index)
 (define-next-char-search group-find-next-char-ci
-  substring-find-next-char-ci)
+  string-index-ci)
 (define-next-char-search group-find-next-char-in-set
-  substring-find-next-char-in-set)
+  string-index)
 
 (define-syntax define-prev-char-search
-  (sc-macro-transformer
-   (lambda (form environment)
-     (let ((name (cadr form))
-	   (find-previous (close-syntax (caddr form) environment)))
-       `(DEFINE (,name GROUP START END CHAR)
-	  ;; Assume (FIX:<= START END)
-	  (AND (NOT (FIX:= START END))
-	       (COND ((FIX:<= END (GROUP-GAP-START GROUP))
-		      (,find-previous (GROUP-TEXT GROUP) START END CHAR))
-		     ((FIX:<= (GROUP-GAP-START GROUP) START)
-		      (LET ((POSITION
-			     (,find-previous
-			      (GROUP-TEXT GROUP)
-			      (FIX:+ START (GROUP-GAP-LENGTH GROUP))
-			      (FIX:+ END (GROUP-GAP-LENGTH GROUP))
-			      CHAR)))
-			(AND POSITION
-			     (FIX:- POSITION (GROUP-GAP-LENGTH GROUP)))))
-		     ((,find-previous (GROUP-TEXT GROUP)
-				      (GROUP-GAP-END GROUP)
-				      (FIX:+ END (GROUP-GAP-LENGTH GROUP))
-				      CHAR)
-		      => (LAMBDA (POSITION)
-			   (FIX:- POSITION (GROUP-GAP-LENGTH GROUP))))
-		     (else
-		      (,find-previous (GROUP-TEXT GROUP)
-				      START
-				      (GROUP-GAP-START GROUP)
-				      CHAR)))))))))
+  (syntax-rules ()
+    ((_ name find-previous)
+     (define name (make-find-previous find-previous)))))
+
+(define (make-find-previous find-previous)
+  (lambda (group start end char)
+    (and (not (fix:= start end))
+         (cond ((fix:<= end (group-gap-start group))
+                (find-previous (group-text group) start end char))
+               ((fix:<= (group-gap-start group) start)
+                (let ((position
+                       (find-previous
+                        (group-text group)
+                        (fix:+ start (group-gap-length group))
+                        (fix:+ end (group-gap-length group))
+                        char)))
+                  (and position
+                       (fix:- position (group-gap-length group)))))
+               ((find-previous (group-text group)
+                                (group-gap-end group)
+                                (fix:+ end (group-gap-length group))
+                                char)
+                => (lambda (position)
+                     (fix:- position (group-gap-length group))))
+               (else
+                (find-previous (group-text group)
+                                start
+                                (group-gap-start group)
+                                char))))))
 
 (define-prev-char-search group-find-previous-char
-  substring-find-previous-char)
+  string-index-right)
 (define-prev-char-search group-find-previous-char-ci
-  substring-find-previous-char-ci)
+  string-index-right-ci)
 (define-prev-char-search group-find-previous-char-in-set
-  substring-find-previous-char-in-set)
+  string-index-right)
 
 (define (%find-next-newline group start end)
-  (group-find-next-char group start end #\newline))
+  (group-find-next-char group #\newline start end))
 
 (define (%find-previous-newline group start end)
   ;; Note reversal of index arguments here.
-  (let ((index (group-find-previous-char group end start #\newline)))
+  (let ((index (group-find-previous-char group #\newline start end)))
     (and index
 	 (fix:+ index 1))))
 
@@ -248,7 +248,7 @@ USA.
 			  (fix:- string-end (fix:- end gap-start)))
 		   index)))))))
 
-(define (char-search-forward char start end #!optional case-fold-search)
+(define* (char-search-forward char start end (case-fold-search #f))
   (let ((group (mark-group start))
 	(start-index (mark-index start))
 	(end-index (mark-index end)))
@@ -257,12 +257,12 @@ USA.
 	(error "Marks incorrectly related:" start end))
     (let ((index
 	   (if (default-case-fold-search case-fold-search start)
-	       (group-find-next-char-ci group start-index end-index char)
-	       (group-find-next-char group start-index end-index char))))
+	       (group-find-next-char-ci group char start-index end-index)
+	       (group-find-next-char    group char start-index end-index))))
       (and index
 	   (make-mark group (fix:+ index 1))))))
 
-(define (char-search-backward char start end #!optional case-fold-search)
+(define* (char-search-backward char start end (case-fold-search #f))
   (let ((group (mark-group start))
 	(start-index (mark-index start))
 	(end-index (mark-index end)))
@@ -271,27 +271,28 @@ USA.
 	(error "Marks incorrectly related:" start end))
     (let ((index
 	   (if (default-case-fold-search case-fold-search start)
-	       (group-find-previous-char-ci group end-index start-index char)
-	       (group-find-previous-char group end-index start-index char))))
+	       (group-find-previous-char-ci group char start-index end-index)
+	       (group-find-previous-char    group char start-index end-index))))
       (and index
 	   (make-mark group index)))))
 
-(define (char-match-forward char start #!optional end case-fold-search)
+(define* (char-match-forward char start (end #f) (case-fold-search #f))
   (and (mark< start (default-end-mark start end))
        (let ((group (mark-group start)))
 	 (if (default-case-fold-search case-fold-search start)
 	     (char-ci=? char (group-right-char group (mark-index start)))
-	     (char=? char (group-right-char group (mark-index start)))))))
+	     (char=?    char (group-right-char group (mark-index start)))))))
 
-(define (char-match-backward char end #!optional start case-fold-search)
+(define* (char-match-backward char end (start #f) (case-fold-search #f))
   (and (mark< (default-start-mark start end) end)
        (let ((group (mark-group end)))
 	 (if (default-case-fold-search case-fold-search end)
 	     (char-ci=? char (group-left-char group (mark-index end)))
-	     (char=? char (group-left-char group (mark-index end)))))))
+	     (char=?    char (group-left-char group (mark-index end)))))))
 
 (define (default-start-mark start end)
-  (if (default-object? start)
+  (if (not start)
+      
       (group-start end)
       (begin
 	(if (not (mark<= start end))
@@ -307,38 +308,33 @@ USA.
 	end)))
 
 (define (default-case-fold-search case-fold-search mark)
-  (if (default-object? case-fold-search)
+  (if (not case-fold-search)
       (group-case-fold-search (mark-group mark))
       case-fold-search))
 
-(define (skip-chars-forward pattern #!optional start end limit?)
-  (let ((start (if (default-object? start) (current-point) start))
-	(limit? (if (default-object? limit?) 'LIMIT limit?)))
-    (let ((end (default-end-mark start end)))
-      (let ((index
-	     (group-find-next-char-in-set (mark-group start)
-					  (mark-index start)
-					  (mark-index end)
-					  (re-compile-char-set pattern #t))))
-	(if index
-	    (make-mark (mark-group start) index)
-	    (limit-mark-motion limit? end))))))
+(define* (skip-chars-forward pattern (start (current-point)) (end #f) (limit? 'LIMIT))
+  (let ((end (default-end-mark start end)))
+    (let ((index
+           (group-find-next-char-in-set (mark-group start)
+                                        (re-compile-char-set pattern #t)
+                                        (mark-index start)
+                                        (mark-index end))))
+      (if index
+          (make-mark (mark-group start) index)
+          (limit-mark-motion limit? end)))))
 
-(define (skip-chars-backward pattern #!optional end start limit?)
-  (let ((end (if (default-object? end) (current-point) end))
-	(limit? (if (default-object? limit?) 'LIMIT limit?)))
-    (let ((start (default-start-mark start end)))
-      (let ((index
-	     (group-find-previous-char-in-set (mark-group start)
-					      (mark-index start)
-					      (mark-index end)
-					      (re-compile-char-set pattern
-								   #t))))
-	(if index
-	    (make-mark (mark-group start) (fix:+ index 1))
-	    (limit-mark-motion limit? start))))))
+(define* (skip-chars-backward pattern (end (current-point)) (start #f) (limit? 'LIMIT))
+  (let ((start (default-start-mark start end)))
+    (let ((index
+           (group-find-previous-char-in-set (mark-group start)
+                                            (re-compile-char-set pattern #t)
+                                            (mark-index start)
+                                            (mark-index end))))
+      (if index
+          (make-mark (mark-group start) (fix:+ index 1))
+          (limit-mark-motion limit? start)))))
 
-(define (match-forward string start #!optional end case-fold-search)
+(define* (match-forward string start (end #f) (case-fold-search #f))
   (let ((end (default-end-mark start end))
 	(group (mark-group start))
 	(start-index (mark-index start))
@@ -348,12 +344,12 @@ USA.
 	   (fix:= (if (default-case-fold-search case-fold-search start)
 		      (group-match-substring-forward-ci group start-index i
 							string 0 length)
-		      (group-match-substring-forward group start-index i
-						     string 0 length))
+		      (group-match-substring-forward    group start-index i
+                                                        string 0 length))
 		  i)
 	   (make-mark group i)))))
 
-(define (match-backward string end #!optional start case-fold-search)
+(define* (match-backward string end (start #f) (case-fold-search #f))
   (let ((start (default-start-mark start end))
 	(group (mark-group end))
 	(end-index (mark-index end))
@@ -363,7 +359,7 @@ USA.
 	   (fix:= (if (default-case-fold-search case-fold-search start)
 		      (group-match-substring-backward-ci group i end-index
 							 string 0 length)
-		      (group-match-substring-backward group i end-index
-						      string 0 length))
+		      (group-match-substring-backward    group i end-index
+                                                         string 0 length))
 		  i)
 	   (make-mark group i)))))

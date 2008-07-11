@@ -41,7 +41,7 @@
          txtprp
          regops
          motion
-         ;; search
+         search
          image
          comman
          comtab
