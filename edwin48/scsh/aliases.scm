@@ -36,6 +36,12 @@
 (define (string-tail string start)
   (substring string start (string-length string)))
 
+(define* (string-index-right-ci string char (start 0) (end (string-length string)))
+  (string-index-right string (lambda (c) (char-ci=? c char)) start end))
+
+(define* (string-index-ci string char (start 0) (end (string-length string)))
+  (string-index string (lambda (c) (string-ci= c char)) start end))
+
 (define (symbol-append . symbols)
   (string->symbol (apply string-append (map symbol->string symbols))))
 

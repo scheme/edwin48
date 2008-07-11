@@ -63,6 +63,7 @@
             list-deletor! alist?
             vector-grow
             string-head string-tail
+            string-index-ci string-index-right-ci
             get-environment-variable
             symbol-append symbol-name symbol<?
             exact-integer? exact-nonnegative-integer?
@@ -104,7 +105,7 @@
             file-modification-time
             read-string!/partial
             working-directory-pathname)
-  (open scheme receiving scsh-subset)
+  (open scheme receiving pathname scsh-subset)
   (files io-support))
 
 (define-structure pathname
