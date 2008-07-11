@@ -1,0 +1,17 @@
+Edwin uses a keystroke notation different from Emacs, here's its
+grammar.
+
+<key-sequence> := (kbd <keystroke>+)
+
+<keystroke> := <characters> | <string> | <keystroke-with-modifiers>
+
+<characters> := #\char-set:printing
+             | return | space | tab
+             | backspace | delete
+             | left | right | up | down
+
+<string> := "<characters>*"
+
+<keystroke-with-modifiers> := (<modifier>+ <character>)
+
+<modifier> := control | meta | super
