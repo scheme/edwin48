@@ -292,7 +292,6 @@ USA.
 
 (define (default-start-mark start end)
   (if (not start)
-      
       (group-start end)
       (begin
 	(if (not (mark<= start end))
@@ -300,7 +299,7 @@ USA.
 	start)))
 
 (define (default-end-mark start end)
-  (if (default-object? end)
+  (if (not end)
       (group-end start)
       (begin
 	(if (not (mark<= start end))
