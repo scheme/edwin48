@@ -58,15 +58,15 @@ USA.
        (lambda ()
 	 (command-reader init))))))
 
-(define (command-reader #!optional initialization)
-  (fluid-let ((*last-command* #f)
-	      (*command* #f)
-	      (*command-argument*)
-	      (*next-argument* #f)
-	      (*command-message*)
-	      (*next-message* #f)
-	      (*non-undo-count* 0)
-	      (*command-key* #f))
+(define* (command-reader (initialization #f))
+  (fluid-let ((*last-command*     #f)
+	      (*command*          #f)
+	      (*command-argument* unspecific)
+	      (*next-argument*    #f)
+	      (*command-message*  unspecific)
+	      (*next-message*     #f)
+	      (*non-undo-count*   0)
+	      (*command-key*      #f))
     (bind-condition-handler (list condition-type:editor-error)
 	editor-error-handler
       (lambda ()
@@ -75,7 +75,7 @@ USA.
 	      (if (not (condition/^G? condition))
 		  (return-to-command-loop condition)))
 	  (lambda ()
-	    (if (and (not (default-object? initialization)) initialization)
+	    (if initialization
 		(bind-abort-editor-command
 		 (lambda ()
 		   (reset-command-state!)
@@ -297,10 +297,10 @@ USA.
 			      (comtab-entry comtab key)
 			      #f))))
 
-(define (dispatch-on-command command #!optional record?)
+(define* (dispatch-on-command command (record? #f))
   (%dispatch-on-command (current-window)
 			command
-			(if (default-object? record?) #f record?)))
+                        record?))
 
 (define (%dispatch-on-command window command record?)
   (set! *command* command)

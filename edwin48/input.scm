@@ -172,7 +172,7 @@ B 3BAB8C
       (keyboard-macro-peek-key)
       (keyboard-read-1 (editor-peek current-editor) #t)))
 
-(define (keyboard-read #!optional no-save?)
+(define* (keyboard-read (no-save? #f))
   (set! keyboard-keys-read (+ keyboard-keys-read 1))
   (if *executing-keyboard-macro?*
       (keyboard-macro-read-key)
@@ -180,7 +180,7 @@ B 3BAB8C
 	(cond ((key? key)
 	       (set! auto-save-keystroke-count
 		     (fix:+ auto-save-keystroke-count 1))
-	       (if (not (and (not (default-object? no-save?)) no-save?))
+	       (if no-save?
 		   (ring-push! (current-char-history) key))
 	       (if *defining-keyboard-macro?* (keyboard-macro-write-key key)))
 	      (*defining-keyboard-macro?*
