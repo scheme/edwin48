@@ -47,22 +47,19 @@ USA.
 	    result)
 	  string))))
 
-(define (write-strings-densely strings #!optional port x-size)
-  (let ((port (if (default-object? port) (current-output-port) port))
-	(n (reduce max 0 (map string-length strings))))
-    (let ((x-size
-	   (if (default-object? x-size) (output-port/x-size port) x-size)))
-      (let ((n-per-line (max 1 (quotient (+ x-size 1) (+ 2 n)))))
-	(if (not (null? strings))
-	    (let loop ((strings strings) (i 0))
-	      (write-string (pad-on-right-to (car strings) n) port)
-	      (let ((strings (cdr strings))
-		    (i (+ i 1)))
-		(if (not (null? strings))
-		    (if (< i n-per-line)
-			(begin
-			  (write-string "  " port)
-			  (loop strings i))
-			(begin
-			  (newline port)
-			  (loop strings 0)))))))))))
+(define* (write-strings-densely strings (port (current-output-port)) (x-size (terminal-x-size)))
+  (let* ((n (reduce max 0 (map string-length strings)))
+         (n-per-line (max 1 (quotient (+ x-size 1) (+ 2 n)))))
+    (if (not (null? strings))
+        (let loop ((strings strings) (i 0))
+          (write-string (pad-on-right-to (car strings) n) port)
+          (let ((strings (cdr strings))
+                (i (+ i 1)))
+            (if (not (null? strings))
+                (if (< i n-per-line)
+                    (begin
+                      (write-string "  " port)
+                      (loop strings i))
+                    (begin
+                      (newline port)
+                      (loop strings 0)))))))))

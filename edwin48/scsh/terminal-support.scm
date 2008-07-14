@@ -94,7 +94,7 @@
     (set-tty-info:control-chars info chars)))
 
 (define (set-terminal-x-size! terminal x-size) 'not-implemented)
-
+(define (terminal-x-size) (getenv "COLUMNS"))
 (define (set-terminal-y-size! terminal y-size) 'not-implemented)
 
 (define event:console-resize (make-event-distributor))

@@ -230,7 +230,8 @@
     (compound-interface scsh-tty/interface
                         scsh-io/interface
                         (export interrupt/winch
-                                set-interrupt-handler))
+                                set-interrupt-handler
+                                getenv))
   (open scheme scsh-level-0))
 
 (define-structure terminal-support
@@ -242,7 +243,8 @@
              terminal-raw-output
              terminal-get-interrupt-char
              terminal-set-interrupt-char!
-             set-terminal-x-size! set-terminal-y-size!
+             set-terminal-x-size! terminal-x-size
+             set-terminal-y-size!
              event:console-resize
              ))
   (open scheme ascii bitwise event-distributor scsh-subset srfi-23
