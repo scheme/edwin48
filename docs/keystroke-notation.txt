@@ -3,14 +3,15 @@ grammar.
 
 <key-sequence> := (kbd <keystroke>+)
 
-<keystroke> := <characters> | <string> | <keystroke-with-modifiers>
+<keystroke> := <characters> | <special-characters> | <string> | <keystroke-with-modifiers>
 
-<characters> := #\char-set:printing
-             | return | space | tab
-             | backspace | delete
-             | left | right | up | down
+<characters> := char-set:printing
 
 <string> := "<characters>*"
+
+<special-characters> := | return | space | tab
+                        | backspace | delete
+                        | left | right | up | down
 
 <keystroke-with-modifiers> := (<modifier>+ <character>)
 

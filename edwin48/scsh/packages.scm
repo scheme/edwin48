@@ -250,3 +250,17 @@
   (open scheme ascii bitwise event-distributor scsh-subset srfi-23
         threads-internal)
   (files terminal-support))
+
+(define-structure keystroke
+    (export (kbd :syntax)
+            make-keystroke
+;;;             keystroke-value
+;;;             keystroke-modifiers
+            )
+  (open scheme ascii bitwise define-opt define-record-type* srfi-1 srfi-23)
+  ;; used to hold all defined modifiers
+  (for-syntax
+   (open scheme srfi-1 aliases define-record-type* errors)
+   (begin (define *keystroke-modifiers* '())
+          (define *keystroke-prefix* 'keystroke-modifier:)))
+  (files keystroke))
