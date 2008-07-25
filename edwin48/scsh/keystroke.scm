@@ -1,9 +1,5 @@
 ;;; -*- Mode: Scheme; scheme48-package: keystroke -*-
 ;;;
-;;; MIT Scheme-like chars (with bucky bits)
-;;;
-;;; The bucky-bits field
-
 ;;; also defined for-syntax, see packages.scm
 ;;;
 (define *keystroke-modifiers* '())
@@ -16,7 +12,8 @@
            (offset    (cadr form))
            (full-name (symbol-append *keystroke-prefix* name))
            (%define   (rename 'define)))
-      (set! *keystroke-modifiers* (alist-cons name offset *keystroke-modifiers*))
+      (if (not (assq name *keystroke-modifiers*))
+          (set! *keystroke-modifiers* (alist-cons name offset *keystroke-modifiers*)))
       `(,%define ,full-name ,offset))))
 
 (define-keystroke-modifier meta    1)
@@ -57,7 +54,8 @@
                  (key       (car form))
                  (modifiers (cdr form)))
             ;; if all the modifiers are valid
-            (if (lset<= compare modifiers
+            (if (lset<= compare
+                        (map rename modifiers)
                         (map (lambda (x) (rename (car x))) *keystroke-modifiers*))
                 `(,%keystroke ,key (,(r 'delete-duplicates) ',modifiers))
                 (syntax-error "contains invalid modifier" modifiers))))))
