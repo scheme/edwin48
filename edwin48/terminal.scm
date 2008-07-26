@@ -112,8 +112,7 @@ USA.
       (f9    ,(key-f9    x))
       (f10   ,(key-f10   x))
       (f11   ,(key-f11   x))
-      (f12   ,(key-f12   x))
-      )))
+      (f12   ,(key-f12   x)))))
 
 (define (get-console-input-operations terminal-state)
   (let ((port   console-input-port)
@@ -129,7 +128,7 @@ USA.
     ;; real time at which we timeout for waiting for the sequence to
     ;; complete, or #T if a timeout occured.
     (letrec
-        ((parse-key                     ; -> #F or a char? or a special-key?
+        ((parse-key                     ; -> #F or a keystroke
           (lambda ()
             (and (fix:< start end)
                  terminal-state
@@ -155,7 +154,7 @@ USA.
                                    (if (fix:< code #x80)
                                        (make-keystroke code 0)
                                        (make-keystroke (fix:and code #x7F)
-                                                       keystroke-bit:meta))))))
+                                                       keystroke-modifier:meta))))))
                          (let* ((key-seq  (caar key-pairs))
                                 (n-seq    (string-length key-seq)))
                            (cond ((and (fix:<= n-seq n-chars)
@@ -172,7 +171,7 @@ USA.
                                       (set! incomplete-pending
                                             (+ (real-time-clock)
                                                timeout-interval)))
-                                  (find (cdr key-pairs) #T))
+                                  (find (cdr key-pairs) #t))
                                  (else
                                   (find (cdr key-pairs)
                                         possible-pending?))))))))))
