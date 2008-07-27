@@ -31,7 +31,7 @@
           (modify ascii   (alias  (ascii->char integer->char)))
           aliases srfi-89 define-record-type* errors event-distributor fixnum
           (modify interrupts (expose call-after-gc!))
-          io-support pathname rb-tree soosy weak-pair
+          io-support keystroke pathname rb-tree soosy weak-pair
           srfi-1 srfi-9 srfi-13 srfi-14 srfi-23 srfi-43 srfi-69
           edwin:doc-string edwin:ring edwin:string-table edwin:utilities)
   (for-syntax (open scheme errors macro-helpers))
@@ -63,12 +63,14 @@
          buffrm
          edtfrm
 
-         calias
+         ;; calias
          edtstr
          ;; editor
          curren
          things
          modlin
+         input
+         ;; comred
          simple
          undo
          basic
@@ -100,12 +102,6 @@
 (define-structure edwin:paths edwin:paths/interface
   (open scheme aliases errors pathname io-support)
   (files paths))
-
-(define-structure edwin:command-table edwin:command-table/interface
-  (open scheme (modify sorting (rename (vector-sort sort)))
-        aliases define-record-type* errors fixnum
-        srfi-1 srfi-14 srfi-89 edwin:string-table edwin:utilities)
-  (files comtab))
 
 (define-structure edwin:terminal-screen edwin:terminal-screen/interface
   (open aliases
