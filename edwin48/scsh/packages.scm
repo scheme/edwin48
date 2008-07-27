@@ -259,3 +259,8 @@
    (begin (define *keystroke-modifiers* '())
           (define *keystroke-prefix* 'keystroke-modifier:)))
   (files keystroke))
+
+(define-structure char-support
+    (export char->name)
+  (open scheme ascii srfi-89)
+  (files char-support))
