@@ -262,5 +262,5 @@
 
 (define-structure char-support
     (export char->name)
-  (open scheme ascii srfi-89)
+  (open scheme ascii fixnum srfi-13 srfi-14 srfi-89)
   (files char-support))

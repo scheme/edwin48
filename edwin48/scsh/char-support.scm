@@ -18,25 +18,23 @@
 (define* (char->name char (slashify? #f))
   (let ((code (char->ascii char)))
     (string-append
-     (let ((base-char (if (fix:= 0 bits) char (ascii->char code))))
-       (cond ((->name named-codes code))
-	     ((and slashify?
-		   (not (fix:= 0 bits))
-		   (or (char=? base-char #\\)
-		       (char-set-member? char-set/atom-delimiters base-char)))
-	      (string-append "\\" (string base-char)))
-	     ((char-graphic? base-char)
-	      (string base-char))
-	     (else
-	      (string-append "U+"
-			     (let ((s (number->string code 16)))
-			       (string-pad s
-                                           (let ((l (string-length s)))
-                                             (let loop ((n 2))
-                                               (if (fix:<= l n)
-                                                   n
-                                                   (loop (fix:* 2 n)))))
-                                           #\0)))))))))
+     (cond ((->name named-codes code))
+           ((and slashify?
+                 (or (char=? char #\\)
+                     (char-set-contains? char char-set/atom-delimiters)))
+            (string-append "\\" (string char)))
+           ((char-set-contains? char char-set:graphic)
+            (string char))
+           (else
+            (string-append "U+"
+                           (let ((s (number->string code 16)))
+                             (string-pad s
+                                         (let ((l (string-length s)))
+                                           (let loop ((n 2))
+                                             (if (fix:<= l n)
+                                                 n
+                                                 (loop (fix:* 2 n)))))
+                                         #\0))))))))
 
 (define named-codes
   '((#x00 #f "null" "nul")
