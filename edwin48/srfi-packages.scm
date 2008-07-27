@@ -63,6 +63,15 @@
 (define-structure srfi-69 srfi-69-interface
   (open scheme
         (subset signals (error))
-        define-opt
-        (modify tables (rename (default-hash-function hash))))
+        (modify tables (rename (default-hash-function hash)))
+        srfi-89)
   (files srfi-69))
+
+;;
+;; SRFI-89
+;;
+(define-structure srfi-89
+    (export (define* :syntax))
+  (open scheme srfi-1 let-opt)
+  (for-syntax (open scheme let-opt (subset signals (syntax-error)) srfi-1))
+  (files srfi-89))

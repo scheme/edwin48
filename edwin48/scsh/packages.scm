@@ -73,16 +73,10 @@
             real-time-clock
             (fluid-let :syntax))
   (open (modify scheme (hide string-fill!))
-        ascii errors define-opt fluids interrupts scsh-subset util
+        ascii errors fluids interrupts scsh-subset util
         (modify scsh-level-0 (rename (getenv get-environment-variable)))
-        srfi-1 srfi-6 srfi-8 srfi-13 srfi-14 srfi-43)
+        srfi-1 srfi-6 srfi-8 srfi-13 srfi-14 srfi-43 srfi-89)
   (files aliases))
-
-(define-structure define-opt
-    (export (define* :syntax))
-  (open scheme srfi-1 let-opt)
-  (for-syntax (open scheme let-opt (subset signals (syntax-error)) srfi-1))
-  (files define-opt))
 
 (define-structure mit-regexp
     (export re-compile-pattern
@@ -257,10 +251,10 @@
 ;;;             keystroke-value
 ;;;             keystroke-modifiers
             )
-  (open scheme ascii bitwise define-opt define-record-type* srfi-1 srfi-23)
+  (open scheme ascii bitwise define-record-type* srfi-1 srfi-23 srfi-89)
   ;; used to hold all defined modifiers
   (for-syntax
-   (open scheme srfi-1 aliases define-record-type* errors)
+   (open scheme srfi-1 srfi-89 aliases ascii define-record-type* errors)
    ;; also defined in the file itself.
    (begin (define *keystroke-modifiers* '())
           (define *keystroke-prefix* 'keystroke-modifier:)))

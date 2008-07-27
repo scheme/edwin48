@@ -29,7 +29,7 @@
     (open (modify scheme  (hide integer->char string-fill! vector-fill!))
           (modify sorting (rename (vector-sort sort)))
           (modify ascii   (alias  (ascii->char integer->char)))
-          aliases define-opt define-record-type* errors event-distributor fixnum
+          aliases srfi-89 define-record-type* errors event-distributor fixnum
           (modify interrupts (expose call-after-gc!))
           io-support pathname rb-tree soosy weak-pair
           srfi-1 srfi-9 srfi-13 srfi-14 srfi-23 srfi-43 srfi-69
@@ -76,9 +76,9 @@
          wincom))
 
 (define-structure edwin:string-table edwin:string-table/interface
-  (open scheme aliases define-record-type* define-opt
+  (open scheme aliases define-record-type*
         (modify sorting (rename (vector-sort sort)))
-        mit-regexp srfi-13 srfi-43)
+        mit-regexp srfi-13 srfi-43 srfi-89)
   (files strtab))
 
 (define-structure edwin:utilities edwin:utilities/interface
@@ -92,7 +92,7 @@
   (files ring))
 
 (define-structure edwin:doc-string edwin:doc-string/interface
-  (open scheme aliases fixnum errors define-opt i/o pathname io-support srfi-13
+  (open scheme aliases fixnum errors i/o pathname io-support srfi-13 srfi-89
         fixme
         edwin:paths)
   (files docstr))
@@ -103,8 +103,8 @@
 
 (define-structure edwin:command-table edwin:command-table/interface
   (open scheme (modify sorting (rename (vector-sort sort)))
-        aliases define-record-type* define-opt errors fixnum
-        srfi-1 srfi-14 edwin:string-table edwin:utilities)
+        aliases define-record-type* errors fixnum
+        srfi-1 srfi-14 srfi-89 edwin:string-table edwin:utilities)
   (files comtab))
 
 (define-structure edwin:terminal-screen edwin:terminal-screen/interface

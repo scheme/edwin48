@@ -1,4 +1,4 @@
-;;; -*- Mode: Scheme; scheme48-package: define-opt -*-
+;;; -*- Mode: Scheme; scheme48-package: srfi-89 -*-
 ;;;   (open scheme srfi-1 let-opt)
 ;;;   (for-syntax (open scheme let-opt (subset signals (syntax-error)) srfi-1))
 
