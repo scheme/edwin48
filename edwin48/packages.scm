@@ -25,7 +25,7 @@
      (edwin:variable         edwin:variable/interface)
      (edwin:variable/private (export set-variable-%default-value!
                                      set-variable-%value!))
-     (edwin:window           edwin:window/interface))
+     (edwin:window-system    edwin:window-system/interface))
     (open (modify scheme  (hide integer->char string-fill! vector-fill!))
           (modify sorting (rename (vector-sort sort)))
           (modify ascii   (alias  (ascii->char integer->char)))

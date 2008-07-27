@@ -634,5 +634,5 @@
           partial-image!
           substring-image!))
 
-(define-interface edwin:window/interface
+(define-interface edwin:window-system/interface
   (export vanilla-window))
