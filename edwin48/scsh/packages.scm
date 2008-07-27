@@ -261,6 +261,7 @@
   ;; used to hold all defined modifiers
   (for-syntax
    (open scheme srfi-1 aliases define-record-type* errors)
+   ;; also defined in the file itself.
    (begin (define *keystroke-modifiers* '())
           (define *keystroke-prefix* 'keystroke-modifier:)))
   (files keystroke))

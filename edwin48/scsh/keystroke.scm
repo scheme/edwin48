@@ -30,7 +30,8 @@
    value
    ;;
    ;; modifiers must be one of the defined keystroke modifiers, listed
-   ;; above
+   ;; above. The representation is just a list (set) of symbols, it
+   ;; could be optimized to use a bit offsets.
    ;;
    modifiers)
   ())
@@ -42,7 +43,7 @@
    ((and (string? value)
          (not (zero? (string-length value))))
     (really-make-keystroke value modifiers))
-   (else (error "invalid input" value modifiers))))
+   (else (error "invalid input" value))))
 
 (define-syntax kbd
   (lambda (form rename compare)
