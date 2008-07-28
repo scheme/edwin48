@@ -11,7 +11,6 @@
      (edwin:display-type     edwin:display-type/interface)
      (edwin:editor           edwin:editor-definition/interface)
      (edwin:group            edwin:group/interface)
-     (edwin:keys             edwin:keys/interface)
      (edwin:kill-command     edwin:kill-command/interface)
      (edwin:mark             edwin:mark/interface)
      (edwin:mode             edwin:mode/interface)
@@ -107,12 +106,12 @@
   (open aliases
         define-record-type*
         edwin:display-type
-        edwin:keys
         edwin:screen
         event-distributor
         errors
         fixnum
         io-support
+        keystroke
         scheme
         srfi-1
         srfi-6

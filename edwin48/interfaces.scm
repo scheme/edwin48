@@ -584,23 +584,6 @@
 (define-interface edwin:terminal-screen/interface
   (export make-console-screen))
 
-(define-interface edwin:keys/interface
-  (export ;; define-alias-key
-          ;; undefine-alias-key
-          ;; unmap-alias-key
-          remap-alias-key
-          make-keystroke
-          keystroke?
-          keystroke-code
-          keystroke-bits
-          key-name
-          xkey->name
-          emacs-key-name
-          key?
-          xkey<?
-          make-special-key
-          special-key?))
-
 (define-interface edwin:kill-command/interface
   (edwin:export (command delete-region
                          delete-backward-char
