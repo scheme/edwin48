@@ -76,7 +76,7 @@
    ((char? value)   (make-simple-keystroke value modifiers))
    ((string? value)
     (cond
-     ((string? name) (make-named-keystroke value modifiers name))
+     ((or  (symbol? name) (string? name)) (make-named-keystroke  value modifiers name))
      ((not (zero? (string-length value))) (make-simple-keystroke value modifiers))
      (else "invalid string input" value)))
    (else (error "invalid input" value))))
