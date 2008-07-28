@@ -247,11 +247,15 @@
 
 (define-structure keystroke
     (export (kbd :syntax)
-            make-keystroke
+            make-key
+            key?
+            key-name
+            key-value
+            key-modifiers
 ;;;             keystroke-value
 ;;;             keystroke-modifiers
             )
-  (open scheme ascii bitwise define-record-type* srfi-1 srfi-23 srfi-89)
+  (open scheme ascii bitwise char-support define-record-type* srfi-1 srfi-23 srfi-89)
   ;; used to hold all defined modifiers
   (for-syntax
    (open scheme srfi-1 srfi-89 aliases ascii define-record-type* errors)
