@@ -2,29 +2,13 @@
 ;;;
 ;;; also defined for-syntax, see packages.scm
 ;;;
-(define *keystroke-modifiers* '())
-(define *keystroke-prefix*    'keystroke-modifier:)
-
-(define-syntax define-keystroke-modifier
-  (lambda (form rename compare)
-    (let* ((form      (cdr form))
-           (name      (car form))
-           (offset    (cadr form))
-           (full-name (symbol-append *keystroke-prefix* name))
-           (%define   (rename 'define)))
-      (if (not (assq name *keystroke-modifiers*))
-          (set! *keystroke-modifiers* (alist-cons name offset *keystroke-modifiers*)))
-      `(,%define ,full-name ,offset))))
-
-(define-keystroke-modifier meta    1)
-(define-keystroke-modifier control 2)
-(define-keystroke-modifier super   4)
-(define-keystroke-modifier hyper   8)
+(define *keystroke-modifiers* '(shift ctrl meta alt))
+(define *named-keystrokes*    '(up down left right backspace))
 
 (define-record-type* simple-key
   (make-simple-key
    ;;
-   ;; Stores the character value of the key
+   ;; Stores the character value of the key as a string
    ;;
    value
    ;;
@@ -34,6 +18,13 @@
    ;;
    modifiers)
   ())
+
+(define (simple-key-name k)
+  (if (simple-key? k)
+      (let ((value (simple-key-value k)))
+        (cond ((string? value) (string-ref value 0))
+              ((char?   value) value)))
+      (error "not a simple key" k)))
 
 (define-record-type* named-key
   (make-named-key
@@ -51,6 +42,16 @@
    name)
   ())
 
+(define (key->name k)
+  (cond
+   ((list? k) (map key->name k))
+   (else
+    (let ((modifiers (key-modifiers k))
+          (name      (key-name k)))
+      (if (null? modifiers)
+          `(kbd ,name)
+          `(kbd (,@modifiers ,name)))))))
+
 (define (key? k)
   (or (simple-key? k)
       (named-key?  k)))
@@ -66,27 +67,37 @@
         (else (error "not a key" k))))
 
 (define (key-name k)
-  (cond ((simple-key? k) (char->name   (simple-key-value  k)))
+  (cond ((simple-key? k) (char->name     (simple-key-name  k)))
         ((named-key?  k) (symbol->string (named-key-name  k)))
         (else (error "not a key" k))))
 
 (define (key=? k1 k2)
+
+  (define (modifiers=? m1 m2) (= m1 m2))
+  (define (value=? v1 v2) (string=? v1 v2))
+
   (if (and (key? k1) (key? k2))
-      ;; check modifiers
-      (and (list=  (key-modifiers k1)
-                   (key-modifiers k2))
-           ;; use the appropriate equality tester for simple/named
-           ((cond
-             ((and (simple-key? k1)
-                   (simple-key? k2))
-              char=?)
-             ((and (named-key? k1)
-                   (named-key? k2))
-              string=?)
-             (else (error "keys are not compatible" k1 k2)))
-            (key-value k1)
-            (key-value k2)))
+      (and (modifiers=? (key-modifiers k1)
+                        (key-modifiers k2))
+           (value=?     (key-value k1)
+                        (key-value k2)))
       #f))
+
+(define (valid-modifier? m)
+  (member (car m) *keystroke-modifiers*))
+
+(define (encode-modifiers modifiers)
+  (if (not (list? modifiers))
+      (error "not a list of modifiers" modifiers)
+      (let loop ((m modifiers)
+                 (r 0))
+        (cond ((null? m) r)
+              ((not (valid-modifier? (car m)))
+               (error "not a valid modifier" (car m)))
+              (else (loop (cdr m)
+                          ))
+            )
+        )))
 
 (define* (make-key value (modifiers '()) (name #f))
   (cond
@@ -120,7 +131,7 @@
             ;; if all the modifiers are valid
             (if (lset<= compare
                         (map rename modifiers)
-                        (map (lambda (x) (rename (car x))) *keystroke-modifiers*))
+                        (map rename *keystroke-modifiers*))
                 `(,%key ,key (,(r 'delete-duplicates) ',modifiers))
                 (syntax-error "contains invalid modifier" modifiers))))))
       (if (= 1 (length form))

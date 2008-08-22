@@ -252,6 +252,7 @@
             key-name
             key-value
             key-modifiers
+            key->name
 ;;;             keystroke-value
 ;;;             keystroke-modifiers
             )
@@ -260,8 +261,9 @@
   (for-syntax
    (open scheme srfi-1 srfi-89 aliases ascii define-record-type* errors)
    ;; also defined in the file itself.
-   (begin (define *keystroke-modifiers* '())
-          (define *keystroke-prefix* 'keystroke-modifier:)))
+   (begin
+     (define *keystroke-modifiers* '(shift ctrl meta alt button1 button2 button3))
+     (define *named-keystrokes*    '(up down left right backspace))))
   (files keystroke))
 
 (define-structure char-support
