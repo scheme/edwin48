@@ -21,9 +21,9 @@
      (cond ((->name named-codes code))
            ((and slashify?
                  (or (char=? char #\\)
-                     (char-set-contains? char char-set/atom-delimiters)))
+                     (char-set-contains? char-set/atom-delimiters char)))
             (string-append "\\" (string char)))
-           ((char-set-contains? char char-set:graphic)
+           ((char-set-contains? char-set:graphic char)
             (string char))
            (else
             (string-append "U+"
