@@ -111,7 +111,7 @@
         errors
         fixnum
         io-support
-        keystroke
+        keystroke keystroke-modifiers
         scheme
         srfi-1
         srfi-6
