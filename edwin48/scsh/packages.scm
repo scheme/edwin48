@@ -249,21 +249,17 @@
     (export (kbd :syntax)
             make-key
             key?
+            key=?
+            empty-key
             key-name
             key-value
             key-modifiers
-            key->name
-;;;             keystroke-value
-;;;             keystroke-modifiers
-            )
-  (open scheme ascii bitwise char-support define-record-type* srfi-1 srfi-23 srfi-89)
-  ;; used to hold all defined modifiers
-  (for-syntax
-   (open scheme srfi-1 srfi-89 aliases ascii define-record-type* errors)
-   ;; also defined in the file itself.
-   (begin
-     (define *keystroke-modifiers* '(shift ctrl meta alt button1 button2 button3))
-     (define *named-keystrokes*    '(up down left right backspace))))
+            key->name)
+  (for-syntax (open scheme enum-sets keystroke-modifiers))
+  (open scheme
+        ascii bitwise char-support define-record-type* enum-sets
+        keystroke-modifiers
+        srfi-1 srfi-13 srfi-14 srfi-23 srfi-89)
   (files keystroke))
 
 (define-structure keystroke-modifiers

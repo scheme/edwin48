@@ -25,8 +25,7 @@
 (define (simple-key-name k)
   (if (simple-key? k)
       (let ((value (simple-key-value k)))
-        (cond ((string? value) (string-ref value 0))
-              ((char?   value) value)))
+        (string-ref value 0))
       (error "not a simple key" k)))
 
 (define-record-type* named-key
@@ -44,6 +43,8 @@
    ;;
    name)
   ())
+
+(define empty-key (make-named-key "" 0 'empty))
 
 (define (key->name k)
   (cond
