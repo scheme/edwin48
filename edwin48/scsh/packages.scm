@@ -266,6 +266,24 @@
      (define *named-keystrokes*    '(up down left right backspace))))
   (files keystroke))
 
+(define-structure keystroke-modifiers
+    (export key-modifier
+            key-modifier?
+            all-key-modifiers
+            key-modifier-name
+            key-modifier-index
+
+            key-modifier-set
+            key-modifier-set?
+            make-key-modifier-set
+
+            named-keystroke
+            named-keystroke?
+            all-named-keystrokes
+            named-keystroke-value)
+  (open scheme enum-sets finite-types)
+  (files keystroke-modifiers))
+
 (define-structure char-support
     (export char->name)
   (open scheme ascii fixnum srfi-13 srfi-14 srfi-89)

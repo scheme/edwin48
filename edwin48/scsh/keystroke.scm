@@ -1,12 +1,7 @@
 ;;; -*- Mode: Scheme; scheme48-package: keystroke -*-
-;;;
-;;; also defined for-syntax, see packages.scm
-;;;
-(define *keystroke-modifiers* '(shift ctrl meta alt))
-(define *named-keystrokes*    '(up down left right backspace))
 
 (define-record-type* simple-key
-  (make-simple-key
+  (%make-simple-key
    ;;
    ;; Stores the character value of the key as a string
    ;;
@@ -18,6 +13,14 @@
    ;;
    modifiers)
   ())
+
+(define (make-simple-key value modifiers)
+  (if (char-set-contains? char-set:iso-control value)
+      (%make-simple-key (string (ascii->char (+ (char->ascii value)
+                                                (char->ascii #\A))))
+                        (enum-set-union modifiers
+                                        (key-modifier-set ctrl)))
+      (%make-simple-key (string value) modifiers)))
 
 (define (simple-key-name k)
   (if (simple-key? k)
@@ -48,9 +51,10 @@
    (else
     (let ((modifiers (key-modifiers k))
           (name      (key-name k)))
-      (if (null? modifiers)
+      (if (zero? modifiers)
           `(kbd ,name)
-          `(kbd (,@modifiers ,name)))))))
+          `(kbd (,@(map key-modifier-name (enum-set->list modifiers))
+                 ,name)))))))
 
 (define (key? k)
   (or (simple-key? k)
@@ -84,7 +88,7 @@
       #f))
 
 (define (valid-modifier? m)
-  (member (car m) *keystroke-modifiers*))
+  (key-modifier? m))
 
 (define (encode-modifiers modifiers)
   (if (not (list? modifiers))
@@ -99,10 +103,13 @@
             )
         )))
 
-(define* (make-key value (modifiers '()) (name #f))
+(define* (make-key value
+                   (modifiers (key-modifier-set))
+                   (name      #f))
   (cond
+   ((not     value) empty-key)
    ((number? value) (make-simple-key (ascii->char value) modifiers))
-   ((char? value)   (make-simple-key value modifiers))
+   ((char?   value) (make-simple-key value modifiers))
    ((string? value)
     (cond
      ((or  (symbol? name) (string? name)) (make-named-key  value modifiers name))
@@ -115,14 +122,16 @@
     (let ((%key (rename 'make-key))
           (r    rename)
           (form (cdr form))) ;; discard the first token, 'KBD'
+      (define all-modifiers
+        (map key-modifier-name (vector->list all-key-modifiers)))
       (define (parse-kbd-form form)
         (cond
          ((char? form)
-          `(,%key (,(r 'string) ,form) '()))
+          `(,%key ,form))
          ((string? form)
           (if (= 1 (string-length form))
-              `(,%key (,(r 'string-ref) ,form 0 ) '())
-              `(,(r 'map) (,(r 'lambda) (c) (,%key c '()))
+              `(,%key (,(r 'string-ref) ,form 0 ))
+              `(,(r 'map) (,(r 'lambda) (c) (,%key c))
                 (,(r 'string->list) ,form))))
          ((list? form)
           (let* ((form      (reverse form))
@@ -131,7 +140,7 @@
             ;; if all the modifiers are valid
             (if (lset<= compare
                         (map rename modifiers)
-                        (map rename *keystroke-modifiers*))
+                        (map rename all-modifiers))
                 `(,%key ,key (,(r 'delete-duplicates) ',modifiers))
                 (syntax-error "contains invalid modifier" modifiers))))))
       (if (= 1 (length form))
