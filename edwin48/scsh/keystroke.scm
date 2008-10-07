@@ -94,19 +94,6 @@
 (define (valid-modifier? m)
   (key-modifier? m))
 
-(define (encode-modifiers modifiers)
-  (if (not (list? modifiers))
-      (error "not a list of modifiers" modifiers)
-      (let loop ((m modifiers)
-                 (r 0))
-        (cond ((null? m) r)
-              ((not (valid-modifier? (car m)))
-               (error "not a valid modifier" (car m)))
-              (else (loop (cdr m)
-                          ))
-            )
-        )))
-
 (define* (make-key value
                    (modifiers (key-modifier-set))
                    (name      #f))
