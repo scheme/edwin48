@@ -45,7 +45,9 @@
    name)
   ())
 
-(define empty-key (make-named-key "" 0 'empty))
+(define empty-modifiers (make-key-modifier-set '()))
+(define (key-modifiers-empty? modifiers) (null? (enum-set->list modifiers)))
+(define empty-key (make-named-key "" empty-modifiers 'empty))
 
 (define (key->name k)
   (cond
@@ -53,11 +55,11 @@
    (else
     (let ((modifiers (key-modifiers k))
           (name      (key-name k)))
-      (if (zero? modifiers)
+      (if (key-modifiers-empty? modifiers)
           `(kbd ,name)
           `(kbd (,@(map key-modifier-name (enum-set->list modifiers))
                  ,name)))))))
-
+ 
 (define (key? k)
   (or (simple-key? k)
       (named-key?  k)))
@@ -79,7 +81,7 @@
 
 (define (key=? k1 k2)
 
-  (define (modifiers=? m1 m2) (= m1 m2))
+  (define (modifiers=? m1 m2) (enum-set=? m1 m2))
   (define (value=? v1 v2) (string=? v1 v2))
 
   (if (and (key? k1) (key? k2))
@@ -132,7 +134,7 @@
           `(,%key ,form))
          ((string? form)
           (if (= 1 (string-length form))
-              `(,%key (,(r 'string-ref) ,form 0 ))
+              `(,%key (,(r 'string-ref) ,form))
               `(,(r 'map) (,(r 'lambda) (c) (,%key c))
                 (,(r 'string->list) ,form))))
          ((list? form)
