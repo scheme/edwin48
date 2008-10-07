@@ -16,7 +16,8 @@
 
 (define (make-simple-key value modifiers)
   (if (char-set-contains? char-set:iso-control value)
-      (%make-simple-key (string (ascii->char (+ (char->ascii value)
+      (%make-simple-key (string (ascii->char (+ -1
+                                                (char->ascii value)
                                                 (char->ascii #\A))))
                         (enum-set-union modifiers
                                         (key-modifier-set ctrl)))
