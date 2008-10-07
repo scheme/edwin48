@@ -47,7 +47,6 @@
 
 (define empty-modifiers (make-key-modifier-set '()))
 (define (key-modifiers-empty? modifiers) (null? (enum-set->list modifiers)))
-(define empty-key (make-named-key "" empty-modifiers 'empty))
 
 (define (key->name k)
   (cond
@@ -98,7 +97,6 @@
                    (modifiers (key-modifier-set))
                    (name      #f))
   (cond
-   ((not     value) empty-key)
    ((number? value) (make-simple-key (ascii->char value) modifiers))
    ((char?   value) (make-simple-key value modifiers))
    ((string? value)

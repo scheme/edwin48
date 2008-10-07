@@ -51,7 +51,7 @@
 (define (start-printer)
   (with-current-input-terminal-mode 'raw
     (let loop ((key (grab-key)))
-      (if (key=? key empty-key)
+      (if (key=? key (kbd #\q))
           (display "bye")
           (begin (display (key->name key))
                  (newline)
