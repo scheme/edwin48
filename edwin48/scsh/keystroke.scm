@@ -81,29 +81,29 @@
 (define (key=? k1 k2)
 
   (define (modifiers=? m1 m2) (enum-set=? m1 m2))
-  (define (value=? v1 v2) (string=? v1 v2))
+  (define (value=?     v1 v2) (string=?   v1 v2))
 
   (if (and (key? k1) (key? k2))
       (and (modifiers=? (key-modifiers k1)
                         (key-modifiers k2))
-           (value=?     (key-value k1)
-                        (key-value k2)))
+           (value=?     (key-value     k1)
+                        (key-value     k2)))
       #f))
 
-(define (valid-modifier? m)
-  (key-modifier? m))
+(define (valid-modifier? m) (key-modifier? m))
 
 (define* (make-key value
-                   (modifiers (key-modifier-set))
+                   (modifiers empty-modifiers)
                    (name      #f))
   (cond
-   ((number? value) (make-simple-key (ascii->char value) modifiers))
    ((char?   value) (make-simple-key value modifiers))
    ((string? value)
-    (cond
-     ((or  (symbol? name) (string? name)) (make-named-key  value modifiers name))
-     ((not (zero? (string-length value))) (make-simple-key value modifiers))
-     (else "invalid string input" value)))
+    (if (zero? (string-length value))
+        (error "invalid string input" value)
+        (cond
+         ((symbol? name) (make-named-key value modifiers name)
+         ((string? name) (make-named-key value modifiers (string->symbol name)))
+         (else (make-simple-key value modifiers))))))
    (else (error "invalid input" value))))
 
 (define-syntax kbd
@@ -117,9 +117,11 @@
         (cond
          ((char? form)
           `(,%key ,form))
+         ((number? form)
+          `(,%key (,(r 'ascii->char) ,form)))
          ((string? form)
           (if (= 1 (string-length form))
-              `(,%key (,(r 'string-ref) ,form))
+              `(,%key (,(r 'string-ref) ,form 0))
               `(,(r 'map) (,(r 'lambda) (c) (,%key c))
                 (,(r 'string->list) ,form))))
          ((list? form)
