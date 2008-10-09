@@ -96,6 +96,7 @@
                    (modifiers empty-modifiers)
                    (name      #f))
   (cond
+   ((number? value) (make-simple-key (ascii->char value) modifiers))
    ((char?   value) (make-simple-key value modifiers))
    ((string? value)
     (if (zero? (string-length value))
@@ -117,8 +118,6 @@
         (cond
          ((char? form)
           `(,%key ,form))
-         ((number? form)
-          `(,%key (,(r 'ascii->char) ,form)))
          ((string? form)
           (if (= 1 (string-length form))
               `(,%key (,(r 'string-ref) ,form 0))
