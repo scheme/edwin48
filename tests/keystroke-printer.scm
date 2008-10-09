@@ -2,13 +2,15 @@
   (receive (halt-update? peek-no-hang peek read)
       (get-console-input-operations)
     (with-current-input-terminal-mode 'raw
-      (let loop ((k (read)))
-        (if (key=? k (kbd #\q))
-            (begin (display "bye")
-                   (newline))
-            (begin (display (key->name k))
-                   (newline)
-                   (loop (read))))))))
+      (let ((term (setup-terminal)))
+        (tputs (keypad-xmit term))
+        (let loop ((k (read)))
+          (if (key=? k (kbd #\q))
+              (begin (display "bye")
+                     (newline))
+              (begin (display (key->name k))
+                     (newline)
+                     (loop (read)))))))))
 
 (define input-buffer-size 16)
 
@@ -79,13 +81,10 @@
                                                  (key-modifier meta)))))))
                          (let* ((key-seq  (caar key-pairs))
                                 (n-seq    (string-length key-seq)))
-;;;                            (format output "In find: ~a~%"
-;;;                                    (map (lambda (c) (char->integer c)) (string->list key-seq)))
                            (cond ((and (fix:<= n-seq n-chars)
                                        (string= string key-seq
                                                 start (fix:+ start n-seq)
                                                 0 n-seq))
-                                  (format output "Found: ~a~%" (key->name (cdar key-pairs)))
                                   (set! len n-seq)
                                   (cdar key-pairs))
                                  ((and (fix:> n-seq n-chars)
