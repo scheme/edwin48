@@ -17,7 +17,7 @@
     (map (lambda (name+key-seq)
            (cons (cdr name+key-seq)
                  (make-key (cdr name+key-seq)
-                           '()
+                           empty-modifiers
                            (car name+key-seq))))
          `((up    . ,(key-up    x))
            (down  . ,(key-down  x))

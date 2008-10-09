@@ -254,7 +254,8 @@
             key-name
             key-value
             key-modifiers
-            key->name)
+            key->name
+            empty-modifiers)
   (for-syntax (open scheme enum-sets keystroke-modifiers))
   (open scheme
         ascii bitwise char-support define-record-type* enum-sets
