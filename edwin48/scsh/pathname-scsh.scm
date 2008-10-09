@@ -65,6 +65,9 @@
 (define (system-library-directory-pathname pathname)
   (->pathname "edwin"))
 
+(define (working-directory-pathname)
+  (->pathname (cwd)))
+
 ;;; Originally from MIT Scheme
 (define (pathname-simplify pathname)
   (define (delete-up directory p)

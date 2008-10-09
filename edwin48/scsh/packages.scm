@@ -97,9 +97,8 @@
             file-eq?
             file-exists?
             file-modification-time
-            read-string!/partial
-            working-directory-pathname)
-  (open scheme receiving pathname scsh-subset)
+            read-string!/partial)
+  (open scheme receiving scsh-subset)
   (files io-support))
 
 (define-structure pathname
@@ -136,6 +135,7 @@
             ;; init-file-pathname
             user-homedir-pathname
             system-library-directory-pathname
+            working-directory-pathname
             )
   (open scheme define-record-type* ascii
         signals util methods receiving fluids cells

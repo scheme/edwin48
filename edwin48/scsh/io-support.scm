@@ -22,6 +22,3 @@
 
 (define (call-with-binary-output-file filename thunk)
   (call-with-output-file filename thunk))
-
-(define (working-directory-pathname)
-  (->pathname (cwd)))
