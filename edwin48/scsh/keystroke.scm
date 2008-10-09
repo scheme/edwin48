@@ -102,9 +102,9 @@
     (if (zero? (string-length value))
         (error "invalid string input" value)
         (cond
-         ((symbol? name) (make-named-key value modifiers name)
+         ((symbol? name) (make-named-key value modifiers name))
          ((string? name) (make-named-key value modifiers (string->symbol name)))
-         (else (make-simple-key value modifiers))))))
+         (else (make-simple-key value modifiers)))))
    (else (error "invalid input" value))))
 
 (define-syntax kbd
