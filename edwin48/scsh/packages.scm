@@ -97,6 +97,7 @@
             file-eq?
             file-exists?
             file-modification-time
+            input-available-on-port?
             read-string!/partial)
   (open scheme receiving scsh-subset)
   (files io-support))
@@ -250,7 +251,6 @@
             make-key
             key?
             key=?
-            empty-key
             key-name
             key-value
             key-modifiers
