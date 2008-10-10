@@ -1,5 +1,13 @@
 ;;; -*- Mode: Scheme; scheme48-package: keystroke -*-
 
+(define (known-key? k)
+  (let loop ((keys all-named-keys))
+    (cond
+     ((null? keys) #f)
+     ((char=? k (caar keys))
+      (symbol->string (cdar keys)))
+     (else (loop (cdr keys))))))
+
 (define-record-type* simple-key
   (%make-simple-key
    ;;
@@ -8,19 +16,21 @@
    value
    ;;
    ;; modifiers must be one of the defined key modifiers, listed
-   ;; above. The representation is just a list (set) of symbols, it
-   ;; could be optimized to use a bit offsets.
+   ;; above. The representation is just an enum-set of symbols.
    ;;
    modifiers)
   ())
 
-(define (make-simple-key value modifiers)
+(define* (make-simple-key value (modifiers empty-modifiers))
+  (define (strip value)
+    (ascii->char (+ -1
+                    (char->ascii value)
+                    (char->ascii #\A))))
+  (define (union modifiers modifier)
+    (key-modifier-set-union modifiers modifier))
   (if (char-set-contains? char-set:iso-control value)
-      (%make-simple-key (string (ascii->char (+ -1
-                                                (char->ascii value)
-                                                (char->ascii #\A))))
-                        (enum-set-union modifiers
-                                        (key-modifier-set ctrl)))
+      (%make-simple-key (string (strip value))
+                        (union modifiers (key-modifier-set ctrl)))
       (%make-simple-key (string value) modifiers)))
 
 (define (simple-key-name k)
@@ -32,17 +42,13 @@
 (define-record-type* named-key
   (make-named-key
    ;;
-   ;; a string containing a escape sequence
+   ;; a symbol containing the name of the keystroke (i.e. up, down, left, right)
    ;;
    value
    ;;
    ;; see above
    ;;
-   modifiers
-   ;;
-   ;; a symbol containing the name of the keystroke (i.e. up, down, left, right)
-   ;;
-   name)
+   modifiers)
   ())
 
 (define empty-modifiers (make-key-modifier-set '()))
@@ -75,7 +81,7 @@
 
 (define (key-name k)
   (cond ((simple-key? k) (char->name     (simple-key-name  k)))
-        ((named-key?  k) (symbol->string (named-key-name  k)))
+        ((named-key?  k) (named-key-value k))
         (else (error "not a key" k))))
 
 (define (key=? k1 k2)
@@ -94,16 +100,17 @@
 
 (define* (make-key value
                    (modifiers empty-modifiers)
-                   (name      #f))
+                   (name      ""))
   (cond
+   ((known-key? value) => (lambda (name) (make-named-key name modifiers)))
    ((number? value) (make-simple-key (ascii->char value) modifiers))
    ((char?   value) (make-simple-key value modifiers))
    ((string? value)
     (if (zero? (string-length value))
         (error "invalid string input" value)
         (cond
-         ((symbol? name) (make-named-key value modifiers name))
-         ((string? name) (make-named-key value modifiers (string->symbol name)))
+         ((symbol? name) (make-named-key (symbol->string name) modifiers))
+         ((string? name) (make-named-key name modifiers))
          (else (make-simple-key value modifiers)))))
    (else (error "invalid input" value))))
 
@@ -123,16 +130,17 @@
               `(,%key (,(r 'string-ref) ,form 0))
               `(,(r 'map) (,(r 'lambda) (c) (,%key c))
                 (,(r 'string->list) ,form))))
+         ((symbol? form)
+          (let loop ((keys all-named-keys))
+            (cond
+             ((null? keys) (syntax-error "not a valid named key" form))
+             ((eq? form (cdar keys)) `(,%key ,(caar keys)))
+             (else (loop (cdr keys))))))
          ((list? form)
           (let* ((form      (reverse form))
                  (key       (car form))
                  (modifiers (cdr form)))
-            ;; if all the modifiers are valid
-            (if (lset<= compare
-                        (map rename modifiers)
-                        (map rename all-modifiers))
-                `(,%key ,key (,(r 'delete-duplicates) ',modifiers))
-                (syntax-error "contains invalid modifier" modifiers))))))
+            `(,%key ,key (,(r 'key-modifier-set) ,@modifiers))))))
       (if (= 1 (length form))
           (parse-kbd-form (car form))
           (map parse-kbd-form form)))))
