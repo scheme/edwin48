@@ -46,7 +46,7 @@
   ())
 
 (define empty-modifiers (make-key-modifier-set '()))
-(define (key-modifiers-empty? modifiers) (null? (enum-set->list modifiers)))
+(define (key-modifiers-empty? modifiers) (null? (key-modifier-set->list modifiers)))
 
 (define (key->name k)
   (cond
@@ -56,9 +56,9 @@
           (name      (key-name k)))
       (if (key-modifiers-empty? modifiers)
           `(kbd ,name)
-          `(kbd (,@(map key-modifier-name (enum-set->list modifiers))
+          `(kbd (,@(map key-modifier-name (key-modifier-set->list modifiers))
                  ,name)))))))
- 
+
 (define (key? k)
   (or (simple-key? k)
       (named-key?  k)))
@@ -80,7 +80,7 @@
 
 (define (key=? k1 k2)
 
-  (define (modifiers=? m1 m2) (enum-set=? m1 m2))
+  (define (modifiers=? m1 m2) (key-modifier-set=? m1 m2))
   (define (value=?     v1 v2) (string=?   v1 v2))
 
   (if (and (key? k1) (key? k2))

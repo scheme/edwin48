@@ -258,7 +258,7 @@
             empty-modifiers)
   (for-syntax (open scheme enum-sets keystroke-modifiers))
   (open scheme
-        ascii bitwise char-support define-record-type* enum-sets
+        ascii bitwise char-support define-record-type*
         keystroke-modifiers
         srfi-1 srfi-13 srfi-14 srfi-23 srfi-89)
   (files keystroke))
@@ -273,6 +273,9 @@
             key-modifier-set
             key-modifier-set?
             make-key-modifier-set
+            key-modifier-set=?
+            key-modifier-set-union
+            key-modifier-set->list
 
             named-keystroke
             named-keystroke?
