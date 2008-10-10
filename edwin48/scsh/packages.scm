@@ -277,6 +277,8 @@
             key-modifier-set-union
             key-modifier-set->list
 
+            all-named-keys
+            
             named-keystroke
             named-keystroke?
             all-named-keystrokes
