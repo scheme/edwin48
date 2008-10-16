@@ -5,7 +5,7 @@
       (let ((term (setup-terminal)))
         (tputs (keypad-xmit term))
         (let loop ((k (read)))
-          (if (key=? k (kbd #\q))
+          (if (key=? k (kbd (ctrl #\q)))
               (begin (display "bye")
                      (newline)
                      (tputs (keypad-local term)))
@@ -41,7 +41,6 @@
 
 (define (get-console-input-operations)
   (let ((port   (current-input-port))
-        (output (current-output-port))
         (string (make-string (* 3 input-buffer-size)))
         (start  0)
         (end    0)

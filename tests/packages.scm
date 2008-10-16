@@ -14,6 +14,6 @@
 (define-structure keystroke-printer
     (export start-printer)
   (open scheme scsh-subset
-        aliases ascii fixnum formats io-support keystroke keystroke-modifiers terminal-mode terminfo
+        aliases ascii fixnum io-support keystroke keystroke-modifiers terminal-mode terminfo
         srfi-8 srfi-13 srfi-23)
   (files keystroke-printer))
