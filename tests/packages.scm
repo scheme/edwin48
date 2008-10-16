@@ -11,9 +11,15 @@
   (open scheme scsh-level-0 enumerated let-opt)
   (files terminal-mode))
 
+(define-structure terminal-driver
+    (export get-console-input-operations)
+  (open scheme scsh-subset
+        aliases ascii fixnum io-support keystroke keystroke-modifiers terminfo
+        srfi-13 srfi-23)
+  (files terminal-driver))
+
 (define-structure keystroke-printer
     (export start-printer)
-  (open scheme scsh-subset
-        aliases ascii fixnum io-support keystroke keystroke-modifiers terminal-mode terminfo
+  (open scheme keystroke terminal-driver terminal-mode terminfo
         srfi-8 srfi-13 srfi-23)
   (files keystroke-printer))
