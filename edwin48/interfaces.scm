@@ -276,6 +276,7 @@
 
 (define-interface edwin:command-table/interface
   (export comtab-entry local-comtab-entry
+          comtab-key?
           prefix-key-list?
           define-key
           define-prefix-key
