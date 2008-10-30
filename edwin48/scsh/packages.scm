@@ -247,15 +247,22 @@
   (files terminal-support))
 
 (define-structure keystroke
-    (export (kbd :syntax)
-            make-key
-            key?
-            key=?
-            key-name
-            key-value
-            key-modifiers
-            key->name
-            empty-modifiers)
+    (compound-interface keystroke-core/interface
+                        keystroke-modifiers/interface)
+    (open keystroke-core keystroke-modifiers))
+
+(define-interface keystroke-core/interface
+  (export (kbd :syntax)
+          make-key
+          key?
+          key=?
+          key-name
+          key-value
+          key-modifiers
+          key->name
+          empty-modifiers))
+
+(define-structure keystroke-core keystroke-core/interface
   (for-syntax (open scheme enum-sets keystroke-modifiers))
   (open scheme
         ascii bitwise char-support define-record-type*
@@ -263,26 +270,28 @@
         srfi-1 srfi-13 srfi-14 srfi-23 srfi-89)
   (files keystroke))
 
-(define-structure keystroke-modifiers
-    (export key-modifier
-            key-modifier?
-            all-key-modifiers
-            key-modifier-name
-            key-modifier-index
+(define-interface keystroke-modifiers/interface
+  (export key-modifier
+          key-modifier?
+          all-key-modifiers
+          key-modifier-name
+          key-modifier-index
 
-            key-modifier-set
-            key-modifier-set?
-            make-key-modifier-set
-            key-modifier-set=?
-            key-modifier-set-union
-            key-modifier-set->list
+          key-modifier-set
+          key-modifier-set?
+          make-key-modifier-set
+          key-modifier-set=?
+          key-modifier-set-union
+          key-modifier-set->list
 
-            all-named-keys
-            
-            named-keystroke
-            named-keystroke?
-            all-named-keystrokes
-            named-keystroke-value)
+          all-named-keys
+
+          named-keystroke
+          named-keystroke?
+          all-named-keystrokes
+          named-keystroke-value))
+
+(define-structure keystroke-modifiers keystroke-modifiers/interface
   (open scheme enum-sets finite-types)
   (files keystroke-modifiers))
 
