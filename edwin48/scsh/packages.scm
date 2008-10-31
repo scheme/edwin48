@@ -280,13 +280,13 @@
   (files keystroke))
 
 (define-interface keystroke-modifiers/interface
-  (export key-modifier
+  (export (key-modifier :syntax)
           key-modifier?
           all-key-modifiers
           key-modifier-name
           key-modifier-index
 
-          key-modifier-set
+          (key-modifier-set :syntax)
           key-modifier-set?
           make-key-modifier-set
           key-modifier-set=?
@@ -295,7 +295,7 @@
 
           all-named-keys
 
-          named-keystroke
+          (named-keystroke :syntax)
           named-keystroke?
           all-named-keystrokes
           named-keystroke-value))
