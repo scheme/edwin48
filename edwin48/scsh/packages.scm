@@ -251,8 +251,17 @@
                         keystroke-modifiers/interface)
     (open keystroke-core keystroke-modifiers))
 
+(define-structure keystroke-discloser
+    (export :key)
+  (open scheme keystroke
+        srfi-9 define-record-types)
+  (begin
+    (define-record-discloser :key
+      (lambda (k) `(,@(key->name k))))))
+
 (define-interface keystroke-core/interface
   (export (kbd :syntax)
+          :key
           make-key
           key?
           key=?
