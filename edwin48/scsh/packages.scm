@@ -269,7 +269,10 @@
           key-value
           key-modifiers
           key->name
-          empty-modifiers))
+          empty-modifiers
+          add-key-modifiers
+          replace-key-modifiers
+          strip-key-modifiers))
 
 (define-structure keystroke-core keystroke-core/interface
   (for-syntax (open scheme enum-sets keystroke-modifiers))

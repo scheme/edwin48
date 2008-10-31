@@ -69,23 +69,39 @@
                     (char->ascii #\a))))
   (define (union modifiers modifier)
     (key-modifier-set-union modifiers modifier))
-  (cond
-   ((number? value) (make-key (ascii->char value) modifiers))
-   ((char? value)
+
+  (let ((modifiers (if (key-modifier? modifiers)
+                       (make-key-modifier-set (list modifiers))
+                       modifiers)))
     (cond
-     ((known-key? value) => (lambda (name) (really-make-key name modifiers)))
-     ((char-set-contains? char-set:iso-control value)
-      (really-make-key (strip value)
-                       (union modifiers (key-modifier-set ctrl))))
-     (else (really-make-key value modifiers))))
-   ((string? value)
-    (if (zero? (string-length value))
-        (error "invalid string input" value)
-        (cond
-         ((symbol? name) (really-make-key name modifiers))
-         ((string? name) (really-make-key (string->symbol name) modifiers))
-         (else (error "invalid name" name )))))
-   (else (error "invalid input" value))))
+     ((number? value) (make-key (ascii->char value) modifiers))
+     ((char? value)
+      (cond
+       ((known-key? value) => (lambda (name) (really-make-key name modifiers)))
+       ((char-set-contains? char-set:iso-control value)
+        (really-make-key (strip value)
+                         (union modifiers (key-modifier-set ctrl))))
+       (else (really-make-key value modifiers))))
+     ((string? value)
+      (if (zero? (string-length value))
+          (error "invalid string input" value)
+          (cond
+           ((symbol? name) (really-make-key name modifiers))
+           ((string? name) (really-make-key (string->symbol name) modifiers))
+           (else (error "invalid name" name )))))
+     (else (error "invalid input" value)))))
+
+(define (add-key-modifiers key modifiers)
+  (let ((existing (key-modifiers key))
+        (union    key-modifier-set-union))
+    (replace-key-modifiers key (union existing modifiers))))
+
+(define (replace-key-modifiers key modifiers)
+  (let ((value (key-value key)))
+    (make-key value modifiers)))
+
+(define (strip-key-modifiers key)
+  (replace-key-modifiers key empty-modifiers))
 
 (define-syntax kbd
   (lambda (form rename compare)
