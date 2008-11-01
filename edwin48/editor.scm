@@ -432,19 +432,6 @@ TRANSCRIPT    messages appear in transcript buffer, if it is enabled;
 				       'ABORT-CURRENT-COMMAND))
 	(signaller input)))))
 
-(define-structure (input-event
-		   (constructor make-input-event (type operator . operands))
-		   (conc-name input-event/))
-  (type #f read-only #t)
-  (operator #f read-only #t)
-  (operands #f read-only #t))
-
-(define (apply-input-event input-event)
-  (if (not (input-event? input-event))
-      (error:wrong-type-argument input-event "input event" apply-input-event))
-  (apply (input-event/operator input-event)
-	 (input-event/operands input-event)))
-
 (define condition-type:^G
   (make-condition-type '^G condition-type:abort-current-command '()
     (lambda (condition port)

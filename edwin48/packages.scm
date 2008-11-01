@@ -32,7 +32,8 @@
           (modify interrupts (expose call-after-gc!))
           io-support keystroke pathname rb-tree soosy weak-pair
           srfi-1 srfi-9 srfi-13 srfi-14 srfi-23 srfi-43 srfi-69
-          edwin:doc-string edwin:ring edwin:string-table edwin:utilities)
+          edwin:doc-string edwin:input-event edwin:ring edwin:string-table
+          edwin:utilities)
   (for-syntax (open scheme errors macro-helpers))
   (files (scsh macros) ;; macros need to be looked at first
          struct
@@ -120,3 +121,6 @@
         terminfo)
   (files terminal))
 
+(define-structure edwin:input-event edwin:input-event/interface
+  (open scheme errors srfi-9)
+  (files input-event))

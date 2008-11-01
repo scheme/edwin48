@@ -620,3 +620,11 @@
 
 (define-interface edwin:window-system/interface
   (export vanilla-window))
+
+(define-interface edwin:input-event/interface
+  (export make-input-event
+          input-event?
+          input-event/type
+          input-event/operator
+          input-event/operands
+          apply-input-event))
