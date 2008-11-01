@@ -46,8 +46,8 @@ Used more than once, this command multiplies the argument by 4 each time."
 
 (define (digit-argument argument mode)
   (let ((key (last-command-key)))
-    (if (char? key)
-	(let ((digit (char->digit (char-base key))))
+    (if (simple-key? key)
+	(let ((digit (char->digit (key-char-value key))))
 	  (if digit
 	      (set-command-argument!
 	       (cond ((eq? '- argument) (- digit))
