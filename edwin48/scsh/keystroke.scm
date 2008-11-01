@@ -8,6 +8,15 @@
       (cdar keys))
      (else (loop (cdr keys))))))
 
+(define (simple-key? k)
+  (= 1 (string-length (key-value k))))
+
+(define (special-key? k) (not (simple-key? k)))
+
+(define (key-char-value k)
+  (if (simple-key? k)
+      (string-ref (key-value k) 0)))
+
 (define-record-type* key
   (really-make-key
    ;;

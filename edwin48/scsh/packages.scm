@@ -264,9 +264,10 @@
           :key
           make-key
           key?
+          simple-key? special-key?
           key=?
           key-name
-          key-value
+          key-value key-char-value
           key-modifiers
           key->name
           empty-modifiers
