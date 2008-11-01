@@ -157,22 +157,16 @@ This command followed by an = is equivalent to a Control-=."
   ()
   (lambda ()
     (read-extension-key
-     (lambda (char)
-       (merge-bucky-bits char char-bit:control)))))
+     (lambda (key)
+       (add-key-modifiers key (key-modifier ctrl))))))
 
 (define-command meta-prefix
-  "Sets Meta-bit of following character. 
-Turns a following A into a Meta-A.
-If the Metizer character is Altmode, it turns ^A
-into Control-Meta-A.  Otherwise, it turns ^A into plain Meta-A."
+  "Sets Meta-bit of following character. Turns a following A into a Meta-A."
   ()
   (lambda ()
     (read-extension-key
-     (lambda (char)
-       (merge-bucky-bits (if (eqv? (current-command-key) #\altmode)
-			     char
-			     (char-base char))
-			 char-bit:meta)))))
+     (lambda (key)
+       (add-key-modifiers key (key-modifier meta))))))
 
 (define-command control-meta-prefix
   "Sets Control- and Meta-bits of following character.
@@ -180,8 +174,8 @@ Turns a following A (or C-A) into a Control-Meta-A."
   ()
   (lambda ()
     (read-extension-key
-     (lambda (char)
-       (merge-bucky-bits char (fix:or char-bit:control char-bit:meta))))))
+     (lambda (key)
+       (add-key-modifiers key (key-modifier-set ctrl meta))))))
 
 (define execute-extended-keys?
   #t)
