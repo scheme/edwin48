@@ -215,7 +215,7 @@ It reads another character (a subcommand) and dispatches on it."
   (set-command-prompt!
    (string-append-separated
     (command-argument-prompt)
-    (string-append (xkey->name (current-command-key)) " -"))))
+    (string-append (key->name (current-command-key)) " -"))))
 
 (define-command execute-extended-command
   "Read an extended command from the terminal with completion.
@@ -227,7 +227,7 @@ For more information type the HELP key while entering the name."
     (dispatch-on-command
      (prompt-for-command
       ;; Prompt with the name of the command char.
-      (list (string-append (xkey->name (current-command-key)) " "))
+      (list (string-append (key->name (current-command-key)) " "))
       'HISTORY 'EXECUTE-EXTENDED-COMMAND)
      #t)))
 
@@ -245,7 +245,7 @@ For more information type the HELP key while entering the name."
   "This command is used to capture undefined keys."
   ()
   (lambda ()
-    (editor-error "Undefined command: " (xkey->name (current-command-key)))))
+    (editor-error "Undefined command: " (key->name (current-command-key)))))
 
 (define (barf-if-read-only)
   (editor-error "Trying to modify read only text."))
@@ -309,8 +309,7 @@ For a normal exit, you should use \\[exit-recursive-edit], NOT this command."
 
 ;; Set this to #F to indicate that calling QUIT has the same effect
 ;; as calling %EXIT, or to prevent the editor from suspending to the OS.
-(define scheme-can-quit?
-  #t)
+(define scheme-can-quit? #t)
 
 ;; Set this to #T to force the exit commands to always prompt for
 ;; confirmation before killing Edwin.
