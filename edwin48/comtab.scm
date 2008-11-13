@@ -44,7 +44,7 @@ USA.
 		 (let ((entry (assq key (comtab-alist comtab))))
 		   (and entry
 			(cdr entry)))))))
-      (if (and (char? key) (char-upper-case? (char-base key)))
+      (if (and (key? key) (char-upper-case? (key-char-value key)))
 	  (or (try key) (try (char-downcase key)))
 	  (try key)))))
 
