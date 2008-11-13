@@ -292,7 +292,7 @@ USA.
       (begin
 	(set! *command-key* key)
 	(set-command-prompt!
-	 (string-append-separated (command-argument-prompt) (xkey->name key)))
+	 (string-append-separated (command-argument-prompt) (key->name key)))
 	(%dispatch-on-command (current-window)
 			      (comtab-entry comtab key)
 			      #f))))

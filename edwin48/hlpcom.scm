@@ -142,7 +142,7 @@ Prints the full documentation for the given command."
       (let ((bindings (comtab-key-bindings (current-comtabs) command)))
 	(if (pair? bindings)
 	    (message (command-name-string command) " is on "
-		     (xkey->name (car bindings)))
+		     (key->name (car bindings)))
 	    (message (command-name-string command) " is not on any keys"))))))
 
 (define-command describe-key-briefly
