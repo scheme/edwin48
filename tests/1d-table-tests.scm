@@ -1,10 +1,9 @@
-(newline)
+(define (message caller expect result)
+  (newline)
+  (display (format #f "~a should return ~a, returned ~a instead.~%"
+                   caller expect result)))
 
 (define table (make-1d-table))
-(define (message caller expect result)
-  (format #f "~a should return ~a, returned ~a instead.~%"
-          caller expect result))
-
 (let ((expect #t)
       (result (1d-table? table)))
   (if (not result)
@@ -12,15 +11,14 @@
 
 (1d-table/put! table 'foo 'bar)
 (1d-table/put! table 'abc 'def)
-
 (let* ((value  (1d-table/alist table))
        (expect '((foo . bar) (abc . def)))
        (result (equal? expect value)))
   (if (not result)
       (message '1d-table/alist expect result)))
 
-(let* ((value (begin (1d-table/remove! table 'foo)
-                     (1d-table/alist table)))
+(1d-table/remove! table 'foo)
+(let* ((value  (1d-table/alist table))
        (expect '((abc . def)))
        (result (equal? expect value)))
   (if (not result)
@@ -47,3 +45,8 @@
   (if (not result)
       (message '1d-table/lookup expect result)))
 
+ (1d-table/remove! table 'abc)
+(let* ((value  (1d-table/alist table))
+       (result (null? value)))
+  (if (not result)
+      (message '1d-table/remove! '() result)))
