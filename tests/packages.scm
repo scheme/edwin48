@@ -23,3 +23,8 @@
   (open scheme keystroke terminal-driver terminal-mode terminfo
         srfi-8 srfi-13 srfi-23)
   (files keystroke-printer))
+
+(define-structure 1d-table-tests
+    (export run-1d-table-test)
+  (open scheme formats 1d-table)
+  (files 1d-table-tests))
