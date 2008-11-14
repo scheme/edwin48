@@ -312,3 +312,14 @@
     (export char->name)
   (open scheme ascii fixnum srfi-13 srfi-14 srfi-89)
   (files char-support))
+
+(define-structure 1d-table
+    (export make-1d-table
+            1d-table?
+            1d-table/put!
+            1d-table/remove!
+            1d-table/get
+            1d-table/lookup
+            1d-table/alist)
+  (open scheme aliases errors srfi-1 weak-pair)
+  (files 1d-table))

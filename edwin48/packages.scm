@@ -28,7 +28,7 @@
     (open (modify scheme  (hide integer->char string-fill! vector-fill!))
           (modify sorting (rename (vector-sort sort)))
           (modify ascii   (alias  (ascii->char integer->char)))
-          aliases srfi-89 define-record-type* errors event-distributor fixnum
+          1d-table aliases srfi-89 define-record-type* errors event-distributor fixnum
           (modify interrupts (expose call-after-gc!))
           io-support keystroke pathname rb-tree soosy weak-pair
           srfi-1 srfi-9 srfi-13 srfi-14 srfi-23 srfi-43 srfi-69
