@@ -88,7 +88,7 @@ USA.
 	      message))))))))
 
 (define (edwin . args) (apply edit args))
-(simple-command-line-parser "edit" edit)
+;; (simple-command-line-parser "edit" edit)
 
 (define edwin-editor #f)
 (define editor-abort unspecific)
