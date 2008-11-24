@@ -425,8 +425,8 @@ TRANSCRIPT    messages appear in transcript buffer, if it is enabled;
 	 (condition-signaller condition-type:abort-current-command
 			      '(INPUT)
 			      standard-error-handler)))
-    (lambda (#!optional input)
-      (let ((input (if (default-object? input) #f input)))
+    (lambda input
+      (let ((input (if (null? input) #f input)))
 	(if (not (or (not input) (input-event? input)))
 	    (error:wrong-type-argument input "input event"
 				       'ABORT-CURRENT-COMMAND))
