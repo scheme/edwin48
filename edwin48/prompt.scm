@@ -166,9 +166,9 @@ USA.
 (define (typein-string)
   (map-name/external->internal (buffer-string (current-buffer))))
 
-(define (set-typein-string! string #!optional update?)
+(define* (set-typein-string! string (update? #t))
   (let ((dont-update?
-	 (or (not (or (default-object? update?) update?))
+	 (or (not update?)
 	     (window-needs-redisplay? (typein-window)))))
     (region-delete! (buffer-region (current-buffer)))
     (insert-string (map-name/internal->external string))
@@ -289,15 +289,14 @@ USA.
 			   prompt default-string string-table
 			   options)))
 
-(define (prompt-for-alist-value prompt alist #!optional default ci?)
+(define* (prompt-for-alist-value prompt alist (default #f) (ci? #t))
   (fluid-let ((map-name/external->internal identity-procedure)
 	      (map-name/internal->external identity-procedure))
     (prompt-for-string-table-value prompt
-				   (and (not (default-object? default))
-					default)
+                                   default
 				   (alist->string-table
 				    alist
-				    (if (default-object? ci?) #t ci?))
+                                    ci?)
 				   'REQUIRE-MATCH? #t)))
 
 (define (prompt-for-command prompt . options)
@@ -859,9 +858,8 @@ a repetition of this command will exit."
 	(editor-error "Not an ASCII character:" input))
     input))
 
-(define (prompt-for-key prompt #!optional comtab)
-  (let ((comtab (if (default-object? comtab) (current-comtabs) comtab)))
-    (prompt-for-typein (string-append prompt ": ") #f
+(define* (prompt-for-key prompt (comtab (current-comtabs)))
+  (prompt-for-typein (string-append prompt ": ") #f
       (lambda ()
 	(let outer-loop ((prefix '()))
 	  (let inner-loop
@@ -877,7 +875,7 @@ a repetition of this command will exit."
 			(inner-loop
 			 (fluid-let ((execute-extended-keys? #f))
 			   (dispatch-on-command command)))
-			chars))))))))))
+			chars)))))))))
 
 ;;;; Confirmation Prompts
 
