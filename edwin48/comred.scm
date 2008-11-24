@@ -28,19 +28,19 @@ USA.
 ;;;; Command Reader
 
 
-(define *command-key*)		;Key read to find current command
-(define *command*)		;The current command
-(define *last-command*)		;The previous command, excluding arg commands
-(define *command-argument*)	;Argument from last command
-(define *next-argument*)	;Argument to next command
-(define *command-message*)	;Message from last command
-(define *next-message*)		;Message to next command
-(define *non-undo-count*)	;# of self-inserts since last undo boundary
-(define keyboard-keys-read)	;# of keys read from keyboard
-(define command-history)
+(define *command-key*       unspecific)  ;Key read to find current command
+(define *command*           unspecific)  ;The current command
+(define *last-command*      unspecific)  ;The previous command, excluding arg commands
+(define *command-argument*  unspecific)  ;Argument from last command
+(define *next-argument*     unspecific)  ;Argument to next command
+(define *command-message*   unspecific)  ;Message from last command
+(define *next-message*      unspecific)  ;Message to next command
+(define *non-undo-count*    unspecific)  ;# of self-inserts since last undo boundary
+(define keyboard-keys-read  unspecific)  ;# of keys read from keyboard
+(define command-history     unspecific)
 (define command-history-limit 30)
-(define command-reader-override-queue)
-(define *command-suffixes*)
+(define command-reader-override-queue unspecific)
+(define *command-suffixes* unspecific)
 
 (add-event-receiver! editor-initializations
   (lambda ()
@@ -115,9 +115,9 @@ USA.
   (call-with-current-continuation
    (lambda (k)
      (with-restart 'ABORT-EDITOR-COMMAND "Return to the editor command loop."
-	 (lambda (#!optional input)
+	 (lambda input
 	   (keyboard-macro-disable)
-	   (if (and (not (default-object? input)) (input-event? input))
+	   (if (and (not (null? input)) (input-event? input))
 	       (within-continuation k
 		 (lambda ()
 		   (reset-command-state!)
@@ -303,10 +303,10 @@ USA.
                         record?))
 
 (define (%dispatch-on-command window command record?)
-  (set! *command* command)
-  (guarantee-command-loaded command)
   (define (char-image-string ch)
     (window-char->image window ch))
+  (set! *command* command)
+  (guarantee-command-loaded command)
   (let ((point (window-point window))
 	(point-x (window-point-x window))
 	(procedure (command-procedure command)))
