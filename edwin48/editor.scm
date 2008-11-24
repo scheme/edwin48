@@ -48,7 +48,7 @@ USA.
 		 (current-editor edwin-editor)
 		 (within-editor? #t)
 		 (editor-thread (current-thread))
-		 (editor-thread-root-continuation)
+		 (editor-thread-root-continuation unspecific)
 		 (editor-initial-threads '())
 		 (inferior-thread-changes? #f)
 		 (inferior-threads '())
@@ -91,13 +91,13 @@ USA.
 (simple-command-line-parser "edit" edit)
 
 (define edwin-editor #f)
-(define editor-abort)
-(define current-editor)
+(define editor-abort unspecific)
+(define current-editor unspecific)
 (define within-editor? #f)
-(define editor-thread)
-(define editor-thread-root-continuation)
-(define editor-initial-threads)
-(define edwin-continuation)
+(define editor-thread unspecific)
+(define editor-thread-root-continuation unspecific)
+(define editor-initial-threads unspecific)
+(define edwin-continuation unspecific)
 
 ;; Set this before entering the editor to get something done after the
 ;; editor's dynamic environment is initialized, but before the command
@@ -213,7 +213,7 @@ with the contents of the startup message."
 		       (screen-discard! screen))
 		     (editor-screens edwin-editor))
 	   (set! edwin-editor #f)
-	   (set! edwin-continuation)
+	   (set! edwin-continuation unspecific)
 	   (set! init-file-loaded? #f)
 	   (weak-set-car! *previous-popped-up-window* #f)
 	   (weak-set-car! *previous-popped-up-buffer* #f)
