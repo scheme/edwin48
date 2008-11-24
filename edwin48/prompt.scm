@@ -318,26 +318,55 @@ USA.
 
 ;;;; Prompt Options
 
-(define-structure
-  (prompt-options (conc-name options/)
-		  (constructor basic-prompt-options
-			       (mode default-string))
-		  (constructor completion-prompt-options
-			       (mode default-string
-				     complete-string
-				     list-completions
-				     verify-final-value)))
-  (seen '())
-  (mode #f)
-  (default-string #f)
-  (complete-string #f read-only #t)
-  (list-completions #f read-only #t)
-  (verify-final-value #f read-only #t)
-  (default-type 'VISIBLE-DEFAULT)
-  (require-match? #f)
-  (case-insensitive-completion? #f)
-  (history #f)
-  (history-index -1))
+(define-record-type prompt-options
+  (really-make-prompt-options mode
+                              default-string
+                              complete-string
+                              list-completions
+                              verify-final-value
+                              seen
+                              default-type
+                              require-match?
+                              case-insensitive-completion?
+                              history
+                              history-index)
+  prompt-options?
+  (mode               options/mode                set-options/mode!)
+  (default-string     options/default-string      set-options/default-string!)
+  (complete-string    options/complete-string)
+  (list-completions   options/list-completions)
+  (verify-final-value options/verify-final-value)
+  (seen               options/seen                set-options/seen!)
+  (default-type       options/default-type)
+  (require-match?     options/require-match?      set-options/require-match?!)
+  (case-insensitive-completion? options/case-insensitive-completion?)
+  (history            options/history)
+  (history-index      options/history-index))
+
+(define (basic-prompt-options mode default-string)
+  (completion-prompt-options mode default-string
+                                  #f
+                                  #f
+                                  #f))
+
+(define (completion-prompt-options mode default-string
+                                        complete-string
+                                        list-completions
+                                        verify-final-value)
+
+  (really-make-prompt-options mode
+                              default-string
+                              complete-string
+                              list-completions
+                              verify-final-value
+                              '()              ;; seen
+                              'VISIBLE-DEFAULT ;; default-type
+                              #f               ;; require-match?
+                              #f               ;; case-insensitive-completion?
+                              #f               ;; history
+                              -1               ;; history-index
+                              ))
+
 
 (define (parse-prompt-options option-structure options)
   (let loop ((options options))
