@@ -428,8 +428,8 @@ USA.
 
 ;;;; Prompt History Mechanism
 
-(define *history-items*)
-(define *history-index*)
+(define *history-items* unspecific)
+(define *history-index* unspecific)
 
 (define (with-history-state initial-string thunk)
   (let ((history (name->history (options/history *options*))))
@@ -447,7 +447,7 @@ USA.
 	    (set-cdr! history (cons string (cdr history))))
 	string))))
 
-(define prompt-histories)
+(define prompt-histories unspecific)
 
 (define (name->history name)
   (if (not (or (not name) (symbol? name)))
@@ -829,7 +829,7 @@ a repetition of this command will exit."
       (message string)))
 
 (define (temporary-typein-message string)
-  (let ((point) (start) (end))
+  (let ((point unspecific) (start unspecific) (end unspecific))
     (dynamic-wind (lambda ()
 		    (set! point (current-point))
 		    (set! end (buffer-end (current-buffer)))
@@ -994,8 +994,8 @@ it is added to the front of the command history."
 ;;; Hair to make sure pass phrases aren't left around in memory.
 
 (define (call-with-pass-phrase prompt receiver)
-  (let ((phrase)
-	(phrase*))
+  (let ((phrase  unspecific)
+        (phrase* unspecific))
     (dynamic-wind
      (lambda ()
        (set! phrase "")
@@ -1032,9 +1032,9 @@ it is added to the front of the command history."
 		      (loop))))))))
      (lambda ()
        (string-fill! phrase #\NUL)
-       (set! phrase)
+       (set! phrase unspecific)
        (if phrase* (string-fill! phrase* #\NUL))
-       (set! phrase*)
+       (set! phrase* unspecific)
        unspecific))))
 
 (define (call-with-confirmed-pass-phrase receiver)
