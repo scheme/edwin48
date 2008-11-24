@@ -509,9 +509,9 @@ The following commands are special to this mode:
 
 (define-key 'minibuffer-local #\return 'exit-minibuffer)
 (define-key 'minibuffer-local #\linefeed 'exit-minibuffer)
-(define-key 'minibuffer-local #\c-m-y 'minibuffer-yank-default)
-(define-key 'minibuffer-local #\M-n 'next-prompt-history-item)
-(define-key 'minibuffer-local #\M-p 'previous-prompt-history-item)
+(define-key 'minibuffer-local (kbd (ctrl meta #\y)) 'minibuffer-yank-default)
+(define-key 'minibuffer-local (kbd (meta #\y)) 'next-prompt-history-item)
+(define-key 'minibuffer-local (kbd (meta #\p)) 'previous-prompt-history-item)
 
 (define-major-mode minibuffer-local-completion minibuffer-local #f
   (description-append (mode-description (ref-mode-object minibuffer-local))
