@@ -134,6 +134,8 @@
           list-of-strings?
           string-or-false?
           string-append-separated
+          string-greatest-common-prefix-ci
+          string-greatest-common-prefix
           write-strings-densely
           pad-on-left-to pad-on-right-to))
 
@@ -151,6 +153,7 @@
 (define-interface edwin:string-table/interface
   (export make-string-table
           alist->string-table
+          string-table-ci?
           string-table-get
           string-table-put!
           string-table-remove!
