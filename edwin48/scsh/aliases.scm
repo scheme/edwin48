@@ -113,3 +113,8 @@
 (define (boolean=? x y)
   (or (and (eq? x #t) (eq? y #t))
       (and (eq? x #f) (eq? y #f))))
+
+(define* (make-circular-list k (element '()))
+  (circular-list element))
+
+(define (identity-procedure x) x)

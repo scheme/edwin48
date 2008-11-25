@@ -71,6 +71,8 @@
             vector-8b-ref vector-8b-set! vector-8b-fill! vector-8b-find-next-char
             round
             real-time-clock
+            make-circular-list
+            identity-procedure
             (fluid-let :syntax))
   (open (modify scheme (hide string-fill!))
         ascii errors fluids interrupts scsh-subset util
