@@ -251,8 +251,8 @@ with the contents of the startup message."
       (recursive-edit-continuation value)
       (editor-error "No recursive edit is in progress")))
 
-(define recursive-edit-continuation)
-(define recursive-edit-level)
+(define recursive-edit-continuation unspecific)
+(define recursive-edit-level unspecific)
 
 (define (editor-gc-daemon)
   (let ((editor edwin-editor))
@@ -529,8 +529,8 @@ TRANSCRIPT    messages appear in transcript buffer, if it is enabled;
 
 ;;;; Inferior threads
 
-(define inferior-thread-changes?)
-(define inferior-threads)
+(define inferior-thread-changes? unspecific)
+(define inferior-threads unspecific)
 
 (define (register-inferior-thread! thread output-processor)
   (let ((flags (cons #f output-processor)))

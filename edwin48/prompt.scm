@@ -30,12 +30,12 @@ USA.
 
 
 (define typein-edit-abort-flag "Abort")
-(define typein-edit-continuation)
-(define typein-edit-depth)
-(define typein-saved-buffers)
-(define typein-saved-windows)
-(define map-name/internal->external)
-(define map-name/external->internal)
+(define typein-edit-continuation    unspecific)
+(define typein-edit-depth           unspecific)
+(define typein-saved-buffers        unspecific)
+(define typein-saved-windows        unspecific)
+(define map-name/internal->external unspecific)
+(define map-name/external->internal unspecific)
 
 (add-event-receiver! editor-initializations
   (lambda ()
