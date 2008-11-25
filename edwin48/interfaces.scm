@@ -132,7 +132,9 @@
           split-list
           list-of-type?
           string-or-false?
-          string-append-separated))
+          string-append-separated
+          write-strings-densely
+          pad-on-left-to pad-on-right-to))
 
 (define-interface edwin:ring/interface
   (export make-ring

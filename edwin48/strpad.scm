@@ -42,7 +42,7 @@ USA.
     (let ((delta (- n l)))
       (if (positive? delta)
 	  (let ((result (make-string n)))
-	    (string-fill! result #\space0 delta)
+	    (string-fill! result #\space 0 delta)
 	    (string-copy! result delta string 0 l)
 	    result)
 	  string))))

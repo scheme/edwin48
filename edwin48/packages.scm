@@ -85,10 +85,10 @@
   (files strtab))
 
 (define-structure edwin:utilities edwin:utilities/interface
- (open scheme i/o
-       aliases errors fixnum pathname util weak-pair
-       srfi-13 srfi-14)
-   (files utils))
+ (open (modify scheme (hide string-fill!))
+       srfi-13 srfi-14 srfi-89
+       aliases errors fixnum i/o pathname terminal-support util weak-pair)
+   (files utils strpad))
 
 (define-structure edwin:ring edwin:ring/interface
   (open scheme aliases errors srfi-1)
