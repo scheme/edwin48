@@ -131,6 +131,7 @@
   (export %substring-move!
           split-list
           list-of-type?
+          list-of-strings?
           string-or-false?
           string-append-separated
           write-strings-densely
