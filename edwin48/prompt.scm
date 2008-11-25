@@ -422,25 +422,19 @@ USA.
 		      prompt-options-table))
 	  unspecific))))
 
-(define (define-simple-option keyword type)
-  (define-prompt-option keyword type
-    (lambda (options value)
-      ((record-modifier (record-type-descriptor options) keyword)
-       options
-       value))))
+(define-prompt-option 'MODE (list major-mode? procedure?) set-options/mode!)
+(define-prompt-option 'DEFAULT-STRING string-or-false? set-options/default-string!)
+(define-prompt-option 'CASE-INSENSITIVE-COMPLETION? boolean? set-options/case-insensitive-completion?!)
 
-(define-simple-option 'MODE (list major-mode? procedure?))
-(define-simple-option 'DEFAULT-STRING string-or-false?)
-(define-simple-option 'CASE-INSENSITIVE-COMPLETION? boolean?)
-
-(define-simple-option 'DEFAULT-TYPE
+(define-prompt-option 'DEFAULT-TYPE
   (lambda (object)
     (memq object
 	  '(VISIBLE-DEFAULT
 	    INVISIBLE-DEFAULT
 	    INSERTED-DEFAULT
 	    NULL-DEFAULT
-	    NO-DEFAULT))))
+	    NO-DEFAULT)))
+  set-options/default-type!)
 
 (define-prompt-option 'REQUIRE-MATCH?
   (lambda (object)
@@ -496,7 +490,7 @@ USA.
 				 'SET-PROMPT-HISTORY-STRINGS!))
   (set-cdr! (name->history name) (list-copy strings)))
 
-(define-simple-option 'HISTORY symbol?)
+(define-prompt-option 'HISTORY symbol? set-options/history!)
 
 (define-prompt-option 'HISTORY-INDEX exact-nonnegative-integer?
   (lambda (options index)
