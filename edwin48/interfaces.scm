@@ -628,3 +628,27 @@
           input-event/operator
           input-event/operands
           apply-input-event))
+
+(define-interface edwin:editor/interface+scheme
+  (export edwin-editor
+          current-editor
+          within-editor?
+          editor-thread editor-thread-root-continuation
+          edwin-initialization
+          editor-initializations
+          enter-recursive-edit exit-recursive-edit
+          editor-error
+          abort-current-command
+          ^G-signal
+          quit-editor-and-signal-error quit-editor
+          quit-scheme
+          ))
+
+(define-interface edwin:editor/interface+edwin
+  (edwin:export (variable inhibit-startup-message
+                          error-display-mode
+                          debug-on-editor-error)))
+
+(define-interface edwin:editor/interface
+  (compound-interface edwin:editor/interface+scheme
+                      edwin:editor/interface+edwin))

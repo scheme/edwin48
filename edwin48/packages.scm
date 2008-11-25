@@ -9,7 +9,8 @@
      (edwin:current-state    edwin:current-state/interface)
      (edwin:display-imaging  edwin:display-imaging/interface)
      (edwin:display-type     edwin:display-type/interface)
-     (edwin:editor           edwin:editor-definition/interface)
+     (edwin:editor           edwin:editor/interface)
+     (edwin:editor-defn      edwin:editor-definition/interface)
      (edwin:group            edwin:group/interface)
      (edwin:kill-command     edwin:kill-command/interface)
      (edwin:mark             edwin:mark/interface)
@@ -30,7 +31,7 @@
           (modify ascii   (alias  (ascii->char integer->char)))
           1d-table aliases srfi-89 define-record-type* errors event-distributor fixnum
           (modify interrupts (expose call-after-gc!))
-          io-support keystroke pathname rb-tree soosy weak-pair
+          io-support keystroke pathname queues rb-tree soosy weak-pair
           srfi-1 srfi-9 srfi-13 srfi-14 srfi-23 srfi-43 srfi-69
           edwin:doc-string edwin:input-event edwin:ring edwin:string-table
           edwin:utilities)
@@ -65,7 +66,7 @@
 
          ;; calias
          edtstr
-         ;; editor
+         editor
          curren
          things
          modlin
