@@ -331,17 +331,17 @@ USA.
                               history
                               history-index)
   prompt-options?
-  (mode               options/mode                set-options/mode!)
-  (default-string     options/default-string      set-options/default-string!)
-  (complete-string    options/complete-string)
-  (list-completions   options/list-completions)
-  (verify-final-value options/verify-final-value)
-  (seen               options/seen                set-options/seen!)
-  (default-type       options/default-type)
-  (require-match?     options/require-match?      set-options/require-match?!)
-  (case-insensitive-completion? options/case-insensitive-completion?)
-  (history            options/history)
-  (history-index      options/history-index))
+  (mode                         options/mode                         set-options/mode!)
+  (default-string               options/default-string               set-options/default-string!)
+  (complete-string              options/complete-string)
+  (list-completions             options/list-completions)
+  (verify-final-value           options/verify-final-value)
+  (seen                         options/seen                         set-options/seen!)
+  (default-type                 options/default-type                 set-options/default-type!)
+  (require-match?               options/require-match?               set-options/require-match?!)
+  (case-insensitive-completion? options/case-insensitive-completion? set-options/case-insensitive-completion?!)
+  (history                      options/history                      set-options/history!)
+  (history-index                options/history-index                set-options/history-index!))
 
 (define (basic-prompt-options mode default-string)
   (completion-prompt-options mode default-string
