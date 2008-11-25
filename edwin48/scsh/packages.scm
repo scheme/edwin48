@@ -164,12 +164,8 @@
   (files macros-helpers))
 
 (define-structure fixme
-    (export within-editor?
-            editor-error
-            current-editor
-            editor-halt-update?
-            procedure-arity-valid?)
-  (open scheme aliases errors)
+    (export procedure-arity-valid?)
+  (open scheme)
   (files fixme))
 
 (define-structure rb-tree
