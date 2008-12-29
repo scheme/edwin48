@@ -9,6 +9,7 @@
      (edwin:current-state    edwin:current-state/interface)
      (edwin:display-imaging  edwin:display-imaging/interface)
      (edwin:display-type     edwin:display-type/interface)
+     (edwin:doc-string       edwin:doc-string/interface)
      (edwin:editor           edwin:editor/interface)
      (edwin:editor-defn      edwin:editor-definition/interface)
      (edwin:group            edwin:group/interface)
@@ -30,12 +31,12 @@
           (modify sorting (rename (vector-sort sort)))
           (modify ascii   (alias  (ascii->char integer->char)))
           1d-table aliases define-record-type* errors event-distributor
-          extended-ports fixnum
+          extended-ports fixnum i/o
           (modify interrupts (expose call-after-gc!))
           io-support keystroke pathname queues rb-tree soosy weak-pair
           srfi-1 srfi-9 srfi-13 srfi-14 srfi-23 srfi-43 srfi-69 srfi-89
-          edwin:doc-string edwin:input-event edwin:ring edwin:string-table
-          edwin:utilities)
+          edwin:input-event edwin:paths edwin:ring
+          edwin:string-table edwin:utilities)
   (for-syntax (open scheme errors macro-helpers))
   (files (scsh macros) ;; macros need to be looked at first
          struct
@@ -46,6 +47,7 @@
          search
          image
          comman
+         docstr
          comtab
          modes
          buffer
@@ -72,6 +74,7 @@
          things
          modlin
          input
+         prompt
          ;; comred
          simple
          undo
@@ -94,12 +97,6 @@
 (define-structure edwin:ring edwin:ring/interface
   (open scheme aliases errors srfi-1)
   (files ring))
-
-(define-structure edwin:doc-string edwin:doc-string/interface
-  (open scheme aliases fixnum errors i/o pathname io-support srfi-13 srfi-89
-        fixme
-        edwin:paths)
-  (files docstr))
 
 (define-structure edwin:paths edwin:paths/interface
   (open scheme aliases errors pathname io-support)
