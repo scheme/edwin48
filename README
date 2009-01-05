@@ -18,7 +18,7 @@ to check out the terminfo submodule.
 
 Edwin48 is being developed on NuScsh. NuScsh can be obtained via git:
 
-    git clone git://git.a-chinaman.com/nuscsh
+    git clone git://a-chinaman.com/nuscsh
 
 NuScsh has been tested on Ubuntu Hardy on i386 and x86-64. To build
 Debian packages, run 'dpkg-buildpackage' in the nuscsh
