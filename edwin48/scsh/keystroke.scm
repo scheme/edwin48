@@ -141,4 +141,4 @@
             `(,%key ,key (,(r 'key-modifier-set) ,@modifiers))))))
       (if (= 1 (length form))
           (parse-kbd-form (car form))
-          (map parse-kbd-form form)))))
+          `(,(r 'list) ,@(map parse-kbd-form form))))))
