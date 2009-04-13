@@ -28,7 +28,12 @@ USA.
 
 ;;;; Command Tables
 
-
+;;; Example of a command:
+;;; (define fundamental (make-comtab))
+;;; (define-command do-something "Does something" () (lambda () (display "Did something\n")))
+;;; (define-key fundamental (kbd #\s) 'do-something)
+;;; (dispatch-on-key fundamental (kbd #\s))
+
 (define-record-type* comtab
   (really-make-comtab table)
   ())
@@ -36,78 +41,15 @@ USA.
 (define (make-comtab)
   (really-make-comtab (make-hash-table)))
 
-(define (comtab-get comtab key)
-  (hash-table-ref/default (comtab-table comtab) key #f))
+;;; Given a key, evaluate the procedure if
+;;; there is a command with that keystroke
+(define (dispatch-on-key comtab keystroke)
+  (let* ((command   (comtab-entry comtab keystroke))
+         (procedure (command-procedure command)))
+    (procedure)))
 
-(define (comtab-put! comtab key datum)
-  (cond (((not datum) => handle-datum)
-	 (comtab-remove! comtab key))
-        (hash-table-set! (comtab-table comtab) key datum)))
-
-(define (comtab-remove! comtab key)
-  (hash-table-delete! (comtab-table comtab) key))
-
-
-(define (valid-comtabs? object)
-  (or (mode? object)
-      (symbol? object)
-      (comtab? object)
-      (list-of-comtabs? object)))
-
-(define (guarantee-comtabs object procedure)
-  (cond ((mode? object)
-	 (mode-comtabs object))
-	((symbol? object)
-	 (mode-comtabs (->mode object)))
-	((comtab? object)
-	 (list object))
-	((list-of-comtabs? object)
-	 object)
-	(else
-	 (error:wrong-type-argument object "list of comtabs" procedure))))
-
-(define (mode-name? object)
-  (and (symbol? object)
-       (string-table-get editor-modes (symbol-name object))))
-
-(define (list-of-comtabs? object)
-  (and (not (null? object))
-       (list? object)
-       (every comtab? object)))
-
-(define (comtab-key? object)
-  (or (key? object)
-      (prefixed-key? object)
-      (button? object)))
-
-(define (prefixed-key? object)
-  (let loop ((object object))
-    (and (pair? object)
-	 (key? (car object))
-	 (or (null? (cdr object))
-	     (loop (cdr object))))))
-
-(define (valid-datum? object)
-  (or (not object)
-      (command? object)
-      (comtab? object)
-      (command&comtab? object)
-      (comtab-alias? object)))
-
-(define (command&comtab? object)
-  (and (pair? object)
-       (command? (car object))
-       (comtab? (cdr object))))
-
-(define (comtab-alias? object)
-  (and (pair? object)
-       (valid-comtabs? (car object))
-       (comtab-key? (cdr object))))
-
-(define (comtab-alias/dereference datum)
-  (lookup-key (car datum) (cdr datum)))
-
-(define (lookup-key comtabs key)
+;;; Returns a command for the given key in a comtab
+(define (lookup-key comtabs keystroke)
   (let ((comtabs (guarantee-comtabs comtabs 'LOOKUP-KEY)))
     (let ((simple-lookup
 	   (lambda (key)
@@ -117,58 +59,36 @@ USA.
 		     ((not (null? (cdr comtabs*)))
 		      (loop (cdr comtabs*)))
 		     (else #f))))))
-    (if (key? key)
-        (simple-lookup key)
-        (error:wrong-type-argument key "comtab key" 'LOOKUP-KEY)))))
+      (if (key? keystroke)
+          (simple-lookup keystroke)
+          (error:wrong-type-argument keystroke "comtab key" 'LOOKUP-KEY)))))
 
-(define (handle-datum datum)
-  (cond ((or (command? datum)
-	     (comtab? datum)
-	     (command&comtab? datum))
-	 datum)
-	((comtab-alias? datum)
-	 (comtab-alias/dereference datum))
-	(else
-	 (error "Illegal comtab datum:" datum))))
+;;; Checks to make sure that the object passed
+;;; in has an equivelent comtab represenation in a list
+(define (guarantee-comtabs object procedure)
+  (cond ;((mode? object)
+        ;(mode-comtabs object))           ; Get the mode's comtabs
+        ;((symbol? object)
+        ;(mode-comtabs (->mode object)))  ; Find mode for the name then comtabs
+         ((comtab? object) (list object)) ; If just a comtab, put it in a list
+         ((list-of-comtabs? object) object)
+         (else
+          (error:wrong-type-argument object "list of comtabs" procedure))))
 
-(define (lookup-prefix comtab prefix intern?)
-  (let loop ((comtab comtab) (prefix* prefix))
-    (if (null? prefix*)
-	comtab
-	(let ((key (remap-alias-key (car prefix*)))
-	      (prefix* (cdr prefix*)))
-	  (let datum-loop ((datum (comtab-get comtab key)))
-	    (cond ((not datum)
-		   (and intern?
-			(let ((datum (make-comtab)))
-			  ;; Note that this will clobber a comtab-alias
-			  ;; that points to an undefined entry.
-			  (comtab-put! comtab key datum)
-			  (loop datum prefix*))))
-		  ((comtab? datum)
-		   (loop datum prefix*))
-		  ((command&comtab? datum)
-		   (loop (cdr datum) prefix*))
-		  ((comtab-alias? datum)
-		   (datum-loop (comtab-alias/dereference datum)))
-		  ((command? datum)
-		   (error "Key sequence too long:"
-			  prefix
-			  (- (length prefix) (length prefix*))))
-		  (else
-		   (error "Illegal comtab datum:" datum))))))))
-
-(define (comtab-entry comtabs key)
-  (or (%comtab-entry comtabs key)
-      (and (not (button? key))
-	   (ref-command-object undefined))))
+;;; Get the Command for the given key in
+;;; the given command table
+(define (comtab-entry comtab keystroke)
+  (hash-table-ref/default (comtab-table comtab)
+                          (key-value keystroke)
+                          (ref-command-object undefined)))
 
-(define (local-comtab-entry comtabs key mark)
+;;; Get the Command for a keystroke in a specific mark
+(define (local-comtab-entry comtabs keystroke mark)
   (or (and mark
 	   (let ((local-comtabs (local-comtabs mark)))
 	     (and local-comtabs
-		  (%comtab-entry local-comtabs key))))
-      (comtab-entry comtabs key)))
+		  (%comtab-entry local-comtabs keystroke))))
+      (comtab-entry comtabs keystroke)))
 
 (define (%comtab-entry comtabs key)
   (let ((object (lookup-key comtabs key)))
@@ -183,25 +103,109 @@ USA.
 	  (else
 	   (error "Illegal result from lookup-key:" object)))))
 
+;;; Add a command to the given command table
+(define (comtab-put! comtab keystroke datum)
+  (if (not datum)
+      (comtab-remove! comtab keystroke)
+      (hash-table-set! (comtab-table comtab) (key-value keystroke) datum)))
+
+;;; Remove a command from the given command table
+(define (comtab-remove! comtab keystroke)
+  (hash-table-delete! (comtab-table comtab) keystroke))
+
+(define (comtab-get comtab key)
+  (hash-table-ref (comtab-table comtab) (key-value key)))
+
+(define (comtab-key? object)
+  (key? object))
+
+(define (valid-comtabs? object)
+  (or (symbol? object)
+      (comtab? object)
+     ;(mode? object)
+      (list-of-comtabs? object)))
+
+(define (list-of-comtabs? object)
+  (and (not (null? object))
+       (list? object)
+       (every comtab? object)))
+
+(define (comtab-alias? object)
+  (and (pair? object)
+       (valid-comtabs? (car object))
+       (comtab-key? (cdr object))))
+
+(define (command&comtab? object)
+  (and (pair? object)
+       (command? (car object))
+       (comtab? (cdr object))))
+
+(define (comtab-alias/dereference datum)
+  (lookup-key (car datum) (cdr datum)))
+
+(define (prefixed-key? object)
+  (let loop ((object object))
+    (and (pair? object)
+	 (key? (car object))
+	 (or (null? (cdr object))
+	     (loop (cdr object))))))
+
 (define (prefix-key-list? comtabs key)
   (let ((object (lookup-key comtabs key)))
     (or (comtab? object)
 	(command&comtab? object))))
 
-(define (define-key mode key datum)
+(define (valid-datum? object)
+  (or (not object)
+      (command? object)
+      (comtab? object)))
+
+;;; Evaluate the datum
+(define (handle-datum datum)
+  (cond ((or (command? datum)
+	     (comtab? datum)
+	     (command&comtab? datum))
+	 datum)
+	((comtab-alias? datum)
+	 (comtab-alias/dereference datum))
+	(else
+	 (error "Illegal comtab datum:" datum))))
+
+;;; Adds a keystroke with a corresponding command in the mode comtab
+;;; mode: A mode
+;;; keystoke: A kbd i.e. (kbd #\a) or (kbd (ctrl #\x) (ctrl #\f))
+;;; datum: A command or another command table
+(define (define-key mode keystroke datum)
   (%define-key (guarantee-comtabs mode 'DEFINE-KEY)
-	       key
+	       keystroke
 	       (if (valid-datum? datum) datum (->command datum))
 	       'DEFINE-KEY))
 
+;;; Really define the key. Uses 'procedure' for error
+;;; messages, but we are not supporting it at the moment.
+(define (%define-key comtabs keystroke datum procedure)
+  (let* ((comtab (car comtabs))
+         (put!
+          (lambda (keystroke)
+            (comtab-put! comtab keystroke datum))))
+    (cond ((key? keystroke)
+           (put! keystroke))
+          ;((char-set? keystroke)
+          ;(for-each put! (char-set-members keystroke)))
+          ((prefixed-key? keystroke)
+           (let ((prefix (except-last-pair keystroke)))
+             (comtab-put! (if (null? prefix)
+                              comtab
+                              (lookup-prefix comtab prefix #t))
+                          (car (last-pair keystroke))
+                          datum)))
+          (else
+           (error:wrong-type-argument keystroke "comtab key" procedure)))))
+
+;;; A prefix key is a keystoke with a comtab and not a command
 (define* (define-prefix-key mode key (command #f))
   (%define-key (guarantee-comtabs mode 'DEFINE-PREFIX-KEY)
-	       (begin
-		 (if (button? key)
-		     (error:wrong-type-argument key
-						"comtab prefix key"
-						'DEFINE-PREFIX-KEY))
-		 key)
+               key
 	       (let ((comtab (make-comtab)))
 		 (if (not command)
 		     comtab
@@ -211,134 +215,13 @@ USA.
 			   (cons command comtab)))))
 	       'DEFINE-PREFIX-KEY))
 
-(define (%define-key comtabs key datum procedure)
-  (let* ((comtab (car comtabs))
-	 (put!
-	  (lambda (key)
-	    (comtab-put! comtab (remap-alias-key key) datum))))
-    (cond ((or (key? key) (button? key))
-	   (put! key))
-	  ((char-set? key)
-	   (for-each put! (char-set->list key)))
-	  ((prefixed-key? key)
-	   (let ((prefix (drop-right key 1)))
-	     (comtab-put! (if (null? prefix)
-			      comtab
-			      (lookup-prefix comtab prefix #t))
-			  (remap-alias-key (car (take-right key 1)))
-			  datum)))
-	  (else
-	   (error:wrong-type-argument key "comtab key" procedure))))
-  key)
-
-(define (comtab-alist* comtab)
-  (let ((vector (comtab-vector comtab))
-	(alist (comtab-alist comtab)))
-    (if (vector? vector)
-	(let ((end (vector-length vector)))
-	  (let loop ((index 0) (alist alist))
-	    (if (fix:< index end)
-		(loop (fix:+ index 1)
-		      (let ((datum (vector-ref vector index)))
-			(if datum
-			    (cons (cons (integer->char index) datum)
-				  alist)
-			    alist)))
-		alist)))
-	alist)))
-
+;;; Used in keymap
 (define (comtab->alist comtab)
-  (let loop ((prefix '()) (comtab comtab))
-    (append-map!
-     (lambda (entry)
-       (if (and (button? (car entry))
-		(not (null? prefix)))
-	   '()
-	   (let ((prefix (append prefix (list (car entry)))))
-	     (let ((key (if (null? (cdr prefix)) (car prefix) prefix)))
-	       (let datum-loop ((datum (cdr entry)))
-		 (cond ((not datum)
-			'())
-		       ((command? datum)
-			(list (cons key datum)))
-		       ((comtab? datum)
-			(loop prefix datum))
-		       ((command&comtab? datum)
-			(cons (cons key (car datum))
-			      (loop prefix (cdr datum))))
-		       ((comtab-alias? datum)
-			(datum-loop (comtab-alias/dereference datum)))
-		       (else
-			(error "Illegal comtab datum:" datum))))))))
-     (comtab-alist* comtab))))
-
-(define (comtab-key-bindings comtabs command)
-  (let ((comtabs (guarantee-comtabs comtabs 'COMTAB-KEY-BINDINGS))
-	(command (->command command)))
-    ;; In addition to having a binding of COMMAND, every key in the
-    ;; result satisfies VALID-KEY?.  This eliminates bindings that are
-    ;; shadowed by other bindings.
-    (let ((valid-key?
-	   (lambda (key)
-	     (let ((datum (lookup-key comtabs key)))
-	       (cond ((command? datum)
-		      (eq? command datum))
-		     ((comtab? datum)
-		      (eq? command (ref-command-object prefix-key)))
-		     ((command&comtab? datum)
-		      (eq? command (car datum)))
-		     (else
-		      #f))))))
-      (sort (let loop ((comtabs comtabs))
-	      (if (null? comtabs)
-		  '()
-		  (%comtab-bindings (car comtabs)
-				    (loop (cdr comtabs))
-				    command
-				    valid-key?)))
-	(let ((v
-	       (lambda (k)
-		 (cond ((char? k) 0)
-		       ((list-of-type? k char?) 1)
-		       ((special-key? k) 2)
-		       ((button? k) 3)
-		       (else 4)))))
-	  (lambda (k1 k2)
-	    (< (v k1) (v k2))))))))
+  (let ((table (comtab-table comtab)))
+    (hash-table->alist table)))
 
-(define (%comtab-bindings comtab keys command valid-key?)
-  (let comtab-loop ((comtab comtab) (keys keys) (prefix '()))
-    (let alist-loop ((entries (comtab-alist* comtab)))
-      (if (null? entries)
-	  keys
-	  (let ((key
-		 (if (pair? prefix)
-		     (append prefix (list (caar entries)))
-		     (caar entries))))
-	    (let datum-loop
-		((datum (cdar entries))
-		 (keys (alist-loop (cdr entries))))
-	      (cond ((not datum)
-		     keys)
-		    ((command? datum)
-		     (if (and (eq? datum command)
-			      (valid-key? key))
-			 (cons key keys)
-			 keys))
-		    ((comtab? datum)
-		     (let ((keys
-			    (comtab-loop datum keys
-					 (if (pair? prefix)
-					     key
-					     (list key)))))
-		       (if (and (eq? command (ref-command-object prefix-key))
-				(valid-key? key))
-			   (cons key keys)
-			   keys)))
-		    ((command&comtab? datum)
-		     (datum-loop (car datum)
-				 (datum-loop (cdr datum) keys)))
-		    ((comtab-alias? datum)
-		     (datum-loop (comtab-alias/dereference datum) keys))
-		    (else
-		     (error "Illegal comtab datum:" datum)))))))))
+;;; (except-last-pair list-of-pair) -> list-of-pair
+;;; Removes the last pair from the given list
+(define (except-last-pair lop)
+  (drop-right lop 1))
+
