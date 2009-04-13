@@ -1,5 +1,6 @@
-#| -*-Scheme-*-
+;;; -*- Mode: Scheme; scheme48-package: edwin:command-table -*-
 
+#|
 $Id: comtab.scm,v 1.78 2008/01/30 20:01:59 cph Exp $
 
 Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994,
@@ -29,83 +30,23 @@ USA.
 
 
 (define-record-type* comtab
-  (make-comtab)
-  (vector
-   alist))
+  (really-make-comtab table)
+  ())
+
+(define (make-comtab)
+  (really-make-comtab (make-hash-table)))
 
 (define (comtab-get comtab key)
-  (let ((vector (comtab-vector comtab)))
-    (let ((try
-	   (lambda (key)
-	     (if (and (vector? vector)
-		      (char? key)
-		      (< (char->integer key) (vector-length vector)))
-		 (vector-ref vector (char->integer key))
-		 (let ((entry (assq key (comtab-alist comtab))))
-		   (and entry
-			(cdr entry)))))))
-      (if (and (key? key) (char-upper-case? (key-char-value key)))
-	  (or (try key) (try (char-downcase key)))
-	  (try key)))))
+  (hash-table-ref/default (comtab-table comtab) key #f))
 
 (define (comtab-put! comtab key datum)
-  (cond ((not datum)
+  (cond (((not datum) => handle-datum)
 	 (comtab-remove! comtab key))
-	((and (char? key) (< (char->integer key) 256))
-	 (let ((vector (comtab-vector comtab)))
-	   (if (vector? vector)
-	       (vector-set! vector (char->integer key) datum)
-	       (let ((alist (comtab-alist comtab)))
-		 (let ((entry (assq key alist)))
-		   (if entry
-		       (set-cdr! entry datum)
-		       (let ((vector (+ vector 1))
-			     (alist (cons (cons key datum) alist)))
-			 (if (< vector 64)
-			     (without-interrupts
-			      (lambda ()
-				(set-comtab-vector! comtab vector)
-				(set-comtab-alist! comtab alist)))
-			     (let* ((vector (make-vector 256 #f))
-				    (alist
-				     (remove (lambda (entry)
-					       (let ((key (car entry)))
-						 (and (char? key)
-						      (< (char->integer key) 256)
-						      (begin
-							(vector-set!
-							 vector
-							 (char->integer key)
-							 (cdr entry))
-							#t))))
-					     alist)))
-			       (without-interrupts
-				(lambda ()
-				  (set-comtab-vector! comtab vector)
-				  (set-comtab-alist! comtab alist))))))))))))
-	(else
-	 (let ((alist (comtab-alist comtab)))
-	   (let ((entry (assq key alist)))
-	     (if entry
-		 (set-cdr! entry datum)
-		 (set-comtab-alist! comtab
-				    (cons (cons key datum) alist))))))))
+        (hash-table-set! (comtab-table comtab) key datum)))
 
 (define (comtab-remove! comtab key)
-  (if (and (char? key) (< (char->integer key) 256))
-      (let ((vector (comtab-vector comtab)))
-	(if (vector? vector)
-	    (vector-set! vector (char->integer key) #f)
-	    (let ((alist (comtab-alist comtab)))
-	      (let ((entry (assq key alist)))
-		(if entry
-		    (let ((vector (- vector 1))
-			  (alist (delete entry alist eq?)))
-		      (without-interrupts
-		       (lambda ()
-			 (set-comtab-vector! comtab vector)
-			 (set-comtab-alist! comtab alist)))))))))
-      (set-comtab-alist! comtab (alist-delete key (comtab-alist comtab) eq?))))
+  (hash-table-delete! (comtab-table comtab) key))
+
 
 (define (valid-comtabs? object)
   (or (mode? object)
@@ -175,28 +116,10 @@ USA.
 		      => handle-datum)
 		     ((not (null? (cdr comtabs*)))
 		      (loop (cdr comtabs*)))
-		     (else
-		      #f))))))
-      (cond ((key? key)
-	     (simple-lookup (remap-alias-key key)))
-	    ((button? key)
-	     (simple-lookup key))
-	    ((prefixed-key? key)
-	     (let ((prefix (drop-right key 1))
-		   (key (remap-alias-key (car (take-right key 1)))))
-	       (if (null? prefix)
-		   (simple-lookup key)
-		   (let loop ((comtabs* comtabs))
-		     (let ((comtab
-			    (lookup-prefix (car comtabs*) prefix #f)))
-		       (cond ((and comtab (comtab-get comtab key))
-			      => handle-datum)
-			     ((not (null? (cdr comtabs*)))
-			      (loop (cdr comtabs*)))
-			     (else
-			      #f)))))))
-	    (else
-	     (error:wrong-type-argument key "comtab key" 'LOOKUP-KEY))))))
+		     (else #f))))))
+    (if (key? key)
+        (simple-lookup key)
+        (error:wrong-type-argument key "comtab key" 'LOOKUP-KEY)))))
 
 (define (handle-datum datum)
   (cond ((or (command? datum)
