@@ -28,3 +28,69 @@
     (export run-1d-table-test)
   (open scheme formats 1d-table)
   (files 1d-table-tests))
+
+(define-structure edwin:string-table edwin:string-table/interface
+  (open scheme aliases define-record-type*
+        (modify sorting (rename (vector-sort sort)))
+        mit-regexp srfi-13 srfi-43 srfi-89)
+  (files ../edwin48/strtab))
+
+(define-structure edwin:paths edwin:paths/interface
+  (open scheme aliases errors pathname io-support)
+  (files ../edwin48/paths))
+
+(define-structure edwin:doc-string edwin:doc-string/interface
+  (open scheme aliases fixnum errors i/o pathname io-support srfi-13 srfi-89
+        fixme
+        edwin:paths)
+  (files ../edwin48/docstr))
+
+(define-structure edwin:command-table edwin:command-table/interface
+  (open scheme edwin:command srfi-1 srfi-69 srfi-89
+        define-record-type* errors keystroke aliases
+        (modify sorting (rename (vector-sort sort))))
+  (begin (define edwin-command$undefined '()))
+  (files command-tables))
+
+(define-interface edwin:command-table/interface
+  (export comtab-entry local-comtab-entry
+          comtab-key?
+          prefix-key-list?
+          define-key
+          define-prefix-key
+          comtab->alist
+          comtab-key-bindings))
+
+(define-interface edwin:command/interface
+  (export ((define-command)     :syntax)
+          ((ref-command-object) :syntax)
+          ((ref-command)        :syntax)
+          command-name
+          command-interactive-specification
+          command-procedure
+          command-description
+          command-name-string
+          editor-name/internal->external
+          editor-name/external->internal
+          make-command
+          name->command
+          ->command
+          command?
+          copy-command))
+
+(define-structure edwin:command edwin:command/interface
+    (open (modify scheme  (hide integer->char string-fill! vector-fill!))
+          (modify sorting (rename (vector-sort sort)))
+          (modify ascii   (alias  (ascii->char integer->char)))
+          aliases srfi-89 define-record-type* errors event-distributor fixnum
+          (modify interrupts (expose call-after-gc!))
+          io-support keystroke pathname rb-tree soosy weak-pair
+          srfi-1 srfi-9 srfi-13 srfi-14 srfi-23 srfi-43 srfi-69
+          edwin:string-table edwin:doc-string)
+    (for-syntax (open scheme errors macro-helpers))
+    (files ../edwin48/scsh/macros
+           ../edwin48/comman)
+    (begin
+      (define editor-error error)
+      (define within-editor? #f)))
+
