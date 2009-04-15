@@ -98,15 +98,16 @@
     (if (< (length form) 5)
 	(syntax-error
 	 "DEFINE-MAJOR-MODE name super-mode-name name-string description [initialization]")
-        (let* ((name		      (list-ref form 1))
+        (let* ((name                 (list-ref form 1))
                (super-mode-name      (list-ref form 2))
-               (name-string	      (list-ref form 3))
-               (description	      (list-ref form 4))
-               (scheme-name	      (mode-name->scheme-name name))
-               (%define	      (rename 'define))
-               (%lambda	      (rename 'lambda))
-               (%make-mode	      (rename 'make-mode))
+               (name-string          (list-ref form 3))
+               (description          (list-ref form 4))
+               (scheme-name          (mode-name->scheme-name name))
+               (%define              (rename 'define))
+               (%lambda              (rename 'lambda))
+               (%make-mode           (rename 'make-mode))
                (%mode-initialization (rename 'mode-initialization))
+               (%mode-super-mode     (rename 'mode-super-mode))
                (%unspecific          (rename 'unspecific)))
           `(,%define ,scheme-name
                      (,%make-mode ',name
@@ -122,8 +123,8 @@
                                      (if super-mode-name
                                          `(,%lambda (buffer)
                                                     ((,%mode-initialization
-                                                      (%mode-super-mode ,scheme-name
-                                                                        buffer)
+                                                      (,%mode-super-mode ,scheme-name
+                                                                         buffer)
                                                       ,@(if initialization
                                                             `((,initialization buffer))
                                                             `()))))

@@ -1,5 +1,4 @@
          %exit
-         %mode-super-mode
          *defining-keyboard-macro?*
          *executing-keyboard-macro?*
          *the-non-printing-object*
