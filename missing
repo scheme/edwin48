@@ -1,111 +1,125 @@
+         %exit
+         %mode-super-mode
          *defining-keyboard-macro?*
          *executing-keyboard-macro?*
-         ->name ; Duncan (part of chars->keystrokes)
-         add-gc-daemon!/no-restore ; Taylor took care of
-         auto-push-point-notification
-         barf-if-read-only
-         bucky-bits->prefix ; Duncan (chars->keystrokes)
-         buffer-creation-hook
+         *the-non-printing-object*
+         *unparse-with-maximum-readability?*
+         ->environment
+         access-condition
+         add-gc-daemon!/no-restore
+         auto-fill-break
+         bind-condition-handler
          buffer-processes
-         char ; Duncan (part of chars->keystrokes)
-         char-base ; Duncan (part of chars->keystrokes)
-         char-graphic? ; ''
-         check-first-group-modification
+         button-down?
+         button?
+         char-syntax
+         cmdl-message/active
+         cmdl-message/append
+         cmdl-message/null
+         cmdl-message/strings
+         cmdl/start
+         command-argument-multiplier-only?
+         command-argument-negative-only?
+         command-argument-numeric-value
+         command-argument-prompt
+         command-argument-value
+         command-history-list
          command-message-receive
-         current-editor
+         command-reader
+         condition-accessor
+         condition-predicate
+         condition-signaller
+         condition-type:error
+         condition-type:primitive-procedure-error
+         condition/report-string
+         condition/type
+         condition?
+         create-thread
+         current-command-key
+         current-thread
+         debug-scheme-error
          delete-auto-save-file!
-         delete-other-windows
-         display-style/discard-screen-contents?
-         display-style/no-screen-output?
-         editor-beep
-         editor-failure
-         editor-frame-screen
-         editor-frame-select-cursor!
-         editor-frame-select-window!
-         editor-frame-selected-window
-         editor-frame-typein-window
-         editor-frame-update-display!
-         editor-frame-window0
-         editor-frame-windows
-         editor-initializations
-         edwin-command$prefix-key
-         edwin-command$save-buffers-kill-scheme
-         edwin-command$undefined
-         edwin-editor
+         delete-process
+         detach-thread
+         dispatch-on-command
+         dispatch-on-key
+         do-auto-save
+         edwin-command$end-kbd-macro
+         edwin-command$expand-abbrev
+         edwin-command$indent-according-to-mode
+         edwin-mode$abbrev
+         edwin-mode$auto-fill
          edwin-mode$fundamental
-         edwin-variable$auto-push-point-notification
-         edwin-variable$buffer-creation-hook
-         edwin-variable$buffer-reallocation-factor
+         edwin-variable$auto-save-interval
          edwin-variable$case-fold-search
-         edwin-variable$char-image-strings
          edwin-variable$editor-default-mode
-         edwin-variable$enable-emacs-key-names
-         edwin-variable$frame-creation-hook
-         edwin-variable$mark-ring-maximum
-         edwin-variable$minor-mode-alist
-         edwin-variable$mode-line-format
-         edwin-variable$mode-line-procedure
-         edwin-variable$mode-name
-         edwin-variable$select-buffer-hook
+         edwin-variable$enable-transcript-buffer
+         edwin-variable$fill-prefix
+         edwin-variable$indent-tabs-mode
          edwin-variable$syntax-table
-         edwin-variable$tab-width
-         enable-emacs-key-names
+         error-irritant/noise
          event:after-restore
-         frame-creation-hook
-         gc-space-status ; Gone (Taylor)
+         execute-command
+         execute-command-history-entry
+         exit-current-thread
          get-buffer-process
-         global-mode-string
-         group-column->index
-         group-columns
-         group-find-next-char
-         group-find-previous-char
          hangup-process
-         hash-table/intern! ; Duncan (chars->keystrokes)
-         horizontal-space-end
-         horizontal-space-start
+         identify-world
          initial-buffer-name
-         interned-symbol?
-         keyboard-peek-no-hang
-         make-editor-frame
-         make-typein-buffer-name
-         message
-         minor-mode-alist
-         mode-line-buffer-identification
-         mode-line-format
-         mode-line-modified
-         mode-line-procedure
-         mode-line-process
-         named-codes ; Duncan (chars->keystrokes)
+         interrupt-mask/gc-ok
+         keyboard-keys-read
+         keyboard-macro-disable
+         keyboard-macro-peek-key
+         keyboard-macro-read-key
+         keyboard-macro-write-key
+         kill-buffer-interactive
+         last-command-key
+         load-edwin-file
+         make-button-event
+         make-cmdl
+         make-condition-type
+         make-port
+         make-port-type
+         nearest-cmdl
+         nearest-cmdl/port
+         nearest-repl/environment
+         os/init-file-name
+         os/interprogram-cut
+         os/interprogram-paste
+         os/quit
+         os/scheme-can-quit?
          os/truncate-filename-for-modeline
+         procedure-arity-valid?
+         process-kill-without-query
+         process-list
+         process-runnable?
          process-status
-         recursive-edit-level
-         select-buffer-hook
-         send
+         re-compile-char-set
+         read-from-string
+         remap-alias-key
+         return-to-command-loop
+         save-buffer
+         save-some-buffers
          set-command-message!
          set-process-buffer!
-         set-window-buffer!
-         set-window-point!
-         set-window-start-mark!
+         signal-condition
+         signal-thread-event
          sleep-current-thread
-         string-pad-left ; chars->keystrokes
-         substring-image!
-         substring-image-results
-         symbol ; Duncan (chars->keystrokes)
-         temporary-message
-         window-1+
-         window-buffer
-         window-clear-override-message!
-         window-direct-update!
-         window-mark-visible?
-         window-modeline-event!
-         window-override-message
-         window-point
-         window-point-coordinates
-         window-root-window
-         window-set-override-message!
-         window-start-mark
-         window-x-size
-         window1+
+         standard-error-handler
+         start-inferior-repl!
+         string->temporary-buffer
+         substring-find-next-char-not-of-syntax
+         thread-dead?
+         top-level-command-reader
+         ucode-primitive
          window?
-         within-typein-edit?
-         working-directory-pathname
+         with-current-button-event
+         with-interrupt-mask
+         with-notification-output-port
+         with-output-to-temporary-buffer
+         with-output-to-transcript-buffer
+         with-restart
+         within-continuation
+         x-display-flush
+         x-display-process-events
+         xkey->name
