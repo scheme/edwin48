@@ -55,7 +55,8 @@
 
 (define-structure aliases
     (export without-interrupts
-            unspecific beep write-to-string write-string
+            unspecific *the-non-printing-object*
+            beep write-to-string write-string
             1+ -1+ boolean=?
             integer-round integer-divide
             integer-divide-quotient integer-divide-remainder

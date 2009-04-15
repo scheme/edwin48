@@ -1,7 +1,6 @@
          %exit
          *defining-keyboard-macro?*
          *executing-keyboard-macro?*
-         *the-non-printing-object*
          *unparse-with-maximum-readability?*
          ->environment
          access-condition
