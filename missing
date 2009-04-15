@@ -1,15 +1,15 @@
          *defining-keyboard-macro?*
          *executing-keyboard-macro?*
-;;          ->name ; Duncan (part of chars->keystrokes)
-;;          add-gc-daemon!/no-restore ; Taylor took care of
+         ->name ; Duncan (part of chars->keystrokes)
+         add-gc-daemon!/no-restore ; Taylor took care of
          auto-push-point-notification
          barf-if-read-only
-;;          bucky-bits->prefix ; Duncan (chars->keystrokes)
+         bucky-bits->prefix ; Duncan (chars->keystrokes)
          buffer-creation-hook
          buffer-processes
-;;          char ; Duncan (part of chars->keystrokes)
-;;          char-base ; Duncan (part of chars->keystrokes)
-;;          char-graphic? ; ''
+         char ; Duncan (part of chars->keystrokes)
+         char-base ; Duncan (part of chars->keystrokes)
+         char-graphic? ; ''
          check-first-group-modification
          command-message-receive
          current-editor
@@ -28,31 +28,31 @@
          editor-frame-window0
          editor-frame-windows
          editor-initializations
-;;          edwin-command$prefix-key
-;;          edwin-command$save-buffers-kill-scheme
-;;          edwin-command$undefined
+         edwin-command$prefix-key
+         edwin-command$save-buffers-kill-scheme
+         edwin-command$undefined
          edwin-editor
-;;          edwin-mode$fundamental
-;;          edwin-variable$auto-push-point-notification
-;;          edwin-variable$buffer-creation-hook
-;;          edwin-variable$buffer-reallocation-factor
-;;          edwin-variable$case-fold-search
-;;          edwin-variable$char-image-strings
-;;          edwin-variable$editor-default-mode
-;;          edwin-variable$enable-emacs-key-names
-;;          edwin-variable$frame-creation-hook
-;;          edwin-variable$mark-ring-maximum
-;;          edwin-variable$minor-mode-alist
-;;          edwin-variable$mode-line-format
-;;          edwin-variable$mode-line-procedure
-;;          edwin-variable$mode-name
-;;          edwin-variable$select-buffer-hook
-;;          edwin-variable$syntax-table
-;;          edwin-variable$tab-width
+         edwin-mode$fundamental
+         edwin-variable$auto-push-point-notification
+         edwin-variable$buffer-creation-hook
+         edwin-variable$buffer-reallocation-factor
+         edwin-variable$case-fold-search
+         edwin-variable$char-image-strings
+         edwin-variable$editor-default-mode
+         edwin-variable$enable-emacs-key-names
+         edwin-variable$frame-creation-hook
+         edwin-variable$mark-ring-maximum
+         edwin-variable$minor-mode-alist
+         edwin-variable$mode-line-format
+         edwin-variable$mode-line-procedure
+         edwin-variable$mode-name
+         edwin-variable$select-buffer-hook
+         edwin-variable$syntax-table
+         edwin-variable$tab-width
          enable-emacs-key-names
          event:after-restore
          frame-creation-hook
-;;          gc-space-status ; Gone (Taylor)
+         gc-space-status ; Gone (Taylor)
          get-buffer-process
          global-mode-string
          group-column->index
@@ -60,7 +60,7 @@
          group-find-next-char
          group-find-previous-char
          hangup-process
-;;          hash-table/intern! ; Duncan (chars->keystrokes)
+         hash-table/intern! ; Duncan (chars->keystrokes)
          horizontal-space-end
          horizontal-space-start
          initial-buffer-name
@@ -75,7 +75,7 @@
          mode-line-modified
          mode-line-procedure
          mode-line-process
-;;          named-codes ; Duncan (chars->keystrokes)
+         named-codes ; Duncan (chars->keystrokes)
          os/truncate-filename-for-modeline
          process-status
          recursive-edit-level
@@ -87,10 +87,10 @@
          set-window-point!
          set-window-start-mark!
          sleep-current-thread
-;;          string-pad-left ; chars->keystrokes
+         string-pad-left ; chars->keystrokes
          substring-image!
          substring-image-results
-;;          symbol ; Duncan (chars->keystrokes)
+         symbol ; Duncan (chars->keystrokes)
          temporary-message
          window-1+
          window-buffer
