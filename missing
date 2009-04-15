@@ -120,4 +120,3 @@
          within-continuation
          x-display-flush
          x-display-process-events
-         xkey->name

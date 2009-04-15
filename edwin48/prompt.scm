@@ -891,7 +891,7 @@ a repetition of this command will exit."
 	    (if (input-event? char)
 		(abort-typein-edit char))
 	    (let ((chars (append! prefix (list char))))
-	      (set-typein-string! (xkey->name chars) #t)
+	      (set-typein-string! (key->name chars) #t)
 	      (if (prefix-key-list? comtab chars)
 		  (outer-loop chars)
 		  (let ((command (comtab-entry comtab chars)))

@@ -36,7 +36,8 @@
 
 (define (key->name k)
   (cond
-   ((list? k) (map key->name k))
+   ((char? k)   `(kbd ,k))
+   ((string? k) `(kbd ,k))
    (else
     (let ((modifiers (key-modifiers k))
           (name      (key-name k)))
