@@ -70,6 +70,15 @@
                         (key-value     k2)))
       #f))
 
+(define (key-hash key)
+  (define (modifiers-hash modifiers)
+    (apply + (map (lambda (m) (* 1000 (expt 2 (key-modifier-index m))))
+                  (key-modifier-set->list modifiers))))
+  (if (not (key? key))
+      (error "Not a key" key)
+      (+ (modifiers-hash (key-modifiers key))
+         (char->ascii (key-value key)))))
+
 (define* (make-key value
                    (modifiers empty-modifiers)
                    (name      ""))

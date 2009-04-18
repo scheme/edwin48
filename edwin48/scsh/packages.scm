@@ -265,7 +265,7 @@
           key?
           simple-key? special-key?
           key=?
-          key-name
+          key-name key-hash
           key-value key-char-value
           key-modifiers
           key->name
