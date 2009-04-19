@@ -658,3 +658,23 @@
 (define-interface edwin:editor/interface
   (compound-interface edwin:editor/interface+scheme
                       edwin:editor/interface+edwin))
+
+(define-interface edwin:command-reader/interface
+  (export top-level-command-reader
+          command-reader
+          return-to-command-loop
+          override-next-command!
+          current-command-key
+          last-command-key
+          set-command-argument!
+          command-argument
+          auto-argument-mode?
+          set-command-message!
+          command-message-receive
+          command-history-list
+          execute-key
+          execute-command
+          execute-button-command
+          dispatch-on-key
+          dispatch-on-command
+          execute-command-history-entry))

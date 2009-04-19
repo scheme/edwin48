@@ -5,6 +5,7 @@
      (edwin:buffer           edwin:buffer/interface)
      (edwin:bufferset        edwin:bufferset/interface)
      (edwin:command          edwin:command/interface)
+     (edwin:command-reader   edwin:command-table/interface)
      (edwin:command-table    edwin:command-table/interface)
      (edwin:current-state    edwin:current-state/interface)
      (edwin:display-imaging  edwin:display-imaging/interface)
@@ -31,7 +32,7 @@
           (modify sorting (rename (vector-sort sort)))
           (modify ascii   (alias  (ascii->char integer->char)))
           1d-table aliases define-record-type* errors event-distributor
-          extended-ports fixnum i/o
+          extended-ports fixme fixnum i/o
           (modify interrupts (expose call-after-gc!))
           io-support keystroke pathname queues rb-tree soosy weak-pair
           srfi-1 srfi-9 srfi-13 srfi-14 srfi-23 srfi-43 srfi-69 srfi-89
@@ -75,7 +76,7 @@
          modlin
          input
          prompt
-         ;; comred
+         comred
          simple
          undo
          basic
