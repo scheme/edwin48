@@ -3,13 +3,13 @@
          *executing-keyboard-macro?*
          *unparse-with-maximum-readability?*
          ->environment
+         abort-keyboard-macro
          access-condition
          add-gc-daemon!/no-restore
          auto-fill-break
          bind-condition-handler
          buffer-processes
          button-down?
-         button?
          char-syntax
          cmdl-message/active
          cmdl-message/append
@@ -20,10 +20,8 @@
          command-argument-negative-only?
          command-argument-numeric-value
          command-argument-prompt
+         command-argument-self-insert?
          command-argument-value
-         command-history-list
-         command-message-receive
-         command-reader
          condition-accessor
          condition-predicate
          condition-signaller
@@ -33,17 +31,16 @@
          condition/type
          condition?
          create-thread
-         current-command-key
          current-thread
          debug-scheme-error
          delete-auto-save-file!
          delete-process
          detach-thread
-         dispatch-on-command
-         dispatch-on-key
          do-auto-save
+         edwin-command$backward-char
          edwin-command$end-kbd-macro
          edwin-command$expand-abbrev
+         edwin-command$forward-char
          edwin-command$indent-according-to-mode
          edwin-mode$abbrev
          edwin-mode$auto-fill
@@ -56,23 +53,25 @@
          edwin-variable$indent-tabs-mode
          edwin-variable$syntax-table
          error-irritant/noise
+         eval-with-history
          event:after-restore
-         execute-command
-         execute-command-history-entry
          exit-current-thread
+         find-restart
          get-buffer-process
+         guarantee-command-loaded
          hangup-process
          identify-world
          initial-buffer-name
          interrupt-mask/gc-ok
-         keyboard-keys-read
+         invoke-restart
          keyboard-macro-disable
+         keyboard-macro-finalize-keys
          keyboard-macro-peek-key
          keyboard-macro-read-key
          keyboard-macro-write-key
          kill-buffer-interactive
-         last-command-key
          load-edwin-file
+         lookup-prefix
          make-button-event
          make-cmdl
          make-condition-type
@@ -87,18 +86,22 @@
          os/quit
          os/scheme-can-quit?
          os/truncate-filename-for-modeline
-         procedure-arity-valid?
          process-kill-without-query
          process-list
          process-runnable?
          process-status
+         prompt-for-buffer
+         prompt-for-directory
+         prompt-for-existing-buffer
+         prompt-for-existing-file
+         prompt-for-expression
+         prompt-for-expression-value
+         prompt-for-file
          re-compile-char-set
          read-from-string
          remap-alias-key
-         return-to-command-loop
          save-buffer
          save-some-buffers
-         set-command-message!
          set-process-buffer!
          signal-condition
          signal-thread-event
@@ -108,11 +111,12 @@
          string->temporary-buffer
          substring-find-next-char-not-of-syntax
          thread-dead?
-         top-level-command-reader
          ucode-primitive
+         unblock-thread-events
          window?
          with-current-button-event
          with-interrupt-mask
+         with-keyboard-macro-disabled
          with-notification-output-port
          with-output-to-temporary-buffer
          with-output-to-transcript-buffer
