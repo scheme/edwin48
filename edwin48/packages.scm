@@ -19,6 +19,7 @@
      (edwin:mode             edwin:mode/interface)
      (edwin:modeline         edwin:modeline/interface)
      (edwin:motion           edwin:motion/interface)
+     (edwin:prompting        edwin:prompting/interface)
      (edwin:region           edwin:region/interface)
      (edwin:screen           edwin:screen/interface)
      (edwin:simple-editing   edwin:simple-editing/interface)

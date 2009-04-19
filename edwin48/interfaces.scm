@@ -678,3 +678,52 @@
           dispatch-on-key
           dispatch-on-command
           execute-command-history-entry))
+
+(define-interface edwin:prompting/interface+scheme
+  (export make-typein-buffer-name
+          within-typein-edit?
+          typein-edit-other-window
+          prompt-for-typein
+          prompt-for-string
+          prompt-for-completed-string
+          prompt-for-string/prompt
+          prompt-for-number
+          prompt-for-string-table-name
+          prompt-for-alist-value
+          prompt-for-command
+          prompt-for-variable
+          prompt-history-strings
+          set-prompt-history-strings!
+          prompt-options-default-string
+          standard-completion
+          pop-up-generated-completions
+          prompt-for-char
+          prompt-for-key
+          prompt-for-confirmation?
+          prompt-for-yes-or-no?
+          call-with-pass-phrase
+          call-with-confirmed-pass-phrase
+          ))
+
+(define-interface edwin:prompting/interface+edwin
+  (edwin:export (command exit-minibuffer
+                         minibuffer-yank-default
+                         minibuffer-complete
+                         minibuffer-complete-word
+                         minibuffer-completion-help
+                         minibuffer-complete-and-exit
+                         exit-minibuffer-yes-or-no
+                         next-prompt-history-item
+                         previous-prompt-history-item
+                         repeat-complex-command)
+                (mode minibuffer-local
+                      minibuffer-local-completion
+                      minibuffer-local-must-match
+                      minibuffer-local-yes-or-no)
+                (variable completion-auto-help
+                          enable-recursive-minibuffers)
+                ))
+
+(define-interface edwin:prompting/interface
+  (compound-interface edwin:prompting/interface+scheme
+                      edwin:prompting/interface+edwin))
