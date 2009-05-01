@@ -1,4 +1,4 @@
-;;; -*- Mode: Scheme; scheme48-package: srfi-69 -*-
+;;; -*- Mode: Scheme; scheme48-package: srfi-78 -*-
 ;;;
 ;;; SRFI 78: Lightweight testing
 ;;;
