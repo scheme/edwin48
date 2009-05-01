@@ -75,3 +75,20 @@
   (open scheme srfi-1 let-opt)
   (for-syntax (open scheme let-opt (subset signals (syntax-error)) srfi-1))
   (files srfi-89))
+
+;;
+;; SRFI-78
+;; Lightweight Testing
+;;
+(define-interface srfi-78-interface
+  (export (check :syntax)
+          (check-ec :syntax)
+          check-report
+          check-set-mode!
+          check-reset!
+          check-passed?))
+
+(define-structure srfi-78 srfi-78-interface
+    (open scheme srfi-23 srfi-42 pp)
+  (files srfi-78)
+  (begin (define check:write p)))
