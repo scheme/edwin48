@@ -275,7 +275,7 @@
           strip-key-modifiers))
 
 (define-structure keystroke-core keystroke-core/interface
-  (for-syntax (open scheme enum-sets keystroke-modifiers))
+  (for-syntax (open scheme enum-sets keystroke-modifiers srfi-13 srfi-14))
   (open scheme
         ascii bitwise char-support define-record-type*
         keystroke-modifiers

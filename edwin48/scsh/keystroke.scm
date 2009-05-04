@@ -97,6 +97,8 @@
                        (make-key-modifier-set (list modifiers))
                        modifiers)))
     (cond
+     ((key? value) (make-key (key-value value)
+                             (union (key-modifiers value) modifiers) name))
      ((number? value) (make-key (ascii->char value) modifiers))
      ((char? value)
       (cond
@@ -131,28 +133,40 @@
     (let ((%key (rename 'make-key))
           (r    rename)
           (form (cdr form))) ;; discard the first token, 'KBD'
+
       (define all-modifiers
         (map key-modifier-name (vector->list all-key-modifiers)))
-      (define (parse-kbd-form form)
+
+      (define (list->key form)
+        (let* ((form      (reverse form))
+               (value     (car form))
+               (modifiers (cdr form)))
+          `(,%key ,(->key value)
+                  (,(r 'key-modifier-set) ,@modifiers))))
+
+      (define (string->key form)
+        (if (= 1 (string-length form))
+            `(,%key (,(r 'string-ref) ,form 0))
+            `(,(r 'map) (,(r 'lambda) (c) (,%key c))
+              (,(r 'string->list) ,form))))
+
+      (define (symbol->key form)
+        (let loop ((keys all-named-keys))
+          (cond
+           ((null? keys)
+            (let ((keys (symbol->string form)))
+              (if (string-every char-set:printing keys)
+                  (string->key keys)
+                  (syntax-error "not a valid key" form))))
+           ((eq? form (cdar keys)) `(,%key ,(caar keys)))
+           (else (loop (cdr keys))))))
+
+      (define (->key form)
         (cond
-         ((char? form)
-          `(,%key ,form))
-         ((string? form)
-          (if (= 1 (string-length form))
-              `(,%key (,(r 'string-ref) ,form 0))
-              `(,(r 'map) (,(r 'lambda) (c) (,%key c))
-                (,(r 'string->list) ,form))))
-         ((symbol? form)
-          (let loop ((keys all-named-keys))
-            (cond
-             ((null? keys) (syntax-error "not a valid named key" form))
-             ((eq? form (cdar keys)) `(,%key ,(caar keys)))
-             (else (loop (cdr keys))))))
-         ((list? form)
-          (let* ((form      (reverse form))
-                 (key       (car form))
-                 (modifiers (cdr form)))
-            `(,%key ,key (,(r 'key-modifier-set) ,@modifiers))))))
+         ((char? form)  `(,%key      ,form))
+         ((string? form) (string->key form))
+         ((symbol? form) (symbol->key form))
+         ((list? form)   (list->key   form))))
       (if (= 1 (length form))
-          (parse-kbd-form (car form))
-          `(,(r 'list) ,@(map parse-kbd-form form))))))
+          (->key (car form))
+          `(,(r 'list) ,@(map ->key form))))))
