@@ -22,6 +22,7 @@
     (#\escape    . escape)
     (#\newline   . newline)
     (#\return    . return)
+    (#\space     . space)
     (#\tab       . tab)
     (#\vtab      . vtab)))
 
