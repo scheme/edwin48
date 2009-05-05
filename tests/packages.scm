@@ -46,11 +46,11 @@
   (files ../edwin48/docstr))
 
 (define-structure edwin:command-table edwin:command-table/interface
-  (open scheme edwin:command srfi-1 srfi-69 srfi-89
+  (open scheme edwin:command srfi-1 srfi-69 srfi-89 srfi-78
         define-record-type* errors keystroke aliases
         (modify sorting (rename (vector-sort sort))))
   (begin (define edwin-command$undefined '()))
-  (files command-tables))
+  (files ../edwin48/comtab test-comtab))
 
 (define-interface edwin:command-table/interface
   (export comtab-entry local-comtab-entry
@@ -93,4 +93,5 @@
     (begin
       (define editor-error error)
       (define within-editor? #f)))
+
 
