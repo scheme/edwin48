@@ -9,7 +9,7 @@
      (else (loop (cdr keys))))))
 
 (define (simple-key? k)
-  (= 1 (string-length (key-value k))))
+  (key-modifiers-empty? (key-modifiers k)))
 
 (define (special-key? k) (not (simple-key? k)))
 
