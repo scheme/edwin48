@@ -169,7 +169,9 @@
          ((char? form)  `(,%key      ,form))
          ((string? form) (string->key form))
          ((symbol? form) (symbol->key form))
-         ((list? form)   (list->key   form))))
+         ;; reverse the form so the key-value is the first element
+         ((list? form)   (list->key   (reverse form)))))
+
       (if (= 1 (length form))
           (->key (car form))
           `(,(r 'list) ,@(map ->key form))))))
