@@ -29,11 +29,11 @@ USA.
 
 
 ;; GNUS compatible key bindings.
-(define-key 'rmail (list #\C-c #\C-s #\C-d) 'rmail-sort-by-date)
-(define-key 'rmail (list #\C-c #\C-s #\C-s) 'rmail-sort-by-subject)
-(define-key 'rmail (list #\C-c #\C-s #\C-a) 'rmail-sort-by-author)
-(define-key 'rmail (list #\C-c #\C-s #\C-r) 'rmail-sort-by-recipient)
-(define-key 'rmail (list #\C-c #\C-s #\C-l) 'rmail-sort-by-size-lines)
+(define-key 'rmail (list (kbd (ctrl #\c)) (kbd (ctrl #\s)) (kbd (ctrl #\d))) 'rmail-sort-by-date)
+(define-key 'rmail (list (kbd (ctrl #\c)) (kbd (ctrl #\s)) (kbd (ctrl #\s))) 'rmail-sort-by-subject)
+(define-key 'rmail (list (kbd (ctrl #\c)) (kbd (ctrl #\s)) (kbd (ctrl #\a))) 'rmail-sort-by-author)
+(define-key 'rmail (list (kbd (ctrl #\c)) (kbd (ctrl #\s)) (kbd (ctrl #\r))) 'rmail-sort-by-recipient)
+(define-key 'rmail (list (kbd (ctrl #\c)) (kbd (ctrl #\s)) (kbd (ctrl #\l))) 'rmail-sort-by-size-lines)
 
 (define-command rmail-sort-by-date 
   "Sort messages of current Rmail file by date.
