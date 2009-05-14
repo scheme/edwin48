@@ -422,17 +422,17 @@ Here are commands that move to a header field (and create it if there isn't):
     (if attachments-buffer
 	(kill-buffer attachments-buffer))))
 
-(define-key 'mail '(#\C-c #\?) 'describe-mode)
-(define-key 'mail '(#\C-c #\C-f #\C-t) 'mail-to)
-(define-key 'mail '(#\C-c #\C-f #\C-b) 'mail-bcc)
-(define-key 'mail '(#\C-c #\C-f #\C-c) 'mail-cc)
-(define-key 'mail '(#\C-c #\C-f #\C-s) 'mail-subject)
-(define-key 'mail '(#\C-c #\C-a) 'mail-browse-attachments)
-(define-key 'mail '(#\C-c #\C-w) 'mail-signature)
-(define-key 'mail '(#\C-c #\C-y) 'mail-yank-original)
-(define-key 'mail '(#\C-c #\C-q) 'mail-fill-yanked-message)
-(define-key 'mail '(#\C-c #\C-c) 'mail-send-and-exit)
-(define-key 'mail '(#\C-c #\C-s) 'mail-send)
+(define-key 'mail (kbd (ctrl #\c) #\?) 'describe-mode)
+(define-key 'mail (kbd (ctrl #\c) (ctrl #\f) (ctrl #\t)) 'mail-to)
+(define-key 'mail (kbd (ctrl #\c) (ctrl #\f) (ctrl #\b)) 'mail-bcc)
+(define-key 'mail (kbd (ctrl #\c) (ctrl #\f) (ctrl #\c)) 'mail-cc)
+(define-key 'mail (kbd (ctrl #\c) (ctrl #\f) (ctrl #\s)) 'mail-subject)
+(define-key 'mail (kbd (ctrl #\c) (ctrl #\a)) 'mail-browse-attachments)
+(define-key 'mail (kbd (ctrl #\c) (ctrl #\w)) 'mail-signature)
+(define-key 'mail (kbd (ctrl #\c) (ctrl #\y)) 'mail-yank-original)
+(define-key 'mail (kbd (ctrl #\c) (ctrl #\q)) 'mail-fill-yanked-message)
+(define-key 'mail (kbd (ctrl #\c) (ctrl #\c)) 'mail-send-and-exit)
+(define-key 'mail (kbd (ctrl #\c) (ctrl #\s)) 'mail-send)
 
 (define-command mail-signature
   "Sign letter with contents of ~/.signature file."
@@ -1479,12 +1479,12 @@ Commands available in this mode:
   "An event distributor that is invoked when entering MIME Attachments mode."
   (make-event-distributor))
 
-(define-key 'mime-attachments #\a 'add-mime-file-attachment)
-(define-key 'mime-attachments #\d 'kill-mime-attachment)
-(define-key 'mime-attachments #\k 'kill-mime-attachment)
-(define-key 'mime-attachments #\? 'describe-mode)
-(define-key 'mime-attachments #\q 'mime-attachments-quit)
-(define-key 'mime-attachments '(#\c-c #\c-c) 'mime-attachments-quit)
+(define-key 'mime-attachments (kbd #\a) 'add-mime-file-attachment)
+(define-key 'mime-attachments (kbd #\d) 'kill-mime-attachment)
+(define-key 'mime-attachments (kbd #\k) 'kill-mime-attachment)
+(define-key 'mime-attachments (kbd #\?) 'describe-mode)
+(define-key 'mime-attachments (kbd #\q) 'mime-attachments-quit)
+(define-key 'mime-attachments (kbd (ctrl c) (ctrl c)) 'mime-attachments-quit)
 
 (define (mime-attachments-revert-buffer buffer
 					dont-use-auto-save? dont-confirm?)
