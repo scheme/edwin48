@@ -4,10 +4,8 @@
          *unparse-with-maximum-readability?*
          ->environment
          abort-keyboard-macro
-         access-condition
          add-gc-daemon!/no-restore
          auto-fill-break
-         bind-condition-handler
          buffer-processes
          button-down?
          char-syntax
@@ -16,20 +14,6 @@
          cmdl-message/null
          cmdl-message/strings
          cmdl/start
-         command-argument-multiplier-only?
-         command-argument-negative-only?
-         command-argument-numeric-value
-         command-argument-prompt
-         command-argument-self-insert?
-         command-argument-value
-         condition-accessor
-         condition-predicate
-         condition-signaller
-         condition-type:error
-         condition-type:primitive-procedure-error
-         condition/report-string
-         condition/type
-         condition?
          create-thread
          current-thread
          debug-scheme-error
@@ -56,14 +40,12 @@
          eval-with-history
          event:after-restore
          exit-current-thread
-         find-restart
          get-buffer-process
          guarantee-command-loaded
          hangup-process
          identify-world
          initial-buffer-name
          interrupt-mask/gc-ok
-         invoke-restart
          keyboard-macro-disable
          keyboard-macro-finalize-keys
          keyboard-macro-peek-key
@@ -71,10 +53,8 @@
          keyboard-macro-write-key
          kill-buffer-interactive
          load-edwin-file
-         lookup-prefix
          make-button-event
          make-cmdl
-         make-condition-type
          make-port
          make-port-type
          nearest-cmdl
@@ -103,7 +83,6 @@
          save-buffer
          save-some-buffers
          set-process-buffer!
-         signal-condition
          signal-thread-event
          sleep-current-thread
          standard-error-handler
@@ -120,7 +99,6 @@
          with-notification-output-port
          with-output-to-temporary-buffer
          with-output-to-transcript-buffer
-         with-restart
          within-continuation
          x-display-flush
          x-display-process-events

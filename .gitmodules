@@ -4,3 +4,6 @@
 [submodule "soosy"]
 	path = soosy
 	url = git://a-chinaman.com/soosy
+[submodule "pantene"]
+	path = pantene
+	url = git://a-chinaman.com/pantene
