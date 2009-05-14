@@ -35,6 +35,7 @@
           1d-table aliases define-record-type* errors event-distributor
           extended-ports fixme fixnum i/o
           (modify interrupts (expose call-after-gc!))
+          pantene
           io-support keystroke pathname queues rb-tree soosy weak-pair
           srfi-1 srfi-9 srfi-13 srfi-14 srfi-23 srfi-43 srfi-69 srfi-89
           edwin:input-event edwin:paths edwin:ring
@@ -78,6 +79,7 @@
          input
          prompt
          comred
+         argred
          simple
          undo
          basic
