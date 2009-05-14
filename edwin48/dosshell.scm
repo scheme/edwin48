@@ -70,17 +70,17 @@ Customization: Entry to this mode runs the hook pseudo-shell-mode-hook."
   #f
   boolean?)
 
-(define-key 'pseudo-shell #\C-a 'pseudo-shell-bol)
-(define-key 'pseudo-shell #\C-m 'pseudo-shell-execute-command)
+(define-key 'pseudo-shell (kbd (ctrl #\a)) 'pseudo-shell-bol)
+(define-key 'pseudo-shell (kbd (ctrl #\m)) 'pseudo-shell-execute-command)
 
-(define-key 'pseudo-shell #\M-p 'comint-previous-input)
-(define-key 'pseudo-shell #\M-n 'comint-next-input)
-(define-key 'pseudo-shell '(#\C-c #\C-r) 'comint-history-search-backward)
-(define-key 'pseudo-shell '(#\C-c #\C-s) 'comint-history-search-forward)
-(define-key 'pseudo-shell '(#\C-c #\C-w) 'backward-kill-word)
+(define-key 'pseudo-shell (kbd (meta p)) 'comint-previous-input)
+(define-key 'pseudo-shell (kbd (meta n)) 'comint-next-input)
+(define-key 'pseudo-shell (kbd (ctrl #\c) (ctrl #\r)) 'comint-history-search-backward)
+(define-key 'pseudo-shell (kbd (ctrl #\c) (ctrl #\s)) 'comint-history-search-forward)
+(define-key 'pseudo-shell (kbd (ctrl #\c) (ctrl #\w)) 'backward-kill-word)
 
-;; (define-key 'pseudo-shell #\tab 'comint-dynamic-complete)
-;; (define-key 'pseudo-shell #\M-? 'comint-dynamic-list-completions)
+;; (define-key 'pseudo-shell (kbd tab) 'comint-dynamic-complete)
+;; (define-key 'pseudo-shell (kbd (meta #\?)) 'comint-dynamic-list-completions)
 
 (define-command shell
   "Run an inferior pseudo shell, with I/O through buffer *shell*.
