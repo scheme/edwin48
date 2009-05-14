@@ -116,7 +116,7 @@ the appropriate regular expression.
 An input history is maintained of size comint-input-ring-size, and
 can be accessed with the commands comint-next-input [\\[comint-next-input]] and
 comint-previous-input [\\[comint-previous-input]].  Commands not keybound by
-default are send-invisible, comint-dynamic-complete, and 
+default are send-invisible, comint-dynamic-complete, and
 comint-list-dynamic-completions.
 
 If you accidentally suspend your process, use \\[comint-continue-subjob]
@@ -139,25 +139,25 @@ Entry to this mode runs the hooks on comint-mode-hook."
   "An event distributor that is invoked when entering Comint mode."
   (make-event-distributor))
 
-(define-key 'comint #\C-d 'comint-delchar-or-maybe-eof)
-(define-key 'comint #\C-m 'comint-send-input)
+(define-key 'comint (kbd (ctrl #\d)) 'comint-delchar-or-maybe-eof)
+(define-key 'comint (kbd (ctrl #\m)) 'comint-send-input)
 
-(define-key 'comint #\M-p 'comint-previous-input)
-(define-key 'comint #\M-n 'comint-next-input)
-(define-key 'comint #\M-s 'comint-previous-similar-input)
+(define-key 'comint (kbd (meta #\p)) 'comint-previous-input)
+(define-key 'comint (kbd (meta #\n)) 'comint-next-input)
+(define-key 'comint (kbd (meta #\s)) 'comint-previous-similar-input)
 
-(define-key 'comint '(#\C-c #\C-a) 'comint-bol)
-(define-key 'comint '(#\C-c #\C-c) 'comint-interrupt-subjob)
-(define-key 'comint '(#\C-c #\C-f) 'comint-continue-subjob)
-(define-key 'comint '(#\C-c #\C-l) 'comint-show-output)
-(define-key 'comint '(#\C-c #\C-o) 'comint-flush-output)
-;;(define-key 'comint '(#\C-c #\C-q) 'comint-send-char)
-(define-key 'comint '(#\C-c #\C-r) 'comint-history-search-backward)
-(define-key 'comint '(#\C-c #\C-s) 'comint-history-search-forward)
-(define-key 'comint '(#\C-c #\C-u) 'comint-kill-input)
-(define-key 'comint '(#\C-c #\C-w) 'backward-kill-word)
-(define-key 'comint '(#\C-c #\C-z) 'comint-stop-subjob)
-(define-key 'comint '(#\C-c #\C-\\) 'comint-quit-subjob)
+(define-key 'comint (kbd (ctrl #\c) (ctrl #\a)) 'comint-bol)
+(define-key 'comint (kbd (ctrl #\c) (ctrl #\c)) 'comint-interrupt-subjob)
+(define-key 'comint (kbd (ctrl #\c) (ctrl #\f)) 'comint-continue-subjob)
+(define-key 'comint (kbd (ctrl #\c) (ctrl #\l)) 'comint-show-output)
+(define-key 'comint (kbd (ctrl #\c) (ctrl #\o)) 'comint-flush-output)
+;;(define-key 'comint (kbd (ctrl #\c) (ctrl #\q)) 'comint-send-char)
+(define-key 'comint (kbd (ctrl #\c) (ctrl #\r)) 'comint-history-search-backward)
+(define-key 'comint (kbd (ctrl #\c) (ctrl #\s)) 'comint-history-search-forward)
+(define-key 'comint (kbd (ctrl #\c) (ctrl #\u)) 'comint-kill-input)
+(define-key 'comint (kbd (ctrl #\c) (ctrl #\w)) 'backward-kill-word)
+(define-key 'comint (kbd (ctrl #\c) (ctrl #\z)) 'comint-stop-subjob)
+(define-key 'comint (kbd (ctrl #\c) (ctrl #\\)) 'comint-quit-subjob)
 
 (define-command comint-send-input
   "Send input to process.
@@ -227,7 +227,7 @@ history list.  Default is to save anything that isn't all whitespace."
 
 (define-command send-invisible
   "Read a string without echoing, and send it to the process running
-in the current buffer.  A new-line is additionally sent.  
+in the current buffer.  A new-line is additionally sent.
 String is not saved on comint input history list.
 Security bug: your string can still be temporarily recovered with
 \\[view-lossage]."
@@ -425,7 +425,7 @@ See also \\[comint-dynamic-complete]."
 (define (comint-dynamic-complete-filename)
   "Complete the filename at point.
 This function is similar to \\[comint-replace-by-expanded-filename], except
-that it won't change parts of the filename already entered in the buffer; 
+that it won't change parts of the filename already entered in the buffer;
 it just adds completion characters to the end of the filename."
   (let ((region (comint-current-filename-region)))
     (let ((pathname
