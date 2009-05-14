@@ -71,14 +71,14 @@ USA.
     (set-char-syntax! syntax-table #\newline ">")
     syntax-table))
 
-(define-key 'vhdl #\linefeed 'reindent-then-newline-and-indent)
-(define-key 'vhdl #\rubout 'backward-delete-char-untabify)
-(define-key 'vhdl #\tab 'keyparser-indent-line)
-(define-key 'vhdl #\c-m-\\ 'keyparser-indent-region)
-(define-key 'vhdl #\) 'lisp-insert-paren)
-(define-key 'vhdl #\] 'lisp-insert-paren)
-(define-key 'vhdl #\} 'lisp-insert-paren)
-(define-key 'vhdl #\m-tab 'complete-keyword)
+(define-key 'vhdl (kbd linefeed) 'reindent-then-newline-and-indent)
+(define-key 'vhdl (kbd rubout) 'backward-delete-char-untabify)
+(define-key 'vhdl (kbd tab) 'keyparser-indent-line)
+(define-key 'vhdl (kbd ctrl meta #\\) 'keyparser-indent-region)
+(define-key 'vhdl (kbd #\)) 'lisp-insert-paren)
+(define-key 'vhdl (kbd #\]) 'lisp-insert-paren)
+(define-key 'vhdl (kbd #\}) 'lisp-insert-paren)
+(define-key 'vhdl (kbd (meta tab)) 'complete-keyword)
 
 ;;;; Syntax Description
 
