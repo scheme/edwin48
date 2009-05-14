@@ -29,9 +29,9 @@ USA.
 ;;; package: (edwin dired)
 
 
-(define-key 'dired #\Z 'dired-do-compress)
-(define-key 'dired #\S 'dired-hidden-toggle)
-(define-key 'dired #\M 'dired-chmod)
+(define-key 'dired (kbd #\Z) 'dired-do-compress)
+(define-key 'dired (kbd #\S) 'dired-hidden-toggle)
+(define-key 'dired (kbd #\M) 'dired-chmod)
 
 (define-command dired-do-compress
   "Compress or uncompress marked (or next ARG) files.
