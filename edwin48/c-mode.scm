@@ -134,16 +134,16 @@ regardless of where in the line point is when the TAB command is used."
   #t
   boolean?)
 
-(define-key 'c #\linefeed 'reindent-then-newline-and-indent)
-(define-key 'c #\) 'lisp-insert-paren)
-(define-key 'c #\{ 'electric-c-brace)
-(define-key 'c #\} 'electric-c-brace)
-(define-key 'c #\; 'electric-c-semi)
-(define-key 'c #\: 'electric-c-terminator)
-(define-key 'c #\c-m-h 'mark-c-procedure)
-(define-key 'c #\c-m-q 'indent-c-exp)
-(define-key 'c #\rubout 'backward-delete-char-untabify)
-(define-key 'c #\tab 'c-indent-command)
+(define-key 'c (kbd linefeed) 'reindent-then-newline-and-indent)
+(define-key 'c (kbd #\)) 'lisp-insert-paren)
+(define-key 'c (kbd #\{) 'electric-c-brace)
+(define-key 'c (kbd #\}) 'electric-c-brace)
+(define-key 'c (kbd #\;) 'electric-c-semi)
+(define-key 'c (kbd #\:) 'electric-c-terminator)
+(define-key 'c (kbd (ctrl meta h)) 'mark-c-procedure)
+(define-key 'c (kbd (ctrl meta 1)) 'indent-c-exp)
+(define-key 'c (kbd rubout) 'backward-delete-char-untabify)
+(define-key 'c (kbd tab) 'c-indent-command)
 
 (define-command electric-c-brace
   "Insert character and correct line's indentation."
