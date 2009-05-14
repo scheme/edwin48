@@ -304,16 +304,16 @@ d	Move to root node.
 
 q	Exit TechInfo.")
 
-(define-key 'techinfo #\. 'beginning-of-buffer)
-(define-key 'techinfo #\Space 'techinfo-space)
-(define-key 'techinfo #\d 'techinfo-top)
-(define-key 'techinfo #\g 'techinfo-goto-node)
-(define-key 'techinfo #\n 'techinfo-next)
-(define-key 'techinfo #\p 'techinfo-prev)
-(define-key 'techinfo #\q 'techinfo-exit)
-(define-key 'techinfo #\u 'techinfo-up)
-(define-key 'techinfo #\l 'techinfo-last)
-(define-key 'techinfo #\Del 'techinfo-delete)
+(define-key 'techinfo (kbd #\.) 'beginning-of-buffer)
+(define-key 'techinfo (kbd space) 'techinfo-space)
+(define-key 'techinfo (kbd #\d) 'techinfo-top)
+(define-key 'techinfo (kbd #\g) 'techinfo-goto-node)
+(define-key 'techinfo (kbd #\n) 'techinfo-next)
+(define-key 'techinfo (kbd #\p) 'techinfo-prev)
+(define-key 'techinfo (kbd #\q) 'techinfo-exit)
+(define-key 'techinfo (kbd #\u) 'techinfo-up)
+(define-key 'techinfo (kbd #\l) 'techinfo-last)
+(define-key 'techinfo (kbd Del) 'techinfo-delete)
 
 (define-command techinfo
   "Enter TechInfo mode."
