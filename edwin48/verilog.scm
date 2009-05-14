@@ -73,14 +73,14 @@ USA.
     (set-char-syntax! syntax-table #\newline ">")
     syntax-table))
 
-(define-key 'verilog #\linefeed 'reindent-then-newline-and-indent)
-(define-key 'verilog #\rubout 'backward-delete-char-untabify)
-(define-key 'verilog #\tab 'keyparser-indent-line)
-(define-key 'verilog #\c-m-\\ 'keyparser-indent-region)
-(define-key 'verilog #\) 'lisp-insert-paren)
-(define-key 'verilog #\] 'lisp-insert-paren)
-(define-key 'verilog #\} 'lisp-insert-paren)
-(define-key 'verilog #\m-tab 'complete-keyword)
+(define-key 'verilog (kbd linefeed) 'reindent-then-newline-and-indent)
+(define-key 'verilog (kbd rubout) 'backward-delete-char-untabify)
+(define-key 'verilog (kbd tab) 'keyparser-indent-line)
+(define-key 'verilog (kbd ctrl meta #\\) 'keyparser-indent-region)
+(define-key 'verilog (kbd #\)) 'lisp-insert-paren)
+(define-key 'verilog (kbd #\]) 'lisp-insert-paren)
+(define-key 'verilog (kbd #\}) 'lisp-insert-paren)
+(define-key 'verilog (kbd (meta tab)) 'complete-keyword)
 
 ;;;; Syntax Description
 
