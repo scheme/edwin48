@@ -78,12 +78,12 @@ USA.
 ;;; Checks to make sure that the object passed
 ;;; in has an equivelent comtab represenation in a list
 (define (guarantee-comtabs object procedure)
-  (cond ;((mode? object)
-        ;(mode-comtabs object))           ; Get the mode's comtabs
-        ;((symbol? object)
-        ;(mode-comtabs (->mode object)))  ; Find mode for the name then comtabs
-   ((comtab? object) (list object)) ; If just a comtab, put it in a list
-   ((list-of-comtabs? object) object)
+  (cond ((mode? object)
+        (mode-comtabs object))           ; Get the mode's comtabs
+        ((symbol? object)
+        (mode-comtabs (->mode object)))  ; Find mode for the name then comtabs
+        ((comtab? object) (list object)) ; If just a comtab, put it in a list
+        ((list-of-comtabs? object) object)
    (else
     (error:wrong-type-argument object "list of comtabs" procedure))))
 
@@ -131,7 +131,7 @@ USA.
 (define (valid-comtabs? object)
   (or (symbol? object)
       (comtab? object)
-      ;(mode? object)
+      (mode? object)
       (list-of-comtabs? object)))
 
 (define (list-of-comtabs? object)
