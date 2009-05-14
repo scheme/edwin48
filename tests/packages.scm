@@ -40,20 +40,27 @@
   (files ../edwin48/paths))
 
 (define-structure edwin:doc-string edwin:doc-string/interface
-  (open scheme aliases fixnum errors i/o pathname io-support srfi-13 srfi-89
+  (open scheme aliases fixnum i/o pathname io-support
+        srfi-13 srfi-89
+        (modify errors (alias (error editor-error)))
         fixme
         edwin:paths)
   (files ../edwin48/docstr))
 
-(define-structure edwin:command-table edwin:command-table/interface
-  (open scheme edwin:command srfi-1 srfi-69 srfi-89 srfi-78
-        define-record-type* errors keystroke aliases
-        (modify sorting (rename (vector-sort sort))))
-  (begin (define edwin-command$undefined '()))
-  (files ../edwin48/comtab test-comtab))
+(define-structures
+  ((edwin:command-table edwin:command-table/interface)
+   (edwin:mode          edwin:mode/interface))
+  (open scheme aliases edwin:command srfi-1 srfi-69 srfi-89 srfi-78
+        define-record-type* errors keystroke aliases keystroke-discloser
+        edwin:string-table edwin:doc-string sorting)
+  (for-syntax (open scheme macro-helpers))
+  (files ../edwin48/scsh/macros
+         ../edwin48/modes
+         ../edwin48/comtab))
 
 (define-interface edwin:command-table/interface
   (export comtab-entry local-comtab-entry
+          make-comtab
           comtab-key?
           prefix-key-list?
           define-key
@@ -94,4 +101,19 @@
       (define editor-error error)
       (define within-editor? #f)))
 
+(define-interface edwin:string-table/interface
+  (export make-string-table
+          alist->string-table
+          string-table-ci?
+          string-table-get
+          string-table-put!
+          string-table-remove!
+          string-table-complete
+          string-table-completions
+          string-table-apropos))
+
+(define-structure edwin:string-table edwin:string-table/interface
+  (open scheme aliases sorting srfi-43
+        srfi-89 srfi-13 define-record-type*)
+  (files ../edwin48/strtab))
 
