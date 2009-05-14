@@ -1007,17 +1007,17 @@ There is a special command, `*l', to mark all files currently locked.
 (define (vc-dired-buffer? buffer)
   (eq? (ref-mode-object vc-dired) (buffer-major-mode buffer)))
 
-(define-key 'vc-dired '(#\v #\h) 'vc-insert-headers)
-(define-key 'vc-dired '(#\v #\i) 'vc-register)
-(define-key 'vc-dired '(#\v #\l) 'vc-print-log)
-;;(define-key 'vc-dired '(#\v #\m) 'vc-merge)
-;;(define-key 'vc-dired '(#\v #\r) 'vc-retrieve-snapshot)
-;;(define-key 'vc-dired '(#\v #\s) 'vc-create-snapshot)
-(define-key 'vc-dired '(#\v #\u) 'vc-revert-buffer)
-(define-key 'vc-dired '(#\v #\v) 'vc-next-action)
-(define-key 'vc-dired '(#\v #\=) 'vc-diff)
-(define-key 'vc-dired '(#\v #\~) 'vc-version-other-window)
-(define-key 'vc-dired '(#\* #\l) 'vc-dired-mark-locked)
+(define-key 'vc-dired (kbd #\v #\h) 'vc-insert-headers)
+(define-key 'vc-dired (kbd #\v #\i) 'vc-register)
+(define-key 'vc-dired (kbd #\v #\l) 'vc-print-log)
+;;(define-key 'vc-dired (kbd #\v #\m) 'vc-merge)
+;;(define-key 'vc-dired (kbd #\v #\r) 'vc-retrieve-snapshot)
+;;(define-key 'vc-dired (kbd #\v #\s) 'vc-create-snapshot)
+(define-key 'vc-dired (kbd #\v #\u) 'vc-revert-buffer)
+(define-key 'vc-dired (kbd #\v #\v) 'vc-next-action)
+(define-key 'vc-dired (kbd #\v #\=) 'vc-diff)
+(define-key 'vc-dired (kbd #\v #\~) 'vc-version-other-window)
+(define-key 'vc-dired (kbd #\* #\l) 'vc-dired-mark-locked)
 
 (define-command vc-dired-mark-locked
   "Mark all files currently locked."
@@ -1128,11 +1128,11 @@ the value of vc-log-mode-hook."
     (local-set-variable! comint-last-input-match #f buffer)
     (event-distributor/invoke! (ref-variable vc-log-mode-hook buffer) buffer)))
 
-(define-key 'vc-log '(#\C-c #\C-c) 'vc-finish-logentry)
-(define-key 'vc-log #\M-p 'comint-previous-input)
-(define-key 'vc-log #\M-n 'comint-next-input)
-(define-key 'vc-log #\M-r 'comint-history-search-backward)
-(define-key 'vc-log #\M-s 'comint-history-search-forward)
+(define-key 'vc-log (kbd (ctrl #\c) (ctrl #\c)) 'vc-finish-logentry)
+(define-key 'vc-log (kbd (meta #\p)) 'comint-previous-input)
+(define-key 'vc-log (kbd (meta #\n)) 'comint-next-input)
+(define-key 'vc-log (kbd (meta #\r)) 'comint-history-search-backward)
+(define-key 'vc-log (kbd (meta #\s)) 'comint-history-search-forward)
 
 (define-command vc-finish-logentry
   "Complete the operation implied by the current log entry."
