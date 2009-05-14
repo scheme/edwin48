@@ -48,13 +48,13 @@ and telnet-mode-hook, in that order."
 	  (ref-variable shell-prompt-pattern buffer)))
     (event-distributor/invoke! (ref-variable telnet-mode-hook buffer) buffer)))
 
-(define-key 'telnet #\C-m 'telnet-send-input)
-(define-key 'telnet '(#\C-c #\C-c) 'telnet-self-send)
-(define-key 'telnet '(#\C-c #\C-d) 'telnet-self-send)
-(define-key 'telnet '(#\C-c #\C-g) 'telnet-self-send)
-(define-key 'telnet '(#\C-c #\C-q) 'telnet-send-character)
-(define-key 'telnet '(#\C-c #\C-z) 'telnet-self-send)
-(define-key 'telnet '(#\C-c #\C-\\) 'telnet-self-send)
+(define-key 'telnet (kbd (ctrl #\m)) 'telnet-send-input)
+(define-key 'telnet (kbd (ctrl #\c) (ctrl #\c)) 'telnet-self-send)
+(define-key 'telnet (kbd (ctrl #\c) (ctrl #\d)) 'telnet-self-send)
+(define-key 'telnet (kbd (ctrl #\c) (ctrl #\g)) 'telnet-self-send)
+(define-key 'telnet (kbd (ctrl #\c) (ctrl #\q)) 'telnet-send-character)
+(define-key 'telnet (kbd (ctrl #\c) (ctrl #\z)) 'telnet-self-send)
+(define-key 'telnet (kbd (ctrl #\c) (ctrl #\\)) 'telnet-self-send)
 
 ;;;moved to "loadef.scm".
 ;;;(define-variable telnet-mode-hook
