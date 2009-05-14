@@ -57,15 +57,15 @@ Key bindings:
     (event-distributor/invoke! (ref-variable debian-changelog-mode-hook buffer)
 			       buffer)))
 
-(define-key 'debian-changelog '(#\C-c #\C-a) 'debian-changelog-add-entry)
-(define-key 'debian-changelog '(#\C-c #\C-f)
+(define-key 'debian-changelog (kbd (ctrl #\c) (ctrl #\a)) 'debian-changelog-add-entry)
+(define-key 'debian-changelog (kbd (ctrl #\c) (ctrl #\f))
   'debian-changelog-finalize-last-version)
-(define-key 'debian-changelog '(#\C-c #\C-c)
+(define-key 'debian-changelog (kbd (ctrl #\c) (ctrl #\c))
   'debian-changelog-finalize-and-save)
-(define-key 'debian-changelog '(#\C-c #\C-v) 'debian-changelog-add-version)
-(define-key 'debian-changelog '(#\C-c #\C-d) 'debian-changelog-distribution)
-(define-key 'debian-changelog '(#\C-c #\C-u) 'debian-changelog-urgency)
-(define-key 'debian-changelog '(#\C-c #\C-e)
+(define-key 'debian-changelog (kbd (ctrl #\c) (ctrl #\v)) 'debian-changelog-add-version)
+(define-key 'debian-changelog (kbd (ctrl #\c) (ctrl #\d)) 'debian-changelog-distribution)
+(define-key 'debian-changelog (kbd (ctrl #\c) (ctrl #\u)) 'debian-changelog-urgency)
+(define-key 'debian-changelog (kbd (ctrl #\c) (ctrl #\e))
   'debian-changelog-unfinalize-last-version)
 
 (define-command debian-changelog-add-version
