@@ -144,12 +144,12 @@ Use webster-mode-hook for customization."
     (event-distributor/invoke! (ref-variable webster-mode-hook buffer)
 			       buffer)))
 
-(define-key 'webster #\? 'describe-mode)
-(define-key 'webster #\d 'webster-define)
-(define-key 'webster #\e 'webster-endings)
-(define-key 'webster #\h 'describe-mode)
-(define-key 'webster #\q 'webster-quit)
-(define-key 'webster #\s 'webster-spellings)
+(define-key 'webster (kbd (ctrl #\?)) 'describe-mode)
+(define-key 'webster (kbd (ctrl #\d)) 'webster-define)
+(define-key 'webster (kbd (ctrl #\e)) 'webster-endings)
+(define-key 'webster (kbd (ctrl #\h)) 'describe-mode)
+(define-key 'webster (kbd (ctrl #\q)) 'webster-quit)
+(define-key 'webster (kbd (ctrl #\s)) 'webster-spellings)
 
 (define (webster-prompt prompt)
   (lambda ()
