@@ -32,38 +32,38 @@ With a prefix argument, enable paredit mode if the argument is
             (define-key 'paredit (car key) (cadr key)))
           '(
             ;; Insertion commands
-            (#\(      paredit-open-list)
-            (#\)      paredit-close-list-and-newline)
-            (#\M-\)   paredit-close-list)
-            (#\M-\"   paredit-close-string-and-newline)
-            (#\"      paredit-doublequote)
-            (#\\      paredit-backslash)
-            (#\return paredit-newline)  ; This defies the convention,
-            (#\C-j    newline)          ; but I prefer it, and you can
+            ((kbd #\()      paredit-open-list)
+            ((kbd #\))      paredit-close-list-and-newline)
+            ((kbd (meta #\)))   paredit-close-list)
+            ((kbd (meta #\"))   paredit-close-string-and-newline)
+            ((kbd #\")      paredit-doublequote)
+            ((kbd #\\)      paredit-backslash)
+            ((kbd return) paredit-newline)  ; This defies the convention,
+            ((kbd (ctrl #\j))    newline)          ; but I prefer it, and you can
                                         ; customize it yourself anyway.
             ;; Killing & deleting
-            (#\C-d    paredit-forward-delete)
-            (#\rubout paredit-backward-delete)
-            (#\C-k    paredit-kill)
+            ((kbd (ctrl #\d))    paredit-forward-delete)
+            ((kbd rubout) paredit-backward-delete)
+            ((kbd (ctrl #\k))    paredit-kill)
 
             ;; Movement & navigation
-            (#\C-M-f  paredit-forward)
-            (#\C-M-b  paredit-backward)
-;;;         (#\C-M-u  backward-up-list) ; These two are built-in.
-;;;         (#\C-M-d  down-list)
-            (#\C-M-p  backward-down-list)
-            (#\C-M-n  up-list)
-            ((#\C-c #\C-M-l) paredit-recentre-on-sexp)
+            ((kbd ctrl meta #\f) paredit-forward)
+            ((kbd ctrl meta #\b) paredit-backward)
+;;;         ((kbd ctrl meta #\u) backward-up-list) ; These two are built-in.
+;;;         ((kbd ctrl meta #\d) down-list)
+            ((kbd ctrl meta #\p) backward-down-list)
+            ((kbd ctrl meta #\n) up-list)
+            ((kbd (ctrl #\c) (kbd ctrl meta #\l)) paredit-recentre-on-sexp)
 
             ;; Depth-changing commands
-            (#\M-\( paredit-wrap-sexp)
-            (#\M-r  paredit-raise-sexp)
-            (#\M-s  paredit-splice-sexp)   ;++ This conflicts with M-s
+            ((kbd (meta #\()) paredit-wrap-sexp)
+            ((kbd (meta #\r))  paredit-raise-sexp)
+            ((kbd (meta #\s))  paredit-splice-sexp)   ;++ This conflicts with M-s
                                            ;++ for STEP-DEFUN.  Hmmmm.
 
             ;; Splitting and Joining
-            (#\M-S paredit-split-sexp)
-            (#\M-J paredit-join-sexps)
+            ((kbd (meta #\S)) paredit-split-sexp)
+            ((kbd (meta #\J)) paredit-join-sexps)
             ))
 
 ;;;; Basic Editing Commands
