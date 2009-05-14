@@ -38,7 +38,7 @@ USA.
 (define* (alist->string-table alist (ci? #t))
   (let* ((compare   (if ci? string-ci<? string<?))
 	 (sort-func (lambda (x y) (compare (car x) (car y))))
-	 (v         (list->vector (sort alist sort-func))))
+	 (v         (list->vector (list-sort alist sort-func))))
       (%make-string-table v (vector-length v) ci?)))
 
 (define make-string-table-entry cons)
@@ -130,17 +130,18 @@ USA.
 		  (loop (1+ index))))))
     (lambda () '())))
 
-(define (string-table-apropos table regexp)
-  (let ((end (string-table-size table))
-	(pattern (re-compile-pattern regexp (string-table-ci? table))))
-    (let loop ((index 0))
-      (if (= index end)
-	  '()
-	  (let ((entry (vector-ref (string-table-vector table) index)))
-	    (if (re-string-search-forward pattern
-					  (string-table-entry-string entry))
-		(cons (string-table-entry-value entry) (loop (1+ index)))
-		(loop (1+ index))))))))
+;; (define (string-table-apropos table regexp)
+;;   (let ((end (string-table-size table))
+;; 	(pattern (re-compile-pattern regexp (string-table-ci? table))))
+;;     (let loop ((index 0))
+;;       (if (= index end)
+;; 	  '()
+;; 	  (let ((entry (vector-ref (string-table-vector table) index)))
+;; 	    (if (re-string-search-forward pattern
+;; 					  (string-table-entry-string entry))
+;; 		(cons (string-table-entry-value entry) (loop (1+ index)))
+;; 		(loop (1+ index))))))))
+
 
 (define (%string-table-complete table string
 				if-unique if-not-unique if-not-found)
