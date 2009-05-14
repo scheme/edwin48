@@ -38,7 +38,7 @@ USA.
 			 buffer)
     (event-distributor/invoke! (ref-variable text-mode-hook buffer) buffer)))
 
-(define-key 'text #\m-s 'center-line)
+(define-key 'text (kbd (meta #\s)) 'center-line)
 
 (define text-mode:syntax-table (make-char-syntax-table))
 (set-char-syntax! text-mode:syntax-table #\" "    ")
