@@ -85,8 +85,8 @@ to match their respective commands."
   "An event distributor that is invoked when entering Shell mode."
   (make-event-distributor))
 
-(define-key 'shell #\tab 'comint-dynamic-complete)
-(define-key 'shell #\M-? 'comint-dynamic-list-completions)
+(define-key 'shell (kbd tab) 'comint-dynamic-complete)
+(define-key 'shell (kbd (meta #\?)) 'comint-dynamic-list-completions)
 
 (define-command shell
   "Run an inferior shell, with I/O through buffer *shell*.
