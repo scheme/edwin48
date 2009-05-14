@@ -500,8 +500,8 @@ Mark is set after the inserted text."
     buffer
     unspecific))
 
-(define-key 'edit-abbrevs '(#\C-x #\C-s) 'edit-abbrevs-redefine)
-(define-key 'edit-abbrevs '(#\C-c #\C-c) 'edit-abbrevs-redefine)
+(define-key 'edit-abbrevs (kbd (ctrl x) (ctrl s)) 'edit-abbrevs-redefine)
+(define-key 'edit-abbrevs (kbd (ctrl c) (ctrl c)) 'edit-abbrevs-redefine)
 
 (define-command edit-abbrevs-redefine
   "Redefine abbrevs according to current buffer contents."
