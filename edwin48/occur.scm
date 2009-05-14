@@ -143,7 +143,7 @@ Move point to one of the occurrences in this buffer,
 then use \\[occur-mode-goto-occurrence] to go to the same occurrence
 in the buffer that the occurrences were found in.")
 
-(define-key 'occur '(#\c-c #\c-c) 'occur-mode-goto-occurrence)
+(define-key 'occur (kbd (ctrl c) (ctrl c)) 'occur-mode-goto-occurrence)
 
 (define-command occur-mode-goto-occurrence
   "Go to the line this occurrence was found in, in the buffer it was found in."
