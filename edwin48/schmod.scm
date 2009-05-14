@@ -81,19 +81,19 @@ The following commands evaluate Scheme expressions:
   "An event distributor that is invoked when entering Scheme mode."
   (make-event-distributor))
 
-(define-key 'scheme #\rubout 'backward-delete-char-untabify)
-(define-key 'scheme #\tab 'lisp-indent-line)
-(define-key 'scheme #\) 'lisp-insert-paren)
-(define-key 'scheme #\m-A 'show-parameter-list)
-(define-key 'scheme #\m-g 'undefined)
-(define-key 'scheme #\m-o 'eval-current-buffer)
-(define-key 'scheme #\m-q 'undefined)
-(define-key 'scheme #\m-s 'step-defun)
-(define-key 'scheme #\m-z 'eval-defun)
-(define-key 'scheme #\c-m-q 'indent-sexp)
-(define-key 'scheme #\c-m-z 'eval-region)
-(define-key 'scheme #\m-tab 'scheme-complete-variable)
-(define-key 'scheme '(#\c-c #\c-c) 'eval-abort-top-level)
+(define-key 'scheme (kbd rubout) 'backward-delete-char-untabify)
+(define-key 'scheme (kbd tab) 'lisp-indent-line)
+(define-key 'scheme (kbd #\)) 'lisp-insert-paren)
+(define-key 'scheme (kbd (meta #\A)) 'show-parameter-list)
+(define-key 'scheme (kbd (meta #\g)) 'undefined)
+(define-key 'scheme (kbd (meta #\o)) 'eval-current-buffer)
+(define-key 'scheme (kbd (meta #\q)) 'undefined)
+(define-key 'scheme (kbd (meta #\s)) 'step-defun)
+(define-key 'scheme (kbd (meta #\z)) 'eval-defun)
+(define-key 'scheme (kbd (ctrl meta #\q)) 'indent-sexp)
+(define-key 'scheme (kbd (ctrl meta z)) 'eval-region)
+(define-key 'scheme (kbd (meta tab)) 'scheme-complete-variable)
+(define-key 'scheme (kbd (ctrl c) (ctrl c)) 'eval-abort-top-level)
 
 ;;;; Read Syntax
 
