@@ -19,6 +19,9 @@
 (config '(load "soosy/interfaces.scm"
                "soosy/packages.scm"))
 
+(config '(load "pantene/interfaces.scm"
+               "pantene/packages.scm"))
+
 (config '(load "edwin48/srfi-packages.scm"
                "edwin48/scsh/packages.scm"
                "edwin48/interfaces.scm"
