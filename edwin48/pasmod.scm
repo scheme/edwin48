@@ -83,10 +83,10 @@ USA.
 	(max (1+ (mark-column start))
 	     (ref-variable comment-column)))))
 
-(define-key 'pascal #\c-\( 'pascal-shift-left)
-(define-key 'pascal #\c-\) 'pascal-shift-right)
-(define-key 'pascal #\rubout 'backward-delete-char-untabify)
-(define-key 'pascal #\tab 'pascal-indent-line)
+(define-key 'pascal (kbd (ctrl #\()) 'pascal-shift-left)
+(define-key 'pascal (kbd (ctrl #\))) 'pascal-shift-right)
+(define-key 'pascal (kbd rubout) 'backward-delete-char-untabify)
+(define-key 'pascal (kbd tab) 'pascal-indent-line)
 
 (define-command pascal-indent-line
   "Indents the current line for Pascal code."
