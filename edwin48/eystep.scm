@@ -77,14 +77,14 @@ r	run current expression to completion without stepping
 e	expand the step under the cursor
 c	contract the step under the cursor")
 
-(define-key 'stepper #\space 'stepper-step)
-(define-key 'stepper #\o 'stepper-step-over)
-(define-key 'stepper #\u 'stepper-step-until)
-(define-key 'stepper #\U 'stepper-step-until-visible)
-(define-key 'stepper #\r 'stepper-run)
-(define-key 'stepper #\e 'stepper-expand)
-(define-key 'stepper #\c 'stepper-contract)
-(define-key 'stepper #\? 'stepper-summary)
+(define-key 'stepper (kbd space) 'stepper-step)
+(define-key 'stepper (kbd #\o) 'stepper-step-over)
+(define-key 'stepper (kbd #\u) 'stepper-step-until)
+(define-key 'stepper (kbd #\U) 'stepper-step-until-visible)
+(define-key 'stepper (kbd #\r) 'stepper-run)
+(define-key 'stepper (kbd #\e) 'stepper-expand)
+(define-key 'stepper (kbd #\c) 'stepper-contract)
+(define-key 'stepper (kbd #\?) 'stepper-summary)
 
 (define-command stepper-summary
   "Summarize the stepper commands in the typein window."
