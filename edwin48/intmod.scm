@@ -466,25 +466,25 @@ The REPL may be controlled by the following commands:
   "An event distributor that is invoked when entering Inferior REPL mode."
   (make-event-distributor))
 
-(define-key 'inferior-repl '(#\C-c #\C-b) 'inferior-cmdl-breakpoint)
-(define-key 'inferior-repl '(#\C-c #\C-c) 'inferior-cmdl-abort-top-level)
-(define-key 'inferior-repl '(#\C-c #\C-u) 'inferior-cmdl-abort-previous)
-(define-key 'inferior-repl '(#\C-c #\C-x) 'inferior-cmdl-abort-nearest)
+(define-key 'inferior-repl (kbd (ctrl #\c) (ctrl #\b)) 'inferior-cmdl-breakpoint)
+(define-key 'inferior-repl (kbd (ctrl #\c) (ctrl #\c)) 'inferior-cmdl-abort-top-level)
+(define-key 'inferior-repl (kbd (ctrl #\c) (ctrl #\u)) 'inferior-cmdl-abort-previous)
+(define-key 'inferior-repl (kbd (ctrl #\c) (ctrl #\x)) 'inferior-cmdl-abort-nearest)
 
-(define-key 'inferior-repl #\M-o 'undefined)
-(define-key 'inferior-repl #\M-z 'inferior-repl-eval-defun)
-(define-key 'inferior-repl #\C-M-z 'inferior-repl-eval-region)
-(define-key 'inferior-repl '(#\C-x #\C-e) 'inferior-repl-eval-last-sexp)
+(define-key 'inferior-repl (kbd (meta #\o)) 'undefined)
+(define-key 'inferior-repl (kbd (meta #\z)) 'inferior-repl-eval-defun)
+(define-key 'inferior-repl (kbd ctrl meta #\z) 'inferior-repl-eval-region)
+(define-key 'inferior-repl (kbd (ctrl #\x) (ctrl #\e)) 'inferior-repl-eval-last-sexp)
 
-(define-key 'inferior-repl #\M-p 'comint-previous-input)
-(define-key 'inferior-repl #\M-n 'comint-next-input)
-(define-key 'inferior-repl '(#\C-c #\C-l) 'comint-show-output)
-(define-key 'inferior-repl '(#\C-c #\C-o) 'inferior-repl-flush-output)
-(define-key 'inferior-repl '(#\C-c #\C-r) 'comint-history-search-backward)
-(define-key 'inferior-repl '(#\C-c #\C-s) 'comint-history-search-forward)
-;;(define-key 'inferior-repl '(#\C-c #\C-u) 'comint-kill-input)
+(define-key 'inferior-repl (kbd (meta #\p)) 'comint-previous-input)
+(define-key 'inferior-repl (kbd (meta #\n)) 'comint-next-input)
+(define-key 'inferior-repl (kbd (ctrl #\c) (ctrl #\l)) 'comint-show-output)
+(define-key 'inferior-repl (kbd (ctrl #\c) (ctrl #\o)) 'inferior-repl-flush-output)
+(define-key 'inferior-repl (kbd (ctrl #\c) (ctrl #\r)) 'comint-history-search-backward)
+(define-key 'inferior-repl (kbd (ctrl #\c) (ctrl #\s)) 'comint-history-search-forward)
+;;(define-key 'inferior-repl (kbd (ctrl #\c) (ctrl #\u)) 'comint-kill-input)
 
-(define-key 'inferior-repl '(#\C-c #\C-d) 'inferior-repl-debug)
+(define-key 'inferior-repl (kbd (ctrl #\c) (ctrl #\d)) 'inferior-repl-debug)
 
 (define-major-mode inferior-cmdl scheme "CMDL"
   "Major mode for communicating with an inferior command loop.
@@ -506,20 +506,20 @@ Additionally, these commands abort the command loop:
   "An event distributor that is invoked when entering Inferior CMDL mode."
   (make-event-distributor))
 
-(define-key 'inferior-cmdl '(#\C-c #\C-b) 'inferior-cmdl-breakpoint)
-(define-key 'inferior-cmdl '(#\C-c #\C-c) 'inferior-cmdl-abort-top-level)
-(define-key 'inferior-cmdl '(#\C-c #\C-u) 'inferior-cmdl-abort-previous)
-(define-key 'inferior-cmdl '(#\C-c #\C-x) 'inferior-cmdl-abort-nearest)
+(define-key 'inferior-cmdl (kbd (ctrl #\c) (ctrl #\b)) 'inferior-cmdl-breakpoint)
+(define-key 'inferior-cmdl (kbd (ctrl #\c) (ctrl #\c)) 'inferior-cmdl-abort-top-level)
+(define-key 'inferior-cmdl (kbd (ctrl #\c) (ctrl #\u)) 'inferior-cmdl-abort-previous)
+(define-key 'inferior-cmdl (kbd (ctrl #\c) (ctrl #\x)) 'inferior-cmdl-abort-nearest)
 
-(define-key 'inferior-cmdl #\M-o 'undefined)
-(define-key 'inferior-cmdl #\M-z 'undefined)
-(define-key 'inferior-cmdl #\C-M-z 'undefined)
-(define-key 'inferior-cmdl '(#\C-x #\C-e) 'undefined)
+(define-key 'inferior-cmdl (kbd (meta #\o)) 'undefined)
+(define-key 'inferior-cmdl (kbd (meta #\z)) 'undefined)
+(define-key 'inferior-cmdl (kbd ctrl meta #\z) 'undefined)
+(define-key 'inferior-cmdl (kbd (ctrl #\x) (ctrl #\e)) 'undefined)
 
-(define-key 'inferior-cmdl #\M-p 'undefined)
-(define-key 'inferior-cmdl #\M-n 'undefined)
-(define-key 'inferior-cmdl '(#\C-c #\C-r) 'undefined)
-(define-key 'inferior-cmdl '(#\C-c #\C-s) 'undefined)
+(define-key 'inferior-cmdl (kbd (meta #\p)) 'undefined)
+(define-key 'inferior-cmdl (kbd (meta #\n)) 'undefined)
+(define-key 'inferior-cmdl (kbd (ctrl #\c) (ctrl #\r)) 'undefined)
+(define-key 'inferior-cmdl (kbd (ctrl #\c) (ctrl #\s)) 'undefined)
 
 (define-key 'inferior-cmdl char-set:graphic 'inferior-cmdl-self-insert)
 
