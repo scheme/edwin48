@@ -1141,16 +1141,16 @@ automatically deleted when you quit the debugger.  If you wish to keep
 one of these buffers, simply rename it using `M-x rename-buffer': once
 it has been renamed, it will not be deleted automatically.")
 
-(define-key 'continuation-browser #\p 'quit-with-restart-value)
-(define-key 'continuation-browser down 'browser-next-line)
-(define-key 'continuation-browser up 'browser-previous-line)
+(define-key 'continuation-browser (kbd (ctrl #\p)) 'quit-with-restart-value)
+(define-key 'continuation-browser (kbd down) 'browser-next-line)
+(define-key 'continuation-browser (kbd up) 'browser-previous-line)
 (define-key 'continuation-browser button1-down 'debugger-mouse-select-bline)
-(define-key 'continuation-browser #\c-n 'browser-next-line)
-(define-key 'continuation-browser #\c-p 'browser-previous-line)
-(define-key 'continuation-browser #\? 'describe-mode)
-(define-key 'continuation-browser #\q 'browser-quit)
-(define-key 'continuation-browser #\space 'browser-select-line)
-(define-key 'continuation-browser #\e 'browser-where)
+(define-key 'continuation-browser (kbd (ctrl #\n)) 'browser-next-line)
+(define-key 'continuation-browser (kbd (ctrl #\p)) 'browser-previous-line)
+(define-key 'continuation-browser (kbd #\?) 'describe-mode)
+(define-key 'continuation-browser (kbd (ctrl #\q)) 'browser-quit)
+(define-key 'continuation-browser (kbd (ctrl #\space)) 'browser-select-line)
+(define-key 'continuation-browser (kbd #\e) 'browser-where)
 
 ;;;; Subproblems
 
@@ -1498,14 +1498,14 @@ they are automatically deleted when you quit the debugger.  If you wish
 to keep one of these buffers, simply rename it using `M-x rename-buffer':
 once it has been renamed, it will not be deleted automatically.")
 
-(define-key 'environment-browser down 'browser-next-line)
-(define-key 'environment-browser up 'browser-previous-line)
+(define-key 'environment-browser (kbd down) 'browser-next-line)
+(define-key 'environment-browser (kbd up) 'browser-previous-line)
 (define-key 'environment-browser button1-down	'debugger-mouse-select-bline)
-(define-key 'environment-browser #\c-n 'browser-next-line)
-(define-key 'environment-browser #\c-p 'browser-previous-line)
-(define-key 'environment-browser #\? 'describe-mode)
-(define-key 'environment-browser #\q 'browser-quit)
-(define-key 'environment-browser #\space 'browser-select-line)
+(define-key 'environment-browser (kbd (ctrl #\n)) 'browser-next-line)
+(define-key 'environment-browser (kbd (ctrl #\p)) 'browser-previous-line)
+(define-key 'environment-browser (kbd #\?) 'describe-mode)
+(define-key 'environment-browser (kbd (ctrl #\q)) 'browser-quit)
+(define-key 'environment-browser (kbd (ctrl #\space)) 'browser-select-line)
 
 (define (environment/write-summary bline port)
   (write-string "E" port)
