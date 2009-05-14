@@ -39,30 +39,30 @@ USA.
 				   program attribute (->namestring pathname))
 	  (dired-redisplay pathname lstart))))))
 
-(define-key 'dired #\M 'dired-chmod)
+(define-key 'dired (kbd #\M) 'dired-chmod)
 (define-command dired-chmod
   "Change mode of this file."
   "sChange to Mode\nP"
   (dired-change-inode "chmod"))
 
-(define-key 'dired #\G 'dired-chgrp)
+(define-key 'dired (kbd #\G) 'dired-chgrp)
 (define-command dired-chgrp
   "Change group of this file."
   "sChange to Group\nP"
   (dired-change-inode "chgrp"))
 
-(define-key 'dired #\O 'dired-chown)
+(define-key 'dired (kbd #\O) 'dired-chown)
 (define-command dired-chown
   "Change owner of this file."
   "sChange to Owner\nP"
   (dired-change-inode "chown"))
 
-(define-key 'dired #\Z 'dired-do-compress)
+(define-key 'dired (kbd #\Z) 'dired-do-compress)
 (define-command dired-do-compress
   "Compress or uncompress marked (or next ARG) files.
 The files are compressed or uncompressed using gzip."
   "P"
-  (lambda (argument)
+  (lambda (argument)n
     (let ((n
 	   (dired-change-files "compress" argument
 	     (let ((gzip (os/find-program "gzip" #f (ref-variable exec-path)))
