@@ -530,8 +530,8 @@ The following commands are special to this mode:
 \\[next-prompt-history-item] moves to the next item in the history.
 \\[previous-prompt-history-item] moves to the previous item in the history.")
 
-(define-key 'minibuffer-local #\return 'exit-minibuffer)
-(define-key 'minibuffer-local #\linefeed 'exit-minibuffer)
+(define-key 'minibuffer-local (kbd return) 'exit-minibuffer)
+(define-key 'minibuffer-local (kbd linefeed) 'exit-minibuffer)
 (define-key 'minibuffer-local (kbd (ctrl meta #\y)) 'minibuffer-yank-default)
 (define-key 'minibuffer-local (kbd (meta #\y)) 'next-prompt-history-item)
 (define-key 'minibuffer-local (kbd (meta #\p)) 'previous-prompt-history-item)
@@ -543,16 +543,16 @@ The following commands are special to this mode:
 \\[minibuffer-complete-word] completes the next word of the input.
 \\[minibuffer-completion-help] displays possible completions of the input."))
 
-(define-key 'minibuffer-local-completion #\tab 'minibuffer-complete)
-(define-key 'minibuffer-local-completion #\space 'minibuffer-complete-word)
-(define-key 'minibuffer-local-completion #\? 'minibuffer-completion-help)
+(define-key 'minibuffer-local-completion (kbd tab) 'minibuffer-complete)
+(define-key 'minibuffer-local-completion (kbd space) 'minibuffer-complete-word)
+(define-key 'minibuffer-local-completion (kbd #\?) 'minibuffer-completion-help)
 
 (define-major-mode minibuffer-local-must-match minibuffer-local-completion #f
   (mode-description (ref-mode-object minibuffer-local-completion)))
 
-(define-key 'minibuffer-local-must-match #\return
+(define-key 'minibuffer-local-must-match (kbd return)
   'minibuffer-complete-and-exit)
-(define-key 'minibuffer-local-must-match #\linefeed
+(define-key 'minibuffer-local-must-match (kbd linefeed)
   'minibuffer-complete-and-exit)
 
 (define-command exit-minibuffer
@@ -939,7 +939,7 @@ a repetition of this command will exit."
 (define-major-mode minibuffer-local-yes-or-no fundamental #f
   "Enter either \"yes\" or \"no\".")
 
-(define-key 'minibuffer-local-yes-or-no #\return 'exit-minibuffer-yes-or-no)
+(define-key 'minibuffer-local-yes-or-no (kbd return) 'exit-minibuffer-yes-or-no)
 
 (define-command exit-minibuffer-yes-or-no
   "Like \\[exit-minibuffer], but insists on \"yes\" or \"no\" as an answer."
