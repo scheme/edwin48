@@ -72,7 +72,7 @@ If password-file is false, or if prefix arg supplied, prompts for a filename."
     (set-buffer-read-only! buffer)
     unspecific))
 
-(define-key 'password-view #\space 'toggle-pw-form)
+(define-key 'password-view (kbd space) 'toggle-pw-form)
 (define-key 'password-view button1-down 'mouse-toggle-pw-form)
 
 (define-command toggle-pw-form
