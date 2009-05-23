@@ -50,6 +50,7 @@
          search
          image
          comman
+         variable
          docstr
          comtab
          modes
