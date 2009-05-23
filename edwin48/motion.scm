@@ -32,9 +32,9 @@ USA.
 
 (define (limit-mark-motion limit? limit)
   (cond ((eq? limit? 'LIMIT) limit)
-	((eq? limit? 'BEEP) (editor-beep) limit)
-	((eq? limit? 'FAILURE) (editor-failure) limit)
-	((eq? limit? 'ERROR) (editor-error))
+;; 	((eq? limit? 'BEEP) (editor-beep) limit)
+;; 	((eq? limit? 'FAILURE) (editor-failure) limit)
+;; 	((eq? limit? 'ERROR) (editor-error))
 	((not limit?) #f)
 	(else (error "Unknown limit type:" limit?))))
 

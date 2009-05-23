@@ -29,12 +29,6 @@
   (open scheme formats 1d-table)
   (files 1d-table-tests))
 
-(define-structure edwin:string-table edwin:string-table/interface
-  (open scheme aliases define-record-type*
-        (modify sorting (rename (vector-sort sort)))
-        mit-regexp srfi-13 srfi-43 srfi-89)
-  (files ../edwin48/strtab))
-
 (define-structure edwin:paths edwin:paths/interface
   (open scheme aliases errors pathname io-support)
   (files ../edwin48/paths))
@@ -58,62 +52,95 @@
          ../edwin48/modes
          ../edwin48/comtab))
 
-(define-interface edwin:command-table/interface
-  (export comtab-entry local-comtab-entry
-          make-comtab
-          comtab-key?
-          prefix-key-list?
-          define-key
-          define-prefix-key
-          comtab->alist
-          comtab-key-bindings))
-
-(define-interface edwin:command/interface
-  (export ((define-command)     :syntax)
-          ((ref-command-object) :syntax)
-          ((ref-command)        :syntax)
-          command-name
-          command-interactive-specification
-          command-procedure
-          command-description
-          command-name-string
-          editor-name/internal->external
-          editor-name/external->internal
-          make-command
-          name->command
-          ->command
-          command?
-          copy-command))
-
-(define-structure edwin:command edwin:command/interface
+(define-structures
+  ((edwin:command edwin:command/interface)
+   (edwin:variable/private (export set-variable-%default-value!
+                                     set-variable-%value!)))
     (open (modify scheme  (hide integer->char string-fill! vector-fill!))
           (modify sorting (rename (vector-sort sort)))
           (modify ascii   (alias  (ascii->char integer->char)))
           aliases srfi-89 define-record-type* errors event-distributor fixnum
           (modify interrupts (expose call-after-gc!))
           io-support keystroke pathname rb-tree soosy weak-pair
-          srfi-1 srfi-9 srfi-13 srfi-14 srfi-23 srfi-43 srfi-69
+          srfi-1 srfi-9 srfi-13 srfi-14 srfi-23 srfi-43
           edwin:string-table edwin:doc-string)
     (for-syntax (open scheme errors macro-helpers))
     (files ../edwin48/scsh/macros
            ../edwin48/comman)
     (begin
-      (define editor-error error)
-      (define within-editor? #f)))
+      (define editor-error error)))
 
-(define-interface edwin:string-table/interface
-  (export make-string-table
-          alist->string-table
-          string-table-ci?
-          string-table-get
-          string-table-put!
-          string-table-remove!
-          string-table-complete
-          string-table-completions
-          string-table-apropos))
+(define-structure edwin:variable edwin:variable/interface
+  (open scheme aliases srfi-89 srfi-69 errors
+        define-record-type* edwin:string-table edwin:doc-string
+        (modify edwin:command (expose editor-name/internal->external)))
+  (for-syntax (open scheme errors macro-helpers))
+  (files ../edwin48/scsh/macros
+         ../edwin48/variable)
+  (begin
+    (define editor-error error)
+    (define within-editor? #f)))
 
 (define-structure edwin:string-table edwin:string-table/interface
   (open scheme aliases sorting srfi-43
         srfi-89 srfi-13 define-record-type*)
   (files ../edwin48/strtab))
 
+(define-structure
+  edwin:buffer  edwin:buffer/interface
+  (open scheme aliases srfi-89 srfi-1 edwin:mode edwin:group
+        srfi-13 define-record-type* errors event-distributor
+        edwin:variable edwin:undo edwin:ring edwin:mark pathname)
+  (for-syntax (open scheme))
+  (files ../edwin48/buffer)
+  (begin
+    (define-variable mark-ring-maximum "maximum number of entries to keep in the mark ring" 10)
+    (define-variable tab-width "Tab Width" 2)
+    (define-variable mode-name "This mode name" 'fundamental)
+    (define-variable editor-default-mode "Default Mode" 'fundamental)
+    (define within-editor? #t)
+    (define (current-buffer? x) #t)
+    (define current-point 0)))
+
+(define-structure edwin:undo edwin:undo/interface
+ (open scheme aliases fixnum edwin:mark edwin:group
+       srfi-1 errors edwin:variable edwin:command edwin:buffer
+       (modify interrupts (expose call-after-gc!)))
+ (files ../edwin48/undo)
+ (begin
+   (define (set-buffer-point! x y) #t)))
+
+(define-structure edwin:ring edwin:ring/interface
+  (open scheme aliases errors srfi-1 srfi-43)
+  (files ../edwin48/ring))
+
+(define-structures
+  ((edwin:things edwin:things/interface)
+   (edwin:region edwin:region/interface)
+   (edwin:simple-editing edwin:simple-editing/interface))
+  (open scheme aliases weak-pair errors fixnum srfi-89
+        define-record-type* srfi-13 rb-tree)
+  (files ../edwin48/things
+         ../edwin48/regops
+         ../edwin48/grpops
+         ../edwin48/search
+         ../edwin48/simple
+         ../edwin48/struct))
+
+(define-structures
+  ((edwin:group edwin:group/interface)
+   (edwin:mark edwin:mark/interface)
+   (edwin:motion edwin:motion/interface)
+   (edwin:search edwin:search/interface)
+   (edwin:text-property edwin:text-property/interface))
+  (open (modify scheme  (hide string-fill!))
+        aliases weak-pair errors fixnum srfi-89 edwin:undo
+        define-record-type* srfi-13 srfi-14 edwin:variable edwin:buffer rb-tree)
+  (for-syntax (open scheme macro-helpers))
+  (files ../edwin48/scsh/macros
+         ../edwin48/struct
+         ../edwin48/grpops
+         ../edwin48/motion
+         ../edwin48/utils
+         ../edwin48/txtprp)
+  (begin (define-variable buffer-reallocation-factor "rect fact" 2)))

@@ -188,50 +188,50 @@ USA.
         (group-extract-and-delete-string! group index1 index2)
         (group-extract-and-delete-string! group index2 index1))))
 
-(define* (mark-flash mark (type #f))
-  (cond (*executing-keyboard-macro?* unspecific)
-	((not mark) (editor-beep))
-	((window-mark-visible? (current-window) mark)
-	 (with-current-point mark
-	   (lambda ()
-	     (sit-for 500))))
-	(else
-	 (temporary-message
-	  "Matches "
-	  (let ((start (line-start mark 0))
-		(end (line-end mark 0)))
-	    (case type
-	      ((RIGHT) (extract-string mark end))
-	      ((LEFT) (extract-string start mark))
-	      (else (extract-string start end))))))))
+;; (define* (mark-flash mark (type #f))
+;;   (cond (*executing-keyboard-macro?* unspecific)
+;; 	((not mark) (editor-beep))
+;; 	((window-mark-visible? (current-window) mark)
+;; 	 (with-current-point mark
+;; 	   (lambda ()
+;; 	     (sit-for 500))))
+;; 	(else
+;; 	 (temporary-message
+;; 	  "Matches "
+;; 	  (let ((start (line-start mark 0))
+;; 		(end (line-end mark 0)))
+;; 	    (case type
+;; 	      ((RIGHT) (extract-string mark end))
+;; 	      ((LEFT) (extract-string start mark))
+;; 	      (else (extract-string start end))))))))
 
-(define (sit-for interval)
-  (let ((time-limit (+ (real-time-clock) interval)))
-    (let loop ()
-      (if (and (not (keyboard-peek-no-hang))
-	       (< (real-time-clock) time-limit)
-	       (update-screens! #f))
-	  (loop)))))
+;; (define (sit-for interval)
+;;   (let ((time-limit (+ (real-time-clock) interval)))
+;;     (let loop ()
+;;       (if (and (not (keyboard-peek-no-hang))
+;; 	       (< (real-time-clock) time-limit)
+;; 	       (update-screens! #f))
+;; 	  (loop)))))
 
-(define sleep-for
-  sleep-current-thread)
+;; (define sleep-for
+;;   sleep-current-thread)
 
-(define (reposition-window-top mark)
-  (if (not (and mark (set-window-start-mark! (current-window) mark #f)))
-      (editor-beep)))
+;; (define (reposition-window-top mark)
+;;   (if (not (and mark (set-window-start-mark! (current-window) mark #f)))
+;;       (editor-beep)))
 
-(define* (narrow-to-region mark (point (current-point)))
-  (let ((group  (mark-group mark))
-        (index1 (mark-index mark))
-        (index2 (mark-index point)))
-    (if (not (eq? group (mark-group point)))
-        (error "Marks not related:" mark point))
-    (if (<= index1 index2)
-        (group-narrow! group index1 index2)
-        (group-narrow! group index2 index1))))
+;; (define* (narrow-to-region mark (point (current-point)))
+;;   (let ((group  (mark-group mark))
+;;         (index1 (mark-index mark))
+;;         (index2 (mark-index point)))
+;;     (if (not (eq? group (mark-group point)))
+;;         (error "Marks not related:" mark point))
+;;     (if (<= index1 index2)
+;;         (group-narrow! group index1 index2)
+;;         (group-narrow! group index2 index1))))
 
-(define* (widen (point (current-point)))
-  (group-widen! (mark-group point)))
+;; (define* (widen (point (current-point)))
+;;   (group-widen! (mark-group point)))
 
 (define* (region-put! start end key datum (no-overwrite? #f))
   (if (not (mark<= start end))

@@ -69,13 +69,13 @@ The buffer is guaranteed to be deselected at that time."
       (%buffer-reset! buffer)
       (set-buffer-windows! buffer '())
       (set-buffer-display-start! buffer #f)
-      (set-buffer-default-directory! buffer directory)
+;      (set-buffer-default-directory! buffer directory)
       (set-buffer-local-bindings! buffer '())
       (set-buffer-local-bindings-installed?! buffer #f)
       (%set-buffer-major-mode! buffer mode)
-      (event-distributor/invoke!
-       (variable-default-value (ref-variable-object buffer-creation-hook))
-       buffer)
+;;       (event-distributor/invoke!
+;;        (variable-default-value (ref-variable-object buffer-creation-hook))
+;;        buffer)
       buffer)))
 
 (define (%buffer-reset! buffer)
@@ -109,9 +109,10 @@ The buffer is guaranteed to be deselected at that time."
   ;; WITH-EDITOR-INTERRUPTS-DISABLED is required in the running editor but
   ;; buffers are created at editor initialization time and variables may
   ;; be set as early as initial file load time (prior to dumping the band).
-  (if within-editor?
-      (with-editor-interrupts-disabled thunk)
-      (without-interrupts thunk)))
+  '())
+;;   (if within-editor?
+;;       (with-editor-interrupts-disabled thunk)
+;;       (without-interrupts thunk)))
 
 (define (buffer-reset! buffer)
   (set-buffer-writeable! buffer)

@@ -2,9 +2,11 @@
 
 (define-interface edwin:group-definition/interface
   (export make-group
+          group?
           group-start-mark
           group-end-mark
           group-point
+          group-buffer
           group-length
           group-start-index
           group-end-index
@@ -23,6 +25,12 @@
           set-group-point-index!
           group-absolute-start
           group-absolute-end
+          add-group-clip-daemon!
+          remove-group-clip-daemon!
+          set-group-undo-data!
+          group-undo-data
+          group-modified?
+          group-text-properties
 ))
 
 (define-interface edwin:group-operations/interface
@@ -64,6 +72,8 @@
 (define-interface edwin:mark/interface
   (export mark-group
           mark-index
+          set-mark-index!
+          mark?
           guarantee-mark
           make-temporary-mark
           make-mark
@@ -126,6 +136,35 @@
           line-start
           line-end
           ))
+
+(define-interface edwin:search/interface
+  (export
+   (define-next-char-search :syntax)
+   (define-prev-char-search :syntax)
+   make-find-next
+   group-find-next-char
+   group-find-next-char-ci
+   group-find-next-char-in-set
+   make-find-previous
+   group-find-previous-char
+   group-find-previous-char-ci
+   group-find-previous-char-in-set
+   group-match-substring-forward
+   group-match-substring-backward
+   group-match-substring-forward-ci
+   group-match-substring-backward-ci
+   char-search-forward
+   char-search-backward
+   char-match-forward
+   char-match-backward
+   default-start-mark
+   default-end-mark
+   default-case-fold-search
+   skip-chars-forward
+   skip-chars-backward
+   match-forward
+   match-backward))
+
 
 (define-interface edwin:utilities/interface
   (export %substring-move!
@@ -234,6 +273,7 @@
           set-buffer-save-length!
           buffer-point
           minibuffer?
+          buffer-group
           buffer-region
           buffer-string
           buffer-unclipped-region
@@ -253,6 +293,7 @@
           buffer-modified! buffer-not-modified!
           verify-visited-file-modification-time?
           clear-visited-file-modification-time!
+          buffer-modification-time
           set-buffer-auto-saved!
           buffer-auto-save-modified?
           buffer-read-only? buffer-writeable?
@@ -549,7 +590,7 @@
 
 (define-interface edwin:screen/interface
   (export make-screen
-          screen-state 
+          screen-state
           screen-x-size
           screen-y-size
           screen-root-window
@@ -727,3 +768,36 @@
 (define-interface edwin:prompting/interface
   (compound-interface edwin:prompting/interface+scheme
                       edwin:prompting/interface+edwin))
+
+(define-interface edwin:things/interface
+  (export
+   make-motion-pair
+   move-thing
+   move-thing-saving-point
+   mark-thing
+   kill-thing
+   transpose-things
+   horizontal-space-region
+   horizontal-space-start
+   horizontal-space-end
+   compute-horizontal-space
+   insert-horizontal-space
+   delete-horizontal-space
+   indent-to
+   region-blank?
+   line-blank?
+   find-previous-blank-line
+   find-next-blank-line
+   find-previous-non-blank-line
+   find-next-non-blank-line
+   maybe-change-indentation
+   change-indentation
+   current-indentation
+   mark-indentation
+   indentation-end
+   within-indentation?
+   maybe-change-column
+   change-column
+   forward-line
+   backward-line))
+

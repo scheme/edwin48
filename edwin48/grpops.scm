@@ -119,7 +119,7 @@ USA.
 	  (and (group-text-properties group)
 	       (text-not-insertable? group new-start)))
       (barf-if-read-only))
-  (if (not (group-modified? group)) (check-first-group-modification group))
+;  (if (not (group-modified? group)) (check-first-group-modification group))
   (cond ((fix:< (group-gap-length group) n)
 	 (grow-group! group new-start n))
 	((fix:< new-start (group-gap-start group))
