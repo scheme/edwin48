@@ -392,9 +392,9 @@ negative numeric arg overrides kept-old-versions with minus the arg."
 			  (let ((end (- nv total)))
 			    (do ((versions
 				  (drop
-				   (sort (cdr file)
-					 (lambda (x y)
-					   (< (car x) (car y))))
+				   (list-sort (cdr file)
+					      (lambda (x y)
+						(< (car x) (car y))))
 				   old)
 				  (cdr versions))
 				 (index 0 (fix:+ index 1)))

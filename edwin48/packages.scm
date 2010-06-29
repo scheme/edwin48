@@ -30,7 +30,7 @@
                                      set-variable-%value!))
      (edwin:window-system    edwin:window-system/interface))
     (open (modify scheme  (hide string-fill! vector-fill!))
-          (modify sorting (rename (vector-sort sort)))
+	  sorting
           ascii
           1d-table aliases define-record-type* errors event-distributor
           extended-ports fixme fixnum i/o
@@ -89,7 +89,7 @@
 
 (define-structure edwin:string-table edwin:string-table/interface
   (open scheme aliases define-record-type*
-        (modify sorting (rename (vector-sort sort)))
+        sorting
         mit-regexp srfi-13 srfi-43 srfi-89)
   (files strtab))
 

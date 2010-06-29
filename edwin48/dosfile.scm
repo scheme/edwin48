@@ -183,8 +183,8 @@ Switches may be concatenated, e.g. `-lt' is equivalent to `-l -t'."
 	       (if attributes
 		   (list (cons (file-namestring file) attributes))
 		   '()))
-	     (sort (dos/read-dired-files file
-					 (string-index switches #\a))
+	     (list-sort (dos/read-dired-files file
+					      (string-index switches #\a))
 		   (if (string-index switches #\t)
 		       (lambda (x y)
 			 (> (file-attributes/modification-time (cdr x))
@@ -233,7 +233,7 @@ Switches may be concatenated, e.g. `-lt' is equivalent to `-l -t'."
 			  prefix))
 			(backups '()))
 		     (if (null? filenames)
-			 (sort backups (lambda (x y) (< (cdr x) (cdr y))))
+			 (list-sort backups (lambda (x y) (< (cdr x) (cdr y))))
 			 (loop (cdr filenames)
 			       (let ((root.version
 				      (os/numeric-backup-filename?
