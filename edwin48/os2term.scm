@@ -764,8 +764,8 @@ USA.
 	      ;; not a virtual key:
 	      (fix:= #x10 (fix:and #x32 (key-event/flags event)))
 	      (let ((code (key-event/code event)))
-		(or (fix:= code (char->integer #\G))
-		    (fix:= code (char->integer #\g)))))
+		(or (fix:= code (char->ascii #\G))
+		    (fix:= code (char->ascii #\g)))))
 	 (clean-event-queue event-queue)
 	 (signal-interrupt!))
 	((fix:= (event-type event) event-type:visibility)

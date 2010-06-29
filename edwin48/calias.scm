@@ -127,7 +127,7 @@ USA.
 		       (else
 			(string-append (if (zero? bits) "C-" "C-M-")
 				       (string
-					(integer->char
+					(ascii->char
 					 (+ (if (<= #x01 code #x1A) #x60 #x40)
 					    code))))))
 		 (prefix bits

@@ -148,7 +148,7 @@ USA.
   (let loop ((index start) (n 0))
     (if (fix:= index end)
 	n
-	(let ((k (fix:- (vector-8b-ref line index) (char->integer #\0))))
+	(let ((k (fix:- (vector-8b-ref line index) (char->ascii #\0))))
 	  (and (fix:>= k 0)
 	       (fix:< k 10)
 	       (loop (fix:+ index 1) (+ (* n 10) k)))))))

@@ -212,7 +212,7 @@ USA.
 
 (define (win32-screen/write-char! screen x y char highlight)
   (win32-screen-write-char! (screen->handle screen) x y
-			    (char->integer char)
+			    (char->ascii char)
 			    (if highlight 1 0))
   (if (char-graphic? char)
       (set-screen-cursor-position! screen (fix:+ x 1) y)
@@ -616,7 +616,7 @@ USA.
 	   (key-event/virtual-keycode event)
 	   (fix:or (if (some-bits? control-key:shift-pressed state) #x4 #x0)
 		   bits))
-	  (merge-bucky-bits (integer->char key) bits)))))
+	  (merge-bucky-bits (ascii->char key) bits)))))
 
 (define (control-keys->bits state)
   (fix:or (if (some-bits? control-key:alt-pressed state)     #x1 #x0)

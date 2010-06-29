@@ -465,7 +465,7 @@ and use that file as the inbox."
 		  (if (let ((char (mark-left-char mark)))
 			(and char
 			     (not (char=? char #\newline))
-			     (not (char=? char (integer->char #o037)))))
+			     (not (char=? char (ascii->char #o037)))))
 		      (insert-newline mark))
 		  (mark-temporary! mark)
 		  pathname)))))
@@ -2072,7 +2072,7 @@ Completion is performed over known labels when reading."
       (do ((m start (replace-match "\n^_")))
 	  ((not (search-forward "\n\037" m end #f))))
       (guarantee-newline end)
-      (if (not (eqv? (integer->char #o37) (extract-right-char end)))
+      (if (not (eqv? (ascii->char #o37) (extract-right-char end)))
 	  (insert-string "\037" end))
       (mark-temporary! end))))
 

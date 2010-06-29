@@ -69,14 +69,14 @@ USA.
 				       (fix:remainder column tab-width))
 				(string-length
 				 (vector-ref char-image-strings
-					     (char->integer char))))))))
+					     (char->ascii char))))))))
 	  ((fix:= index end) column))
       (do ((index start (fix:+ index 1))
 	   (column column
 		   (fix:+ column
 			  (string-length
 			   (vector-ref char-image-strings
-				       (char->integer
+				       (char->ascii
 					(string-ref string index)))))))
 	  ((fix:= index end) column))))
 
@@ -84,10 +84,10 @@ USA.
   (let ((strings (make-vector 256)))
     (do ((i #x00 (+ i 1)))
 	((= #x20 i))
-      (vector-set! strings i (string #\^ (integer->char (+ #x40 i)))))
+      (vector-set! strings i (string #\^ (ascii->char (+ #x40 i)))))
     (do ((i #x20 (+ i 1)))
 	((= #x7f i))
-      (vector-set! strings i (string (integer->char i))))
+      (vector-set! strings i (string (ascii->char i))))
     (vector-set! strings #x7f "^?")
     (do ((i #x80 (+ i 1)))
 	((= #x100 i))
@@ -98,10 +98,10 @@ USA.
   (let ((strings (vector-copy default-char-image-strings/original-emacs)))
     (do ((i #x91 (+ i 1)))
 	((= #x93 i))
-      (vector-set! strings i (string (integer->char i))))
+      (vector-set! strings i (string (ascii->char i))))
     (do ((i #xA0 (+ i 1)))
 	((= #x100 i))
-      (vector-set! strings i (string (integer->char i))))
+      (vector-set! strings i (string (ascii->char i))))
     strings))
 
 (define default-char-image-strings/ascii
@@ -171,7 +171,7 @@ USA.
 					  (fix:remainder column tab-width))
 				   (string-length
 				    (vector-ref char-image-strings
-						(char->integer char))))))))))
+						(char->ascii char))))))))))
       (let loop ((index start) (column column))
 	(if (fix:= index end)
 	    (cons index column)
@@ -182,7 +182,7 @@ USA.
 			(fix:+ column
 			       (string-length
 				(vector-ref char-image-strings
-					    (char->integer char)))))))))))
+					    (char->ascii char)))))))))))
 
 (define (group-column->index group start end start-column column tab-width
 			     char-image-strings)
@@ -246,7 +246,7 @@ USA.
 				(fix:- tab-width (fix:remainder c tab-width))
 				(string-length
 				 (vector-ref char-image-strings
-					     (char->integer char))))))))
+					     (char->ascii char))))))))
 	      (if (fix:> c column)
 		  (vector index column (fix:- c column))
 		  (loop (fix:+ index 1) c)))))
@@ -259,7 +259,7 @@ USA.
 		   (fix:+ c
 			  (string-length
 			   (vector-ref char-image-strings
-				       (char->integer
+				       (char->ascii
 					(string-ref string index)))))))
 	      (if (fix:> c column)
 		  (vector index column (fix:- c column))
@@ -303,7 +303,7 @@ USA.
 			  (string-set! image image-index #\space))
 			(partial (fix:- end image-end))))))
 	      (let* ((image-string  (vector-ref char-image-strings
-						(char->integer char)))
+						(char->ascii char)))
 		     (image-len     (string-length image-string)))
 		(string-set! image image-index (string-ref image-string 0))
 		(if (fix:= image-len 1)
@@ -385,8 +385,8 @@ USA.
 			char-image-strings)
   ;; Assume that (< IMAGE-START IMAGE-END) and that N is less than the
   ;; total width of the image for the character.
-  (let ((ascii (char->integer char)))
-    (if (and (fix:= ascii (char->integer #\tab)) tab-width)
+  (let ((ascii (char->ascii char)))
+    (if (and (fix:= ascii (char->ascii #\tab)) tab-width)
 	(let ((end
 	       (let ((end (fix:+ image-start n)))
 		 (if (fix:< end image-end) end image-end))))
