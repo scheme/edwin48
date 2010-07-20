@@ -1,4 +1,4 @@
-; Scratch Interfaces -- attempt to modularize edwin48
+;; Scratch Interfaces -- attempt to modularize edwin48
 
 (define-interface edwin:basic-command/interface+scheme
   (export barf-if-read-only      check-first-group-modification
@@ -74,6 +74,16 @@
 (define-interface edwin:buffer/interface
   (compound-interface edwin:buffer/interface+edwin
                       edwin:buffer/interface+scheme))
+
+(define-interface edwin:bufferset/interface
+  (export bufferset-buffer-list
+          bufferset-names
+          make-bufferset
+          set-bufferset-buffer-list!  bufferset-buffer-list
+          bufferset-bury-buffer!      bufferset-create-buffer
+          bufferset-find-buffer       bufferset-find-or-create-buffer
+          bufferset-guarantee-buffer! bufferset-kill-buffer!
+          bufferset-rename-buffer     bufferset-select-buffer!))
 
 (define-interface edwin:command/interface
   (export (define-command     :syntax)
@@ -171,126 +181,282 @@
 
 (define-interface edwin:group-definition/interface
   (export add-group-clip-daemon!
-          group-absolute-end
-          group-absolute-start
-          group-buffer
-          group-case-fold-search
-          group-display-end-index
-          group-display-end-index?
-          group-display-start-index
-          group-display-start-index?
-          group-end
-          group-end-changes-index
-          group-end-index
-          group-end-index?
-          group-end-mark
-          group-end?
-          group-gap-end
-          group-gap-length
-          group-gap-start
-          group-index->position
-          group-length
-          group-modified-tick
-          group-modified?
-          group-point
-          group-position->index
-          group-region
-          group-start
-          group-start-changes-index
-          group-start-index
-          group-start-index?
-          group-start-mark
-          group-text
-          group-text-properties
-          group-undo-data
-          group-writeable?
-          group?
-          make-group
-          remove-group-clip-daemon!
-          set-group-end-changes-index!
-          set-group-modified-tick!
-          set-group-modified?!
-          set-group-point!
-          set-group-point-index!
-          set-group-read-only!
-          set-group-start-changes-index!
-          set-group-undo-data!
-          set-group-writeable!))
+          
+	  ((group-absolute-end group-absolute-start)
+	   (proc (:value) :value))
+
+          (group-buffer
+	   (proc (:value) :value))
+
+          (group-case-fold-search
+	   (proc (:value) :value))
+	  
+          (group-display-end-index
+	   (proc (:value) :exact-integer))
+
+          (group-display-end-index?
+	   (proc (:value :exact-integer)
+		 :boolean))
+
+          (group-display-start-index
+	   (proc (:value) :exact-integer))
+
+          (group-display-start-index?
+	   (proc (:value :exact-integer)
+		 :boolean))
+
+          (group-end
+	   (proc (:value) :value))
+
+          (group-end-changes-index
+	   (proc (:value) :value))
+          
+	  (group-end-index
+	   (proc (:value) :exact-integer))
+
+          (group-end-index?
+	   (proc (:value :exact-integer)
+		 :boolean))
+
+          (group-end-mark
+	   (proc (:value) :value))
+          
+	  (group-end?
+	   (proc (:value) :boolean))
+
+          ((group-gap-end    group-gap-start
+			     group-gap-length group-length)
+	   (proc (:value) :exact-integer))
+
+          (group-index->position
+	   (proc (:value :exact-integer :boolean)
+		 :exact-integer))
+
+          (group-modified-tick
+	   (proc (:value) :exact-integer))
+
+          (group-modified?
+	   (proc (:value) :boolean))
+
+          (group-point
+	   (proc (:value) :value))
+
+          (group-position->index
+	   (proc (:value :exact-integer)
+		 :exact-integer))
+
+          (group-region
+	   (proc (:value) :value))
+
+          (group-start
+	   (proc (:value) :value))
+	  
+          (group-start-changes-index
+	   (proc (:value) :value))
+          
+	  (group-start-index
+	   (proc (:value) :exact-integer))
+
+          (group-start-index?
+	   (proc (:value :exact-integer)
+		 :boolean))
+
+          (group-start-mark
+	   (proc (:value) :value))
+
+          (group-text
+	   (proc (:value) :string))
+
+          (group-text-properties
+	   (proc (:value) :value))
+
+          (group-undo-data
+	   (proc (:value) :value))
+	  
+	  (group-writeable?
+	   (proc (:value) :boolean))
+          
+	  (group?
+	   (proc (:value) :boolean))
+	  
+	  (make-group
+	   (proc (:value) :value))
+
+          (remove-group-clip-daemon!
+	   (proc (:value :value)
+		 :unspecific))
+
+          (set-group-end-changes-index!
+	   (proc (:value :value)
+		 :unspecific))
+
+          (set-group-modified-tick!
+	   (proc (:value :value)
+		 :unspecific))
+
+          (set-group-modified?!
+	   (proc (:value :value)
+		 :unspecific))
+
+          (set-group-point! 
+	   (proc (:value :value)
+		 :unspecific))
+
+          (set-group-point-index!
+	   (proc (:value :exact-integer)
+		 :unspecific))
+
+          (set-group-read-only!
+	   (proc (:value) :unspecific))
+
+	  (set-group-start-changes-index!
+	   (proc (:value :value)
+		 :unspecific))
+
+	  (set-group-text-properties!
+	   (proc (:value :value)
+		 :unspecific))
+
+	  (set-group-undo-data!
+	   (proc (:value :value)
+		 :unspecific))
+
+	  (set-group-writeable!
+	   (proc (:value) :unspecific))))
 
 (define-interface edwin:group-operations/interface
-  (export group-extract-string
-          group-copy-substring!
-          group-left-char
-          group-right-char
-          group-extract-and-delete-string!
+  (export ((group-extract-string group-extract-and-delete-string!)
+	   (proc (:value :exact-integer :exact-integer)
+		 :unspecific))
 
-          group-insert-char!
-          group-insert-chars!
-          group-insert-string!
-          group-insert-substring!
-          prepare-gap-for-insert!
-          finish-group-insert!
+	  (group-copy-substring!
+	   (proc (:value :exact-integer :exact-integer
+			 :string :exact-integer)
+		 :unspecific))
 
-          group-delete-left-char!
-          group-delete-right-char!
-          group-delete!
+	  ((group-left-char  group-right-char)
+	   (proc (:value :exact-integer)
+		 :char))
 
-          group-replace-char!
-          group-replace-string!
-          group-replace-substring!
-          prepare-gap-for-replace!
-          finish-group-replace!
+	  (group-insert-char!
+	   (proc (:value :exact-integer :char)
+		 :unspecific))
 
-          grow-group!
-          shrink-group!
-          memoize-shrink-length!
-          compute-shrink-length
-          group-reallocation-factor))
+          (group-insert-chars!
+	   (proc (:value :exact-integer :char :exact-integer)
+		 :unspecific))
+
+          (group-insert-string!
+	   (proc (:value :exact-integer :string)
+		 :unspecific))
+
+	  (group-insert-substring!
+	   (proc (:value :exact-integer :string 
+			 :exact-integer :exact-integer)
+		 :unspecific))
+
+          ((prepare-gap-for-insert! finish-group-insert!
+				    prepare-gap-for-replace! finish-group-replace!)
+	   (proc (:value :exact-integer :exact-integer)
+		 :unspecific))
+
+          ((group-delete-left-char! group-delete-right-char!)
+	   (proc (:value :exact-integer)
+		 :unspecific))
+
+          (group-delete!
+	   (proc (:value :exact-integer :exact-integer)
+		 :unspecific))
+
+          (group-replace-char!
+	   (proc (:value :exact-integer :char)
+		 :unspecific))
+
+          (group-replace-string!
+	   (proc (:value :exact-integer :string)
+		 :unspecific))
+
+          (group-replace-substring!
+	   (proc (:value :exact-integer :string
+			 :exact-integer :exact-integer)
+		 :unspecific))
+
+          (grow-group!
+	   (proc (:value :exact-integer :exact-integer)
+		 :unspecific))
+
+          (shrink-group!
+	   (proc (:value) :unspecific))
+
+          (memoize-shrink-length!
+	   (proc (:value :exact-integer)
+		 :unspecific))
+
+          (compute-shrink-length
+	   (proc (:exact-integer :exact-integer)
+		 :unspecific))
+
+          (group-reallocation-factor
+	   (proc (:value) :exact-integer))))
 
 (define-interface edwin:group/interface
   (compound-interface edwin:group-definition/interface
                       edwin:group-operations/interface))
 
 (define-interface edwin:mark/interface
-  (export guarantee-mark
-          make-mark
-          make-permanent-mark
-          make-temporary-mark
-          mark-buffer
-          mark-index
-          mark-left-inserting
-          mark-left-inserting-copy
-          mark-permanent-copy
-          mark-right-inserting
-          mark-right-inserting-copy
-          mark-temporary-copy
-          mark<
-          mark<=
-          mark?
-          move-mark-to!
-          set-mark-index!
-          mark-group))
+  (export (guarantee-mark (proc (:value) :boolean))
+          (make-mark (proc (:value :exact-integer) :unspecific))
+          (make-permanent-mark (proc (:value) :value))
+	  (make-temporary-mark 
+	   (proc (:value :exact-integer :boolean) :value))
+	  (mark-buffer (proc (:value) :value))
+	  (mark-index (proc (:value) :exact-integer))
+	  ((mark-left-inserting 
+	    mark-left-inserting-copy
+	    mark-permanent-copy
+	    mark-right-inserting
+	    mark-right-inserting-copy
+	    mark-temporary-copy)
+	   (proc (:value) :value))
+	  ((mark/=
+	    mark/~
+	    mark<
+	    mark<=
+	    mark=
+	    mark>
+	    mark>=
+	    mark~)
+	   (proc (:value :value) :boolean))
+	  (mark? (proc (:value) :boolean))
+	  (move-mark-to! 
+	   (proc (:value :exact-integer) :unspecific))
+	  (set-mark-index! 
+	   (proc (:value :exact-integer) :unspecific))
+	  (mark-group (proc (:value) :value))))
 
 (define-interface edwin:mode/interface
   (export (ref-mode-object   :syntax)
-          (define-major-mode :syntax)
-          (define-minor-mode :syntax)
-          make-mode
-          mode-name
-          mode-major?
-          mode-display-name
-          mode-initialization
-          mode-comtabs
-          editor-modes
-          name->mode
-          ->mode
-          major-mode?
-          minor-mode?
-          minor-mode-comtab
-          mode-description))
+	  (define-major-mode :syntax)
+	  (define-minor-mode :syntax)
+	  make-mode
+	  mode-name
+	  mode-major?
+	  mode-display-name
+	  mode-initialization
+	  mode-comtabs
+	  editor-modes
+	  name->mode
+	  ->mode
+	  major-mode?
+	  minor-mode?
+	  minor-mode-comtab
+	  mode-description))
+
 
 (define-interface edwin:motion/interface
-  (export line-end
+  (export (line-end 
+	   (proc (:value :exact-integer &opt :value) 
+		 :value))
           line-end-index
           line-end-index?
           line-start
@@ -306,12 +472,11 @@
           ))
 
 (define-interface edwin:region-definition/interface
-  (export make-region
-          region-start
-          region-end
-          region-group
-          region-start-index
-          region-end-index))
+  (export (make-region (proc (:value :value) :value))
+          ((region-start region-end region-group)
+	   (proc (:value) :value)) 
+	  ((region-start-index region-end-index)
+	   (proc (:value) :value))))
 
 (define-interface edwin:region-operations/interface
   (export region-insert!
@@ -325,7 +490,8 @@
           mark-right-char
           mark-delete-left-char!
           mark-delete-right-char!
-          region-transform!
+          (region-transform! 
+	   (proc (:value (proc (:string) :string)) :unspecific))
           group-narrow!
           group-widen!
           region-clip!
@@ -427,13 +593,14 @@
           string-table-remove!
           string-table-complete
           string-table-completions
-          string-table-apropos))
+          ;; string-table-apropos
+	  ))
 
 (define-interface edwin:text-property/interface
   (export add-text-property
           remove-text-property
           get-text-properties get-text-property
-          next-proper-change
+          next-property-change
           previous-property-change
           next-specific-property-change
           previous-specific-property-change
@@ -541,101 +708,6 @@
           window-root-window))
 
 
-
-#|
-
-
-(define-interface edwin:string-table/interface
-  (export make-string-table
-          alist->string-table
-          string-table-ci?
-          string-table-get
-          string-table-put!
-          string-table-remove!
-          string-table-complete
-          string-table-completions
-          string-table-apropos))
-
-(define-interface edwin:doc-string/interface
-  (export *external-doc-strings?*
-          *external-doc-strings-file*
-          ->doc-string
-          doc-string->posn
-          description?
-          description->string
-          description-first-line
-          description-append))
-
-(define-interface edwin:paths/interface
-  (export edwin-binary-directory
-          edwin-info-directory
-          edwin-etc-directory
-          edwin-tutorial-pathname
-          default-homedir-pathname))
-
-(define-interface edwin:variable/interface
-  (export (define-variable            :syntax)
-          (define-variable-per-buffer :syntax)
-          (ref-variable-object        :syntax)
-          (ref-variable               :syntax)
-          (set-variable!              :syntax)
-          (local-set-variable!        :syntax)
-	  variable?
-          variable-name
-          variable-buffer-local?
-          variable-description
-          variable-value
-          variable-default-value
-          variable-name-string
-          make-variable
-          normalize-variable-value
-          add-variable-assignment-daemon!
-          invoke-variable-assignment-daemons!
-          editor-variables
-          name->variable
-          ->variable
-          variable-permanent-local?
-          variable-permanent-local!))
-
-(define-interface edwin:modeline/interface+edwin
-  (edwin:export
-   (variable mode-name
-             minor-mode-alist
-             mode-line-format
-             mode-line-modified
-             mode-line-procedure
-             mode-line-process)))
-
-(define-interface edwin:modeline/interface+scheme
-  (export add-minor-mode-line-entry!
-          remove-minor-mode-line-entry!))
-
-(define-interface edwin:modeline/interface
-  (compound-interface edwin:modeline/interface+edwin
-                      edwin:modeline/interface+scheme))
-
-(define-interface edwin:simple-editing/interface
-  (export delete-left-char  delete-right-char
-          delete-string     extract-and-delete-string
-          extract-left-char extract-right-char
-          extract-string
-          find-next-property-change
-          find-next-specific-property-change
-          find-previous-property-change
-          find-previous-specific-property-change
-          guarantee-newline         guarantee-newlines
-          insert                    insert-char
-          insert-chars              insert-newline
-          insert-newlines           insert-region
-          insert-string             insert-substring
-          insert-string-pad-left    insert-string-pad-right
-          insert-substring-pad-left insert-substring-pad-right
-          mark-flash                narrow-to-region
-          region-get                region-put!
-          region-remove!            reposition-window-top
-          sit-for                   sleep-for
-          specific-property-region  widen))
-
 (define-interface edwin:basic-command/interface+edwin
   (edwin:export (variable buffer-reallocation-factor)
                 (commmand abort-recursive-edit
@@ -666,198 +738,3 @@
 (define-interface edwin:basic-command/interface
   (compound-interface edwin:basic-command/interface+edwin
                       edwin:basic-command/interface+scheme))
-
-(define-interface edwin:current-state/interface+edwin
-  (edwin:export (variable frame-creation-hook
-                          select-buffer-hook)))
-
-(define-interface edwin:current-state/interface+scheme
-  (export add-kill-buffer-hook
-          add-rename-buffer-hook
-          add-select-buffer-hook
-          buffer-alive?
-          buffer-list
-          buffer-mark
-          buffer-names
-          bury-buffer
-          clear-current-message!
-          create-buffer
-          current-buffer
-          current-buffer?
-          current-column
-          current-comtabs
-          current-major-mode
-          current-mark
-          current-message
-          current-minor-mode?
-          current-point
-          current-process
-          current-region
-          current-window
-          current-window?
-          delete-screen!
-          disable-current-minor-mode!
-          enable-current-minor-mode!
-          find-buffer
-          find-or-create-buffer
-          global-window-modeline-event!
-          kill-buffer
-          make-buffer-invisible
-          make-screen
-          maybe-deselect-buffer-layout
-          multiple-screens?
-          next-visible-window
-          other-buffer
-          other-screen
-          other-window
-          pop-current-mark!
-          previous-buffer
-          push-buffer-mark!
-          push-current-mark!
-          remove-kill-buffer-hook
-          remove-rename-buffer-hook
-          remove-select-buffer-hook
-          rename-buffer
-          save-excursion
-          screen-list
-          select-buffer
-          select-buffer-no-record
-          select-cursor
-          select-screen
-          select-window
-          selected-buffer
-          selected-buffer?
-          selected-screen
-          selected-screen?
-          selected-window
-          selected-window?
-          set-buffer-mark!
-          set-buffer-point!
-          set-current-major-mode!
-          set-current-mark!
-          set-current-message!
-          set-current-point!
-          set-current-region!
-          set-current-region-reversed!
-          typein-window
-          typein-window?
-          update-screens!
-          update-selected-screen!
-          window-list
-          window-live?
-          window-visible?
-          window0
-          with-current-point
-          with-messages-suppressed
-          with-selected-buffer))
-
-(define-interface edwin:current-state/interface
-  (compound-interface edwin:current-state/interface+edwin
-                      edwin:current-state/interface+scheme))
-
-(define-interface edwin:terminal-screen/interface
-  (export make-console-screen))
-
-(define-interface edwin:kill-command/interface
-  (edwin:export (command delete-region
-                         delete-backward-char
-                         delete-char
-                         kill-line
-                         backward-delete-char-untabify
-                         kill-region
-                         copy-region-as-kill
-                         append-next-kill
-                         yank
-                         yank-pop
-                         rotate-yank-pointer
-                         set-mark-command
-                         mark-beginning-of-buffer
-                         mark-end-of-buffer
-                         mark-whole-buffer
-                         exchange-point-and-mark
-                         transpose-chars)
-                (variable kill-ring-max
-                          kill-ring
-                          kill-ring-yank-pointer
-                          mark-ring-maximum)))
-
-
-(define-interface edwin:input-event/interface
-  (export make-input-event
-          input-event?
-          input-event/type
-          input-event/operator
-          input-event/operands
-          apply-input-event))
-
-
-
-(define-interface edwin:command-reader/interface
-  (export top-level-command-reader
-          command-reader
-          return-to-command-loop
-          override-next-command!
-          current-command-key
-          last-command-key
-          set-command-argument!
-          command-argument
-          auto-argument-mode?
-          set-command-message!
-          command-message-receive
-          command-history-list
-          execute-key
-          execute-command
-          execute-button-command
-          dispatch-on-key
-          dispatch-on-command
-          execute-command-history-entry))
-
-(define-interface edwin:prompting/interface+scheme
-  (export make-typein-buffer-name
-          within-typein-edit?
-          typein-edit-other-window
-          prompt-for-typein
-          prompt-for-string
-          prompt-for-completed-string
-          prompt-for-string/prompt
-          prompt-for-number
-          prompt-for-string-table-name
-          prompt-for-alist-value
-          prompt-for-command
-          prompt-for-variable
-          prompt-history-strings
-          set-prompt-history-strings!
-          prompt-options-default-string
-          standard-completion
-          pop-up-generated-completions
-          prompt-for-char
-          prompt-for-key
-          prompt-for-confirmation?
-          prompt-for-yes-or-no?
-          call-with-pass-phrase
-          call-with-confirmed-pass-phrase
-          ))
-
-(define-interface edwin:prompting/interface+edwin
-  (edwin:export (command exit-minibuffer
-                         minibuffer-yank-default
-                         minibuffer-complete
-                         minibuffer-complete-word
-                         minibuffer-completion-help
-                         minibuffer-complete-and-exit
-                         exit-minibuffer-yes-or-no
-                         next-prompt-history-item
-                         previous-prompt-history-item
-                         repeat-complex-command)
-                (mode minibuffer-local
-                      minibuffer-local-completion
-                      minibuffer-local-must-match
-                      minibuffer-local-yes-or-no)
-                (variable completion-auto-help
-                          enable-recursive-minibuffers)
-                ))
-
-(define-interface edwin:prompting/interface
-  (compound-interface edwin:prompting/interface+scheme
-                      edwin:prompting/interface+edwin))
-|#
