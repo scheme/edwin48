@@ -39,30 +39,31 @@
     (define (set-command-prompt-prefix!) "set-pref-BROKEN")
     
     ;; commands
-    (define (edwin-command$abort-recursive-edit) "abort_edit-BROKEN")
-    (define (edwin-command$control-meta-prefix) "cm_pre-BROKEN")
-    (define (edwin-command$control-prefix) "c_pre-BROKEN")
-    (define (edwin-command$define-command) "defcm-BROKEN")
-    (define (edwin-command$execute-extended-command) "eec-BROKEN")
-    (define (edwin-command$exit-recursive-edit) "ere-BROKEN")
-    (define (edwin-command$indent-for-comment) "ifc-BROKEN")
-    (define (edwin-command$indent-new-comment-line) "inc-BROKEN")
-    (define (edwin-command$keyboard-quit) "kq-BROKEN")
-    (define (edwin-command$kill-comment) "kc-BROKEN")
-    (define (edwin-command$meta-prefix) "m_pre-BROKEN")
-    (define (edwin-command$narrow-to-region) "ntr-BROKEN")
-    (define (edwin-command$open-line) "open-line-BROKEN")
-    (define (edwin-command$prefix-key) "p_keyBROKEN")
-    (define (edwin-command$quoted-insert) "quins-BROKEN")
-    (define (edwin-command$save-buffers-kill-edwin) "killed--BROKEN")
-    (define (edwin-command$save-buffers-kill-scheme) "killsch-BROKEN")
-    (define (edwin-command$self-insert-command) "sicom-BROKEN")
-    (define (edwin-command$set-comment-column) "setcom-BROKEN")
-    (define (edwin-command$set-key) "s_keyBROKEN")
-    (define (edwin-command$suspend-edwin) "sused-BROKEN")
-    (define (edwin-command$suspend-scheme) "suschm-BROKEN")
-    (define (edwin-command$undefined) "undef-BROKEN")
-    (define (edwin-command$widen) "widen-BROKEN")    
+    (define edwin-command$abort-recursive-edit "abort_edit-BROKEN")
+    (define edwin-command$control-meta-prefix "cm_pre-BROKEN")
+    (define edwin-command$control-prefix "c_pre-BROKEN")
+    (define edwin-command$define-command "defcm-BROKEN")
+    (define edwin-command$execute-extended-command "eec-BROKEN")
+    (define edwin-command$exit-recursive-edit "ere-BROKEN")
+    (define edwin-command$indent-for-comment "ifc-BROKEN")
+    (define edwin-command$indent-new-comment-line "inc-BROKEN")
+    (define edwin-command$keyboard-quit "kq-BROKEN")
+    (define edwin-command$kill-comment "kc-BROKEN")
+    (define edwin-command$meta-prefix "m_pre-BROKEN")
+    (define edwin-command$narrow-to-region "ntr-BROKEN")
+    (define edwin-command$open-line "open-line-BROKEN")
+    (define edwin-command$prefix-key "p_keyBROKEN")
+    (define edwin-command$quoted-insert "quins-BROKEN")
+    (define edwin-command$save-buffers-kill-edwin "killed--BROKEN")
+    (define edwin-command$save-buffers-kill-scheme "killsch-BROKEN")
+    (define edwin-command$self-insert-command "sicom-BROKEN")
+    (define edwin-command$set-comment-column "setcom-BROKEN")
+    (define edwin-command$set-key "s_keyBROKEN")
+    (define edwin-command$suspend-edwin "sused-BROKEN")
+    (define edwin-command$suspend-scheme "suschm-BROKEN")
+    (define edwin-command$undefined "undef-BROKEN")
+    (define edwin-command$widen "widen-BROKEN")    
+    
     ;; variables
     (define edwin-variable$buffer-reallocation-factor 4)))
 
@@ -126,6 +127,19 @@
          comman)
   (begin
     (define (editor-error e s) e)))
+
+(define-structures
+  ((edwin:command-table edwin:command-table/interface)
+   (edwin:mode          edwin:mode/interface))
+  (open scheme aliases
+	edwin:basic-command edwin:command edwin:text-property
+	srfi-1 srfi-69 srfi-89 srfi-78
+        define-record-type* errors keystroke aliases keystroke-discloser
+        edwin:string-table edwin:doc-string sorting)
+  (for-syntax (open scheme macro-helpers))
+  (files (scsh macros)
+         modes
+         comtab))
 
 (define-structures
   ((edwin:display-imaging edwin:display-imaging/interface)
