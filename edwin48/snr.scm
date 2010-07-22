@@ -3514,8 +3514,8 @@ With prefix arg, replaces the file with the list information."
 	n
 	(loop (mark1+ mark)
 	      (+ (* n 10)
-		 (fix:- (char->integer (extract-right-char mark))
-			(char->integer #\0)))))))
+		 (fix:- (char->ascii (extract-right-char mark))
+			(char->ascii #\0)))))))
 
 (define (update-newsrc-group buffer group)
   (let ((mark

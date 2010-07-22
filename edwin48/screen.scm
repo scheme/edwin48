@@ -858,21 +858,21 @@ USA.
   (do ((index start (fix:+ index 1)))
       ((or (fix:= end index)
 	   (not (fix:= (vector-8b-ref string index)
-		       (char->integer #\space))))
+		       (char->ascii #\space))))
        index)))
 
 (define (substring-non-space-end string start end)
   (do ((index end (fix:- index 1)))
       ((or (fix:= start index)
 	   (not (fix:= (vector-8b-ref string (fix:- index 1))
-		       (char->integer #\space))))
+		       (char->ascii #\space))))
        index)))
 
 (define (string-move! x y)
   (string-copy! y 0 x 0 (string-length x)))
 
 (define (boolean-vector-ref vector index)
-  (fix:= (char->integer #\t) (vector-8b-ref vector index)))
+  (fix:= (char->ascii #\t) (vector-8b-ref vector index)))
 
 (define (boolean-vector-set! vector index value)
   (vector-8b-set! vector index (boolean->ascii value)))
@@ -910,4 +910,4 @@ USA.
   (boolean-subvector-fill! vector 0 (boolean-vector-length vector) value))
 
 (define (boolean->ascii boolean)
-  (if boolean (char->integer #\t) (char->integer #\f)))
+  (if boolean (char->ascii #\t) (char->ascii #\f)))

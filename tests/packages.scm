@@ -56,9 +56,9 @@
   ((edwin:command edwin:command/interface)
    (edwin:variable/private (export set-variable-%default-value!
                                      set-variable-%value!)))
-    (open (modify scheme  (hide integer->char string-fill! vector-fill!))
+    (open (modify scheme  (hide string-fill! vector-fill!))
           (modify sorting (rename (vector-sort sort)))
-          (modify ascii   (alias  (ascii->char integer->char)))
+          ascii
           aliases srfi-89 define-record-type* errors event-distributor fixnum
           (modify interrupts (expose call-after-gc!))
           io-support keystroke pathname rb-tree soosy weak-pair

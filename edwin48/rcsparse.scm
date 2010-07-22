@@ -374,7 +374,7 @@ USA.
       (input-port/discard-chars port delimiters)
       (let ((char (input-port/peek-char port)))
 	(and (not (eof-object? char))
-	     ((vector-ref parse-word/dispatch-table (char->integer char))
+	     ((vector-ref parse-word/dispatch-table (char->ascii char))
 	      port))))))
 
 (define parse-string
@@ -433,9 +433,9 @@ USA.
     (subvector-fill! table #o330 #o366 parse-id)
     (subvector-fill! table #o370 #o400 parse-id)
     (subvector-fill! table #o060 #o072 parse-num)
-    (vector-set! table (char->integer #\@) parse-string)
-    (vector-set! table (char->integer #\:) parse-colon)
-    (vector-set! table (char->integer #\;) parse-semicolon)
+    (vector-set! table (char->ascii #\@) parse-string)
+    (vector-set! table (char->ascii #\:) parse-colon)
+    (vector-set! table (char->ascii #\;) parse-semicolon)
     table))
 
 ;;;; Tokens

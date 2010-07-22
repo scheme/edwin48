@@ -75,7 +75,7 @@
 
 (define (char->digit c)
   (if (char-set-contains? char-set:digit c)
-      (- (char->integer c) (char->integer #\0))
+      (- (char->ascii c) (char->ascii #\0))
       (error "this is not a digit" c)))
 
 (define (char-ascii? c) (char? c))

@@ -29,9 +29,9 @@
      (edwin:variable/private (export set-variable-%default-value!
                                      set-variable-%value!))
      (edwin:window-system    edwin:window-system/interface))
-    (open (modify scheme  (hide integer->char string-fill! vector-fill!))
+    (open (modify scheme  (hide string-fill! vector-fill!))
           (modify sorting (rename (vector-sort sort)))
-          (modify ascii   (alias  (ascii->char integer->char)))
+          ascii
           1d-table aliases define-record-type* errors event-distributor
           extended-ports fixme fixnum i/o
           (modify interrupts (expose call-after-gc!))
