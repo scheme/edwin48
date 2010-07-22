@@ -89,6 +89,7 @@
   (export (define-command     :syntax)
           (ref-command-object :syntax)
           (ref-command        :syntax)
+	  command?
           command-name
           command-interactive-specification
           command-procedure
@@ -103,6 +104,7 @@
 
 (define-interface edwin:command-table/interface
   (export comtab-entry local-comtab-entry
+	  make-comtab
           comtab-key?
           prefix-key-list?
           define-key
@@ -182,222 +184,222 @@
 (define-interface edwin:group-definition/interface
   (export add-group-clip-daemon!
           
-	  ((group-absolute-end group-absolute-start)
-	   (proc (:value) :value))
+          ((group-absolute-end group-absolute-start)
+           (proc (:value) :value))
 
           (group-buffer
-	   (proc (:value) :value))
+           (proc (:value) :value))
 
           (group-case-fold-search
-	   (proc (:value) :value))
-	  
+           (proc (:value) :value))
+          
           (group-display-end-index
-	   (proc (:value) :exact-integer))
+           (proc (:value) :exact-integer))
 
           (group-display-end-index?
-	   (proc (:value :exact-integer)
-		 :boolean))
+           (proc (:value :exact-integer)
+                 :boolean))
 
           (group-display-start-index
-	   (proc (:value) :exact-integer))
+           (proc (:value) :exact-integer))
 
           (group-display-start-index?
-	   (proc (:value :exact-integer)
-		 :boolean))
+           (proc (:value :exact-integer)
+                 :boolean))
 
           (group-end
-	   (proc (:value) :value))
+           (proc (:value) :value))
 
           (group-end-changes-index
-	   (proc (:value) :value))
+           (proc (:value) :value))
           
-	  (group-end-index
-	   (proc (:value) :exact-integer))
+          (group-end-index
+           (proc (:value) :exact-integer))
 
           (group-end-index?
-	   (proc (:value :exact-integer)
-		 :boolean))
+           (proc (:value :exact-integer)
+                 :boolean))
 
           (group-end-mark
-	   (proc (:value) :value))
+           (proc (:value) :value))
           
-	  (group-end?
-	   (proc (:value) :boolean))
+          (group-end?
+           (proc (:value) :boolean))
 
           ((group-gap-end    group-gap-start
-			     group-gap-length group-length)
-	   (proc (:value) :exact-integer))
+                             group-gap-length group-length)
+           (proc (:value) :exact-integer))
 
           (group-index->position
-	   (proc (:value :exact-integer :boolean)
-		 :exact-integer))
+           (proc (:value :exact-integer :boolean)
+                 :exact-integer))
 
           (group-modified-tick
-	   (proc (:value) :exact-integer))
+           (proc (:value) :exact-integer))
 
           (group-modified?
-	   (proc (:value) :boolean))
+           (proc (:value) :boolean))
 
           (group-point
-	   (proc (:value) :value))
+           (proc (:value) :value))
 
           (group-position->index
-	   (proc (:value :exact-integer)
-		 :exact-integer))
+           (proc (:value :exact-integer)
+                 :exact-integer))
 
           (group-region
-	   (proc (:value) :value))
+           (proc (:value) :value))
 
           (group-start
-	   (proc (:value) :value))
-	  
-          (group-start-changes-index
-	   (proc (:value) :value))
+           (proc (:value) :value))
           
-	  (group-start-index
-	   (proc (:value) :exact-integer))
+          (group-start-changes-index
+           (proc (:value) :value))
+          
+          (group-start-index
+           (proc (:value) :exact-integer))
 
           (group-start-index?
-	   (proc (:value :exact-integer)
-		 :boolean))
+           (proc (:value :exact-integer)
+                 :boolean))
 
           (group-start-mark
-	   (proc (:value) :value))
+           (proc (:value) :value))
 
           (group-text
-	   (proc (:value) :string))
+           (proc (:value) :string))
 
           (group-text-properties
-	   (proc (:value) :value))
+           (proc (:value) :value))
 
           (group-undo-data
-	   (proc (:value) :value))
-	  
-	  (group-writeable?
-	   (proc (:value) :boolean))
+           (proc (:value) :value))
           
-	  (group?
-	   (proc (:value) :boolean))
-	  
-	  (make-group
-	   (proc (:value) :value))
+          (group-writeable?
+           (proc (:value) :boolean))
+          
+          (group?
+           (proc (:value) :boolean))
+          
+          (make-group
+           (proc (:value) :value))
 
           (remove-group-clip-daemon!
-	   (proc (:value :value)
-		 :unspecific))
+           (proc (:value :value)
+                 :unspecific))
 
           (set-group-end-changes-index!
-	   (proc (:value :value)
-		 :unspecific))
+           (proc (:value :value)
+                 :unspecific))
 
           (set-group-modified-tick!
-	   (proc (:value :value)
-		 :unspecific))
+           (proc (:value :value)
+                 :unspecific))
 
           (set-group-modified?!
-	   (proc (:value :value)
-		 :unspecific))
+           (proc (:value :value)
+                 :unspecific))
 
           (set-group-point! 
-	   (proc (:value :value)
-		 :unspecific))
+           (proc (:value :value)
+                 :unspecific))
 
           (set-group-point-index!
-	   (proc (:value :exact-integer)
-		 :unspecific))
+           (proc (:value :exact-integer)
+                 :unspecific))
 
           (set-group-read-only!
-	   (proc (:value) :unspecific))
+           (proc (:value) :unspecific))
 
-	  (set-group-start-changes-index!
-	   (proc (:value :value)
-		 :unspecific))
+          (set-group-start-changes-index!
+           (proc (:value :value)
+                 :unspecific))
 
-	  (set-group-text-properties!
-	   (proc (:value :value)
-		 :unspecific))
+          (set-group-text-properties!
+           (proc (:value :value)
+                 :unspecific))
 
-	  (set-group-undo-data!
-	   (proc (:value :value)
-		 :unspecific))
+          (set-group-undo-data!
+           (proc (:value :value)
+                 :unspecific))
 
-	  (set-group-writeable!
-	   (proc (:value) :unspecific))))
+          (set-group-writeable!
+           (proc (:value) :unspecific))))
 
 (define-interface edwin:group-operations/interface
   (export ((group-extract-string group-extract-and-delete-string!)
-	   (proc (:value :exact-integer :exact-integer)
-		 :unspecific))
+           (proc (:value :exact-integer :exact-integer)
+                 :unspecific))
 
-	  (group-copy-substring!
-	   (proc (:value :exact-integer :exact-integer
-			 :string :exact-integer)
-		 :unspecific))
+          (group-copy-substring!
+           (proc (:value :exact-integer :exact-integer
+                         :string :exact-integer)
+                 :unspecific))
 
-	  ((group-left-char  group-right-char)
-	   (proc (:value :exact-integer)
-		 :char))
+          ((group-left-char  group-right-char)
+           (proc (:value :exact-integer)
+                 :char))
 
-	  (group-insert-char!
-	   (proc (:value :exact-integer :char)
-		 :unspecific))
+          (group-insert-char!
+           (proc (:value :exact-integer :char)
+                 :unspecific))
 
           (group-insert-chars!
-	   (proc (:value :exact-integer :char :exact-integer)
-		 :unspecific))
+           (proc (:value :exact-integer :char :exact-integer)
+                 :unspecific))
 
           (group-insert-string!
-	   (proc (:value :exact-integer :string)
-		 :unspecific))
+           (proc (:value :exact-integer :string)
+                 :unspecific))
 
-	  (group-insert-substring!
-	   (proc (:value :exact-integer :string 
-			 :exact-integer :exact-integer)
-		 :unspecific))
+          (group-insert-substring!
+           (proc (:value :exact-integer :string 
+                         :exact-integer :exact-integer)
+                 :unspecific))
 
           ((prepare-gap-for-insert! finish-group-insert!
-				    prepare-gap-for-replace! finish-group-replace!)
-	   (proc (:value :exact-integer :exact-integer)
-		 :unspecific))
+                                    prepare-gap-for-replace! finish-group-replace!)
+           (proc (:value :exact-integer :exact-integer)
+                 :unspecific))
 
           ((group-delete-left-char! group-delete-right-char!)
-	   (proc (:value :exact-integer)
-		 :unspecific))
+           (proc (:value :exact-integer)
+                 :unspecific))
 
           (group-delete!
-	   (proc (:value :exact-integer :exact-integer)
-		 :unspecific))
+           (proc (:value :exact-integer :exact-integer)
+                 :unspecific))
 
           (group-replace-char!
-	   (proc (:value :exact-integer :char)
-		 :unspecific))
+           (proc (:value :exact-integer :char)
+                 :unspecific))
 
           (group-replace-string!
-	   (proc (:value :exact-integer :string)
-		 :unspecific))
+           (proc (:value :exact-integer :string)
+                 :unspecific))
 
           (group-replace-substring!
-	   (proc (:value :exact-integer :string
-			 :exact-integer :exact-integer)
-		 :unspecific))
+           (proc (:value :exact-integer :string
+                         :exact-integer :exact-integer)
+                 :unspecific))
 
           (grow-group!
-	   (proc (:value :exact-integer :exact-integer)
-		 :unspecific))
+           (proc (:value :exact-integer :exact-integer)
+                 :unspecific))
 
           (shrink-group!
-	   (proc (:value) :unspecific))
+           (proc (:value) :unspecific))
 
           (memoize-shrink-length!
-	   (proc (:value :exact-integer)
-		 :unspecific))
+           (proc (:value :exact-integer)
+                 :unspecific))
 
           (compute-shrink-length
-	   (proc (:exact-integer :exact-integer)
-		 :unspecific))
+           (proc (:exact-integer :exact-integer)
+                 :unspecific))
 
           (group-reallocation-factor
-	   (proc (:value) :exact-integer))))
+           (proc (:value) :exact-integer))))
 
 (define-interface edwin:group/interface
   (compound-interface edwin:group-definition/interface
@@ -407,56 +409,56 @@
   (export (guarantee-mark (proc (:value) :boolean))
           (make-mark (proc (:value :exact-integer) :unspecific))
           (make-permanent-mark (proc (:value) :value))
-	  (make-temporary-mark 
-	   (proc (:value :exact-integer :boolean) :value))
-	  (mark-buffer (proc (:value) :value))
-	  (mark-index (proc (:value) :exact-integer))
-	  ((mark-left-inserting 
-	    mark-left-inserting-copy
-	    mark-permanent-copy
-	    mark-right-inserting
-	    mark-right-inserting-copy
-	    mark-temporary-copy)
-	   (proc (:value) :value))
-	  ((mark/=
-	    mark/~
-	    mark<
-	    mark<=
-	    mark=
-	    mark>
-	    mark>=
-	    mark~)
-	   (proc (:value :value) :boolean))
-	  (mark? (proc (:value) :boolean))
-	  (move-mark-to! 
-	   (proc (:value :exact-integer) :unspecific))
-	  (set-mark-index! 
-	   (proc (:value :exact-integer) :unspecific))
-	  (mark-group (proc (:value) :value))))
+          (make-temporary-mark 
+           (proc (:value :exact-integer :boolean) :value))
+          (mark-buffer (proc (:value) :value))
+          (mark-index (proc (:value) :exact-integer))
+          ((mark-left-inserting 
+            mark-left-inserting-copy
+            mark-permanent-copy
+            mark-right-inserting
+            mark-right-inserting-copy
+            mark-temporary-copy)
+           (proc (:value) :value))
+          ((mark/=
+            mark/~
+            mark<
+            mark<=
+            mark=
+            mark>
+            mark>=
+            mark~)
+           (proc (:value :value) :boolean))
+          (mark? (proc (:value) :boolean))
+          (move-mark-to! 
+           (proc (:value :exact-integer) :unspecific))
+          (set-mark-index! 
+           (proc (:value :exact-integer) :unspecific))
+          (mark-group (proc (:value) :value))))
 
 (define-interface edwin:mode/interface
   (export (ref-mode-object   :syntax)
-	  (define-major-mode :syntax)
-	  (define-minor-mode :syntax)
-	  make-mode
-	  mode-name
-	  mode-major?
-	  mode-display-name
-	  mode-initialization
-	  mode-comtabs
-	  editor-modes
-	  name->mode
-	  ->mode
-	  major-mode?
-	  minor-mode?
-	  minor-mode-comtab
-	  mode-description))
+          (define-major-mode :syntax)
+          (define-minor-mode :syntax)
+          make-mode
+          mode-name
+          mode-major?
+          mode-display-name
+          mode-initialization
+          mode-comtabs
+          editor-modes
+          name->mode
+          ->mode
+          major-mode?
+          minor-mode?
+          minor-mode-comtab
+          mode-description))
 
 
 (define-interface edwin:motion/interface
   (export (line-end 
-	   (proc (:value :exact-integer &opt :value) 
-		 :value))
+           (proc (:value :exact-integer &opt :value) 
+                 :value))
           line-end-index
           line-end-index?
           line-start
@@ -474,9 +476,9 @@
 (define-interface edwin:region-definition/interface
   (export (make-region (proc (:value :value) :value))
           ((region-start region-end region-group)
-	   (proc (:value) :value)) 
-	  ((region-start-index region-end-index)
-	   (proc (:value) :value))))
+           (proc (:value) :value)) 
+          ((region-start-index region-end-index)
+           (proc (:value) :value))))
 
 (define-interface edwin:region-operations/interface
   (export region-insert!
@@ -491,7 +493,7 @@
           mark-delete-left-char!
           mark-delete-right-char!
           (region-transform! 
-	   (proc (:value (proc (:string) :string)) :unspecific))
+           (proc (:value (proc (:string) :string)) :unspecific))
           group-narrow!
           group-widen!
           region-clip!
@@ -594,7 +596,7 @@
           string-table-complete
           string-table-completions
           ;; string-table-apropos
-	  ))
+          ))
 
 (define-interface edwin:text-property/interface
   (export add-text-property
@@ -686,8 +688,8 @@
           (ref-variable               :syntax)
           (set-variable!              :syntax)
           (local-set-variable!        :syntax)
-	  variable?
-	  variable-name
+          variable?
+          variable-name
           variable-buffer-local?
           variable-description
           variable-value
@@ -710,7 +712,7 @@
 
 (define-interface edwin:basic-command/interface+edwin
   (edwin:export (variable buffer-reallocation-factor)
-                (commmand abort-recursive-edit
+                (command abort-recursive-edit
                           control-meta-prefix
                           control-prefix
                           define-command
