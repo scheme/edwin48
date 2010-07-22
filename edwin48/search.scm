@@ -37,27 +37,27 @@ USA.
   (lambda (group start end char)
     (and (not (fix:= start end))
          (cond ((fix:<= end (group-gap-start group))
-                (find-next (group-text group) start end char))
+                (find-next (group-text group) char start end))
                ((fix:<= (group-gap-start group) start)
                 (let ((position
                        (find-next
                         (group-text group)
+                        char
                         (fix:+ start (group-gap-length group))
-                        (fix:+ end (group-gap-length group))
-                        char)))
+                        (fix:+ end (group-gap-length group)))))
                   (and position
                        (fix:- position (group-gap-length group)))))
                ((find-next (group-text group)
+                           char
                            start
-                           (group-gap-start group)
-                           char))
+                           (group-gap-start group)))
                (else
                 (let ((position
                        (find-next (group-text group)
+                                  char
                                   (group-gap-end group)
                                   (fix:+ end
-                                         (group-gap-length group))
-                                  char)))
+                                         (group-gap-length group)))))
                   (and position
                        (fix:- position
                               (group-gap-length group)))))))))
@@ -78,27 +78,27 @@ USA.
   (lambda (group start end char)
     (and (not (fix:= start end))
          (cond ((fix:<= end (group-gap-start group))
-                (find-previous (group-text group) start end char))
+                (find-previous (group-text group) char start end))
                ((fix:<= (group-gap-start group) start)
                 (let ((position
                        (find-previous
                         (group-text group)
+                        char
                         (fix:+ start (group-gap-length group))
-                        (fix:+ end (group-gap-length group))
-                        char)))
+                        (fix:+ end (group-gap-length group)))))
                   (and position
                        (fix:- position (group-gap-length group)))))
                ((find-previous (group-text group)
-                                (group-gap-end group)
-                                (fix:+ end (group-gap-length group))
-                                char)
+                               char
+                               (group-gap-end group)
+                               (fix:+ end (group-gap-length group)))
                 => (lambda (position)
                      (fix:- position (group-gap-length group))))
                (else
                 (find-previous (group-text group)
-                                start
-                                (group-gap-start group)
-                                char))))))
+                               char
+                               start
+                               (group-gap-start group)))))))
 
 (define-prev-char-search group-find-previous-char
   string-index-right)
