@@ -1549,7 +1549,7 @@ once it has been renamed, it will not be deleted automatically.")
 				#t)))))))
 	  (else
 	   (write-string "  BINDINGS:" port)
-	   (finish (if package (sort names symbol<?) names)))))
+	   (finish (if package (list-sort names symbol<?) names)))))
   (debugger-newline port)
   (debugger-newline port)
   (write-string
@@ -1714,7 +1714,7 @@ once it has been renamed, it will not be deleted automatically.")
 		     (if (null? l)
 			 l
 			 (cons (car l) (loop (delete (car l) l))))))
-	 (names4 (sort names3 symbol<?)))
+	 (names4 (list-sort names3 symbol<?)))
     names4))
 
 (define (show-environment-bindings-with-ind environment ind port)

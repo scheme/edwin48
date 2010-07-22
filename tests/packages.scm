@@ -57,7 +57,7 @@
    (edwin:variable/private (export set-variable-%default-value!
                                      set-variable-%value!)))
     (open (modify scheme  (hide string-fill! vector-fill!))
-          (modify sorting (rename (vector-sort sort)))
+          sorting
           ascii
           aliases srfi-89 define-record-type* errors event-distributor fixnum
           (modify interrupts (expose call-after-gc!))

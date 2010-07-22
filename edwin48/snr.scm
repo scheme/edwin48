@@ -415,7 +415,7 @@ Only one News reader may be open per server; if a previous News reader
 		      (read-groups-init-file
 		       (news-server-buffer:connection buffer))))
 		 (if sort?
-		     (sort groups news-group:<)
+		     (vector-sort groups news-group:<)
 		     groups))))
 	  (if (ref-variable news-server-initial-refresh buffer)
 	      (vector-for-each news-group:update-ranges! groups))
@@ -3896,7 +3896,7 @@ With prefix arg, replaces the file with the list information."
   (if (null? ranges)
       ranges
       (let ((ranges
-	     (sort ranges (lambda (x y) (< (range-first x) (range-first y))))))
+	     (list-sort ranges (lambda (x y) (< (range-first x) (range-first y))))))
 	(let loop ((ranges ranges))
 	  (if (not (null? (cdr ranges)))
 	      (let ((x (car ranges))

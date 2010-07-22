@@ -166,7 +166,7 @@ USA.
       (do ((i 0 (fix:+ i 1)))
 	  ((fix:= i end))
 	(vector-set! lines i (string-first-token (vector-ref lines i)))))
-    (sort! lines string<?)
+    (vector-sort! lines string<?)
     (message msg "done"))
   lines)
 
@@ -1285,12 +1285,12 @@ USA.
 				       allow-server-probes?
 				       split-different-subjects?
 				       join-same-subjects?)
-  (sort (let ((threads
-	       (associate-threads-with-trees
-		(build-followup-trees! headers
-				       show-context?
-				       allow-server-probes?
-				       split-different-subjects?))))
+  (list-sort (let ((threads
+		    (associate-threads-with-trees
+		     (build-followup-trees! headers
+					    show-context?
+					    allow-server-probes?
+					    split-different-subjects?))))
 	  (if join-same-subjects?
 	      (map make-threads-equivalent!
 		   (build-equivalence-classes
@@ -1594,7 +1594,7 @@ USA.
 	   (let ((followups (news-header:followups header)))
 	     (for-each loop followups)
 	     (set-news-header:followups! header
-					 (sort followups news-header:<)))
+					 (list-sort followups news-header:<)))
 	   (if (and (not (news-header:real? header))
 		    (not (news-header:number header)))
 	       (set-news-header:number!
@@ -1754,7 +1754,7 @@ USA.
 	  (map cdr (hash-table-values equivalences))))))
 
 (define (make-threads-equivalent! threads)
-  (let ((threads (sort threads news-thread:<)))
+  (let ((threads (list-sort threads news-thread:<)))
     (let ((thread (car threads))
 	  (threads (cdr threads)))
       (if (not (null? threads))
