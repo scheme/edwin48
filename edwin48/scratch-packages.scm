@@ -128,18 +128,27 @@
   (begin
     (define (editor-error e s) e)))
 
-(define-structures
-  ((edwin:command-table edwin:command-table/interface)
-   (edwin:mode          edwin:mode/interface))
+(define-structure edwin:command-table edwin:command-table/interface
   (open scheme aliases
-	edwin:basic-command edwin:command edwin:text-property
+	edwin:basic-command edwin:command edwin:mode edwin:text-property
 	srfi-1 srfi-69 srfi-89 srfi-78
         define-record-type* errors keystroke aliases keystroke-discloser
         edwin:string-table edwin:doc-string sorting)
   (for-syntax (open scheme macro-helpers))
   (files (scsh macros)
-         modes
          comtab))
+
+(define-structure edwin:fundamental edwin:fundamental/inteface
+  (open scheme
+	aliases
+	keystroke
+	edwin:command
+	edwin:command-table
+	edwin:mode
+	edwin:variable)
+  (for-syntax (open scheme macro-helpers))
+  (files (scsh macros)
+	 modefs))
 
 (define-structures
   ((edwin:display-imaging edwin:display-imaging/interface)
@@ -212,6 +221,7 @@
         edwin:string-table
         errors
         srfi-89
+	sort
         )
   (for-syntax (open scheme macro-helpers))
   (files (scsh macros)
@@ -258,7 +268,8 @@
   (files screen))
 
 (define-structure edwin:string-table edwin:string-table/interface
-  (open scheme aliases define-record-type*
+  (open scheme aliases define-record-type* 
+	sort
         mit-regexp srfi-13 srfi-43 srfi-89)
   (files strtab))
 

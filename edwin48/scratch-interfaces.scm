@@ -740,3 +740,20 @@
 (define-interface edwin:basic-command/interface
   (compound-interface edwin:basic-command/interface+edwin
                       edwin:basic-command/interface+scheme))
+
+(define-interface edwin:fundamental/interface+edwin
+  (edwin:export (command fundamental-mode)
+		(mode fundamental-mode
+		      read-only    
+		      read-only-noarg)
+		(variable editor-default-mode)))
+
+(define-interface edwin:fundamental/interface+scheme
+  (export initial-buffer-name
+	  char-set:self-insert-keys
+	  global-modes))
+
+(define-interface edwin:fundamental/inteface
+  (compound-interface edwin:fundamental/interface+edwin
+		      edwin:fundamental/interface+scheme))
+	  
