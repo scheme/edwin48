@@ -183,7 +183,7 @@
 
 (define-interface edwin:group-definition/interface
   (export add-group-clip-daemon!
-          
+
           ((group-absolute-end group-absolute-start)
            (proc (:value) :value))
 
@@ -192,7 +192,7 @@
 
           (group-case-fold-search
            (proc (:value) :value))
-          
+
           (group-display-end-index
            (proc (:value) :exact-integer))
 
@@ -212,7 +212,7 @@
 
           (group-end-changes-index
            (proc (:value) :value))
-          
+
           (group-end-index
            (proc (:value) :exact-integer))
 
@@ -222,7 +222,7 @@
 
           (group-end-mark
            (proc (:value) :value))
-          
+
           (group-end?
            (proc (:value) :boolean))
 
@@ -252,10 +252,10 @@
 
           (group-start
            (proc (:value) :value))
-          
+
           (group-start-changes-index
            (proc (:value) :value))
-          
+
           (group-start-index
            (proc (:value) :exact-integer))
 
@@ -274,13 +274,13 @@
 
           (group-undo-data
            (proc (:value) :value))
-          
+
           (group-writeable?
            (proc (:value) :boolean))
-          
+
           (group?
            (proc (:value) :boolean))
-          
+
           (make-group
            (proc (:value) :value))
 
@@ -300,7 +300,7 @@
            (proc (:value :value)
                  :unspecific))
 
-          (set-group-point! 
+          (set-group-point!
            (proc (:value :value)
                  :unspecific))
 
@@ -353,7 +353,7 @@
                  :unspecific))
 
           (group-insert-substring!
-           (proc (:value :exact-integer :string 
+           (proc (:value :exact-integer :string
                          :exact-integer :exact-integer)
                  :unspecific))
 
@@ -409,11 +409,11 @@
   (export (guarantee-mark (proc (:value) :boolean))
           (make-mark (proc (:value :exact-integer) :unspecific))
           (make-permanent-mark (proc (:value) :value))
-          (make-temporary-mark 
+          (make-temporary-mark
            (proc (:value :exact-integer :boolean) :value))
           (mark-buffer (proc (:value) :value))
           (mark-index (proc (:value) :exact-integer))
-          ((mark-left-inserting 
+          ((mark-left-inserting
             mark-left-inserting-copy
             mark-permanent-copy
             mark-right-inserting
@@ -430,9 +430,9 @@
             mark~)
            (proc (:value :value) :boolean))
           (mark? (proc (:value) :boolean))
-          (move-mark-to! 
+          (move-mark-to!
            (proc (:value :exact-integer) :unspecific))
-          (set-mark-index! 
+          (set-mark-index!
            (proc (:value :exact-integer) :unspecific))
           (mark-group (proc (:value) :value))))
 
@@ -440,6 +440,7 @@
   (export (ref-mode-object   :syntax)
           (define-major-mode :syntax)
           (define-minor-mode :syntax)
+          mode?
           make-mode
           mode-name
           mode-major?
@@ -456,8 +457,8 @@
 
 
 (define-interface edwin:motion/interface
-  (export (line-end 
-           (proc (:value :exact-integer &opt :value) 
+  (export (line-end
+           (proc (:value :exact-integer &opt :value)
                  :value))
           line-end-index
           line-end-index?
@@ -476,7 +477,7 @@
 (define-interface edwin:region-definition/interface
   (export (make-region (proc (:value :value) :value))
           ((region-start region-end region-group)
-           (proc (:value) :value)) 
+           (proc (:value) :value))
           ((region-start-index region-end-index)
            (proc (:value) :value))))
 
@@ -492,7 +493,7 @@
           mark-right-char
           mark-delete-left-char!
           mark-delete-right-char!
-          (region-transform! 
+          (region-transform!
            (proc (:value (proc (:string) :string)) :unspecific))
           group-narrow!
           group-widen!
@@ -744,7 +745,7 @@
 (define-interface edwin:fundamental/interface+edwin
   (edwin:export (command fundamental-mode)
 		(mode fundamental-mode
-		      read-only    
+		      read-only
 		      read-only-noarg)
 		(variable editor-default-mode)))
 
@@ -756,4 +757,3 @@
 (define-interface edwin:fundamental/inteface
   (compound-interface edwin:fundamental/interface+edwin
 		      edwin:fundamental/interface+scheme))
-	  
