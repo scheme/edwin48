@@ -444,6 +444,7 @@
           make-mode
           mode-name
           mode-major?
+          mode-super-mode
           mode-display-name
           mode-initialization
           mode-comtabs
