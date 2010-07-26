@@ -20,7 +20,7 @@
 
 (define-structure edwin:basic-command edwin:basic-command/interface
   (open scheme)
-  (begin 
+  (begin
     (define (barf-if-read-only) (lambda () (display "barf-BROKEN")))
     (define (check-first-group-modification g) "mod-BROKEN")
     (define (editor-beep g) "beedp-BROKEN")
@@ -32,12 +32,12 @@
     (define (read-quoted-char prompt-string) "rc_car-BROKEN")
     (define (save-buffers-and-exit no-confirmation? noun exit)
       "save&exit-BROKEN")
-    (define (save-buffers-kill-edwin (no-confirmation? #f)) 
+    (define (save-buffers-kill-edwin (no-confirmation? #f))
       "save&kill-BROKEN")
     (define scheme-can-quit? #t)
     (define (self-insert char n allow-autofill?) "self_ins-BROKEN")
     (define (set-command-prompt-prefix!) "set-pref-BROKEN")
-    
+
     ;; commands
     (define edwin-command$abort-recursive-edit "abort_edit-BROKEN")
     (define edwin-command$control-meta-prefix "cm_pre-BROKEN")
@@ -62,8 +62,8 @@
     (define edwin-command$suspend-edwin "sused-BROKEN")
     (define edwin-command$suspend-scheme "suschm-BROKEN")
     (define edwin-command$undefined "undef-BROKEN")
-    (define edwin-command$widen "widen-BROKEN")    
-    
+    (define edwin-command$widen "widen-BROKEN")
+
     ;; variables
     (define edwin-variable$buffer-reallocation-factor 4)))
 
@@ -133,7 +133,7 @@
 	edwin:basic-command edwin:command edwin:mode edwin:text-property
 	srfi-1 srfi-69 srfi-89 srfi-78
         define-record-type* errors keystroke aliases keystroke-discloser
-        edwin:string-table edwin:doc-string sorting)
+        edwin:string-table edwin:doc-string sort)
   (for-syntax (open scheme macro-helpers))
   (files (scsh macros)
          comtab))
@@ -268,7 +268,7 @@
   (files screen))
 
 (define-structure edwin:string-table edwin:string-table/interface
-  (open scheme aliases define-record-type* 
+  (open scheme aliases define-record-type*
 	sort
         mit-regexp srfi-13 srfi-43 srfi-89)
   (files strtab))
@@ -293,14 +293,14 @@
           undo-record-replacement!
           undo-record-property-changes!)
   (open scheme)
-  (begin 
+  (begin
     (define (undo-record-insertion! group start end)
       "uri-BROKEN")
     (define (undo-record-deletion! group start end)
       "urd-BROKEN")
     (define (undo-record-replacement! group start end)
       "urr-BROKEN")
-    (define (undo-record-property-changes! group start end) 
+    (define (undo-record-property-changes! group start end)
       "urpc-BROKEN")))
 
 (define-structure edwin:utilities edwin:utilities/interface
