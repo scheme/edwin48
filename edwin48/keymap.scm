@@ -152,9 +152,9 @@ Previous contents of that buffer are killed first."
   (map (lambda (element)
 	 (cons (xkey->name (car element))
 	       (command-name-string (cdr element))))
-       (list-sort (remove (lambda (element) (button? (car element)))
-			  elements)
-		  (lambda (a b) (xkey<? (car a) (car b))))))
+       (list-sort (lambda (a b) (xkey<? (car a) (car b)))
+		  (remove (lambda (element) (button? (car element)))
+			  elements))))
 
 (define (sort-by-prefix elements)
   (let ((prefix-alist '()))
@@ -190,7 +190,7 @@ Previous contents of that buffer are killed first."
 		elements))
     (map (lambda (entry)
 	   (group-elements (reverse! (cdr entry))))
-	 (list-sort prefix-alist (lambda (x y) (string<? (car x) (car y)))))))
+	 (list-sort (lambda (x y) (string<? (car x) (car y))) prefix-alist))))
 
 (define (group-elements elements)
   (if (or (null? elements)

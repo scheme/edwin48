@@ -37,8 +37,7 @@ USA.
 	 (delete-end (mark-right-inserting-copy end))
 	 (unsorted-list (identify-records region forward-record record-end))
 	 (sorted-list
-	  (list-sort unsorted-list
-		     (let ((order (if reverse? not identity-procedure)))
+	  (list-sort (let ((order (if reverse? not identity-procedure)))
 		       (lambda (element1 element2)
 			 (order
 			  (let ((start1 (key-start (car element1) (cdr element1)))
@@ -46,7 +45,8 @@ USA.
 			    (compare start1
 				     (key-end start1 (cdr element1))
 				     start2
-				     (key-end start2 (cdr element2))))))))))
+				     (key-end start2 (cdr element2)))))))
+		     unsorted-list)))
     (insert-reordered-region start end sorted-list unsorted-list)
     (kill-string start delete-end)
     (mark-temporary! delete-end)))

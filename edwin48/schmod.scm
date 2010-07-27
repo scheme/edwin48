@@ -250,7 +250,7 @@ The following commands evaluate Scheme expressions:
 		   (let ((completions (map weak-car completions)))
 		     (if-not-unique
 		      (string-greatest-common-prefix completions)
-		      (lambda () (list-sort completions string<=?))))))))
+		      (lambda () (list-sort string<=? completions))))))))
 	(lambda (completion)
 	  (delete-string start end)
 	  (insert-string completion start))))))

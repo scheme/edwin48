@@ -230,7 +230,7 @@ procedures are called."
 (define (standard-scheme-find-file-initialization database)
   ;; DATABASE -must- be a vector whose elements are all three element
   ;; lists.  The car of each element must be a string.
-  (vector-sort! database (lambda (x y) (string<? (car x) (car y))))
+  (vector-sort! (lambda (x y) (string<? (car x) (car y))) database)
   (lambda (buffer)
     (let ((entry
 	   (let ((pathname (buffer-pathname buffer)))
@@ -882,7 +882,7 @@ Prefix arg means treat the plaintext file as binary data."
 			     (merge-pathnames (car filenames) directory))
 	(set-car! filenames
 		  (->namestring (pathname-as-directory (car filenames))))))
-  (list-sort filenames string<?))
+  (list-sort string<? filenames))
 
 (define (completion-ignore-filename? filename)
   (os/completion-ignore-filename? (->namestring filename)))

@@ -335,7 +335,7 @@ If you want VALUE to be a string, you must surround it with doublequotes."
 	  (write-string (key-list-string bindings) port)))))
 
 (define (key-list-string xkeys)
-  (let loop ((xkeys (list-sort xkeys xkey<?)))
+  (let loop ((xkeys (list-sort xkey<? xkeys)))
     (if (pair? (cdr xkeys))
 	(string-append (xkey->name (car xkeys))
 		       ", "
