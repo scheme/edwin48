@@ -48,10 +48,10 @@ Most other major modes are defined by comparison to this one.")
 
 ;; The extra range allows international keyboards to insert 8-bit characters
 (define char-set:self-insert-keys
-  (char-set-union char-set:graphic (ascii-range->char-set 128 255)))
+  (char-set-union char-set:digit (ascii-range->char-set 128 255)))
 
 (define-key 'fundamental char-set:self-insert-keys 'self-insert-command)
-(define-key 'fundamental char-set:numeric 'auto-digit-argument)
+(define-key 'fundamental char-set:digit 'auto-digit-argument)
 (define-key 'fundamental (kbd #\-) 'auto-negative-argument)
 (define-key 'fundamental (kbd rubout) 'delete-backward-char)
 
@@ -61,7 +61,7 @@ Like Fundamental mode, but no self-inserting characters.
 Digits and - are bound to prefix argument commands.")
 
 (define-key 'read-only char-set:self-insert-keys 'undefined)
-(define-key 'read-only char-set:numeric 'digit-argument)
+(define-key 'read-only char-set:digit 'digit-argument)
 (define-key 'read-only #\- 'negative-argument)
 (define-key 'read-only (kbd (ctrl #\x) (ctrl #\q)) 'no-toggle-read-only)
 
