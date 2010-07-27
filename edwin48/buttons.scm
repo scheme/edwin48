@@ -65,3 +65,14 @@
      thunk
      (lambda ()
        (set-editor-button-event! current-editor old-button-event)))))
+
+(define button1-down (make-down-button 0))
+(define button2-down (make-down-button 1))
+(define button3-down (make-down-button 2))
+(define button4-down (make-down-button 3))
+(define button5-down (make-down-button 4))
+(define button1-up (make-up-button 0))
+(define button2-up (make-up-button 1))
+(define button3-up (make-up-button 2))
+(define button4-up (make-up-button 3))
+(define button5-up (make-up-button 4))
