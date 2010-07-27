@@ -48,7 +48,7 @@ Most other major modes are defined by comparison to this one.")
 
 ;; The extra range allows international keyboards to insert 8-bit characters
 (define char-set:self-insert-keys
-  (char-set-union char-set:digit (ascii-range->char-set 128 255)))
+  (char-set-union char-set:digit (ucs-range->char-set 128 255)))
 
 (define-key 'fundamental char-set:self-insert-keys 'self-insert-command)
 (define-key 'fundamental char-set:digit 'auto-digit-argument)

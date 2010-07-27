@@ -798,7 +798,7 @@ Actions controlled by variables list-directory-brief-switches
 (define directory-listing-before-filename-regexp
   (let* ((l
 	  (char-set-union char-set:alphabetic
-			  (ascii-range->char-set #x80 #x100)))
+			  (ucs-range->char-set #x80 #x100)))
 	 (l? (rexp-optional l))
 	 (l-or-quote (char-set-union l (char-set #\')))
 	 (digit (string->char-set "0123456789"))
