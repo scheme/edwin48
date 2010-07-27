@@ -142,6 +142,7 @@
   (open scheme
 	aliases
 	keystroke
+        srfi-14
 	edwin:command
 	edwin:command-table
 	edwin:mode
