@@ -398,10 +398,10 @@ Switches may be concatenated, e.g. `-lt' is equivalent to `-l -t'."
        (char-set-union (string->char-set "\"/:<>\\|")
 		       (string->char-set "*?"))))
   (set! char-set:valid-hpfs
-	(char-set-difference (ascii-range->char-set #x21 #x7F)
+	(char-set-difference (ucs-range->char-set #x21 #x7F)
 			     reserved-chars))
   (set! char-set:valid-windows-long
-	(char-set-difference (ascii-range->char-set #x20 #x100)
+	(char-set-difference (ucs-range->char-set #x20 #x100)
 			     reserved-chars)))
 
 (define char-set:valid-fat
