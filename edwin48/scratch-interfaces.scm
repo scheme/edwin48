@@ -85,6 +85,36 @@
           bufferset-guarantee-buffer! bufferset-kill-buffer!
           bufferset-rename-buffer     bufferset-select-buffer!))
 
+(define-interface edwin:button/interface
+  (export button-bits
+          button-down?
+          button-event/window
+          button-event/x
+          button-event/y
+          button-event?
+          button-name
+          button-number
+          button-symbol
+          button1-down
+          button1-up
+          button2-down
+          button2-up
+          button3-down
+          button3-up
+          button4-down
+          button4-up
+          button5-down
+          button5-up
+          button?
+          buttons-table
+          current-button-event
+          down-button?
+          make-button-event
+          make-down-button
+          make-up-button
+          up-button?
+          with-current-button-event))
+
 (define-interface edwin:command/interface
   (export (define-command     :syntax)
           (ref-command-object :syntax)

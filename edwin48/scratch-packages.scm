@@ -113,6 +113,28 @@
     (define edwin-variable$editor-default-mode "edi-def-BROKEN")
 ))
 
+(define-structure edwin:button edwin:button/interface
+  (open scheme
+        aliases
+        big-util
+        srfi-69
+        srfi-89
+        srfi-9)
+  (for-syntax (open scheme macro-helpers))
+  (files (scsh macros))
+  (begin
+    (define hash-table/intern! hash-table-ref)
+    (define symbol concatenate-symbol)
+    (define current-editor 'broken-editor-button)
+    (define current-window 'broken-window-button)
+    (define-record-type editor (make-editor) editor?
+      (button-event editor-button-event set-editor-button-event!))
+    (define-record-type window (make-window) window?
+      (point-coordinates window-point-coordinates))
+    (define (bucky-bits->prefix bits) (if (not (zero? bits)) 'error-T
+                                          'error-F)))
+  (files buttons))
+
 (define-structure edwin:command edwin:command/interface
   (open scheme
         aliases
@@ -143,6 +165,7 @@
 	aliases
 	keystroke
         srfi-14
+        edwin:button
 	edwin:command
 	edwin:command-table
 	edwin:mode
