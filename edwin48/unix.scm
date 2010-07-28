@@ -216,7 +216,7 @@ Includes the new backup.  Must be > 0."
 			  prefix))
 			(backups '()))
 		     (if (null? filenames)
-			 (list-sort backups (lambda (x y) (< (cdr x) (cdr y))))
+			 (list-sort (lambda (x y) (< (cdr x) (cdr y))) backups)
 			 (loop (cdr filenames)
 			       (let ((root.version
 				      (os/numeric-backup-filename?

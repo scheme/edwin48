@@ -29,7 +29,7 @@ USA.
 
 
 (define rfc822:char-set:header-constituents
-  (char-set-difference (ascii-range->char-set 33 127)
+  (char-set-difference (ucs-range->char-set 33 127)
 		       (char-set #\:)))
 
 (define rfc822:char-set:not-header-constituents
@@ -362,7 +362,7 @@ USA.
 
 (define (rfc822:string-tokenizer special-chars keep-whitespace?)
   (let ((atom-chars
-         (char-set-difference (ascii-range->char-set #x21 #x7F)
+         (char-set-difference (ucs-range->char-set #x21 #x7F)
                               special-chars)))
     (define (special-char? char) (char-set-member? special-chars char))
     (define    (atom-char? char) (char-set-member?    atom-chars char))

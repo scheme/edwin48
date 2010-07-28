@@ -38,7 +38,7 @@ USA.
 (define* (alist->string-table alist (ci? #t))
   (let* ((compare   (if ci? string-ci<? string<?))
 	 (sort-func (lambda (x y) (compare (car x) (car y))))
-	 (v         (list->vector (list-sort alist sort-func))))
+	 (v         (list->vector (list-sort sort-func alist))))
       (%make-string-table v (vector-length v) ci?)))
 
 (define make-string-table-entry cons)

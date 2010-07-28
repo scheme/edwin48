@@ -392,9 +392,9 @@ negative numeric arg overrides kept-old-versions with minus the arg."
 			  (let ((end (- nv total)))
 			    (do ((versions
 				  (drop
-				   (list-sort (cdr file)
-					      (lambda (x y)
-						(< (car x) (car y))))
+				   (list-sort (lambda (x y)
+						(< (car x) (car y)))
+					      (cdr file))
 				   old)
 				  (cdr versions))
 				 (index 0 (fix:+ index 1)))
@@ -798,7 +798,7 @@ Actions controlled by variables list-directory-brief-switches
 (define directory-listing-before-filename-regexp
   (let* ((l
 	  (char-set-union char-set:alphabetic
-			  (ascii-range->char-set #x80 #x100)))
+			  (ucs-range->char-set #x80 #x100)))
 	 (l? (rexp-optional l))
 	 (l-or-quote (char-set-union l (char-set #\')))
 	 (digit (string->char-set "0123456789"))
