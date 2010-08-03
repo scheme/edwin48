@@ -210,6 +210,10 @@ USA.
                               (comtab-get comtab prefixes))
                           last-key
                           datum)))
+          ((char-set? keystroke)
+           (for-each (lambda (char) (%define-key comtabs (make-key (string char))
+                                            datum procedure))
+                     (char-set->list keystroke)))
           (else
            (error:wrong-type-argument keystroke "comtab key" procedure)))))
 
