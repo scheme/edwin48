@@ -62,7 +62,7 @@ Digits and - are bound to prefix argument commands.")
 
 (define-key 'read-only char-set:self-insert-keys 'undefined)
 (define-key 'read-only char-set:digit 'digit-argument)
-(define-key 'read-only #\- 'negative-argument)
+(define-key 'read-only (kbd #\-) 'negative-argument)
 (define-key 'read-only (kbd (ctrl #\x) (ctrl #\q)) 'no-toggle-read-only)
 
 (define-major-mode read-only-noarg fundamental "Read-only-noarg"
