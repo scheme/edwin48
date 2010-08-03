@@ -70,6 +70,7 @@ Digits and - are bound to prefix argument commands.")
 Like Fundamental mode, but no self-inserting characters.")
 
 (define-key 'read-only-noarg char-set:self-insert-keys 'undefined)
+(define-prefix-key 'read-only-noarg (kbd (ctrl #\x)))
 (define-key 'read-only-noarg (kbd (ctrl #\x) (ctrl #\q)) 'no-toggle-read-only)
 
 (define global-modes
