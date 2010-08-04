@@ -19,7 +19,8 @@
 ;; variable - Works with explicit defines
 
 (define-structure edwin:basic-command edwin:basic-command/interface
-  (open scheme)
+  (open scheme
+        srfi-89)
   (begin
     (define (barf-if-read-only) (lambda () (display "barf-BROKEN")))
     (define (check-first-group-modification g) "mod-BROKEN")
@@ -32,7 +33,7 @@
     (define (read-quoted-char prompt-string) "rc_car-BROKEN")
     (define (save-buffers-and-exit no-confirmation? noun exit)
       "save&exit-BROKEN")
-    (define (save-buffers-kill-edwin (no-confirmation? #f))
+    (define* (save-buffers-kill-edwin (no-confirmation? #f))
       "save&kill-BROKEN")
     (define scheme-can-quit? #t)
     (define (self-insert char n allow-autofill?) "self_ins-BROKEN")
