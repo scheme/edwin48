@@ -1,3 +1,4 @@
+;;; -*- Mode: Scheme; tab-width: 2; indent-tabs-mode: nil; -*-
 ;;; Scratch Packages -- attempt to modularize edwin48
 
 ;;; Files to be worked on:
@@ -20,7 +21,7 @@
 
 (define-structure edwin:basic-command edwin:basic-command/interface
   (open scheme)
-  (begin 
+  (begin
     (define (barf-if-read-only) (lambda () (display "barf-BROKEN")))
     (define (check-first-group-modification g) "mod-BROKEN")
     (define (editor-beep g) "beedp-BROKEN")
@@ -32,12 +33,12 @@
     (define (read-quoted-char prompt-string) "rc_car-BROKEN")
     (define (save-buffers-and-exit no-confirmation? noun exit)
       "save&exit-BROKEN")
-    (define (save-buffers-kill-edwin (no-confirmation? #f)) 
-      "save&kill-BROKEN")
+    ;; (define (save-buffers-kill-edwin (no-confirmation? #f))
+    ;;   "save&kill-BROKEN")
     (define scheme-can-quit? #t)
     (define (self-insert char n allow-autofill?) "self_ins-BROKEN")
     (define (set-command-prompt-prefix!) "set-pref-BROKEN")
-    
+
     ;; commands
     (define edwin-command$abort-recursive-edit "abort_edit-BROKEN")
     (define edwin-command$control-meta-prefix "cm_pre-BROKEN")
@@ -62,8 +63,8 @@
     (define edwin-command$suspend-edwin "sused-BROKEN")
     (define edwin-command$suspend-scheme "suschm-BROKEN")
     (define edwin-command$undefined "undef-BROKEN")
-    (define edwin-command$widen "widen-BROKEN")    
-    
+    (define edwin-command$widen "widen-BROKEN")
+
     ;; variables
     (define edwin-variable$buffer-reallocation-factor 4)))
 
@@ -128,28 +129,18 @@
   (begin
     (define (editor-error e s) e)))
 
-(define-structure edwin:command-table edwin:command-table/interface
-  (open scheme aliases
-	edwin:basic-command edwin:command edwin:mode edwin:text-property
-	srfi-1 srfi-69 srfi-89 srfi-78
-        define-record-type* errors keystroke aliases keystroke-discloser
-        edwin:string-table edwin:doc-string sorting)
-  (for-syntax (open scheme macro-helpers))
-  (files (scsh macros)
-         comtab))
-
 (define-structure edwin:fundamental edwin:fundamental/inteface
   (open scheme
-	aliases
-	keystroke
+        aliases
+        keystroke
         srfi-14
-	edwin:command
-	edwin:command-table
-	edwin:mode
-	edwin:variable)
+        edwin:command
+        edwin:command-table
+        edwin:mode
+        edwin:variable)
   (for-syntax (open scheme macro-helpers))
   (files (scsh macros)
-	 modefs))
+         modefs))
 
 (define-structures
   ((edwin:display-imaging edwin:display-imaging/interface)
@@ -214,20 +205,16 @@
         edwin:buffer)
   (files edtstr))
 
-(define-structure edwin:mode edwin:mode/interface
-  (open scheme
-        aliases
-        define-record-type*
-        edwin:doc-string
-        edwin:string-table
-        errors
-        srfi-89
-        )
+(define-structures
+  ((edwin:command-table edwin:command-table/interface)
+   (edwin:mode          edwin:mode/interface))
+  (open scheme aliases edwin:command srfi-1 srfi-69 srfi-89 srfi-78 srfi-14
+        define-record-type* errors keystroke aliases keystroke-discloser
+        edwin:string-table edwin:doc-string sorting)
   (for-syntax (open scheme macro-helpers))
   (files (scsh macros)
-         modes)
-  (begin
-    (define (make-comtab) "BROKEN")))
+         modes
+         comtab))
 
 (define-structure edwin:ring edwin:ring/interface
   (open scheme aliases errors srfi-1)
@@ -268,7 +255,7 @@
   (files screen))
 
 (define-structure edwin:string-table edwin:string-table/interface
-  (open scheme aliases define-record-type* 
+  (open scheme aliases define-record-type*
         mit-regexp srfi-13 srfi-43 srfi-89)
   (files strtab))
 
@@ -292,14 +279,14 @@
           undo-record-replacement!
           undo-record-property-changes!)
   (open scheme)
-  (begin 
+  (begin
     (define (undo-record-insertion! group start end)
       "uri-BROKEN")
     (define (undo-record-deletion! group start end)
       "urd-BROKEN")
     (define (undo-record-replacement! group start end)
       "urr-BROKEN")
-    (define (undo-record-property-changes! group start end) 
+    (define (undo-record-property-changes! group start end)
       "urpc-BROKEN")))
 
 (define-structure edwin:utilities edwin:utilities/interface
