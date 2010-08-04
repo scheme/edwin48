@@ -211,7 +211,7 @@ USA.
                           last-key
                           datum)))
           ((char-set? keystroke)
-           (for-each (lambda (char) (%define-key comtabs (make-key (string char))
+           (for-each (lambda (char) (%define-key comtabs (make-key char)
                                             datum procedure))
                      (char-set->list keystroke)))
           (else
