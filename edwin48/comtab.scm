@@ -164,6 +164,15 @@ USA.
     (or (comtab? object)
 	(command&comtab? object))))
 
+;;; Returns a newly allocated list of the characters in char-set.
+;;; This is a former built in MIT-Scheme function.
+;;; char-set: SRFI-14 data structure
+(define (char-set-members char-set)
+  (if (char-set? char-set)
+      (map (lambda (char) (kbd char))
+           (char-set-fold cons '() char-set))
+      (error:wrong-type-argument "character set" char-set)))
+
 (define (valid-datum? object)
   (or (not object)
       (command? object)
@@ -199,6 +208,8 @@ USA.
             (comtab-put! comtab keystroke datum))))
     (cond ((key? keystroke)
            (put! keystroke))
+          ((char-set? keystroke)
+           (for-each put! (char-set-members keystroke)))
           ((prefixed-key? keystroke)
            ;; Find the comtab for the prefix key
            ;; then add the following key to the datum

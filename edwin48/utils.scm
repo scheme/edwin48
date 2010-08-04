@@ -169,11 +169,11 @@ USA.
 	  (write-string (lambda (s)
 			  (write-string s (current-output-port)))))
       (cond ((or (char=? char #\Y)
-		 (char=? char #\Space))
+		 (char=? char #\space))
 	     (write-string "Yes")
 	     #t)
 	    ((or (char=? char #\N)
-		 (char=? char #\Rubout))
+		 (char=? char #\rubout))
 	     (write-string "No")
 	     #f)
 	    (else
