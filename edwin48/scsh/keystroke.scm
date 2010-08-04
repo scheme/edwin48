@@ -100,7 +100,7 @@
      ((number? value) (make-key (ascii->char value) modifiers))
      ((char? value)
       (cond
-       ((known-key? value) => (lambda (name) (really-make-key name modifiers)))
+       ; ((known-key? value) => (lambda (name) (really-make-key name modifiers)))
        ((char-set-contains? char-set:iso-control value)
         (really-make-key (strip value)
                          (union modifiers (key-modifier-set ctrl))))
@@ -129,6 +129,7 @@
 (define-syntax kbd
   (lambda (form rename compare)
     (let ((%key (rename 'make-key))
+          (%key-value (rename 'key-value))
           (r    rename)
           (form (cdr form))) ;; discard the first token, 'KBD'
 
@@ -140,7 +141,7 @@
               (value     (car form))
               (modifiers (cdr form))
               (%key-modifier-set (r 'key-modifier-set)))
-          `(,%key ,(->key value)
+          `(,%key (,%key-value ,(->key value))
                   (,%key-modifier-set ,@modifiers))))
 
       (define (string->key form)
