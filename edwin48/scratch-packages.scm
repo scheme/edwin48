@@ -19,54 +19,25 @@
 ;; variable - Works with explicit defines
 
 (define-structure edwin:basic-command edwin:basic-command/interface
-  (open scheme
-        srfi-89)
-  (begin
-    (define (barf-if-read-only) (lambda () (display "barf-BROKEN")))
-    (define (check-first-group-modification g) "mod-BROKEN")
-    (define (editor-beep g) "beedp-BROKEN")
-    (define (editor-failure g) "fail-BROKEN")
-    (define (execute-extended-keys? g) "extnkeys-BROKEN")
-    (define extension-commands (list 0))
-    (define (indent-new-comment-line mark fill-prefix)
-      "indlin-BROKEN")
-    (define (read-quoted-char prompt-string) "rc_car-BROKEN")
-    (define (save-buffers-and-exit no-confirmation? noun exit)
-      "save&exit-BROKEN")
-    (define* (save-buffers-kill-edwin (no-confirmation? #f))
-      "save&kill-BROKEN")
-    (define scheme-can-quit? #t)
-    (define (self-insert char n allow-autofill?) "self_ins-BROKEN")
-    (define (set-command-prompt-prefix!) "set-pref-BROKEN")
+  (open scheme aliases edwin:utilities edwin:command
+        edwin:variable edwin:buffer edwin:mark edwin:group
+        edwin:things edwin:simple-editing edwin:region keystroke
+        ascii srfi-89)
+  (for-syntax (open scheme macro-helpers))
+  (files (scsh macros)
+         basic))
 
-    ;; commands
-    (define edwin-command$abort-recursive-edit "abort_edit-BROKEN")
-    (define edwin-command$control-meta-prefix "cm_pre-BROKEN")
-    (define edwin-command$control-prefix "c_pre-BROKEN")
-    (define edwin-command$define-command "defcm-BROKEN")
-    (define edwin-command$execute-extended-command "eec-BROKEN")
-    (define edwin-command$exit-recursive-edit "ere-BROKEN")
-    (define edwin-command$indent-for-comment "ifc-BROKEN")
-    (define edwin-command$indent-new-comment-line "inc-BROKEN")
-    (define edwin-command$keyboard-quit "kq-BROKEN")
-    (define edwin-command$kill-comment "kc-BROKEN")
-    (define edwin-command$meta-prefix "m_pre-BROKEN")
-    (define edwin-command$narrow-to-region "ntr-BROKEN")
-    (define edwin-command$open-line "open-line-BROKEN")
-    (define edwin-command$prefix-key "p_keyBROKEN")
-    (define edwin-command$quoted-insert "quins-BROKEN")
-    (define edwin-command$save-buffers-kill-edwin "killed--BROKEN")
-    (define edwin-command$save-buffers-kill-scheme "killsch-BROKEN")
-    (define edwin-command$self-insert-command "sicom-BROKEN")
-    (define edwin-command$set-comment-column "setcom-BROKEN")
-    (define edwin-command$set-key "s_keyBROKEN")
-    (define edwin-command$suspend-edwin "sused-BROKEN")
-    (define edwin-command$suspend-scheme "suschm-BROKEN")
-    (define edwin-command$undefined "undef-BROKEN")
-    (define edwin-command$widen "widen-BROKEN")
-
-    ;; variables
-    (define edwin-variable$buffer-reallocation-factor 4)))
+(define-structures
+  ((edwin:things edwin:things/interface)
+   (edwin:simple-editing edwin:simple-editing/interface))
+  (open scheme aliases weak-pair errors fixnum srfi-89
+        define-record-type* srfi-13 rb-tree)
+  (files things
+         regops
+         grpops
+         search
+         simple
+         struct))
 
 (define-structure edwin:buffer
   (export make-buffer
@@ -81,7 +52,7 @@
   (open scheme
         aliases
         define-record-type*
-        edwin:basic-command
+        ;edwin:basic-command
         edwin:group
         edwin:mark
         edwin:mode
@@ -153,21 +124,19 @@
 
 (define-structures
   ((edwin:command-table edwin:command-table/interface)
-   (edwin:mode edwin:mode/interface))
-  (open scheme aliases
-	edwin:basic-command edwin:command edwin:text-property
-	srfi-1 srfi-14 srfi-69 srfi-89 srfi-78
+   (edwin:mode          edwin:mode/interface))
+  (open scheme aliases edwin:command srfi-1 srfi-69 srfi-89 srfi-78 srfi-14
         define-record-type* errors keystroke aliases keystroke-discloser
-        edwin:string-table edwin:doc-string sorting)
+        edwin:string-table edwin:doc-string sorting ascii)
   (for-syntax (open scheme macro-helpers))
   (files (scsh macros)
-         comtab
-         modes))
+         modes
+         comtab))
 
 (define-structure edwin:fundamental edwin:fundamental/inteface
   (open scheme
-	aliases
-	keystroke
+        aliases
+        keystroke
         srfi-14
         edwin:button
 	edwin:command
@@ -186,7 +155,7 @@
     (define (set-current-major-mode! m)
       (set! current-major-mode m)))
   (files (scsh macros)
-	 modefs))
+         modefs))
 
 (define-structures
   ((edwin:display-imaging edwin:display-imaging/interface)
@@ -201,7 +170,7 @@
         (modify interrupts (expose call-after-gc!))
         aliases scaffolding
         define-record-type*
-        edwin:basic-command
+;        edwin:basic-command
         edwin:buffer
         edwin:command
         edwin:things
