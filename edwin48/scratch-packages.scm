@@ -175,6 +175,16 @@
 	edwin:mode
 	edwin:variable)
   (for-syntax (open scheme macro-helpers))
+  (begin
+    (define (make-special-key key modifiers)
+      (make-key key
+                (cond ((= modifiers 0)
+                       empty-modifiers)
+                      (else
+                       (make-key-modifier-set '(ctrl))))))
+    (define current-major-mode)
+    (define (set-current-major-mode! m)
+      (set! current-major-mode m)))
   (files (scsh macros)
 	 modefs))
 
