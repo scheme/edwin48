@@ -103,4 +103,6 @@
   (spawn-on-root
    (lambda () (event-distributor/invoke! event:console-resize))))
 
-(set-interrupt-handler interrupt/winch console-resize-handler)
+;; TODO : Commented out because scsh 0.7 would vomit about it's missing
+;;        TTY.
+;; (set-interrupt-handler interrupt/winch console-resize-handler)
