@@ -143,7 +143,7 @@
           comtab-key-bindings))
 
 (define-interface edwin:display-imaging/interface
-  (export default-char-image-strings
+  (export ;default-char-image-strings
           group-column->index
           group-columns
           group-line-columns
@@ -736,6 +736,29 @@
           ->variable
           variable-permanent-local?
           variable-permanent-local!))
+
+(define-interface edwin:simple-editing/interface
+  (export delete-left-char  delete-right-char
+          delete-string     extract-and-delete-string
+          extract-left-char extract-right-char
+          extract-string
+          find-next-property-change
+          find-next-specific-property-change
+          find-previous-property-change
+          find-previous-specific-property-change
+          guarantee-newline         guarantee-newlines
+          insert                    insert-char
+          insert-chars              insert-newline
+          insert-newlines           insert-region
+          insert-string             insert-substring
+          insert-string-pad-left    insert-string-pad-right
+          insert-substring-pad-left insert-substring-pad-right
+          mark-flash                narrow-to-region
+          region-get                region-put!
+          region-remove!            reposition-window-top
+          sit-for                   sleep-for
+          specific-property-region  widen))
+
 
 (define-interface edwin:window-system/interface
   (export vanilla-window
