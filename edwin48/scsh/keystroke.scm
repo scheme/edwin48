@@ -98,6 +98,7 @@
                              (union (key-modifiers value) modifiers)
                              name))
      ((number? value) (make-key (ascii->char value) modifiers))
+     ((symbol? value) (really-make-key value modifiers))
      ((char? value)
       (cond
        ; ((known-key? value) => (lambda (name) (really-make-key name modifiers)))
