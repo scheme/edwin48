@@ -104,7 +104,7 @@ Like Fundamental mode, but no self-inserting characters.")
 (define-key 'fundamental (kbd (ctrl #\e)) 'end-of-line)
 (define-key 'fundamental (kbd (ctrl #\f)) 'forward-char)
 (define-key 'fundamental (kbd (ctrl #\g)) 'keyboard-quit)
-(define-prefix-key 'fundamental (kbd (ctrl #\h)) 'help-prefix)
+(define-prefix-key 'fundamental (kbd (ctrl #\h)) ) ;; 'help-prefix)
 (define-key 'fundamental (kbd (ctrl #\i)) 'indent-for-tab-command)
 (define-key 'fundamental (kbd (ctrl #\j)) 'newline-and-indent)
 (define-key 'fundamental (kbd (ctrl #\k)) 'kill-line)
@@ -336,48 +336,49 @@ Like Fundamental mode, but no self-inserting characters.")
 
 ;;; Additional bindings to `standard' special keys:
 
-(define-key 'fundamental (make-special-key 'down 0) 'next-line)
-(define-key 'fundamental (make-special-key 'up 0) 'previous-line)
-(define-key 'fundamental (make-special-key 'left 0) 'backward-char)
-(define-key 'fundamental (make-special-key 'right 0) 'forward-char)
-(define-key 'fundamental (make-special-key 'left 1) 'backward-word)
-(define-key 'fundamental (make-special-key 'right 1) 'forward-word)
+;; (define-key 'fundamental (make-special-key 'down 0) 'next-line)
+;; (define-key 'fundamental (make-special-key 'up 0) 'previous-line)
+;; (define-key 'fundamental (make-special-key 'left 0) 'backward-char)
+;; (define-key 'fundamental (make-special-key 'right 0) 'forward-char)
+;; (define-key 'fundamental (make-special-key 'left 1) 'backward-word)
+;; (define-key 'fundamental (make-special-key 'right 1) 'forward-word)
 
-;; PC bindings:
-(define-key 'fundamental (make-special-key 'home 0) 'beginning-of-line)
-(define-key 'fundamental (make-special-key 'end 0) 'end-of-line)
-(define-key 'fundamental (make-special-key 'delete 0) 'delete-char)
-(define-key 'fundamental (make-special-key 'page-up 0) 'scroll-down)
-(define-key 'fundamental (make-special-key 'page-down 0) 'scroll-up)
-(define-key 'fundamental (make-special-key 'page-up 1) 'scroll-other-window)
-(define-key 'fundamental (make-special-key 'page-down 1) 'scroll-other-window-down)
+;; ;; PC bindings:
+;; (define-key 'fundamental (make-special-key 'home 0) 'beginning-of-line)
+;; (define-key 'fundamental (make-special-key 'end 0) 'end-of-line)
+;; (define-key 'fundamental (make-special-key 'delete 0) 'delete-char)
+;; (define-key 'fundamental (make-special-key 'page-up 0) 'scroll-down)
+;; (define-key 'fundamental (make-special-key 'page-down 0) 'scroll-up)
+;; (define-key 'fundamental (make-special-key 'page-up 1) 'scroll-other-window)
+;; (define-key 'fundamental (make-special-key 'page-down 1) 'scroll-other-window-down)
 
-;; HP bindings:
-(define-key 'fundamental (make-special-key 'deletechar 0) 'delete-char)
-(define-key 'fundamental (make-special-key 'deleteline 0) 'kill-line)
-(define-key 'fundamental (make-special-key 'insertline 0) 'open-line)
-(define-key 'fundamental (make-special-key 'next 0) 'scroll-up)
-(define-key 'fundamental (make-special-key 'prior 0) 'scroll-down)
-(define-key 'fundamental (make-special-key 'next 1) 'scroll-other-window)
-(define-key 'fundamental (make-special-key 'prior 1) 'scroll-other-window-down)
+;; ;; HP bindings:
+;; (define-key 'fundamental (make-special-key 'deletechar 0) 'delete-char)
+;; (define-key 'fundamental (make-special-key 'deleteline 0) 'kill-line)
+;; (define-key 'fundamental (make-special-key 'insertline 0) 'open-line)
+;; (define-key 'fundamental (make-special-key 'next 0) 'scroll-up)
+;; (define-key 'fundamental (make-special-key 'prior 0) 'scroll-down)
+;; (define-key 'fundamental (make-special-key 'next 1) 'scroll-other-window)
+;; (define-key 'fundamental (make-special-key 'prior 1) 'scroll-other-window-down)
+
 
 ;;; Jokes:
 
-(define-key 'fundamental (kbd h #\space) 'hyper-space)
-(define-key 'fundamental (make-special-key 'malesymbol 4) 'super-man)
-(define-key 'fundamental (make-special-key 'menu 4) 'super-menu)
+;; (define-key 'fundamental (kbd h #\space) 'hyper-space)
+;; (define-key 'fundamental (make-special-key 'malesymbol 4) 'super-man)
+;; (define-key 'fundamental (make-special-key 'menu 4) 'super-menu)
 
 ;;; Mouse buttons:
-
-(define-key 'fundamental button1-down 'mouse-set-point)
-;; Next two are for wheel mouse under X.
-(define-key 'fundamental button4-down 'mouse-scroll-down)
-(define-key 'fundamental button5-down 'mouse-scroll-up)
-(define-key 'fundamental button1-up 'mouse-ignore)
-(define-key 'fundamental button2-up 'mouse-ignore)
-(define-key 'fundamental button3-up 'mouse-ignore)
-(define-key 'fundamental button4-up 'mouse-ignore)
-(define-key 'fundamental button5-up 'mouse-ignore)
+;; Need to implement mouse buttons in kbd macro
+;; (define-key 'fundamental button1-down 'mouse-set-point)
+;; ;; Next two are for wheel mouse under X.
+;; (define-key 'fundamental button4-down 'mouse-scroll-down)
+;; (define-key 'fundamental button5-down 'mouse-scroll-up)
+;; (define-key 'fundamental button1-up 'mouse-ignore)
+;; (define-key 'fundamental button2-up 'mouse-ignore)
+;; (define-key 'fundamental button3-up 'mouse-ignore)
+;; (define-key 'fundamental button4-up 'mouse-ignore)
+;; (define-key 'fundamental button5-up 'mouse-ignore)
 
 ;; Bind VC keys only if VC is loaded.
 (if (name->command 'vc-toggle-read-only #f)
