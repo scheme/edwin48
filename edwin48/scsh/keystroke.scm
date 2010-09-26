@@ -77,8 +77,10 @@
                   (key-modifier-set->list modifiers))))
   (if (not (key? key))
       (error "Not a key" key)
-      (+ (modifiers-hash (key-modifiers key))
-         (char->ascii (key-value key)))))
+      + ((modifiers-hash (key-modifiers key))
+         ;; (key-value key) returns a string, so make it a list of chars
+         ;; then add them together to make the key
+         (apply + (map char->ascii (string->list (key-value key)))))))
 
 (define* (make-key value
                    (modifiers empty-modifiers)
@@ -89,14 +91,14 @@
                     (char->ascii #\a))))
   (define (union modifiers modifier)
     (key-modifier-set-union modifiers modifier))
-
   (let ((modifiers (if (key-modifier? modifiers)
                        (make-key-modifier-set (list modifiers))
                        modifiers)))
     (cond
-     ((key? value) (make-key (key-value value)
-                             (union (key-modifiers value) modifiers)
-                             name))
+     ((key? value)
+      (make-key (key-value value)
+                (union (key-modifiers value) modifiers)
+                name))
      ((number? value) (make-key (ascii->char value) modifiers))
      ((symbol? value) (really-make-key value modifiers))
      ((char? value)
