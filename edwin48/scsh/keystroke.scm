@@ -77,11 +77,16 @@
                   (key-modifier-set->list modifiers))))
   (if (not (key? key))
       (error "Not a key" key)
-      + ((modifiers-hash (key-modifiers key))
-         ;; (key-value key) returns a string, so make it a list of chars
-         ;; then add them together to make the key
-         (apply + (map char->ascii (string->list (key-value key)))))))
+      (let ((kval (key-value key)))
+        (+ (modifiers-hash (key-modifiers key))
+           (if (symbol? kval)
+               (string-hash (symbol->string kval))
+               (string-hash kval))))))
+      ;; Have to do something special for keys that are symbols
+      ;; (key-value key) returns a string, so make it a list of chars
+      ;; then add them together to make the key
 
+;;; TODO: Figure out what NAME is
 (define* (make-key value
                    (modifiers empty-modifiers)
                    (name      ""))
@@ -103,17 +108,17 @@
      ((symbol? value) (really-make-key value modifiers))
      ((char? value)
       (cond
-       ; ((known-key? value) => (lambda (name) (really-make-key name modifiers)))
-       ((char-set-contains? char-set:iso-control value)
-        (really-make-key (strip value)
-                         (union modifiers (key-modifier-set ctrl))))
-       (else (really-make-key value modifiers))))
+       ((known-key? value) => (lambda (name) (really-make-key name modifiers)))
+       ;; ((char-set-contains? char-set:iso-control value)
+       ;;  (really-make-key (strip value)
+       ;;                   (union modifiers (key-modifier-set ctrl))))
+       (else (really-make-key (string value) modifiers))))
      ((string? value)
       (if (zero? (string-length value))
           (error "invalid string input" value)
           (cond
            ((symbol? name) (really-make-key name modifiers))
-           ((string? name) (really-make-key (string->symbol name) modifiers))
+           ((string? name) (really-make-key value modifiers))
            (else (error "invalid name" name )))))
      (else (error "invalid input" value)))))
 
