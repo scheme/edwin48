@@ -27,12 +27,17 @@ USA.
 |#
 
 ;;;; Command Tables
+;;;;
+;;;; Command Tables are hash tables that bind a keystroke to a command
+;;;; what is the range of comtabs, possible things that it can store
+;;;; whats the parsing algorithm for keystrokes
+
 
 ;;; Example of a command:
 ;;; (define fundamental (make-comtab))
 ;;; (define-command do-something "Does something" () (lambda () (display "Did something\n")))
-;;; (define-key fundamental (kbd s) 'do-something)
-;;; (dispatch-on-key fundamental (kbd s))
+;;; (define-key fundamental (kbd #\s) 'do-something)
+;;; (dispatch-on-key fundamental (kbd #\s))
 
 (define-record-type* comtab
   (really-make-comtab table)
@@ -89,10 +94,10 @@ USA.
 
 ;;; Get the Command for the given key in
 ;;; the given command table
-(define (comtab-entry comtab keystroke)
-  (hash-table-ref/default (comtab-table comtab)
-                          keystroke
-                          (ref-command-object undefined)))
+(define (comtab-entry comtabs keystroke)
+  (or (%comtab-entry comtabs keystroke)
+      (and (not (button? keystroke))
+	   (ref-command-object undefined))))
 
 ;;; Get the Command for a keystroke in a specific mark
 (define (local-comtab-entry comtabs keystroke mark)
@@ -139,11 +144,13 @@ USA.
        (list? object)
        (every comtab? object)))
 
+;;; DEPRECATED
 (define (comtab-alias? object)
   (and (pair? object)
        (valid-comtabs? (car object))
        (comtab-key? (cdr object))))
 
+;;; DEPRECATED
 (define (command&comtab? object)
   (and (pair? object)
        (command? (car object))
@@ -152,13 +159,15 @@ USA.
 (define (comtab-alias/dereference datum)
   (lookup-key (car datum) (cdr datum)))
 
+;;; DEPRECATED
 (define (prefixed-key? object)
   (let loop ((object object))
     (and (pair? object)
-	 (key? (car object))
-	 (or (null? (cdr object))
-	     (loop (cdr object))))))
+         (key? (car object))
+         (or (null? (cdr object))
+             (loop (cdr object))))))
 
+;;; DEPRECATED
 (define (prefix-key-list? comtabs key)
   (let ((object (lookup-key comtabs key)))
     (or (comtab? object)
