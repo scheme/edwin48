@@ -57,7 +57,8 @@
   (char->ascii (string-ref string k)))
 
 (define (vector-8b-set! string k code)
-  (string-set! string k (ascii->char code)))
+  (if (<= code 128)
+      (string-set! string k (ascii->char code))))
 
 (define (vector-8b-fill! string start end ascii)
   (string-fill! string ascii start end))
