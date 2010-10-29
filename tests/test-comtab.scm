@@ -36,58 +36,58 @@
 
 
 ;;; On the third day he created keys
-(define-key fundamental (kbd s) 'do-something)
-(check (comtab-get fundamental (kbd s)) => (name->command 'do-something))
+(define-key fundamental (kbd #\s) 'do-something)
+(check (comtab-get fundamental (kbd #\s)) => (name->command 'do-something))
 
-(define-key ass-mode (kbd (ctrl s)) 'do-something)
-(check (comtab-get ass-mode (kbd (ctrl s))) => (name->command 'do-something))
+(define-key ass-mode (kbd (ctrl #\s)) 'do-something)
+(check (comtab-get ass-mode (kbd (ctrl #\s))) => (name->command 'do-something))
 
-(define-key fundamental (kbd n) 'do-nothing)
-(check (comtab-get fundamental (kbd n)) => (name->command 'do-nothing))
+(define-key fundamental (kbd #\n) 'do-nothing)
+(check (comtab-get fundamental (kbd #\n)) => (name->command 'do-nothing))
 
-(define-key fundamental (kbd (ctrl n)) 'do-nothing)
-(check (comtab-get fundamental (kbd (ctrl n))) => (name->command 'do-nothing))
+(define-key fundamental (kbd (ctrl #\n)) 'do-nothing)
+(check (comtab-get fundamental (kbd (ctrl #\n))) => (name->command 'do-nothing))
 
-(define-key ass-mode (kbd (ctrl q)) 'do-nothing)
-(check (comtab-get ass-mode (kbd (ctrl q))) => (name->command 'do-nothing))
+(define-key ass-mode (kbd (ctrl #\q)) 'do-nothing)
+(check (comtab-get ass-mode (kbd (ctrl #\q))) => (name->command 'do-nothing))
 
-(define-key fundamental (kbd m) 'do-me)
-(check (comtab-get fundamental (kbd m)) => (name->command 'do-me))
+(define-key fundamental (kbd #\m) 'do-me)
+(check (comtab-get fundamental (kbd #\m)) => (name->command 'do-me))
 
-(define-key ass-mode (kbd n) 'do-be)
-(check (comtab-get ass-mode (kbd n)) => (name->command 'do-be))
+(define-key ass-mode (kbd #\n) 'do-be)
+(check (comtab-get ass-mode (kbd #\n)) => (name->command 'do-be))
 ;;; and it was good ...
 
 
 ;;; On the forth day he created prefix keys
-(define-prefix-key ass-mode (kbd (ctrl x)))
-(check (comtab? (hash-table-ref (comtab-table ass-mode) (kbd (ctrl x)))) => #t)
+(define-prefix-key ass-mode (kbd (ctrl #\x)))
+(check (comtab? (hash-table-ref (comtab-table ass-mode) (kbd (ctrl #\x)))) => #t)
 
 (define-command find-file "Find file" () (lambda () (display "find\n")))
 (check (command? (name->command 'find-file)) => #t)
 
-(define-prefix-key ass-mode (kbd (ctrl x) v))
-(check (comtab? (comtab-get ass-mode (kbd (ctrl x) v))) => #t)
+(define-prefix-key ass-mode (kbd (ctrl #\x) #\v))
+(check (comtab? (comtab-get ass-mode (kbd (ctrl #\x) #\v))) => #t)
 
 (define-command vc-dir "Version Control Dir" () (lambda () (display "VC Dir\n")))
 (check (command? (name->command 'vc-dir)) => #t)
 
-(define-key ass-mode (kbd (ctrl x) v v) 'vc-dir)
-(check (comtab-get ass-mode (kbd (ctrl x) v v)) => (name->command 'vc-dir))
+(define-key ass-mode (kbd (ctrl #\x) #\v #\v) 'vc-dir)
+(check (comtab-get ass-mode (kbd (ctrl #\x) #\v #\v)) => (name->command 'vc-dir))
 ;;; and it was good ...
 
 
 ;;; On the fifth day he asked for help
 (check (comtab-key-bindings (list ass-mode fundamental) (name->command 'do-nothing))
        (=> key=?)
-       (list (kbd (ctrl n)) (kbd (ctrl q))))
+       (list (kbd (ctrl #\n)) (kbd (ctrl #\q))))
 ;;; The order of the comtabs determines the shadowing. So =>
 ;;; C-q ass-mode
 ;;; C-n fundamental ('do-be in ass-mode shadows (kbd n) in fundamental)
 
 (check (comtab-key-bindings (list fundamental ass-mode) (name->command 'do-nothing))
        (=> key=?)
-       (list (kbd n) (kbd (ctrl n)) (kbd (ctrl q))))
+       (list (kbd #\n) (kbd (ctrl #\n)) (kbd (ctrl #\q))))
 ;;; Flipping them gets us different results =>
 ;;; n fundamental
 ;;; C-n fundamental
