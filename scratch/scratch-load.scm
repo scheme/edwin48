@@ -17,6 +17,9 @@
 (config '(load "=base/terminfo/interfaces.scm"
                "=base/terminfo/scsh-packages.scm"))
 
+(config '(load "=base/pantene/interfaces.scm"
+               "=base/pantene/packages.scm"))
+
 (config '(load "=base/soosy/interfaces.scm"
                "=base/soosy/packages.scm"))
 
