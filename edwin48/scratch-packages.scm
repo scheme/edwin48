@@ -323,3 +323,14 @@
   (files (scsh macros)
          variable)
   (begin (define (editor-name/internal->external e) e)))
+
+(define-structure edwin:command-reader edwin:command-table/interface
+  (open scheme
+        aliases
+        pantene
+        srfi-13 srfi-14 srfi-89
+        edwin:command-table)
+  (for-syntax (open scheme errors macro-helpers))
+  (files (scsh macros)
+         comred
+         comtab))
