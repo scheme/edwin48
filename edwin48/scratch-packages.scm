@@ -158,7 +158,7 @@
          modefs))
 
 (define-structures
-  ((edwin:display-imaging edwin:display-imaging/interface)
+  (;(edwin:display-imaging edwin:display-imaging/interface)
    (edwin:group           edwin:group/interface)
    (edwin:mark            edwin:mark/interface)
    (edwin:motion          edwin:motion/interface)
@@ -190,7 +190,8 @@
          motion
          txtprp
          search
-         image))
+;         image
+))
 
 (define-structure edwin:display-type edwin:display-type/interface
   (open (modify scheme (hide string-fill! vector-fill!))
