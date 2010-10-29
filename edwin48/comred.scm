@@ -436,21 +436,23 @@ USA.
 		   (record-command-arguments (map quotify-sexp arguments)))
 	       arguments))))))
 
-(define (execute-command-history-entry entry)
-  (let ((history command-history))
-    (if (not (equal? entry
-		     (let loop ((entries (cdr history)) (tail history))
-		       (if (eq? entries history)
-			   (car tail)
-			   (loop (cdr entries) entries)))))
-	(begin
-	  (set-car! history entry)
-	  (set! command-history (cdr history)))))
-  (apply (command-procedure (name->command (car entry)))
-	 (map (let ((environment (->environment '(EDWIN))))
-		(lambda (expression)
-		  (eval-with-history expression environment)))
-	      (cdr entry))))
+;;; TODO: Get rid of Environments!
+
+;; (define (execute-command-history-entry entry)
+;;   (let ((history command-history))
+;;     (if (not (equal? entry
+;; 		     (let loop ((entries (cdr history)) (tail history))
+;; 		       (if (eq? entries history)
+;; 			   (car tail)
+;; 			   (loop (cdr entries) entries)))))
+;; 	(begin
+;; 	  (set-car! history entry)
+;; 	  (set! command-history (cdr history)))))
+;;   (apply (command-procedure (name->command (car entry)))
+;; 	 (map (let ((environment (->environment '(EDWIN))))
+;; 		(lambda (expression)
+;; 		  (eval-with-history expression environment)))
+;; 	      (cdr entry))))
 
 (define (interactive-argument key prompt)
   (let ((prompting
