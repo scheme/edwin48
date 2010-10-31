@@ -29,7 +29,8 @@
 (config '(load "=base/edwin48/scratch-interfaces.scm"
 	       "=base/edwin48/scratch-packages.scm"))
 
-(config '(load "test-groups.scm"))
+;(config '(load "test-groups.scm"))
+
 
 
 
