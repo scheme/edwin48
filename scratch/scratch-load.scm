@@ -14,20 +14,22 @@
 
 (config '(load "=base/config-macros.scm"))
 
+;; Load srfi's before the other packages.
+(config '(load "=base/edwin48/srfi-packages.scm"
+               "=base/edwin48/scsh/packages.scm"))
+
 (config '(load "=base/terminfo/interfaces.scm"
                "=base/terminfo/scsh-packages.scm"))
-
-(config '(load "=base/pantene/interfaces.scm"
-               "=base/pantene/packages.scm"))
 
 (config '(load "=base/soosy/interfaces.scm"
                "=base/soosy/packages.scm"))
 
-(config '(load "=base/edwin48/srfi-packages.scm"
-               "=base/edwin48/scsh/packages.scm"))
+(config '(load "=base/pantene/edwin-interfaces.scm"
+               "=base/pantene/edwin-packages.scm"))
 
 (config '(load "=base/edwin48/scratch-interfaces.scm"
-	       "=base/edwin48/scratch-packages.scm"))
+               "=base/edwin48/scratch-packages.scm"))
+
 
 ;(config '(load "test-groups.scm"))
 
