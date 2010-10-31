@@ -125,7 +125,7 @@
 (define-structures
   ((edwin:command-table edwin:command-table/interface)
    (edwin:mode          edwin:mode/interface))
-  (open scheme aliases edwin:command srfi-1 srfi-69 srfi-89 srfi-78 srfi-14
+  (open scheme aliases edwin:command srfi-1 srfi-69 srfi-89 srfi-14
         define-record-type* errors keystroke aliases keystroke-discloser
         edwin:string-table edwin:doc-string sorting ascii)
   (for-syntax (open scheme macro-helpers))
