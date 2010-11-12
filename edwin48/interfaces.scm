@@ -85,6 +85,94 @@
           bufferset-guarantee-buffer! bufferset-kill-buffer!
           bufferset-rename-buffer     bufferset-select-buffer!))
 
+(define-interface edwin:current-state/interface+edwin
+  (edwin:export (variable frame-creation-hook
+                          select-buffer-hook)))
+
+(define-interface edwin:current-state/interface+scheme
+  (export add-kill-buffer-hook
+          add-rename-buffer-hook
+          add-select-buffer-hook
+          buffer-alive?
+          buffer-list
+          buffer-mark
+          buffer-names
+          bury-buffer
+          clear-current-message!
+          create-buffer
+          current-buffer
+          current-buffer?
+          current-column
+          current-comtabs
+          current-major-mode
+          current-mark
+          current-message
+          current-minor-mode?
+          current-point
+          current-process
+          current-region
+          current-window
+          current-window?
+          delete-screen!
+          disable-current-minor-mode!
+          enable-current-minor-mode!
+          find-buffer
+          find-or-create-buffer
+          global-window-modeline-event!
+          kill-buffer
+          make-buffer-invisible
+          make-screen
+          maybe-deselect-buffer-layout
+          multiple-screens?
+          next-visible-window
+          other-buffer
+          other-screen
+          other-window
+          pop-current-mark!
+          previous-buffer
+          push-buffer-mark!
+          push-current-mark!
+          remove-kill-buffer-hook
+          remove-rename-buffer-hook
+          remove-select-buffer-hook
+          rename-buffer
+          save-excursion
+          screen-list
+          select-buffer
+          select-buffer-no-record
+          select-cursor
+          select-screen
+          select-window
+          selected-buffer
+          selected-buffer?
+          selected-screen
+          selected-screen?
+          selected-window
+          selected-window?
+          set-buffer-mark!
+          set-buffer-point!
+          set-current-major-mode!
+          set-current-mark!
+          set-current-message!
+          set-current-point!
+          set-current-region!
+          set-current-region-reversed!
+          typein-window
+          typein-window?
+          update-screens!
+          update-selected-screen!
+          window-list
+          window-live?
+          window-visible?
+          window0
+          with-current-point
+          with-messages-suppressed
+          with-selected-buffer))
+
+(define-interface edwin:current-state/interface
+  (compound-interface edwin:current-state/interface+edwin
+                      edwin:current-state/interface+scheme))
+
 (define-interface edwin:button/interface
   (export button-bits
           button-down?
@@ -174,6 +262,13 @@
           description->string
           description-first-line
           description-append))
+
+(define-interface edwin:paths/interface
+  (export edwin-binary-directory
+          edwin-info-directory
+          edwin-etc-directory
+          edwin-tutorial-pathname
+          default-homedir-pathname))
 
 (define-interface edwin:editor-definition/interface
   (export make-editor
@@ -486,6 +581,22 @@
           minor-mode-comtab
           mode-description))
 
+(define-interface edwin:modeline/interface+edwin
+  (edwin:export
+   (variable mode-name
+             minor-mode-alist
+             mode-line-format
+             mode-line-modified
+             mode-line-procedure
+             mode-line-process)))
+
+(define-interface edwin:modeline/interface+scheme
+  (export add-minor-mode-line-entry!
+          remove-minor-mode-line-entry!))
+
+(define-interface edwin:modeline/interface
+  (compound-interface edwin:modeline/interface+edwin
+                      edwin:modeline/interface+scheme))
 
 (define-interface edwin:motion/interface
   (export (line-end
@@ -589,6 +700,9 @@
           screen-scroll-lines-up
           with-screen-in-update
           screen-line-draw-cost))
+
+(define-interface edwin:terminal-screen/interface
+  (export make-console-screen))
 
 (define-interface edwin:search/interface
   (export
@@ -760,9 +874,41 @@
           specific-property-region  widen))
 
 
+(define-interface edwin:kill-command/interface
+  (edwin:export (command delete-region
+                         delete-backward-char
+                         delete-char
+                         kill-line
+                         backward-delete-char-untabify
+                         kill-region
+                         copy-region-as-kill
+                         append-next-kill
+                         yank
+                         yank-pop
+                         rotate-yank-pointer
+                         set-mark-command
+                         mark-beginning-of-buffer
+                         mark-end-of-buffer
+                         mark-whole-buffer
+                         exchange-point-and-mark
+                         transpose-chars)
+                (variable kill-ring-max
+                          kill-ring
+                          kill-ring-yank-pointer
+                          mark-ring-maximum)))
+
+
 (define-interface edwin:window-system/interface
   (export vanilla-window
           window-root-window))
+
+(define-interface edwin:input-event/interface
+  (export make-input-event
+          input-event?
+          input-event/type
+          input-event/operator
+          input-event/operands
+          apply-input-event))
 
 (define-interface edwin:command-reader/interface
   (export top-level-command-reader
@@ -783,6 +929,55 @@
           dispatch-on-key
           dispatch-on-command
           execute-command-history-entry))
+
+(define-interface edwin:prompting/interface+scheme
+  (export make-typein-buffer-name
+          within-typein-edit?
+          typein-edit-other-window
+          prompt-for-typein
+          prompt-for-string
+          prompt-for-completed-string
+          prompt-for-string/prompt
+          prompt-for-number
+          prompt-for-string-table-name
+          prompt-for-alist-value
+          prompt-for-command
+          prompt-for-variable
+          prompt-history-strings
+          set-prompt-history-strings!
+          prompt-options-default-string
+          standard-completion
+          pop-up-generated-completions
+          prompt-for-char
+          prompt-for-key
+          prompt-for-confirmation?
+          prompt-for-yes-or-no?
+          call-with-pass-phrase
+          call-with-confirmed-pass-phrase
+          ))
+
+(define-interface edwin:prompting/interface+edwin
+  (edwin:export (command exit-minibuffer
+                         minibuffer-yank-default
+                         minibuffer-complete
+                         minibuffer-complete-word
+                         minibuffer-completion-help
+                         minibuffer-complete-and-exit
+                         exit-minibuffer-yes-or-no
+                         next-prompt-history-item
+                         previous-prompt-history-item
+                         repeat-complex-command)
+                (mode minibuffer-local
+                      minibuffer-local-completion
+                      minibuffer-local-must-match
+                      minibuffer-local-yes-or-no)
+                (variable completion-auto-help
+                          enable-recursive-minibuffers)
+                ))
+
+(define-interface edwin:prompting/interface
+  (compound-interface edwin:prompting/interface+scheme
+                      edwin:prompting/interface+edwin))
 
 (define-interface edwin:basic-command/interface+edwin
   (edwin:export (variable buffer-reallocation-factor)
