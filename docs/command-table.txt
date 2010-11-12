@@ -1,0 +1,206 @@
+-- Title --
+
+Command Tables
+
+-- Author --
+
+Jeff Dlouhy
+
+-- Files --
+
+comtab.scm
+
+-- Abstract --
+
+This document describes the implementation, specification and uses for
+command tables inside of Edwin48. They are a essential part of an
+Emacs and are dispatched on almost every time a key is pressed by the user.
+
+-- Rationale --
+
+Command Tables are implemented as hash tables that bind a keystroke to
+either a command, button, or another command table. Command tables are
+normally referred in code as a list of comtabs or a single comtab. I
+will use this shortened name for the rest of the document.
+
+Modes contain a list of comtabs that are used for lookup when
+dispatching on a keystroke. The order of the comtabs is important in
+this lookup, since some modes will have the same key bound to
+different commands and shadow the other modes.
+
+-- Specification --
+
+- Constructors-
+
+make-comtab  (nothing) -> comtab
+
+    Returns a newly created command table record type.
+
+
+define-key  mode keystroke datum -> undefined
+
+    Adds a keystroke (kbd) with a datum in the mode's comtabs.
+    The mode can either be one of: Mode -   Where it will add it to the
+                                            mode's command tables
+
+                                   Symbol - Where it will lookup the
+                                            mode by name and add it to
+                                            it's command
+                                            tables. Otherwise it will
+                                            throw an error.
+
+                                   Comtab - It will just be added to
+                                            the given comtab
+
+
+    Example:
+
+         (define-key fundamental (kbd #\s) 'do-something)
+         (define-key 'scheme (kbd #\a) 'do-that)
+         (define-key (make-comtab) (kbd #\p) 'do-this)
+
+
+
+define-prefix-key  mode key (command #f) -> undefined
+    A prefix key is a keystroke with a comtab and not a command
+    TODO: Finish me
+
+
+- Predicates -
+
+comtab?  obj -> bool
+
+    Is this object obj a command table?
+
+
+comtab-key?  obj -> bool
+
+    Is this object obj a keystroke?
+
+
+(DEPRECATED) prefix-key-list?  list-of-comtabs key -> bool
+
+    Is this keystroke key is bound to a prefix key or a command table ?
+
+
+valid-comtabs?  obj -> bool
+
+    Is this object obj valid command table?
+
+    A valid command table is either a Symbol, Command Table, Mode, or
+    List of Command Tables.
+    TODO: Make sure this is still the case
+
+list-of-comtabs?  obj -> bool
+
+    Is this object obj a list containing only command tables?
+
+
+(DEPRECATED) comtab-alias?  obj -> bool
+
+    Is this object obj a key bound to another comtab (now a prefix key) ?
+
+
+(DEPRECATED) command&comtab?  obj -> bool
+
+    Is this object obj a pair which is a Command at the CAR and a
+    Command Table at the CDR?
+
+
+(DEPRECATED) prefixed-key?  obj -> bool
+
+    Is this object obj a pair made up of two or more keys?
+
+
+valid-datum?  obj -> bool
+
+    Is this object obj a vaild datum to store in a command table?
+
+    A valid datum is one either a Command or a Command Table. In the
+    future it will support Buttons.
+
+
+
+- Command Table Conversion -
+
+comtab->alist  comtab -> alist
+
+    Returns an association list such that the car of each element in
+    alist is a key in command-table and the corresponding cdr of each element
+    in alist is the datum associated to the key in command-table. The order
+    of the elements is unspecified.
+
+
+
+- Selection -
+
+comtab-get  comtab key -> comtab
+
+    Returns a command for the given key in a comtab this walks the
+    tree until it finds something. This follows prefixed keys and
+    walks down the tree until it finds a key that is is not a prefix
+    key at that point it returns the comtab. If the keystroke key is
+    not a prefix key, it just returns the given command table.
+
+
+lookup-key comtabs key -> datum
+
+    Returns the value of a key in a comtab or list of comtabs
+
+
+comtab-entry
+local-comtab-entry
+comtab-key-bindings
+comtab-alias/dereference
+
+
+- Modification -
+
+comtab-put!
+comtab-remove!
+
+
+- General Procedures -
+
+guarantee-comtabs
+handle-datum
+dispatch-on-key
+
+
+-- Examples --
+
+  +----------+--------------------------+
+  |   KEY    |          VALUE           |
+  +----------+--------------------------+
+  |   C-a    |  move-beginning-of-line  |
+  +----------+--------------------------+
+  |   C-x    |         comtab ----------+-----------+
+  +----------+--------------------------+           |
+  |   C-n    |        next-line         |           |
+  +----------+--------------------------+           |
+  |   M-p    |  cominit-previous-input  |           |
+  +----------+--------------------------+           |
+  |   C-h    |         comtab ----------+----+      |
+  +----------+--------------------------+    |      |
+                                             |      |
+                       +---------------------+      |
+                       |                            |
+  +----------+---------+----------------+           |
+  |   KEY    |          VALUE           |           |
+  +----------+--------------------------+           |
+  |    k     |       describe-key       |           |
+  +----------+--------------------------+           |
+  |    a     |     apropos-command      |           |
+  +----------+--------------------------+           |
+                       +----------------------------+
+                       |
+  +----------+---------+----------------+
+  |   KEY    |          VALUE           |
+  +----------+--------------------------+
+  |   C-f    |        find-file         |
+  +----------+--------------------------+
+  |   C-d    |      list-directory      |
+  +----------+--------------------------+
+  |   C-s    |       save-buffer        |
+  +----------+--------------------------+
+
