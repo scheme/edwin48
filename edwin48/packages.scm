@@ -72,7 +72,30 @@
   ((edwin:things edwin:things/interface)
    (edwin:simple-editing edwin:simple-editing/interface))
   (open scheme aliases weak-pair errors fixnum srfi-89
-        define-record-type* srfi-13 rb-tree)
+        define-record-type* srfi-13
+        (subset edwin:current-state (set-current-point!
+                                     push-current-mark!
+                                     set-current-mark!
+                                     current-point
+                                     current-mark))
+        (subset edwin:text-property (next-specific-property-change
+                                     text-not-deleteable?
+                                     update-intervals-for-deletion!
+                                     add-text-property))
+        (subset edwin:undo (undo-record-deletion!
+                            undo-record-replacement!))
+        (subset edwin:buffer (set-buffer-display-start!
+                              buffer-display-start))
+        (subset edwin:variable (ref-variable-object))
+        (subset scaffolding (re-compile-char-set
+                             set-window-point!
+                             window-point))
+        (subset edwin:utilities (%substring-move!))
+        (subset srfi-1 (delete!))
+        (subset edwin:buffer (buffer-windows
+                              buffer?))
+        edwin:mark
+        rb-tree)
   (files things
          regops
          grpops
@@ -119,7 +142,9 @@
         edwin:variable
         errors
         pathname
-        srfi-1)
+        srfi-1
+        (subset scaffolding (within-editor?))
+        (subset edwin:current-state (current-buffer)))
   (files bufset)
   (begin
     ;; buffer.scm
@@ -168,7 +193,9 @@
    (edwin:mode          edwin:mode/interface))
   (open scheme aliases edwin:command srfi-1 srfi-69 srfi-89 srfi-14
         define-record-type* errors keystroke aliases keystroke-discloser
-        edwin:string-table edwin:doc-string sorting ascii)
+        edwin:string-table edwin:doc-string sorting ascii
+        (subset edwin:basic-command (edwin-command$prefix-key))
+        (subset edwin:text-property (local-comtabs)))
   (for-syntax (open scheme macro-helpers))
   (files (scsh macros)
          modes
@@ -227,7 +254,6 @@
         (subset edwin:basic-command (barf-if-read-only
                                      check-first-group-modification
                                      edwin-variable$buffer-reallocation-factor))
-
         errors
         fixnum
         rb-tree
@@ -329,7 +355,8 @@
 
 (define-structure edwin:string-table edwin:string-table/interface
   (open scheme aliases define-record-type*
-	sort
+        sort
+        (subset sorting (list-sort))
         mit-regexp srfi-13 srfi-43 srfi-89)
   (files strtab))
 
@@ -451,6 +478,10 @@
         srfi-1
         srfi-6
         srfi-13
+        (subset edwin:current-state (update-screens!
+                                     make-input-event
+                                     selected-screen))
+        (subset scaffolding (within-editor?))
         terminal-support
         terminfo)
   (files terminal))
@@ -465,7 +496,27 @@
          edtstr))
 
 (define-structure edwin:modeline edwin:modeline/interface
-  (open scheme)
+  (open scheme
+        aliases
+        srfi-89
+        fixnum
+        (subset srfi-13 (string-pad
+                         string-index))
+        (subset srfi-1 (alist-delete))
+        edwin:variable
+        edwin:mark
+        (subset edwin:region (group-clipped?))
+        (subset edwin:group (group-display-start-index
+                             group-display-end-index))
+        (subset edwin:buffer (variable-local-value
+                              buffer-group))
+        (subset edwin:variable (define-variable-per-buffer
+                                 variable-default-value))
+        (subset edwin:mode (mode-name
+                            mode-display-name
+                            minor-mode?))
+        (subset pathname (->namestring
+                          pathname?)))
   (files modlin))
 
 (define-structure edwin:kill-command edwin:kill-command/interface
