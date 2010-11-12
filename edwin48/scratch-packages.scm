@@ -19,10 +19,30 @@
 ;; variable - Works with explicit defines
 
 (define-structure edwin:basic-command edwin:basic-command/interface
-  (open scheme aliases edwin:utilities edwin:command
-        edwin:variable edwin:buffer edwin:mark edwin:group
-        edwin:things edwin:simple-editing edwin:region keystroke
-        ascii srfi-89)
+  (open scheme
+        aliases
+        edwin:utilities
+        edwin:command
+        edwin:variable
+        edwin:buffer
+        edwin:mark
+        edwin:group
+        edwin:things
+        edwin:simple-editing
+        edwin:region
+        (subset scaffolding (current-point current-buffer))
+        (subset fixnum (fix:=))
+;        (subset edwin:command-reader (define-key dispatch-on-key))
+        (subset pathname (->namestring))
+        (subset terminfo (key-message key-smessage))
+        (subset edwin:screen (screen-beep))
+        (subset edwin:bufferset (bufferset-buffer-list set-bufferset-buffer-list!))
+        (subset tty-flags (ttyin/xon-any))
+
+        conditions
+        keystroke
+        ascii
+        srfi-89)
   (for-syntax (open scheme macro-helpers))
   (files (scsh macros)
          basic))
@@ -131,7 +151,13 @@
   (for-syntax (open scheme macro-helpers))
   (files (scsh macros)
          modes
-         comtab))
+         comtab)
+  (begin (define button? (lambda (x) #f))
+         (define-command undefined
+           "This command is not defined"
+           "P"
+           (lambda (argument)
+             (write "ERROR: Undefined Command")))))
 
 (define-structure edwin:fundamental edwin:fundamental/inteface
   (open scheme
@@ -324,13 +350,14 @@
          variable)
   (begin (define (editor-name/internal->external e) e)))
 
-(define-structure edwin:command-reader edwin:command-table/interface
+(define-structure edwin:command-reader edwin:command-reader/interface
   (open scheme
         aliases
-        pantene
+        ;pantene
+        edwin:command
+        define-record-type*
         srfi-13 srfi-14 srfi-89
-        edwin:command-table)
+        (subset edwin:command-table (local-comtab-entry comtab-entry)))
   (for-syntax (open scheme errors macro-helpers))
   (files (scsh macros)
-         comred
-         comtab))
+         comred))
