@@ -5,13 +5,17 @@
 ;;; This code is placed in the Public Domain.  All warranties are
 ;;; disclaimed.
 ;;;
-;;; load.scm - Script for loading Edgar
+;;; load.scm - Script for loading Edwin48
 ;;;
+
 
 (user)
 
-;;; EDWIN-EXPORT
 (config '(load "config-macros.scm"))
+
+;; Load srfi's before the other packages.
+(config '(load "edwin48/srfi-packages.scm"
+               "edwin48/scsh/packages.scm"))
 
 (config '(load "terminfo/interfaces.scm"
                "terminfo/scsh-packages.scm"))
@@ -19,17 +23,12 @@
 (config '(load "soosy/interfaces.scm"
                "soosy/packages.scm"))
 
-(config '(load "pantene/interfaces.scm"
-               "pantene/packages.scm"))
+(config '(load "pantene/edwin-interfaces.scm"
+               "pantene/edwin-packages.scm"))
 
-(config '(load "edwin48/srfi-packages.scm"
-               "edwin48/scsh/packages.scm"
-               "edwin48/interfaces.scm"
-               "edwin48/packages.scm"))
+(config '(load "edwin48/scratch-interfaces.scm"
+               "edwin48/scratch-packages.scm"))
 
-;; (open 'edwin-groups)
-;; (open 'edwin-marks)
-;; (open 'edwin-regions)
-;; (open 'edwin-motion)
+(config '(load "scratch/s48-apropos.scm"))
 
-
+(config '(load "cosmacs/packages.scm"))
