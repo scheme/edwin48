@@ -1,0 +1,2134 @@
+-*-Org-*-
+apropos> (map print-structure-dep (get-edwin-structures))
+
+
+
+* EDWIN:COMMAND-READER ---- buffer-name
+
+
+
+* EDWIN:COMMAND-READER ---- condition-type:editor-error
+
+
+
+* EDWIN:COMMAND-READER ---- buffer-read-only?
+
+
+
+* EDWIN:COMMAND-READER ---- prompt-for-number
+
+** Exported by #{structure 438 edwin:prompting}
+  prompt-for-number           (not yet defined)
+
+
+
+* EDWIN:COMMAND-READER ---- line-end?
+
+
+
+* EDWIN:COMMAND-READER ---- prompt-for-file
+
+
+
+* EDWIN:COMMAND-READER ---- condition/abort-current-command?
+
+
+
+* EDWIN:COMMAND-READER ---- window-x-size
+
+
+
+* EDWIN:COMMAND-READER ---- dequeue!
+
+** Exported by #{structure 51 queues}
+  dequeue!                    = #{procedure 3124 (dequeue! in queues)}
+
+** Exported by #{structure 51 queues}
+  dequeue!                    = #{procedure 3124 (dequeue! in queues)}
+
+
+
+* EDWIN:COMMAND-READER ---- current-region
+
+** Exported by #{structure 435 edwin:current-state}
+  current-region              (not yet defined)
+
+
+
+* EDWIN:COMMAND-READER ---- set-command-prompt!
+
+
+
+* EDWIN:COMMAND-READER ---- command-argument-prompt
+
+
+
+* EDWIN:COMMAND-READER ---- with-keyboard-macro-disabled
+
+
+
+* EDWIN:COMMAND-READER ---- prompt-for-buffer
+
+
+
+* EDWIN:COMMAND-READER ---- window-char->image
+
+
+
+* EDWIN:COMMAND-READER ---- condition-type:abort-current-command
+
+
+
+* EDWIN:COMMAND-READER ---- input-event?
+
+** Exported by #{structure 434 edwin:input-event}
+  input-event?                = #{procedure 23504 (input-event? in edwin:input-event)}
+
+
+
+* EDWIN:COMMAND-READER ---- clear-message
+
+
+
+* EDWIN:COMMAND-READER ---- apply-input-event
+
+** Exported by #{structure 434 edwin:input-event}
+  apply-input-event           = #{procedure 23500 (apply-input-event in edwin:input-event)}
+
+
+
+* EDWIN:COMMAND-READER ---- prompt-for-directory
+
+
+
+* EDWIN:COMMAND-READER ---- current-mark
+
+** Exported by #{structure 435 edwin:current-state}
+  current-mark                (not yet defined)
+
+
+
+* EDWIN:COMMAND-READER ---- editor-error
+
+
+
+* EDWIN:COMMAND-READER ---- buffer-auto-save-modified?
+
+
+
+* EDWIN:COMMAND-READER ---- prompt-for-expression
+
+
+
+* EDWIN:COMMAND-READER ---- reset-command-prompt!
+
+
+
+* EDWIN:COMMAND-READER ---- *defining-keyboard-macro?*
+
+
+
+* EDWIN:COMMAND-READER ---- window-needs-redisplay?
+
+
+
+* EDWIN:COMMAND-READER ---- unblock-thread-events
+
+
+
+* EDWIN:COMMAND-READER ---- keyboard-read
+
+
+
+* EDWIN:COMMAND-READER ---- edwin-command$forward-char
+
+
+
+* EDWIN:COMMAND-READER ---- command-argument-numeric-value
+
+
+
+* EDWIN:COMMAND-READER ---- prompt-for-command
+
+** Exported by #{structure 438 edwin:prompting}
+  prompt-for-command          (not yet defined)
+
+
+
+* EDWIN:COMMAND-READER ---- window-buffer
+
+
+
+* EDWIN:COMMAND-READER ---- editor-error-handler
+
+
+
+* EDWIN:COMMAND-READER ---- window-point-x
+
+
+
+* EDWIN:COMMAND-READER ---- window-direct-output-forward-char!
+
+
+
+* EDWIN:COMMAND-READER ---- window-direct-output-backward-char!
+
+
+
+* EDWIN:COMMAND-READER ---- keyboard-macro-read-key
+
+
+
+* EDWIN:COMMAND-READER ---- prompt-for-key
+
+** Exported by #{structure 438 edwin:prompting}
+  prompt-for-key              (not yet defined)
+
+
+
+* EDWIN:COMMAND-READER ---- group-start?
+
+
+
+* EDWIN:COMMAND-READER ---- prompt-for-existing-file
+
+
+
+* EDWIN:COMMAND-READER ---- *executing-keyboard-macro?*
+
+
+
+* EDWIN:COMMAND-READER ---- abort-keyboard-macro
+
+
+
+* EDWIN:COMMAND-READER ---- buffer-windows
+
+** Exported by #{structure 413 edwin:buffer}
+  buffer-windows              = #{procedure 19652 (buffer-windows in edwin:buffer)}
+
+
+
+* EDWIN:COMMAND-READER ---- undo-boundary!
+
+
+
+* EDWIN:COMMAND-READER ---- key?
+
+** Exported by #{structure 394 keystroke}
+  key?                        = #{procedure 19439 (key? in keystroke-core)}
+
+** Exported by #{structure 396 keystroke-core}
+  key?                        = #{procedure 19439 (key? in keystroke-core)}
+
+
+
+* EDWIN:COMMAND-READER ---- abort-current-command/input
+
+
+
+* EDWIN:COMMAND-READER ---- window-direct-output-insert-char!
+
+
+
+* EDWIN:COMMAND-READER ---- prompt-for-existing-buffer
+
+
+
+* EDWIN:COMMAND-READER ---- current-window
+
+** Exported by #{structure 435 edwin:current-state}
+  current-window              (not yet defined)
+
+
+
+* EDWIN:COMMAND-READER ---- with-editor-interrupts-disabled
+
+
+
+* EDWIN:COMMAND-READER ---- edwin-command$backward-char
+
+
+
+* EDWIN:COMMAND-READER ---- guarantee-command-loaded
+
+
+
+* EDWIN:COMMAND-READER ---- command-argument-self-insert?
+
+
+
+* EDWIN:COMMAND-READER ---- prompt-for-variable
+
+** Exported by #{structure 438 edwin:prompting}
+  prompt-for-variable         (not yet defined)
+
+
+
+* EDWIN:COMMAND-READER ---- enqueue!
+
+** Exported by #{structure 51 queues}
+  enqueue!                    = #{procedure 3109 (enqueue! in queues)}
+
+** Exported by #{structure 51 queues}
+  enqueue!                    = #{procedure 3109 (enqueue! in queues)}
+
+
+
+* EDWIN:COMMAND-READER ---- condition/^G?
+
+
+
+* EDWIN:COMMAND-READER ---- window-point
+
+** Exported by #{structure 424 scaffolding}
+  window-point                = #{procedure 18181 (window-point in scaffolding)}
+
+
+
+* EDWIN:COMMAND-READER ---- keyboard-macro-disable
+
+
+
+* EDWIN:COMMAND-READER ---- prompt-for-expression-value
+
+
+
+* EDWIN:COMMAND-READER ---- current-comtabs
+
+** Exported by #{structure 435 edwin:current-state}
+  current-comtabs             (not yet defined)
+
+
+
+* EDWIN:COMMAND-READER ---- group-end?
+
+** Exported by #{structure 419 edwin:group}
+  group-end?                  = #{procedure 18855 (group-end? in edwin:group)}
+
+
+
+* EDWIN:COMMAND-READER ---- command-argument-value
+
+
+
+* EDWIN:COMMAND-READER ---- prompt-for-string
+
+** Exported by #{structure 438 edwin:prompting}
+  prompt-for-string           (not yet defined)
+
+
+
+* EDWIN:COMMAND-READER ---- input-event/type
+
+** Exported by #{structure 434 edwin:input-event}
+  input-event/type            = #{procedure 23506 (input-event/type in edwin:input-event)}
+
+
+
+* EDWIN:COMMAND-READER ---- buffer-comtabs
+
+
+
+* EDWIN:COMMAND-READER ---- prefix-key-list?
+
+** Exported by #{structure 417 edwin:command-table}
+  prefix-key-list?            = #{procedure 22171 (prefix-key-list? in edwin:command-table)}
+
+
+
+* EDWIN:COMMAND-READER ---- within-continuation
+
+
+
+* EDWIN:COMMAND-READER ---- prompt-for-char
+
+** Exported by #{structure 438 edwin:prompting}
+  prompt-for-char             (not yet defined)
+
+
+
+* EDWIN:COMMAND-READER ---- keyboard-macro-finalize-keys
+
+
+
+* EDWIN:COMMAND-READER ---- mark-left-char
+
+** Exported by #{structure 419 edwin:region}
+  mark-left-char              = #{procedure 18741 (mark-left-char in edwin:group)}
+
+
+
+* EDWIN:SCREEN ---- operation/scroll-lines-down!
+
+
+
+* EDWIN:SCREEN ---- operation/flush!
+
+
+
+* EDWIN:SCREEN ---- highlight
+
+
+
+* EDWIN:SCREEN ---- screen
+
+
+
+* EDWIN:SCREEN ---- send
+
+** Exported by #{structure 403 soosy}
+  send                        (not yet defined)
+
+** Exported by #{structure 400 soosy-helpers}
+  send                        (not yet defined)
+
+** Exported by #{structure 278 rendezvous-channels}
+  send                        (not yet defined)
+
+
+
+* EDWIN:SCREEN ---- x-size
+
+
+
+* EDWIN:SCREEN ---- operation/clear-rectangle!
+
+
+
+* EDWIN:SCREEN ---- operation/modeline-event!
+
+
+
+* EDWIN:SCREEN ---- operation/exit!
+
+
+
+* EDWIN:SCREEN ---- current-editor
+
+
+
+* EDWIN:SCREEN ---- make-editor-frame
+
+
+
+* EDWIN:SCREEN ---- editor-frame-select-window!
+
+
+
+* EDWIN:SCREEN ---- in-update?
+
+
+
+* EDWIN:SCREEN ---- display-style/discard-screen-contents?
+
+
+
+* EDWIN:SCREEN ---- bufferset-find-or-create-buffer
+
+** Exported by #{structure 414 edwin:bufferset}
+  bufferset-find-or-create-buffer
+                              = #{procedure 21803 (bufferset-find-or-create-buffer in edwin:bufferset)}
+
+
+
+* EDWIN:SCREEN ---- visibility
+
+
+
+* EDWIN:SCREEN ---- editor-frame-windows
+
+
+
+* EDWIN:SCREEN ---- current-matrix
+
+
+
+* EDWIN:SCREEN ---- operation/wrap-update!
+
+
+
+* EDWIN:SCREEN ---- needs-update?
+
+
+
+* EDWIN:SCREEN ---- editor-frame-selected-window
+
+
+
+* EDWIN:SCREEN ---- char->ascii
+
+** Exported by #{structure 354 scsh}
+  char->ascii                 = #{procedure 906 (char->ascii in scheme-level-0)}
+
+** Exported by #{structure 363 scheme-with-scsh}
+  char->ascii                 = #{procedure 906 (char->ascii in scheme-level-0)}
+
+** Exported by #{structure 345 scsh-level-0}
+  char->ascii                 = #{procedure 906 (char->ascii in scheme-level-0)}
+
+** Exported by #{structure 362 scsh-user}
+  char->ascii                 = #{procedure 906 (char->ascii in scheme-level-0)}
+
+** Exported by #{structure 180 big-scheme}
+  char->ascii                 = #{procedure 906 (char->ascii in scheme-level-0)}
+
+** Exported by #{structure 15 ascii}
+  char->ascii                 = #{procedure 906 (char->ascii in scheme-level-0)}
+
+
+
+* EDWIN:SCREEN ---- enable
+
+
+
+* EDWIN:SCREEN ---- make-typein-buffer-name
+
+** Exported by #{structure 438 edwin:prompting}
+  make-typein-buffer-name     (not yet defined)
+
+
+
+* EDWIN:SCREEN ---- window-root-window
+
+
+
+* EDWIN:SCREEN ---- operation/discard!
+
+
+
+* EDWIN:SCREEN ---- operation/clear-line!
+
+
+
+* EDWIN:SCREEN ---- editor-frame-screen
+
+
+
+* EDWIN:SCREEN ---- preemption-modulus
+
+
+
+* EDWIN:SCREEN ---- operation/clear-screen!
+
+
+
+* EDWIN:SCREEN ---- editor-frame-select-cursor!
+
+
+
+* EDWIN:SCREEN ---- operation/write-cursor!
+
+
+
+* EDWIN:SCREEN ---- operation/scroll-lines-up!
+
+
+
+* EDWIN:SCREEN ---- new-matrix
+
+
+
+* EDWIN:SCREEN ---- editor-frame-typein-window
+
+
+
+* EDWIN:SCREEN ---- cursor-y
+
+
+
+* EDWIN:SCREEN ---- cursor-x
+
+
+
+* EDWIN:SCREEN ---- state
+
+
+
+* EDWIN:SCREEN ---- display-style/no-screen-output?
+
+
+
+* EDWIN:SCREEN ---- highlight-enable
+
+
+
+* EDWIN:SCREEN ---- y-size
+
+
+
+* EDWIN:SCREEN ---- operation/enter!
+
+
+
+* EDWIN:SCREEN ---- editor-frame-window0
+
+
+
+* EDWIN:SCREEN ---- matrix
+
+
+
+* EDWIN:SCREEN ---- editor-halt-update?
+
+** Exported by #{structure 422 edwin:editor-definition}
+  editor-halt-update?         = #{procedure 22691 (editor-halt-update? in edwin:editor-definition)}
+
+
+
+* EDWIN:SCREEN ---- operation/write-substring!
+
+
+
+* EDWIN:SCREEN ---- operation/beep
+
+
+
+* EDWIN:SCREEN ---- editor-frame-update-display!
+
+
+
+* EDWIN:SCREEN ---- root-window
+
+
+
+* EDWIN:SCREEN ---- contents
+
+** Exported by #{structure 15 locations}
+  contents                    = #{procedure 281 contents}
+
+
+
+* EDWIN:SCREEN ---- operation/write-char!
+
+
+
+* EDWIN:SCREEN ---- debug-trace
+
+
+
+* EDWIN:MODE ---- button?
+
+** Exported by #{structure 415 edwin:button}
+  button?                     = #{procedure 22050 (button? in edwin:button)}
+
+
+
+* EDWIN:MODE ---- edwin-command$undefined
+
+** Exported by #{structure 411 edwin:basic-command}
+  edwin-command$undefined     = #{command}
+
+
+
+* EDWIN:MODE ---- local-comtabs
+
+** Exported by #{structure 419 edwin:text-property}
+  local-comtabs               = #{procedure 18578 (local-comtabs in edwin:group)}
+
+
+
+* EDWIN:MODE ---- edwin-command$prefix-key
+
+** Exported by #{structure 411 edwin:basic-command}
+  edwin-command$prefix-key    = #{command}
+
+
+
+* EDWIN:UTILITIES ---- char->ascii
+
+** Exported by #{structure 354 scsh}
+  char->ascii                 = #{procedure 906 (char->ascii in scheme-level-0)}
+
+** Exported by #{structure 363 scheme-with-scsh}
+  char->ascii                 = #{procedure 906 (char->ascii in scheme-level-0)}
+
+** Exported by #{structure 345 scsh-level-0}
+  char->ascii                 = #{procedure 906 (char->ascii in scheme-level-0)}
+
+** Exported by #{structure 362 scsh-user}
+  char->ascii                 = #{procedure 906 (char->ascii in scheme-level-0)}
+
+** Exported by #{structure 180 big-scheme}
+  char->ascii                 = #{procedure 906 (char->ascii in scheme-level-0)}
+
+** Exported by #{structure 15 ascii}
+  char->ascii                 = #{procedure 906 (char->ascii in scheme-level-0)}
+
+
+
+* EDWIN:BUFFER ---- buffer
+
+
+
+* EDWIN:BUFFER ---- group
+
+
+
+* EDWIN:BUFFER ---- windows
+
+
+
+* EDWIN:BUFFER ---- display-start
+
+
+
+* EDWIN:BASIC-COMMAND ---- set-current-point!
+
+** Exported by #{structure 435 edwin:current-state}
+  set-current-point!          (not yet defined)
+
+
+
+* EDWIN:BASIC-COMMAND ---- delete-process
+
+
+
+* EDWIN:BASIC-COMMAND ---- maybe-change-column
+
+
+
+* EDWIN:BASIC-COMMAND ---- line-end?
+
+
+
+* EDWIN:BASIC-COMMAND ---- set-command-prompt!
+
+
+
+* EDWIN:BASIC-COMMAND ---- command-argument-prompt
+
+
+
+* EDWIN:BASIC-COMMAND ---- line-start
+
+** Exported by #{structure 419 edwin:motion}
+  line-start                  = #{procedure 18671 (line-start in edwin:group)}
+
+
+
+* EDWIN:BASIC-COMMAND ---- quit-editor
+
+
+
+* EDWIN:BASIC-COMMAND ---- buffer-minor-mode?
+
+
+
+* EDWIN:BASIC-COMMAND ---- save-some-buffers
+
+
+
+* EDWIN:BASIC-COMMAND ---- process-runnable?
+
+
+
+* EDWIN:BASIC-COMMAND ---- mark-column
+
+** Exported by #{structure 419 edwin:motion}
+  mark-column                 = #{procedure 18653 (mark-column in edwin:group)}
+
+
+
+* EDWIN:BASIC-COMMAND ---- exit-scheme
+
+
+
+* EDWIN:BASIC-COMMAND ---- current-command-key
+
+** Exported by #{structure 431 edwin:command-reader}
+  current-command-key         = #{procedure 23133 (current-command-key in edwin:command-reader)}
+
+
+
+* EDWIN:BASIC-COMMAND ---- with-current-point
+
+** Exported by #{structure 435 edwin:current-state}
+  with-current-point          (not yet defined)
+
+
+
+* EDWIN:BASIC-COMMAND ---- char-syntax
+
+
+
+* EDWIN:BASIC-COMMAND ---- mark-permanent!
+
+
+
+* EDWIN:BASIC-COMMAND ---- input-event?
+
+** Exported by #{structure 434 edwin:input-event}
+  input-event?                = #{procedure 23504 (input-event? in edwin:input-event)}
+
+
+
+* EDWIN:BASIC-COMMAND ---- clear-message
+
+
+
+* EDWIN:BASIC-COMMAND ---- auto-fill-break
+
+
+
+* EDWIN:BASIC-COMMAND ---- apply-input-event
+
+** Exported by #{structure 434 edwin:input-event}
+  apply-input-event           = #{procedure 23500 (apply-input-event in edwin:input-event)}
+
+
+
+* EDWIN:BASIC-COMMAND ---- delete-horizontal-space
+
+
+
+* EDWIN:BASIC-COMMAND ---- buffer-pathname
+
+
+
+* EDWIN:BASIC-COMMAND ---- edwin-mode$abbrev
+
+
+
+* EDWIN:BASIC-COMMAND ---- buffer-modified?
+
+
+
+* EDWIN:BASIC-COMMAND ---- editor-error
+
+
+
+* EDWIN:BASIC-COMMAND ---- buffer-list
+
+** Exported by #{structure 435 edwin:current-state}
+  buffer-list                 (not yet defined)
+
+
+
+* EDWIN:BASIC-COMMAND ---- set-buffer-backed-up?!
+
+
+
+* EDWIN:BASIC-COMMAND ---- current-minor-mode?
+
+** Exported by #{structure 435 edwin:current-state}
+  current-minor-mode?         (not yet defined)
+
+
+
+* EDWIN:BASIC-COMMAND ---- *defining-keyboard-macro?*
+
+
+
+* EDWIN:BASIC-COMMAND ---- save-buffer
+
+
+
+* EDWIN:BASIC-COMMAND ---- line-end
+
+** Exported by #{structure 419 edwin:motion}
+  line-end                    = #{procedure 18664 (line-end in edwin:group)}
+
+
+
+* EDWIN:BASIC-COMMAND ---- keyboard-read
+
+
+
+* EDWIN:BASIC-COMMAND ---- message
+
+
+
+* EDWIN:BASIC-COMMAND ---- last-command-key
+
+** Exported by #{structure 431 edwin:command-reader}
+  last-command-key            = #{procedure 23131 (last-command-key in edwin:command-reader)}
+
+
+
+* EDWIN:BASIC-COMMAND ---- command-argument-numeric-value
+
+
+
+* EDWIN:BASIC-COMMAND ---- current-column
+
+** Exported by #{structure 435 edwin:current-state}
+  current-column              (not yet defined)
+
+** Exported by #{structure 180 big-scheme}
+  current-column              = #{procedure 9835 (unnamed in row-column-accessor in ---)}
+
+** Exported by #{structure 166 extended-ports}
+  current-column              = #{procedure 9835 (unnamed in row-column-accessor in ---)}
+
+
+
+* EDWIN:BASIC-COMMAND ---- any
+
+** Exported by #{structure 362 scsh-user}
+  any                         = #{procedure 9284 (any in srfi-1)}
+
+** Exported by #{structure 217 srfi-1}
+  any                         = #{procedure 9284 (any in srfi-1)}
+
+** Exported by #{structure 179 big-util}
+  any                         = #{procedure 9918 (first in big-util)}
+
+** Exported by #{structure 180 big-scheme}
+  any                         = #{procedure 9918 (first in big-util)}
+
+** Exported by #{structure 16 util}
+  any                         = #{procedure 1245 (any in scheme-level-1)}
+
+
+
+* EDWIN:BASIC-COMMAND ---- with-selected-buffer
+
+** Exported by #{structure 435 edwin:current-state}
+  with-selected-buffer        (not yet defined)
+
+
+
+* EDWIN:BASIC-COMMAND ---- set-buffer-point!
+
+** Exported by #{structure 435 edwin:current-state}
+  set-buffer-point!           (not yet defined)
+
+
+
+* EDWIN:BASIC-COMMAND ---- selected-screen
+
+** Exported by #{structure 435 edwin:current-state}
+  selected-screen             (not yet defined)
+
+
+
+* EDWIN:BASIC-COMMAND ---- prompt-for-command
+
+** Exported by #{structure 438 edwin:prompting}
+  prompt-for-command          (not yet defined)
+
+
+
+* EDWIN:BASIC-COMMAND ---- abort-current-command
+
+
+
+* EDWIN:BASIC-COMMAND ---- temporary-message
+
+
+
+* EDWIN:BASIC-COMMAND ---- quit-scheme
+
+
+
+* EDWIN:BASIC-COMMAND ---- buffer-modification-time
+
+
+
+* EDWIN:BASIC-COMMAND ---- group-start?
+
+
+
+* EDWIN:BASIC-COMMAND ---- dispatch-on-command
+
+** Exported by #{structure 431 edwin:command-reader}
+  dispatch-on-command         = #{procedure 23084 (dispatch-on-command in edwin:command-reader)}
+
+
+
+* EDWIN:BASIC-COMMAND ---- exit-editor
+
+
+
+* EDWIN:BASIC-COMMAND ---- buffer-truename
+
+
+
+* EDWIN:BASIC-COMMAND ---- process-list
+
+
+
+* EDWIN:BASIC-COMMAND ---- edwin-mode$auto-fill
+
+
+
+* EDWIN:BASIC-COMMAND ---- os/scheme-can-quit?
+
+
+
+* EDWIN:BASIC-COMMAND ---- define-key
+
+** Exported by #{structure 417 edwin:command-table}
+  define-key                  = #{procedure 22165 (define-key in edwin:command-table)}
+
+
+
+* EDWIN:BASIC-COMMAND ---- edwin-variable$fill-prefix
+
+
+
+* EDWIN:BASIC-COMMAND ---- buffer-widen!
+
+
+
+* EDWIN:BASIC-COMMAND ---- set-variable-value!
+
+
+
+* EDWIN:BASIC-COMMAND ---- edwin-command$expand-abbrev
+
+
+
+* EDWIN:BASIC-COMMAND ---- with-editor-interrupts-disabled
+
+
+
+* EDWIN:BASIC-COMMAND ---- dispatch-on-key
+
+** Exported by #{structure 440 cosmacs:command-reader}
+  dispatch-on-key             (not yet defined)
+
+** Exported by #{structure 431 edwin:command-reader}
+  dispatch-on-key             = #{procedure 23088 (dispatch-on-key in edwin:command-reader)}
+
+
+
+* EDWIN:BASIC-COMMAND ---- process-kill-without-query
+
+
+
+* EDWIN:BASIC-COMMAND ---- mark-temporary!
+
+
+
+* EDWIN:BASIC-COMMAND ---- ^G-signal
+
+
+
+* EDWIN:BASIC-COMMAND ---- edwin-command$indent-according-to-mode
+
+
+
+* EDWIN:BASIC-COMMAND ---- prompt-for-confirmation?
+
+** Exported by #{structure 438 edwin:prompting}
+  prompt-for-confirmation?    (not yet defined)
+
+
+
+* EDWIN:BASIC-COMMAND ---- keyboard-macro-disable
+
+
+
+* EDWIN:BASIC-COMMAND ---- current-comtabs
+
+** Exported by #{structure 435 edwin:current-state}
+  current-comtabs             (not yet defined)
+
+
+
+* EDWIN:BASIC-COMMAND ---- command-prompt
+
+
+
+* EDWIN:BASIC-COMMAND ---- command-argument-value
+
+
+
+* EDWIN:BASIC-COMMAND ---- verify-visited-file-modification-time?
+
+
+
+* EDWIN:BASIC-COMMAND ---- command-argument-negative-only?
+
+
+
+* EDWIN:BASIC-COMMAND ---- exit-recursive-edit
+
+
+
+* EDWIN:BASIC-COMMAND ---- kill-string
+
+
+
+* EDWIN:BASIC-COMMAND ---- prompt-for-yes-or-no?
+
+** Exported by #{structure 438 edwin:prompting}
+  prompt-for-yes-or-no?       (not yet defined)
+
+
+
+* EDWIN:REGION ---- barf-if-read-only
+
+** Exported by #{structure 411 edwin:basic-command}
+  barf-if-read-only           = #{procedure 21910 (barf-if-read-only in edwin:basic-command)}
+
+
+
+* EDWIN:REGION ---- check-first-group-modification
+
+** Exported by #{structure 411 edwin:basic-command}
+  check-first-group-modification
+                              = #{procedure 21908 (check-first-group-modification in edwin:basic-command)}
+
+
+
+* EDWIN:REGION ---- edwin-variable$buffer-reallocation-factor
+
+** Exported by #{structure 411 edwin:basic-command}
+  edwin-variable$buffer-reallocation-factor
+                              = #{variable}
+
+
+
+* EDWIN:REGION ---- group-columns
+
+
+
+* EDWIN:REGION ---- group-column->index
+
+
+
+* EDWIN:EDITOR-DEFINITION ---- initial-buffer-name
+
+** Exported by #{structure 418 edwin:fundamental}
+  initial-buffer-name         = "*scheme*"
+
+
+
+* EDWIN:EDITOR-DEFINITION ---- fundamental
+
+
+
+* EDWIN:EDITOR-DEFINITION ---- ref-mode-object
+
+** Exported by #{structure 440 edwin:mode}
+  ref-mode-object             (syntax)
+
+
+
+* EDWIN:EDITOR-DEFINITION ---- working-directory-pathname
+
+** Exported by #{structure 387 pathname}
+  working-directory-pathname  = #{procedure 17388 (working-directory-pathname in pathname)}
+
+
+
+* EDWIN:EDITOR-DEFINITION ---- make-bufferset
+
+** Exported by #{structure 414 edwin:bufferset}
+  make-bufferset              = #{procedure 21815 (make-bufferset in edwin:bufferset)}
+
+
+
+* EDWIN:EDITOR-DEFINITION ---- display-type/make-screen
+
+** Exported by #{structure 420 edwin:display-type}
+  display-type/make-screen    = #{procedure 22600 (display-type/make-screen in edwin:display-type)}
+
+
+
+* EDWIN:EDITOR-DEFINITION ---- initialize-screen-root-window!
+
+** Exported by #{structure 425 edwin:screen}
+  initialize-screen-root-window!
+                              = #{procedure 21717 (initialize-screen-root-window! in edwin:screen)}
+
+
+
+* EDWIN:EDITOR-DEFINITION ---- display-type/get-input-operations
+
+** Exported by #{structure 420 edwin:display-type}
+  display-type/get-input-operations
+                              = #{procedure 22598 (display-type/get-input-operations in edwin:display-type)}
+
+
+
+* EDWIN:EDITOR-DEFINITION ---- current-editor
+
+
+
+* EDWIN:EDITOR-DEFINITION ---- display-type/with-interrupts-enabled
+
+** Exported by #{structure 420 edwin:display-type}
+  display-type/with-interrupts-enabled
+                              = #{procedure 22594 (display-type/with-interrupts-enabled in edwin:display-type)}
+
+
+
+* EDWIN:EDITOR-DEFINITION ---- display-type/with-interrupts-disabled
+
+** Exported by #{structure 420 edwin:display-type}
+  display-type/with-interrupts-disabled
+                              = #{procedure 22592 (display-type/with-interrupts-disabled in edwin:display-type)}
+
+
+
+* EDWIN:SEARCH ---- barf-if-read-only
+
+** Exported by #{structure 411 edwin:basic-command}
+  barf-if-read-only           = #{procedure 21910 (barf-if-read-only in edwin:basic-command)}
+
+
+
+* EDWIN:SEARCH ---- check-first-group-modification
+
+** Exported by #{structure 411 edwin:basic-command}
+  check-first-group-modification
+                              = #{procedure 21908 (check-first-group-modification in edwin:basic-command)}
+
+
+
+* EDWIN:SEARCH ---- edwin-variable$buffer-reallocation-factor
+
+** Exported by #{structure 411 edwin:basic-command}
+  edwin-variable$buffer-reallocation-factor
+                              = #{variable}
+
+
+
+* EDWIN:SEARCH ---- group-columns
+
+
+
+* EDWIN:SEARCH ---- group-column->index
+
+
+
+* EDWIN:COMMAND-TABLE ---- local-comtabs
+
+** Exported by #{structure 419 edwin:text-property}
+  local-comtabs               = #{procedure 18578 (local-comtabs in edwin:group)}
+
+
+
+* EDWIN:COMMAND-TABLE ---- edwin-command$prefix-key
+
+** Exported by #{structure 411 edwin:basic-command}
+  edwin-command$prefix-key    = #{command}
+
+
+
+* EDWIN:GROUP ---- barf-if-read-only
+
+** Exported by #{structure 411 edwin:basic-command}
+  barf-if-read-only           = #{procedure 21910 (barf-if-read-only in edwin:basic-command)}
+
+
+
+* EDWIN:GROUP ---- check-first-group-modification
+
+** Exported by #{structure 411 edwin:basic-command}
+  check-first-group-modification
+                              = #{procedure 21908 (check-first-group-modification in edwin:basic-command)}
+
+
+
+* EDWIN:GROUP ---- edwin-variable$buffer-reallocation-factor
+
+** Exported by #{structure 411 edwin:basic-command}
+  edwin-variable$buffer-reallocation-factor
+                              = #{variable}
+
+
+
+* EDWIN:GROUP ---- group-columns
+
+
+
+* EDWIN:GROUP ---- group-column->index
+
+
+
+* EDWIN:TEXT-PROPERTY ---- barf-if-read-only
+
+** Exported by #{structure 411 edwin:basic-command}
+  barf-if-read-only           = #{procedure 21910 (barf-if-read-only in edwin:basic-command)}
+
+
+
+* EDWIN:TEXT-PROPERTY ---- check-first-group-modification
+
+** Exported by #{structure 411 edwin:basic-command}
+  check-first-group-modification
+                              = #{procedure 21908 (check-first-group-modification in edwin:basic-command)}
+
+
+
+* EDWIN:TEXT-PROPERTY ---- edwin-variable$buffer-reallocation-factor
+
+** Exported by #{structure 411 edwin:basic-command}
+  edwin-variable$buffer-reallocation-factor
+                              = #{variable}
+
+
+
+* EDWIN:TEXT-PROPERTY ---- group-columns
+
+
+
+* EDWIN:TEXT-PROPERTY ---- group-column->index
+
+
+
+* EDWIN:MARK ---- barf-if-read-only
+
+** Exported by #{structure 411 edwin:basic-command}
+  barf-if-read-only           = #{procedure 21910 (barf-if-read-only in edwin:basic-command)}
+
+
+
+* EDWIN:MARK ---- check-first-group-modification
+
+** Exported by #{structure 411 edwin:basic-command}
+  check-first-group-modification
+                              = #{procedure 21908 (check-first-group-modification in edwin:basic-command)}
+
+
+
+* EDWIN:MARK ---- edwin-variable$buffer-reallocation-factor
+
+** Exported by #{structure 411 edwin:basic-command}
+  edwin-variable$buffer-reallocation-factor
+                              = #{variable}
+
+
+
+* EDWIN:MARK ---- group-columns
+
+
+
+* EDWIN:MARK ---- group-column->index
+
+
+
+* EDWIN:TERMINAL-SCREEN ---- update-screens!
+
+** Exported by #{structure 435 edwin:current-state}
+  update-screens!             (not yet defined)
+
+
+
+* EDWIN:TERMINAL-SCREEN ---- make-input-event
+
+** Exported by #{structure 434 edwin:input-event}
+  make-input-event            = #{procedure 23502 (make-input-event in edwin:input-event)}
+
+
+
+* EDWIN:TERMINAL-SCREEN ---- accept-process-output
+
+
+
+* EDWIN:TERMINAL-SCREEN ---- handle-process-status-changes
+
+
+
+* EDWIN:TERMINAL-SCREEN ---- accept-thread-output
+
+
+
+* EDWIN:TERMINAL-SCREEN ---- editor-thread
+
+
+
+* EDWIN:TERMINAL-SCREEN ---- temporary-message
+
+
+
+* EDWIN:TERMINAL-SCREEN ---- ^G-signal
+
+
+
+* EDWIN:TERMINAL-SCREEN ---- signal-thread-event
+
+
+
+* EDWIN:TERMINAL-SCREEN ---- selected-screen
+
+** Exported by #{structure 435 edwin:current-state}
+  selected-screen             (not yet defined)
+
+
+
+* EDWIN:TERMINAL-SCREEN ---- editor-error
+
+
+
+* EDWIN:VARIABLE ---- editor-error
+
+
+
+* EDWIN:VARIABLE ---- within-editor?
+
+** Exported by #{structure 424 scaffolding}
+  within-editor?              = #{procedure 18175 (within-editor? in scaffolding)}
+
+
+
+* EDWIN:MOTION ---- barf-if-read-only
+
+** Exported by #{structure 411 edwin:basic-command}
+  barf-if-read-only           = #{procedure 21910 (barf-if-read-only in edwin:basic-command)}
+
+
+
+* EDWIN:MOTION ---- check-first-group-modification
+
+** Exported by #{structure 411 edwin:basic-command}
+  check-first-group-modification
+                              = #{procedure 21908 (check-first-group-modification in edwin:basic-command)}
+
+
+
+* EDWIN:MOTION ---- edwin-variable$buffer-reallocation-factor
+
+** Exported by #{structure 411 edwin:basic-command}
+  edwin-variable$buffer-reallocation-factor
+                              = #{variable}
+
+
+
+* EDWIN:MOTION ---- group-columns
+
+
+
+* EDWIN:MOTION ---- group-column->index
+
+
+
+* EDWIN:SIMPLE-EDITING ---- set-current-point!
+
+** Exported by #{structure 435 edwin:current-state}
+  set-current-point!          (not yet defined)
+
+
+
+* EDWIN:SIMPLE-EDITING ---- next-specific-property-change
+
+** Exported by #{structure 419 edwin:text-property}
+  next-specific-property-change
+                              = #{procedure 18629 (next-specific-property-change in edwin:group)}
+
+
+
+* EDWIN:SIMPLE-EDITING ---- set-buffer-display-start!
+
+** Exported by #{structure 413 edwin:buffer}
+  set-buffer-display-start!   = #{procedure 19642 (set-buffer-display-start! in edwin:buffer)}
+
+
+
+* EDWIN:SIMPLE-EDITING ---- indent-tabs-mode
+
+
+
+* EDWIN:SIMPLE-EDITING ---- text-not-deleteable?
+
+** Exported by #{structure 419 edwin:text-property}
+  text-not-deleteable?        = #{procedure 18588 (text-not-deleteable? in edwin:group)}
+
+
+
+* EDWIN:SIMPLE-EDITING ---- push-current-mark!
+
+** Exported by #{structure 435 edwin:current-state}
+  push-current-mark!          (not yet defined)
+
+
+
+* EDWIN:SIMPLE-EDITING ---- update-intervals-for-deletion!
+
+** Exported by #{structure 419 edwin:text-property}
+  update-intervals-for-deletion!
+                              = #{procedure 18569 (update-intervals-for-deletion! in edwin:group)}
+
+
+
+* EDWIN:SIMPLE-EDITING ---- add-text-property
+
+** Exported by #{structure 419 edwin:text-property}
+  add-text-property           = #{procedure 18644 (add-text-property in edwin:group)}
+
+
+
+* EDWIN:SIMPLE-EDITING ---- undo-record-deletion!
+
+** Exported by #{structure 428 edwin:undo}
+  undo-record-deletion!       = #{procedure 18198 (undo-record-deletion! in edwin:undo)}
+
+
+
+* EDWIN:SIMPLE-EDITING ---- line-start
+
+** Exported by #{structure 419 edwin:motion}
+  line-start                  = #{procedure 18671 (line-start in edwin:group)}
+
+
+
+* EDWIN:SIMPLE-EDITING ---- text-not-insertable?
+
+** Exported by #{structure 419 edwin:text-property}
+  text-not-insertable?        = #{procedure 18591 (text-not-insertable? in edwin:group)}
+
+
+
+* EDWIN:SIMPLE-EDITING ---- kill-region
+
+
+
+* EDWIN:SIMPLE-EDITING ---- mark-column
+
+** Exported by #{structure 419 edwin:motion}
+  mark-column                 = #{procedure 18653 (mark-column in edwin:group)}
+
+
+
+* EDWIN:SIMPLE-EDITING ---- char-image-strings
+
+
+
+* EDWIN:SIMPLE-EDITING ---- get-text-property
+
+** Exported by #{structure 419 edwin:text-property}
+  get-text-property           = #{procedure 18636 (get-text-property in edwin:group)}
+
+
+
+* EDWIN:SIMPLE-EDITING ---- barf-if-read-only
+
+** Exported by #{structure 411 edwin:basic-command}
+  barf-if-read-only           = #{procedure 21910 (barf-if-read-only in edwin:basic-command)}
+
+
+
+* EDWIN:SIMPLE-EDITING ---- current-point
+
+** Exported by #{structure 435 edwin:current-state}
+  current-point               (not yet defined)
+
+** Exported by #{structure 424 scaffolding}
+  current-point               = #{procedure 18185 (current-point in scaffolding)}
+
+
+
+* EDWIN:SIMPLE-EDITING ---- update-intervals-for-replacement!
+
+** Exported by #{structure 419 edwin:text-property}
+  update-intervals-for-replacement!
+                              = #{procedure 18567 (update-intervals-for-replacement! in edwin:group)}
+
+
+
+* EDWIN:SIMPLE-EDITING ---- current-mark
+
+** Exported by #{structure 435 edwin:current-state}
+  current-mark                (not yet defined)
+
+
+
+* EDWIN:SIMPLE-EDITING ---- case-fold-search
+
+
+
+* EDWIN:SIMPLE-EDITING ---- editor-error
+
+
+
+* EDWIN:SIMPLE-EDITING ---- tab-width
+
+
+
+* EDWIN:SIMPLE-EDITING ---- set-current-mark!
+
+** Exported by #{structure 435 edwin:current-state}
+  set-current-mark!           (not yet defined)
+
+
+
+* EDWIN:SIMPLE-EDITING ---- mark-1+
+
+** Exported by #{structure 419 edwin:motion}
+  mark-1+                     = #{procedure 18700 (mark-1+ in edwin:group)}
+
+
+
+* EDWIN:SIMPLE-EDITING ---- limit-mark-motion
+
+** Exported by #{structure 419 edwin:motion}
+  limit-mark-motion           = #{procedure 18708 (limit-mark-motion in edwin:group)}
+
+
+
+* EDWIN:SIMPLE-EDITING ---- line-end
+
+** Exported by #{structure 419 edwin:motion}
+  line-end                    = #{procedure 18664 (line-end in edwin:group)}
+
+
+
+* EDWIN:SIMPLE-EDITING ---- ref-variable
+
+** Exported by #{structure 430 edwin:variable}
+  ref-variable                (syntax)
+
+
+
+* EDWIN:SIMPLE-EDITING ---- undo-record-insertion!
+
+** Exported by #{structure 428 edwin:undo}
+  undo-record-insertion!      = #{procedure 18200 (undo-record-insertion! in edwin:undo)}
+
+
+
+* EDWIN:SIMPLE-EDITING ---- variable-local-value
+
+** Exported by #{structure 413 edwin:buffer}
+  variable-local-value        = #{procedure 19638 (variable-local-value in edwin:buffer)}
+
+
+
+* EDWIN:SIMPLE-EDITING ---- update-intervals-for-insertion!
+
+** Exported by #{structure 419 edwin:text-property}
+  update-intervals-for-insertion!
+                              = #{procedure 18572 (update-intervals-for-insertion! in edwin:group)}
+
+
+
+* EDWIN:SIMPLE-EDITING ---- buffer-display-start
+
+** Exported by #{structure 413 edwin:buffer}
+  buffer-display-start        = #{procedure 19644 (buffer-display-start in edwin:buffer)}
+
+
+
+* EDWIN:SIMPLE-EDITING ---- ref-variable-object
+
+** Exported by #{structure 430 edwin:variable}
+  ref-variable-object         (syntax)
+
+
+
+* EDWIN:SIMPLE-EDITING ---- re-compile-char-set
+
+** Exported by #{structure 424 scaffolding}
+  re-compile-char-set         = #{procedure 18183 (re-compile-char-set in scaffolding)}
+
+
+
+* EDWIN:SIMPLE-EDITING ---- %substring-move!
+
+** Exported by #{structure 429 edwin:utilities}
+  %substring-move!            = #{procedure 17861 (%substring-move! in edwin:utilities)}
+
+
+
+* EDWIN:SIMPLE-EDITING ---- remove-text-property
+
+** Exported by #{structure 419 edwin:text-property}
+  remove-text-property        = #{procedure 18640 (remove-text-property in edwin:group)}
+
+
+
+* EDWIN:SIMPLE-EDITING ---- line-start?
+
+
+
+* EDWIN:SIMPLE-EDITING ---- text-not-replaceable?
+
+** Exported by #{structure 419 edwin:text-property}
+  text-not-replaceable?       = #{procedure 18588 (text-not-deleteable? in edwin:group)}
+
+
+
+* EDWIN:SIMPLE-EDITING ---- delete!
+
+** Exported by #{structure 362 scsh-user}
+  delete!                     = #{procedure 9343 (delete! in srfi-1)}
+
+** Exported by #{structure 217 srfi-1}
+  delete!                     = #{procedure 9343 (delete! in srfi-1)}
+
+
+
+* EDWIN:SIMPLE-EDITING ---- previous-specific-property-change
+
+** Exported by #{structure 419 edwin:text-property}
+  previous-specific-property-change
+                              = #{procedure 18626 (previous-specific-property-change in edwin:group)}
+
+
+
+* EDWIN:SIMPLE-EDITING ---- buffer-windows
+
+** Exported by #{structure 413 edwin:buffer}
+  buffer-windows              = #{procedure 19652 (buffer-windows in edwin:buffer)}
+
+
+
+* EDWIN:SIMPLE-EDITING ---- buffer-group
+
+** Exported by #{structure 413 edwin:buffer}
+  buffer-group                = #{procedure 19648 (buffer-group in edwin:buffer)}
+
+
+
+* EDWIN:SIMPLE-EDITING ---- syntax-table
+
+
+
+* EDWIN:SIMPLE-EDITING ---- check-first-group-modification
+
+** Exported by #{structure 411 edwin:basic-command}
+  check-first-group-modification
+                              = #{procedure 21908 (check-first-group-modification in edwin:basic-command)}
+
+
+
+* EDWIN:SIMPLE-EDITING ---- buffer-reallocation-factor
+
+
+
+* EDWIN:SIMPLE-EDITING ---- set-window-point!
+
+** Exported by #{structure 424 scaffolding}
+  set-window-point!           = #{procedure 18179 (set-window-point! in scaffolding)}
+
+
+
+* EDWIN:SIMPLE-EDITING ---- window-point
+
+** Exported by #{structure 424 scaffolding}
+  window-point                = #{procedure 18181 (window-point in scaffolding)}
+
+
+
+* EDWIN:SIMPLE-EDITING ---- previous-property-change
+
+** Exported by #{structure 419 edwin:text-property}
+  previous-property-change    = #{procedure 18632 (previous-property-change in edwin:group)}
+
+
+
+* EDWIN:SIMPLE-EDITING ---- buffer?
+
+** Exported by #{structure 413 edwin:buffer}
+  buffer?                     = #{procedure 19640 (buffer? in edwin:buffer)}
+
+
+
+* EDWIN:SIMPLE-EDITING ---- next-property-change
+
+** Exported by #{structure 419 edwin:text-property}
+  next-property-change        = #{procedure 18634 (next-property-change in edwin:group)}
+
+
+
+* EDWIN:SIMPLE-EDITING ---- undo-record-replacement!
+
+** Exported by #{structure 428 edwin:undo}
+  undo-record-replacement!    = #{procedure 18196 (undo-record-replacement! in edwin:undo)}
+
+
+
+* EDWIN:SIMPLE-EDITING ---- mark1+
+
+** Exported by #{structure 419 edwin:motion}
+  mark1+                      = #{procedure 18704 (mark1+ in edwin:group)}
+
+
+
+* EDWIN:STRING-TABLE ---- list-sort
+
+** Exported by #{structure 116 sorting}
+  list-sort                   = #{procedure 16084 (list-sort in sorting)}
+
+** Exported by #{structure 262 r6rs-sorting}
+  list-sort                   (not yet defined)
+
+
+
+* EDWIN:MODELINE ---- buffer-name
+
+
+
+* EDWIN:MODELINE ---- integer-round
+
+** Exported by #{structure 384 aliases}
+  integer-round               = #{procedure 17215 (integer-round in aliases)}
+
+
+
+* EDWIN:MODELINE ---- group-display-start
+
+
+
+* EDWIN:MODELINE ---- define-variable-per-buffer
+
+** Exported by #{structure 430 edwin:variable}
+  define-variable-per-buffer  (syntax)
+
+
+
+* EDWIN:MODELINE ---- define*
+
+** Exported by #{structure 377 srfi-89}
+  define*                     (syntax)
+
+** Exported by #{structure 404 define-opt}
+  define*                     (not yet defined)
+
+
+
+* EDWIN:MODELINE ---- add-minor-mode-line-entry!
+
+** Exported by #{structure 436 edwin:modeline}
+  add-minor-mode-line-entry!  (not yet defined)
+
+
+
+* EDWIN:MODELINE ---- buffer-minor-mode?
+
+
+
+* EDWIN:MODELINE ---- mode-line-buffer-identification
+
+
+
+* EDWIN:MODELINE ---- variable-default-value
+
+** Exported by #{structure 430 edwin:variable}
+  variable-default-value      = #{procedure 18158 (variable-%default-value in edwin:variable)}
+
+
+
+* EDWIN:MODELINE ---- ->namestring
+
+** Exported by #{structure 387 pathname}
+  ->namestring                = #{procedure 17423 (->namestring in pathname)}
+
+
+
+* EDWIN:MODELINE ---- char-image-strings
+
+
+
+* EDWIN:MODELINE ---- global-mode-string
+
+
+
+* EDWIN:MODELINE ---- symbol-name
+
+** Exported by #{structure 384 aliases}
+  symbol-name                 = #{procedure 17244 (symbol-name in aliases)}
+
+
+
+* EDWIN:MODELINE ---- string-pad
+
+** Exported by #{structure 362 scsh-user}
+  string-pad                  = #{procedure 10453 (string-pad in srfi-13)}
+
+** Exported by #{structure 226 srfi-13}
+  string-pad                  = #{procedure 10453 (string-pad in srfi-13)}
+
+
+
+* EDWIN:MODELINE ---- mode-name
+
+** Exported by #{structure 440 edwin:mode}
+  mode-name                   = #{procedure 19586 (mode-name in cosmacs:command-reader)}
+
+
+
+* EDWIN:MODELINE ---- mode-display-name
+
+** Exported by #{structure 440 edwin:mode}
+  mode-display-name           = #{procedure 19594 (mode-display-name in cosmacs:command-reader)}
+
+
+
+* EDWIN:MODELINE ---- buffer-pathname
+
+
+
+* EDWIN:MODELINE ---- buffer-modified?
+
+
+
+* EDWIN:MODELINE ---- mode-line-format
+
+
+
+* EDWIN:MODELINE ---- define-variable
+
+** Exported by #{structure 430 edwin:variable}
+  define-variable             (syntax)
+
+
+
+* EDWIN:MODELINE ---- get-buffer-process
+
+
+
+* EDWIN:MODELINE ---- set-variable-local-value!
+
+
+
+* EDWIN:MODELINE ---- *defining-keyboard-macro?*
+
+
+
+* EDWIN:MODELINE ---- mark-index
+
+** Exported by #{structure 419 edwin:mark}
+  mark-index                  = #{procedure 18911 (mark-index in edwin:group)}
+
+
+
+* EDWIN:MODELINE ---- mark-1+
+
+** Exported by #{structure 419 edwin:motion}
+  mark-1+                     = #{procedure 18700 (mark-1+ in edwin:group)}
+
+
+
+* EDWIN:MODELINE ---- char->digit
+
+** Exported by #{structure 384 aliases}
+  char->digit                 = #{procedure 17228 (char->digit in aliases)}
+
+
+
+* EDWIN:MODELINE ---- ref-variable
+
+** Exported by #{structure 430 edwin:variable}
+  ref-variable                (syntax)
+
+
+
+* EDWIN:MODELINE ---- mode-line-process
+
+
+
+* EDWIN:MODELINE ---- process-status
+
+
+
+* EDWIN:MODELINE ---- substring-image!
+
+
+
+* EDWIN:MODELINE ---- variable-local-value
+
+** Exported by #{structure 413 edwin:buffer}
+  variable-local-value        = #{procedure 19638 (variable-local-value in edwin:buffer)}
+
+
+
+* EDWIN:MODELINE ---- ref-variable-object
+
+** Exported by #{structure 430 edwin:variable}
+  ref-variable-object         (syntax)
+
+
+
+* EDWIN:MODELINE ---- group-display-start-index
+
+** Exported by #{structure 419 edwin:group}
+  group-display-start-index   = #{procedure 18975 (group-display-start-index in edwin:group)}
+
+
+
+* EDWIN:MODELINE ---- window-buffer
+
+
+
+* EDWIN:MODELINE ---- fix:=
+
+** Exported by #{structure 382 fixnum}
+  fix:=                       = #{procedure 17331 (fix:= in fixnum)}
+
+
+
+* EDWIN:MODELINE ---- fix:<
+
+** Exported by #{structure 382 fixnum}
+  fix:<                       = #{procedure 17329 (fix:< in fixnum)}
+
+
+
+* EDWIN:MODELINE ---- buffer
+
+
+
+* EDWIN:MODELINE ---- group-display-end
+
+
+
+* EDWIN:MODELINE ---- predicate
+
+
+
+* EDWIN:MODELINE ---- line-start?
+
+
+
+* EDWIN:MODELINE ---- recursive-edit-level
+
+
+
+* EDWIN:MODELINE ---- alist?
+
+** Exported by #{structure 384 aliases}
+  alist?                      = #{procedure 17224 (alist? in aliases)}
+
+
+
+* EDWIN:MODELINE ---- name->variable
+
+** Exported by #{structure 430 edwin:variable}
+  name->variable              = #{procedure 18109 (name->variable in edwin:variable)}
+
+
+
+* EDWIN:MODELINE ---- fix:+
+
+** Exported by #{structure 382 fixnum}
+  fix:+                       = #{procedure 17313 (fix:+ in fixnum)}
+
+
+
+* EDWIN:MODELINE ---- mark<
+
+** Exported by #{structure 419 edwin:mark}
+  mark<                       = #{procedure 18871 (mark< in edwin:group)}
+
+
+
+* EDWIN:MODELINE ---- buffer-writeable?
+
+
+
+* EDWIN:MODELINE ---- window-mark-visible?
+
+
+
+* EDWIN:MODELINE ---- alist-delete
+
+** Exported by #{structure 362 scsh-user}
+  alist-delete                = #{procedure 9323 (alist-delete in srfi-1)}
+
+** Exported by #{structure 217 srfi-1}
+  alist-delete                = #{procedure 9323 (alist-delete in srfi-1)}
+
+
+
+* EDWIN:MODELINE ---- group-clipped?
+
+** Exported by #{structure 419 edwin:region}
+  group-clipped?              = #{procedure 18712 (group-clipped? in edwin:group)}
+
+
+
+* EDWIN:MODELINE ---- string-index
+
+** Exported by #{structure 362 scsh-user}
+  string-index                = #{procedure 10432 (string-index in srfi-13)}
+
+** Exported by #{structure 226 srfi-13}
+  string-index                = #{procedure 10432 (string-index in srfi-13)}
+
+
+
+* EDWIN:MODELINE ---- group-display-end-index
+
+** Exported by #{structure 419 edwin:group}
+  group-display-end-index     = #{procedure 18973 (group-display-end-index in edwin:group)}
+
+
+
+* EDWIN:MODELINE ---- minor-mode-alist
+
+
+
+* EDWIN:MODELINE ---- buffer-group
+
+** Exported by #{structure 413 edwin:buffer}
+  buffer-group                = #{procedure 19648 (buffer-group in edwin:buffer)}
+
+
+
+* EDWIN:MODELINE ---- os/truncate-filename-for-modeline
+
+
+
+* EDWIN:MODELINE ---- consequent
+
+
+
+* EDWIN:MODELINE ---- pathname?
+
+** Exported by #{structure 387 pathname}
+  pathname?                   = #{procedure 17699 (pathname? in pathname)}
+
+
+
+* EDWIN:MODELINE ---- mode-line-modified
+
+
+
+* EDWIN:MODELINE ---- window-start-mark
+
+
+
+* EDWIN:MODELINE ---- mode-line-procedure
+
+
+
+* EDWIN:MODELINE ---- minor-mode?
+
+** Exported by #{structure 440 edwin:mode}
+  minor-mode?                 = #{procedure 19570 (minor-mode? in cosmacs:command-reader)}
+
+
+
+* EDWIN:MODELINE ---- variable?
+
+** Exported by #{structure 430 edwin:variable}
+  variable?                   = #{procedure 18134 (variable? in edwin:variable)}
+
+
+
+* EDWIN:MODELINE ---- substring-image-results
+
+
+
+* EDWIN:BUFFERSET ---- buffer-name
+
+
+
+* EDWIN:BUFFERSET ---- within-editor?
+
+** Exported by #{structure 424 scaffolding}
+  within-editor?              = #{procedure 18175 (within-editor? in scaffolding)}
+
+
+
+* EDWIN:BUFFERSET ---- current-buffer
+
+** Exported by #{structure 435 edwin:current-state}
+  current-buffer              (not yet defined)
+
+** Exported by #{structure 424 scaffolding}
+  current-buffer              = #{procedure 18177 (current-buffer in scaffolding)}
+
+
+
+* EDWIN:BUFFERSET ---- buffer-default-directory
+
+
+
+* EDWIN:BUFFERSET ---- set-buffer-name!
