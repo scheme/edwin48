@@ -26,8 +26,8 @@
 (config '(load "pantene/edwin-interfaces.scm"
                "pantene/edwin-packages.scm"))
 
-(config '(load "edwin48/scratch-interfaces.scm"
-               "edwin48/scratch-packages.scm"))
+(config '(load "edwin48/interfaces.scm"
+               "edwin48/packages.scm"))
 
 (config '(load "scratch/s48-apropos.scm"))
 
