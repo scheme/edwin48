@@ -32,13 +32,34 @@
         edwin:region
         (subset scaffolding (current-point current-buffer))
         (subset fixnum (fix:=))
-;        (subset edwin:command-reader (define-key dispatch-on-key))
+        (subset edwin:command-reader (last-command-key
+                                      dispatch-on-command
+                                      dispatch-on-key
+                                      define-key))
         (subset pathname (->namestring))
         (subset terminfo (key-message key-smessage))
         (subset edwin:screen (screen-beep))
-        (subset edwin:bufferset (bufferset-buffer-list set-bufferset-buffer-list!))
+        (subset edwin:bufferset (bufferset-buffer-list
+                                 set-bufferset-buffer-list!))
         (subset tty-flags (ttyin/xon-any))
-
+        (subset edwin:current-state (set-current-point!
+                                     with-current-point
+                                     set-buffer-point!
+                                     buffer-list
+                                     current-column
+                                     current-comtabs
+                                     current-minor-mode?
+                                     with-selected-buffer
+                                     selected-screen))
+        (subset edwin:motion (line-start
+                              mark-column
+                              line-end))
+        (subset edwin:input-event (input-event?
+                                   apply-input-event))
+        (subset util (any))
+        (subset edwin:prompting (prompt-for-command
+                                 prompt-for-confirmation?
+                                 prompt-for-yes-or-no?))
         conditions
         keystroke
         ascii
@@ -203,6 +224,10 @@
         edwin:undo
         edwin:variable
         edwin:utilities
+        (subset edwin:basic-command (barf-if-read-only
+                                     check-first-group-modification
+                                     edwin-variable$buffer-reallocation-factor))
+
         errors
         fixnum
         rb-tree
@@ -243,6 +268,15 @@
   (open scheme
         aliases
         define-record-type*
+        (subset edwin:fundamental (initial-buffer-name))
+        (subset edwin:mode (ref-mode-object))
+        (subset pathname (working-directory-pathname))
+        (subset edwin:bufferset (make-bufferset))
+        (subset edwin:display-type (display-type/make-screen
+                                    display-type/get-input-operations
+                                    display-type/with-interrupts-enabled
+                                    display-type/with-interrupts-disabled))
+        (subset edwin:screen (initialize-screen-root-window!))
         edwin:ring
         edwin:buffer)
   (files edtstr))
@@ -282,7 +316,15 @@
         sorting ; vector operations
         srfi-13 ; string operations
         srfi-43 ; vector operations
-        )
+        (subset edwin:bufferset (bufferset-find-or-create-buffer))
+        (subset ascii (char->ascii))
+        (subset edwin:prompting (make-typein-buffer-name))
+        (subset edwin:editor-definition (editor-halt-update?))
+        (subset locations (contents))
+        (subset edwin:button (button?))
+        (subset edwin:basic-command (edwin-command$undefined
+                                     edwin-command$prefix-key))
+        (subset edwin:text-property (local-comtabs)))
   (files screen))
 
 (define-structure edwin:string-table edwin:string-table/interface
@@ -331,7 +373,8 @@
         pathname
         terminal-support
         util
-        weak-pair)
+        weak-pair
+        (subset ascii (char->ascii)))
   (files utils strpad))
 
 (define-structure edwin:variable edwin:variable/interface
@@ -353,11 +396,82 @@
 (define-structure edwin:command-reader edwin:command-reader/interface
   (open scheme
         aliases
-        ;pantene
+        pantene
+        fixnum
+        errors
+        queues
+        (subset scaffolding (current-buffer
+                             current-point
+                             current-comtabs
+                             window-point
+                             ))
+        (subset keystroke (key-name key?))
+        (subset edwin:basic-command (barf-if-read-only
+                                     self-insert
+                                     edwin-command$self-insert-command))
+        (subset edwin:region (mark-right-char
+                              mark-left-char))
+        (subset edwin:utilities (string-append-separated))
+        (subset edwin:variable (variable-name))
+        (subset srfi-1 (take-right))
+        (subset edwin:current-state (current-region
+                                     current-mark
+                                     current-window))
+        (subset edwin:input-event (apply-input-event
+                                   input-event?
+                                   input-event/type))
+        (subset edwin:command-table (local-comtab-entry
+                                     comtab-entry
+                                     prefix-key-list?))
+        (subset edwin:buffer (buffer-windows))
+        (subset edwin:group (group-end?))
+        edwin:prompting
         edwin:command
         define-record-type*
-        srfi-13 srfi-14 srfi-89
-        (subset edwin:command-table (local-comtab-entry comtab-entry)))
+        srfi-13 srfi-14 srfi-89)
   (for-syntax (open scheme errors macro-helpers))
   (files (scsh macros)
          comred))
+
+(define-structure edwin:paths edwin:paths/interface
+  (open scheme aliases errors pathname io-support)
+  (files paths))
+
+(define-structure edwin:terminal-screen edwin:terminal-screen/interface
+  (open aliases
+        define-record-type*
+        edwin:display-type
+        edwin:screen
+        event-distributor
+        errors
+        fixnum
+        io-support
+        keystroke
+        scheme
+        srfi-1
+        srfi-6
+        srfi-13
+        terminal-support
+        terminfo)
+  (files terminal))
+
+(define-structure edwin:input-event edwin:input-event/interface
+  (open scheme errors srfi-9)
+  (files input-event))
+
+(define-structure edwin:current-state edwin:current-state/interface
+  (open scheme)
+  (files (scsh macros)
+         edtstr))
+
+(define-structure edwin:modeline edwin:modeline/interface
+  (open scheme)
+  (files modlin))
+
+(define-structure edwin:kill-command edwin:kill-command/interface
+  (open scheme)
+  (files kilcom))
+
+(define-structure edwin:prompting edwin:prompting/interface
+  (open scheme)
+  (files prompt))
