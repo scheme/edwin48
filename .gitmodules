@@ -4,3 +4,6 @@
 [submodule "terminfo"]
 	path = terminfo
 	url = https://github.com/scheme/terminfo.git
+[submodule "soosy"]
+	path = soosy
+	url = https://github.com/scheme/soosy.git
