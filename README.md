@@ -13,4 +13,4 @@ In order to load the edwin48 code, you'll need an up to date installation of
 [scsh](https://github.com/scheme/scsh). See the installation instructions there for details.
 
 ## Running Edwin48
-See the `load.scm` script in the top level directory or `cosmacs/load.scm`
+See the `load.scm` script in the top level directory or `cosmacs/load.scm`.
