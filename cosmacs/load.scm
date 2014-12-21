@@ -5,8 +5,10 @@
 ;;; This code is placed in the Public Domain.  All warranties are
 ;;; disclaimed.
 ;;;
-;;; load.scm - Script for loading Edgar
+;;; This script loads the code for cosmacs and its dependencies. To run it, execute the following on
+;;; the scsh repl from this directory:
 ;;;
+;;; > ,exec ,load load.scm
 
 (user)
 

@@ -5,9 +5,10 @@
 ;;; This code is placed in the Public Domain.  All warranties are
 ;;; disclaimed.
 ;;;
-;;; load.scm - Script for loading Edwin48
+;;; This script loads the code for Edwin48 and its dependencies. To run it, execute the following on
+;;; the scsh repl from this directory:
 ;;;
-
+;;; > ,exec ,load load.scm
 
 (user)
 
@@ -23,11 +24,10 @@
 (config '(load "soosy/interfaces.scm"
                "soosy/packages.scm"))
 
-(config '(load "pantene/edwin-interfaces.scm"
-               "pantene/edwin-packages.scm"))
+(config '(load "pantene/interfaces.scm"
+               "pantene/packages.scm"))
 
 (config '(load "edwin48/interfaces.scm"
                "edwin48/packages.scm"))
 
 (config '(load "scratch/s48-apropos.scm"))
-
