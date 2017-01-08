@@ -94,4 +94,4 @@
 ;;; C-q ass-mode
 
 
-(check-report)
+;; (check-report)

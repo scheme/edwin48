@@ -42,13 +42,13 @@ USA.
 (define command-reader-override-queue unspecific)
 (define *command-suffixes* unspecific)
 
-(add-event-receiver! editor-initializations
-  (lambda ()
-    (set! keyboard-keys-read 0)
-    (set! command-history (make-circular-list command-history-limit #f))
-    (set! command-reader-override-queue (make-queue))
-    (set! *command-suffixes* #f)
-    unspecific))
+;; (add-event-receiver! editor-initializations
+;;   (lambda ()
+;;     (set! keyboard-keys-read 0)
+;;     (set! command-history (make-circular-list command-history-limit #f))
+;;     (set! command-reader-override-queue (make-queue))
+;;     (set! *command-suffixes* #f)
+;;     unspecific))
 
 (define (top-level-command-reader init)
   (with-keyboard-macro-disabled
@@ -280,22 +280,30 @@ USA.
 (define (execute-button-command screen button x y)
   (clear-message)
   (reset-command-state!)
-  (send (screen-root-window screen) ':button-event! button x y))
+;  (send (screen-root-window screen) ':button-event! button x y)
+)
 
 (define (read-and-dispatch-on-key)
   (dispatch-on-key (current-comtabs)
 		   (with-editor-interrupts-disabled keyboard-read)))
 
-(define (dispatch-on-key comtab key)
-  (if (input-event? key)
-      (apply-input-event key)
-      (begin
-	(set! *command-key* key)
-	(set-command-prompt!
-	 (string-append-separated (command-argument-prompt) (key->name key)))
-	(%dispatch-on-command (current-window)
-			      (comtab-entry comtab key)
-			      #f))))
+;;; Given a key, evaluate the procedure if
+;;; there is a command with that keystroke
+(define (dispatch-on-key comtab keystroke)
+  (let* ((command   (comtab-entry comtab keystroke))
+         (procedure (command-procedure command)))
+    (procedure)))
+
+;; (define (dispatch-on-key comtab key)
+;;   (if (input-event? key)
+;;       (apply-input-event key)
+;;       (begin
+;; 	(set! *command-key* key)
+;; 	(set-command-prompt!
+;; 	 (string-append-separated (command-argument-prompt) (key->name key)))
+;; 	(%dispatch-on-command (current-window)
+;; 			      (comtab-entry comtab key)
+;; 			      #f))))
 
 (define* (dispatch-on-command command (record? #f))
   (%dispatch-on-command (current-window)

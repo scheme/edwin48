@@ -42,24 +42,24 @@
         (subset edwin:bufferset (bufferset-buffer-list
                                  set-bufferset-buffer-list!))
         (subset tty-flags (ttyin/xon-any))
-        (subset edwin:current-state (set-current-point!
-                                     with-current-point
-                                     set-buffer-point!
-                                     buffer-list
-                                     current-column
-                                     current-comtabs
-                                     current-minor-mode?
-                                     with-selected-buffer
-                                     selected-screen))
+        ;; (subset edwin:current-state (set-current-point!
+        ;;                              with-current-point
+        ;;                              set-buffer-point!
+        ;;                              buffer-list
+        ;;                              current-column
+        ;;                              current-comtabs
+        ;;                              current-minor-mode?
+        ;;                              with-selected-buffer
+        ;;                              selected-screen))
         (subset edwin:motion (line-start
                               mark-column
                               line-end))
         (subset edwin:input-event (input-event?
                                    apply-input-event))
         (subset util (any))
-        (subset edwin:prompting (prompt-for-command
-                                 prompt-for-confirmation?
-                                 prompt-for-yes-or-no?))
+        ;; (subset edwin:prompting (prompt-for-command
+        ;;                          prompt-for-confirmation?
+        ;;                          prompt-for-yes-or-no?))
         conditions
         keystroke
         ascii
@@ -73,11 +73,11 @@
    (edwin:simple-editing edwin:simple-editing/interface))
   (open scheme aliases weak-pair errors fixnum srfi-89
         define-record-type* srfi-13
-        (subset edwin:current-state (set-current-point!
-                                     push-current-mark!
-                                     set-current-mark!
-                                     current-point
-                                     current-mark))
+        ;; (subset edwin:current-state (set-current-point!
+        ;;                              push-current-mark!
+        ;;                              set-current-mark!
+        ;;                              current-point
+        ;;                              current-mark))
         (subset edwin:text-property (next-specific-property-change
                                      text-not-deleteable?
                                      update-intervals-for-deletion!
@@ -144,7 +144,8 @@
         pathname
         srfi-1
         (subset scaffolding (within-editor?))
-        (subset edwin:current-state (current-buffer)))
+;        (subset edwin:current-state (current-buffer))
+        )
   (files bufset)
   (begin
     ;; buffer.scm
@@ -213,10 +214,10 @@
         keystroke
         srfi-14
         edwin:button
-	edwin:command
-	edwin:command-table
-	edwin:mode
-	edwin:variable)
+        edwin:command
+        edwin:command-table
+        edwin:mode
+        edwin:variable)
   (for-syntax (open scheme macro-helpers))
   (begin
     (define (make-special-key key modifiers)
@@ -294,7 +295,7 @@
   (open scheme
         aliases
         define-record-type*
-        (subset edwin:fundamental (initial-buffer-name))
+;        (subset edwin:fundamental (initial-buffer-name))
         (subset edwin:mode (ref-mode-object))
         (subset pathname (working-directory-pathname))
         (subset edwin:bufferset (make-bufferset))
@@ -344,8 +345,8 @@
         srfi-43 ; vector operations
         (subset edwin:bufferset (bufferset-find-or-create-buffer))
         (subset ascii (char->ascii))
-        (subset edwin:prompting (make-typein-buffer-name))
-        (subset edwin:editor-definition (editor-halt-update?))
+;        (subset edwin:prompting (make-typein-buffer-name))
+;        (subset edwin:editor-definition (editor-halt-update?))
         (subset locations (contents))
         (subset edwin:button (button?))
         (subset edwin:basic-command (edwin-command$undefined
@@ -423,7 +424,7 @@
 (define-structure edwin:command-reader edwin:command-reader/interface
   (open scheme
         aliases
-        pantene
+        ;pantene
         fixnum
         errors
         queues
@@ -441,9 +442,9 @@
         (subset edwin:utilities (string-append-separated))
         (subset edwin:variable (variable-name))
         (subset srfi-1 (take-right))
-        (subset edwin:current-state (current-region
-                                     current-mark
-                                     current-window))
+        ;; (subset edwin:current-state (current-region
+        ;;                              current-mark
+        ;;                              current-window))
         (subset edwin:input-event (apply-input-event
                                    input-event?
                                    input-event/type))
@@ -452,7 +453,7 @@
                                      prefix-key-list?))
         (subset edwin:buffer (buffer-windows))
         (subset edwin:group (group-end?))
-        edwin:prompting
+;        edwin:prompting
         edwin:command
         define-record-type*
         srfi-13 srfi-14 srfi-89)
@@ -478,9 +479,9 @@
         srfi-1
         srfi-6
         srfi-13
-        (subset edwin:current-state (update-screens!
-                                     make-input-event
-                                     selected-screen))
+        ;; (subset edwin:current-state (update-screens!
+        ;;                              make-input-event
+        ;;                              selected-screen))
         (subset scaffolding (within-editor?))
         terminal-support
         terminfo)

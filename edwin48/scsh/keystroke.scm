@@ -1,5 +1,31 @@
 ;;; -*- Mode: Scheme; scheme48-package: keystroke -*-
 
+;; Char    Decimal Hex     Octal   Binary       [Meaning]
+;;  m-a    225     0xe1    0341    11100001
+;;  m-a    225     0xe1    0341    11100001
+;;  m-a    225     0xe1    0341    11100001
+;;  m-n    238     0xee    0356    11101110
+;;    a     97     0x61    0141    01100001
+;;   ^A      1     0x01    0001    00000001     (SOH)
+;;    A     65     0x41    0101    01000001
+;;   ^[     27     0x1b    0033    00011011     Escape (ESC)
+;;   ^A      1     0x01    0001    00000001     (SOH)
+;;  m-a    225     0xe1    0341    11100001
+;;    a     97     0x61    0141    01100001
+;;  m-a    225     0xe1    0341    11100001
+;;  m-a    225     0xe1    0341    11100001
+;;   ^A      1     0x01    0001    00000001     (SOH)
+;;   ^[     27     0x1b    0033    00011011     Escape (ESC)
+;;    [     91     0x5b    0133    01011011
+;;    A     65     0x41    0101    01000001
+;;  m-h    232     0xe8    0350    11101000
+;;    b     98     0x62    0142    01100010
+;;   ^B      2     0x02    0002    00000010     (STX)
+;;  m-b    226     0xe2    0342    11100010
+;; m-^A    129     0x81    0201    10000001     (SOH)
+;; m-^B    130     0x82    0202    10000010     (STX)
+
+
 (define (known-key? k)
   (let loop ((keys all-named-keys))
     (cond
@@ -34,6 +60,41 @@
 (define empty-modifiers (make-key-modifier-set '()))
 (define (key-modifiers-empty? modifiers) (null? (key-modifier-set->list modifiers)))
 
+(define (%char-code char)
+  (fix:and (char->integer char) #x1FFFFF))
+
+;;; Right shift the bits over by 7
+;;;
+;;; %char-bits:  char -> integer
+(define (%char-bits char)
+  (fix:lsh (char->integer char) -7))
+
+(define (ascii-controlified? char)
+    (fix:< char #x20))
+
+;; Check to see if the key is ascii-controlified?
+;;  If so then =>
+;;    See if the meta bit is set=>
+;;     If so then => make a key META-CONTROL- (then unset the meta and control bit)
+
+(define (remove-meta-ctrl int) (- int 32))
+(define (remove-ctrl int) (+ 96 int))
+(define (remove-meta int) (- int 97))
+
+;;; TODO: Checking
+(define (char-code char)
+  (%char-code char))
+
+(define (keystroke-bits-set? bits char)
+  (fix:= bits (fix:and (%char-bits char) bits)))
+
+(define (keystroke-bits-clear? bits char)
+  (fix:= 0 (fix:and (%char-bits char) bits)))
+
+(define (8-bit-char? object)
+  (and (char? object)
+       (fix:< (char->integer object) 256)))
+
 (define (key->name k)
   (cond
    ((char? k)   `(kbd ,k))
@@ -51,6 +112,7 @@
     (cond
      ((char? value)   (char->name value))
      ((symbol? value) (symbol->string value))
+     ((string? value) value)
      (else (error "key is invalid" k)))))
 
 (define (key=? k1 k2)
@@ -71,6 +133,18 @@
          (every (lambda (true?) true?) (map key=? k1 k2)))
         (else #f)))
 
+;;; Returns a pretty printed string of a kbd record
+;;;
+;;; Example: (key->string (kbd (ctrl #\s))) => "(kbd (ctrl s))"
+;;;
+;;; key->string?  keystroke -> string
+;;;
+(define (key->string keystroke)
+    (let* ((name (key-name keystroke))
+           (modifiers (key-modifier-set->list (key-modifiers keystroke)))
+           (mod-list (map (lambda (km) (symbol->string (key-modifier-name km))) modifiers)))
+      (format #f "(kbd ~A)" (append mod-list (list name)))))
+
 (define (key-hash key)
   (define (modifiers-hash modifiers)
     (apply + (map (lambda (m) (* 1000 (expt 2 (key-modifier-index m))))
@@ -79,9 +153,9 @@
       (error "Not a key" key)
       (let ((kval (key-value key)))
         (+ (modifiers-hash (key-modifiers key))
-           (if (symbol? kval)
-               (string-hash (symbol->string kval))
-               (string-hash kval))))))
+           (cond ((symbol? kval) (string-hash (symbol->string kval)))
+                 ((string? kval) (string-hash kval))
+                 (else (char->integer kval))))))) ;; (else (key-hash (char->name key))))))))
       ;; Have to do something special for keys that are symbols
       ;; (key-value key) returns a string, so make it a list of chars
       ;; then add them together to make the key
@@ -91,9 +165,9 @@
                    (modifiers empty-modifiers)
                    (name      ""))
   (define (strip value)
-    (ascii->char (+ -1
-                    (char->ascii value)
-                    (char->ascii #\a))))
+    (integer->char (+ -1
+                    (char->integer value)
+                    (char->integer #\a))))
   (define (union modifiers modifier)
     (key-modifier-set-union modifiers modifier))
   (let ((modifiers (if (key-modifier? modifiers)
@@ -104,14 +178,14 @@
       (make-key (key-value value)
                 (union (key-modifiers value) modifiers)
                 name))
-     ((number? value) (make-key (ascii->char value) modifiers))
+     ((number? value) (make-key (integer->char value) modifiers))
      ((symbol? value) (really-make-key value modifiers))
      ((char? value)
       (cond
        ((known-key? value) => (lambda (name) (really-make-key name modifiers)))
-       ;; ((char-set-contains? char-set:iso-control value)
-       ;;  (really-make-key (strip value)
-       ;;                   (union modifiers (key-modifier-set ctrl))))
+       ((char-set-contains? char-set:iso-control value)
+        (really-make-key (strip value) ; Possibly just value and not stripping it
+                         (union modifiers (key-modifier-set ctrl))))
        (else (really-make-key (string value) modifiers))))
      ((string? value)
       (if (zero? (string-length value))

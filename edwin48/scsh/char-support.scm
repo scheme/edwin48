@@ -73,3 +73,14 @@
     (#x7F "delete" "del" "rubout")
     (#xA0 "nbsp")
     (#xFEFF "bom")))
+
+(define named-bits
+  '((#x01 "M" "meta")
+    (#x02 "C" "control" "ctrl")
+    (#x04 "S" "super")
+    (#x08 "H" "hyper")))
+
+(define char-bit:meta #x01)
+(define char-bit:control #x02)
+(define char-bit:super #x04)
+(define char-bit:hyper #x08)

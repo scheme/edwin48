@@ -9,6 +9,12 @@
                                   with-apropos-verbosity
                                   set-apropos-verbosity!)
   (open scheme
+        (subset srfi-1 (filter-map filter))
+        (subset srfi-13 (string-upcase string-prefix-ci?))
+        (subset srfi-69 (hash-table-values hash-table-keys))
+        formats
+        compile-packages
+        exceptions
         fluids
         cells
         signals
@@ -81,6 +87,35 @@
                                        struct))
                     (package-opens config)))))))
 
+
+(define (apropos-all/string id . config)
+  (let ((substring (apropos-of id))
+        (config (if (null? config)
+                    (config-package)
+                    (car config))))
+    (call-with-current-tracking-output-port
+      (lambda (out)
+        (let ((body (lambda (name binding)
+                      (if (binding? binding)
+                          (let ((loc (binding-place binding)))
+                            (if (and (location? loc)
+                                     (location-assigned? loc)
+                                     (structure? (contents loc)))
+                                (format #f "")
+                                (*apropos-structure/string
+                                 substring
+                                 (contents loc)
+                                 out
+                                 "Exported by" #f)))))))
+          (for-each-definition body config)
+          ;; (for-each (lambda (struct)
+          ;;             (for-each-export (lambda (name type binding)
+          ;;                                (body name binding))
+          ;;                              struct))
+          ;;           (package-opens config))
+)))))
+
+
 (define (apropos id . where)
   (let ((substring (apropos-of id))
         (where (and (not (null? where))
@@ -147,6 +182,19 @@
            (display-entries entries
                             (package-uid (structure-package struct))
                             out)))))
+
+(define (*apropos-structure/string substring struct out banner force-banner?)
+  (let ((entries '()))
+    (for-each-export (lambda (name exported-type binding)
+                       (if (apropos? name substring)
+                           (set! entries
+                                 (cons (list name
+                                             exported-type
+                                             binding)
+                                       entries))))
+                     struct)
+    (if (pair? entries)
+        (format #f "** ~%~A ~A~%ENTRIES: ~A" banner struct entries))))
 
 (define (display-entries entries pkg-uid out)
   ((lambda (body)
@@ -296,6 +344,7 @@
           ((= larger-len smaller-len)
            (string=? larger smaller))
           (else
+           #f
            (let loop ((i 0))
              (cond ((> (+ i smaller-len)
                        larger-len)
@@ -304,7 +353,8 @@
                               smaller)
                     #t)
                    (else
-                    (loop (+ i 1)))))))))
+                    (loop (+ i 1)))))
+           ))))
 
 (define (delq obj list)
   (if (null? list)
@@ -337,4 +387,66 @@
 (define (apropos-depth) 3)
 (define (apropos-breadth) 4)
 
+;;; Depenency Finder
+
+;; (define (get-package-definitions config)
+;;   )
+;; (define find-undefineds
+;;   (let (())))
+
+;;; Get a list of structures in the current config env
+;;;
+;;; get-structures  Nothing -> List
+(define (get-structures)
+  (let ((config            (config-package))
+        (remove-interfaces (lambda (binding)
+                             (if (binding? binding)
+                                 (let* ((loc  (binding-place binding))
+                                        (strc (contents loc)))
+                                   (and (location? loc)
+                                        (location-assigned? loc)
+                                        (structure? strc)
+                                        strc))))))
+
+    (filter-map remove-interfaces (hash-table-values (package-definitions config)))))
+
+;;; Get a list of only Edwin structures
+;;;
+;;; get-edwin-structures  Nothing -> List
+(define (get-edwin-structures)
+  (filter (lambda (st) (string-prefix-ci? "edwin" (symbol->string (structure-name st))))
+          (get-structures)))
+
 ))
+
+;(for-each-definition (lambda (name binding) (format #t "NAME: ~A~%BINDING: ~A~%~%" name (contents (binding-place binding)))) (config-package))
+
+
+;;; Binding
+;;;  Type
+;;;  Place (Location Structure)
+;;;    Contents -> (Hopefully a structure)  Structure -> Package -> Undefineds
+;;;  Static
+;;;
+;;; ,open compile-packages
+;;; (compile-package (structure-package (car (get-edwin-structures))))
+
+
+;; (map (lambda (s) (call-with-current-continuation
+;;                   (lambda (k) (with-exception-handler (lambda (condition) (k #f))
+;;                                 (lambda () (let ((pkg (structure-package s)))
+;;                                              (compile-package pkg)
+;;                                              (map apropos-all (hash-table-values (package-undefineds pkg)))))))))
+;;      (get-edwin-structures))
+
+
+;; ;; (map (lambda (sym) (format #t "SYMBOL: ~A~%~% ~A" sym (apropos-all sym))) (hash-table-keys (package-undefineds (structure-package (car (get-edwin-structures))))))
+
+;; (define (print-structure-dep struct)
+;;   (let* ((name (structure-name struct))
+;;          (pkg (structure-package struct))
+;;          (undefs (package-undefineds pkg))
+;;          (missing-names (hash-table-keys undefs)))
+;;     (map (lambda (key) (format #t "~%~%~%* ~A ---- ~A~%" (string-upcase (symbol->string name)) key)
+;;                  (apropos-all key))
+;;          missing-names)))

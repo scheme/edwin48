@@ -31,3 +31,4 @@
 
 (config '(load "scratch/s48-apropos.scm"))
 
+(config '(load "cosmacs/packages.scm"))

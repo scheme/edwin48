@@ -46,13 +46,6 @@ USA.
 (define (make-comtab)
   (really-make-comtab (make-hash-table key=? key-hash)))
 
-;;; Given a key, evaluate the procedure if
-;;; there is a command with that keystroke
-(define (dispatch-on-key comtab keystroke)
-  (let* ((command   (comtab-entry comtab keystroke))
-         (procedure (command-procedure command)))
-    (procedure)))
-
 ;;; Returns a command for the given key in a comtab
 ;;; this walks the tree until it finds something.
 ;;; Meaning it follows prefixed keys.

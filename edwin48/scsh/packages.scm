@@ -76,7 +76,9 @@
             identity-procedure
             (fluid-let :syntax))
   (open (modify scheme (hide string-fill!))
-        ascii errors fluids interrupts scsh-subset util
+        ascii errors fluids interrupts
+        scsh-subset
+        util
         (modify scsh-level-0 (rename (getenv get-environment-variable)))
         srfi-1 srfi-6 srfi-8 srfi-13 srfi-14 srfi-43 srfi-89)
   (files aliases))
@@ -102,7 +104,9 @@
             file-modification-time
             input-available-on-port?
             read-string!/partial)
-  (open scheme receiving scsh-subset)
+  (open scheme receiving
+        scsh-subset
+        )
   (files io-support))
 
 (define-structure pathname
@@ -225,8 +229,18 @@
                         scsh-io/interface
                         (export interrupt/winch
                                 set-interrupt-handler
-                                getenv))
-  (open scheme scsh-level-0))
+                                getenv
+                                ))
+  (open (modify scheme
+                (hide open-output-file
+                      open-input-file
+                      newline
+                      display
+                      write
+                      write-char
+                      read-char
+                      char-ready?))
+        scsh-level-0))
 
 (define-structure terminal-support
     (compound-interface
@@ -241,7 +255,9 @@
              set-terminal-y-size!
              event:console-resize
              ))
-  (open scheme ascii bitwise event-distributor scsh-subset srfi-23
+  (open scheme ascii bitwise event-distributor
+        scsh-subset
+        srfi-23
         threads-internal)
   (files terminal-support))
 
@@ -269,6 +285,7 @@
           key-value key-char-value
           key-modifiers
           key->name
+          key->string
           empty-modifiers
           add-key-modifiers
           replace-key-modifiers
@@ -277,9 +294,9 @@
 (define-structure keystroke-core keystroke-core/interface
   (for-syntax (open scheme enum-sets keystroke-modifiers srfi-13 srfi-14))
   (open scheme
-        ascii bitwise char-support define-record-type*
+        ascii bitwise fixnum char-support define-record-type*
         keystroke-modifiers
-        srfi-1 srfi-13 srfi-14 srfi-23 srfi-89)
+        srfi-1 srfi-13 srfi-14 srfi-23 srfi-89 formats)
   (files keystroke))
 
 (define-interface keystroke-modifiers/interface
@@ -308,17 +325,21 @@
   (files keystroke-modifiers))
 
 (define-structure char-support
-    (export char->name)
+    (export char->name
+            keystroke-bit:meta
+            keystroke-bit:control
+            keystroke-bit:super
+            keystroke-bit:hyper)
   (open scheme ascii fixnum srfi-13 srfi-14 srfi-89)
   (files char-support))
 
-(define-structure 1d-table
-    (export make-1d-table
-            1d-table?
-            1d-table/put!
-            1d-table/remove!
-            1d-table/get
-            1d-table/lookup
-            1d-table/alist)
-  (open scheme aliases errors srfi-1 weak-pair)
-  (files 1d-table))
+;; (define-structure 1d-table
+;;     (export make-1d-table
+;;             1d-table?
+;;             1d-table/put!
+;;             1d-table/remove!
+;;             1d-table/get
+;;             1d-table/lookup
+;;             1d-table/alist)
+;;   (open scheme aliases errors srfi-1 weak-pair)
+;;   (files 1d-table))
